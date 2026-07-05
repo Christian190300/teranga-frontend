@@ -4,6 +4,8 @@ import { AppLayout } from "./components/layout/AppLayout";
 import { HomePage } from "./pages/HomePage";
 import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
+import { ProfilCandidatPage } from "./pages/candidat/ProfilCandidatPage";
+import { ProfilRecruteurPage } from "./pages/recruteur/ProfilRecruteurPage";
 
 export default function App() {
     return (
@@ -14,7 +16,9 @@ export default function App() {
                         <Route path="/" element={<HomePage />} />
                         <Route path="/connexion" element={<LoginPage />} />
                         <Route path="/inscription" element={<RegisterPage />} />
-                        {/* Routes à venir : /candidat/profil, /recruteur/offres, /admin, etc. */}
+                        <Route path="/candidat/profil" element={<ProfilCandidatPage />} />
+                        <Route path="/recruteur/entreprise" element={<ProfilRecruteurPage />} />
+                        {/* Routes à venir : /admin, /offres, /candidat/candidatures, /recruteur/offres, etc. */}
                     </Routes>
                 </AppLayout>
             </BrowserRouter>

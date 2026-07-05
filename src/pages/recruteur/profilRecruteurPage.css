@@ -1,0 +1,136 @@
+.profil-page,
+.profil-page * {
+    box-sizing: border-box;
+}
+
+.profil-page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+    font-family: 'Inter', -apple-system, sans-serif;
+}
+
+.profil-page__header {
+    margin-bottom: 32px;
+}
+
+.profil-page__title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #14294d;
+    margin: 0 0 6px;
+}
+
+.profil-page__subtitle {
+    font-size: 0.92rem;
+    color: #667085;
+    margin: 0;
+}
+
+.profil-card {
+    background: white;
+    border: 1px solid #e8e9ee;
+    border-radius: 12px;
+    padding: 32px;
+}
+
+.profil-field {
+    margin-bottom: 20px;
+}
+
+.profil-field label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #14294d;
+    margin-bottom: 6px;
+}
+
+.profil-field input,
+.profil-field textarea {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid #e8e9ee;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.92rem;
+    background: #f7f8fb;
+    color: #14294d;
+}
+
+.profil-field input:focus,
+.profil-field textarea:focus {
+    outline: none;
+    border-color: #c8951e;
+    background: white;
+}
+
+.profil-field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+@media (max-width: 560px) {
+    .profil-field-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.profil-page__actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid #e8e9ee;
+}
+
+.profil-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 26px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.92rem;
+    border: none;
+    cursor: pointer;
+    background: #e8b84b;
+    color: #14294d;
+    transition: background 0.15s ease;
+}
+
+.profil-btn:hover {
+    background: #c8951e;
+}
+
+.profil-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.profil-message {
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    margin-bottom: 20px;
+}
+
+.profil-message--success {
+    background: #eaf6ee;
+    color: #1e7a3c;
+    border: 1px solid #b9dfc4;
+}
+
+.profil-message--error {
+    background: #fdecea;
+    color: #b3261e;
+    border: 1px solid #f2c1bd;
+}
+
+.profil-page__loading {
+    text-align: center;
+    padding: 60px 0;
+    color: #667085;
+    font-size: 0.92rem;
+}
