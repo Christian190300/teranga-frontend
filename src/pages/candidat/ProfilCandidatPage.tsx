@@ -21,6 +21,34 @@ function formatDate(iso: string | null): string {
     return new Date(iso).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
 }
 
+function IconCamera() {
+    return (
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M4 8.5C4 7.67 4.67 7 5.5 7H8l1-2h6l1 2h2.5c.83 0 1.5.67 1.5 1.5v9c0 .83-.67 1.5-1.5 1.5h-14C4.67 19 4 18.33 4 17.5v-9Z"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinejoin="round"
+            />
+            <circle cx="12" cy="13" r="3.2" stroke="currentColor" strokeWidth="1.6" />
+        </svg>
+    );
+}
+
+function IconDocument() {
+    return (
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M7 3.5h7l4 4v12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-15a1 1 0 0 1 1-1Z"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinejoin="round"
+            />
+            <path d="M14 3.5v4h4" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+        </svg>
+    );
+}
+
 const NIVEAUX_EXPERIENCE = ["Débutant", "Junior", "Intermédiaire", "Sénior", "Expert"];
 const DISPONIBILITES = ["Immédiate", "Sous 1 mois", "Sous 3 mois", "Non disponible"];
 
@@ -187,7 +215,7 @@ export function ProfilCandidatPage() {
 
             await refreshPhoto();
         } catch {
-            setPhotoError("Échec de l'envoi de la photo. Vérifiez le format (JPEG, PNG, WebP) et la taille (2 Mo max).");
+            setPhotoError("Échec de l'envoi. Format accepté : JPEG, PNG, WebP (2 Mo max).");
         } finally {
             setPhotoUploading(false);
             if (photoInputRef.current) photoInputRef.current.value = "";
@@ -206,7 +234,7 @@ export function ProfilCandidatPage() {
             setCvOriginalFilename(updated.cvOriginalFilename);
             setDateMaj(updated.dateMaj);
         } catch {
-            setCvError("Échec de l'envoi du CV. Vérifiez qu'il s'agit bien d'un PDF (5 Mo max).");
+            setCvError("Échec de l'envoi. Le fichier doit être un PDF (5 Mo max).");
         } finally {
             setCvUploading(false);
             if (cvInputRef.current) cvInputRef.current.value = "";
@@ -225,7 +253,7 @@ export function ProfilCandidatPage() {
             setLmOriginalFilename(updated.lettreMotivationOriginalFilename);
             setDateMaj(updated.dateMaj);
         } catch {
-            setLmError("Échec de l'envoi de la lettre. Vérifiez qu'il s'agit bien d'un PDF (5 Mo max).");
+            setLmError("Échec de l'envoi. Le fichier doit être un PDF (5 Mo max).");
         } finally {
             setLmUploading(false);
             if (lmInputRef.current) lmInputRef.current.value = "";
@@ -266,25 +294,32 @@ export function ProfilCandidatPage() {
 
             {/* Photo */}
             <div className="profil-card">
-                <p className="profil-card__section-title">Photo</p>
-                <div className="profil-photo-row">
-                    {photoUrl ? (
-                        <img src={photoUrl} alt="Photo de profil" className="profil-photo-preview" />
-                    ) : (
-                        <div className="profil-photo-placeholder">?</div>
-                    )}
-                    <div className="profil-photo-field">
-                        <input
-                            ref={photoInputRef}
-                            type="file"
-                            accept="image/jpeg,image/png,image/webp"
-                            onChange={handlePhotoChange}
-                            disabled={photoUploading}
-                        />
-                        <p className="profil-field__hint">
-                            {photoUploading
-                                ? "Envoi en cours..."
-                                : "Sélectionnez une photo depuis votre appareil (JPEG, PNG, WebP, 2 Mo max)."}
+                <p className="profil-card__section-title">Photo de profil</p>
+                <div className="profil-avatar-row">
+                    <div className="profil-avatar-wrap">
+                        {photoUrl ? (
+                            <img src={photoUrl} alt="Photo de profil" className="profil-photo-preview" />
+                        ) : (
+                            <div className="profil-photo-placeholder">?</div>
+                        )}
+                        <label className={`profil-avatar-edit${photoUploading ? " profil-upload-btn--disabled" : ""}`}>
+                            <input
+                                ref={photoInputRef}
+                                type="file"
+                                accept="image/jpeg,image/png,image/webp"
+                                onChange={handlePhotoChange}
+                                disabled={photoUploading}
+                                className="profil-file-input-hidden"
+                            />
+                            <IconCamera />
+                        </label>
+                    </div>
+                    <div className="profil-avatar-info">
+                        <p className="profil-avatar-info__title">
+                            {photoUploading ? "Envoi en cours..." : "Cliquez sur l'icône pour changer votre photo"}
+                        </p>
+                        <p className="profil-field__hint" style={{ margin: 0 }}>
+                            JPEG, PNG ou WebP — 2 Mo maximum.
                         </p>
                         {photoError && <p className="profil-message profil-message--error">{photoError}</p>}
                     </div>
@@ -297,7 +332,12 @@ export function ProfilCandidatPage() {
                 <div className="profil-field-row">
                     <div className="profil-field">
                         <label htmlFor="telephone">Téléphone</label>
-                        <input id="telephone" value={telephone} onChange={(e) => setTelephone(e.target.value)} placeholder="+221 77 123 45 67" />
+                        <input
+                            id="telephone"
+                            value={telephone}
+                            onChange={(e) => setTelephone(e.target.value)}
+                            placeholder="+221 77 123 45 67"
+                        />
                     </div>
                     <div className="profil-field">
                         <label htmlFor="sexe">Sexe</label>
@@ -308,11 +348,13 @@ export function ProfilCandidatPage() {
                         </select>
                     </div>
                 </div>
+
                 <div className="profil-field">
                     <label htmlFor="adresse">Adresse</label>
                     <input id="adresse" value={adresse} onChange={(e) => setAdresse(e.target.value)} placeholder="Rue, quartier..." />
                 </div>
-                <div className="profil-field-row">
+
+                <div className="profil-field-row profil-field-row--3">
                     <div className="profil-field">
                         <label htmlFor="ville">Ville</label>
                         <input id="ville" value={ville} onChange={(e) => setVille(e.target.value)} placeholder="Thiès" />
@@ -326,12 +368,13 @@ export function ProfilCandidatPage() {
                         <input id="pays" value={pays} onChange={(e) => setPays(e.target.value)} placeholder="Sénégal" />
                     </div>
                 </div>
-                <div className="profil-field-row">
-                    <label className="profil-checkbox">
+
+                <div className="profil-toggle-row">
+                    <label className={`profil-toggle${mobilite ? " profil-toggle--active" : ""}`}>
                         <input type="checkbox" checked={mobilite} onChange={(e) => setMobilite(e.target.checked)} />
                         Mobilité géographique
                     </label>
-                    <label className="profil-checkbox">
+                    <label className={`profil-toggle${teletravail ? " profil-toggle--active" : ""}`}>
                         <input type="checkbox" checked={teletravail} onChange={(e) => setTeletravail(e.target.checked)} />
                         Ouvert au télétravail
                     </label>
@@ -360,7 +403,7 @@ export function ProfilCandidatPage() {
                         placeholder="Présentez-vous en quelques lignes..."
                     />
                 </div>
-                <div className="profil-field-row">
+                <div className="profil-field-row profil-field-row--3">
                     <div className="profil-field">
                         <label htmlFor="niveauExperience">Niveau d'expérience</label>
                         <select id="niveauExperience" value={niveauExperience} onChange={(e) => setNiveauExperience(e.target.value)}>
@@ -398,69 +441,137 @@ export function ProfilCandidatPage() {
 
             {/* Formation / Certifications */}
             <div className="profil-card">
-                <p className="profil-card__section-title">Formations</p>
+                <p className="profil-card__section-title">Parcours</p>
+                <p className="profil-card__subtitle">Formations</p>
                 <TagListEditor
                     values={formations}
                     onChange={setFormations}
-                    placeholder="Ex: Licence Informatique - UCAD (2022), puis Entrée"
+                    placeholder="Ex : Licence Informatique - UCAD (2022), puis Entrée"
                     emptyLabel="Aucune formation ajoutée pour l'instant."
                 />
 
-                <p className="profil-card__section-title">Certifications</p>
+                <p className="profil-card__subtitle">Certifications</p>
                 <TagListEditor
                     values={certifications}
                     onChange={setCertifications}
-                    placeholder="Ex: AWS Certified Cloud Practitioner (2024), puis Entrée"
+                    placeholder="Ex : AWS Certified Cloud Practitioner (2024), puis Entrée"
                     emptyLabel="Aucune certification ajoutée pour l'instant."
                 />
             </div>
 
             {/* Compétences / Langues */}
             <div className="profil-card">
-                <p className="profil-card__section-title">Compétences</p>
+                <p className="profil-card__section-title">Compétences & langues</p>
+                <p className="profil-card__subtitle">Compétences</p>
                 <TagListEditor
                     values={competences}
                     onChange={setCompetences}
-                    placeholder="Tapez une compétence puis Entrée (ex: Java, Spring Boot)"
+                    placeholder="Tapez une compétence puis Entrée (ex : Java, Spring Boot)"
                     emptyLabel="Aucune compétence ajoutée pour l'instant."
                 />
 
-                <p className="profil-card__section-title">Langues</p>
+                <p className="profil-card__subtitle">Langues</p>
                 <TagListEditor
                     values={langues}
                     onChange={setLangues}
-                    placeholder="Ex: Français - Courant, puis Entrée"
+                    placeholder="Ex : Français - Courant, puis Entrée"
                     emptyLabel="Aucune langue ajoutée pour l'instant."
                 />
             </div>
 
             {/* CV / Lettre de motivation */}
             <div className="profil-card">
-                <p className="profil-card__section-title">CV</p>
+                <p className="profil-card__section-title">Documents</p>
+
+                <p className="profil-card__subtitle">CV</p>
                 <div className="profil-field">
-                    <div className="profil-cv-row">
-                        <input ref={cvInputRef} type="file" accept="application/pdf" onChange={handleCvChange} disabled={cvUploading} />
-                        {cvPresent && !cvUploading && (
-                            <button type="button" className="profil-cv-link" onClick={handleCvDownload}>
-                                Voir le CV{cvOriginalFilename ? ` (${cvOriginalFilename})` : ""}
-                            </button>
-                        )}
-                    </div>
-                    {cvUploading && <p className="profil-field__hint">Envoi en cours...</p>}
+                    {cvPresent && !cvUploading ? (
+                        <div className="profil-file-card">
+                            <div className="profil-file-card__icon">
+                                <IconDocument />
+                            </div>
+                            <div className="profil-file-card__info">
+                                <div className="profil-file-card__name">{cvOriginalFilename ?? "cv.pdf"}</div>
+                                <div className="profil-file-card__meta">PDF</div>
+                            </div>
+                            <div className="profil-file-card__actions">
+                                <button type="button" className="profil-file-card__link" onClick={handleCvDownload}>
+                                    Voir
+                                </button>
+                                <label className="profil-file-card__link">
+                                    <input
+                                        ref={cvInputRef}
+                                        type="file"
+                                        accept="application/pdf"
+                                        onChange={handleCvChange}
+                                        className="profil-file-input-hidden"
+                                    />
+                                    Remplacer
+                                </label>
+                            </div>
+                        </div>
+                    ) : (
+                        <label className={`profil-empty-upload${cvUploading ? " profil-upload-btn--disabled" : ""}`} style={{ display: "flex", cursor: "pointer" }}>
+                            <input
+                                ref={cvInputRef}
+                                type="file"
+                                accept="application/pdf"
+                                onChange={handleCvChange}
+                                disabled={cvUploading}
+                                className="profil-file-input-hidden"
+                            />
+                            <IconDocument />
+                            <span className="profil-empty-upload__text">
+                                {cvUploading ? "Envoi en cours..." : "Cliquez pour ajouter votre CV (PDF, 5 Mo max)"}
+                            </span>
+                        </label>
+                    )}
                     {cvError && <p className="profil-message profil-message--error">{cvError}</p>}
                 </div>
 
-                <p className="profil-card__section-title">Lettre de motivation</p>
+                <p className="profil-card__subtitle">Lettre de motivation</p>
                 <div className="profil-field">
-                    <div className="profil-cv-row">
-                        <input ref={lmInputRef} type="file" accept="application/pdf" onChange={handleLmChange} disabled={lmUploading} />
-                        {lmPresente && !lmUploading && (
-                            <button type="button" className="profil-cv-link" onClick={handleLmDownload}>
-                                Voir la lettre{lmOriginalFilename ? ` (${lmOriginalFilename})` : ""}
-                            </button>
-                        )}
-                    </div>
-                    {lmUploading && <p className="profil-field__hint">Envoi en cours...</p>}
+                    {lmPresente && !lmUploading ? (
+                        <div className="profil-file-card">
+                            <div className="profil-file-card__icon">
+                                <IconDocument />
+                            </div>
+                            <div className="profil-file-card__info">
+                                <div className="profil-file-card__name">{lmOriginalFilename ?? "lettre-motivation.pdf"}</div>
+                                <div className="profil-file-card__meta">PDF</div>
+                            </div>
+                            <div className="profil-file-card__actions">
+                                <button type="button" className="profil-file-card__link" onClick={handleLmDownload}>
+                                    Voir
+                                </button>
+                                <label className="profil-file-card__link">
+                                    <input
+                                        ref={lmInputRef}
+                                        type="file"
+                                        accept="application/pdf"
+                                        onChange={handleLmChange}
+                                        className="profil-file-input-hidden"
+                                    />
+                                    Remplacer
+                                </label>
+                            </div>
+                        </div>
+                    ) : (
+                        <label className={`profil-empty-upload${lmUploading ? " profil-upload-btn--disabled" : ""}`} style={{ display: "flex", cursor: "pointer" }}>
+                            <input
+                                ref={lmInputRef}
+                                type="file"
+                                accept="application/pdf"
+                                onChange={handleLmChange}
+                                disabled={lmUploading}
+                                className="profil-file-input-hidden"
+                            />
+                            <IconDocument />
+                            <span className="profil-empty-upload__text">
+                                {lmUploading ? "Envoi en cours..." : "Cliquez pour ajouter votre lettre (PDF, 5 Mo max)"}
+                            </span>
+                        </label>
+                    )}
                     {lmError && <p className="profil-message profil-message--error">{lmError}</p>}
                 </div>
             </div>
@@ -468,10 +579,15 @@ export function ProfilCandidatPage() {
             {/* Réseaux */}
             <div className="profil-card">
                 <p className="profil-card__section-title">Réseaux</p>
-                <div className="profil-field-row">
+                <div className="profil-field-row profil-field-row--3">
                     <div className="profil-field">
                         <label htmlFor="linkedin">LinkedIn</label>
-                        <input id="linkedin" value={linkedin} onChange={(e) => setLinkedin(e.target.value)} placeholder="https://linkedin.com/in/..." />
+                        <input
+                            id="linkedin"
+                            value={linkedin}
+                            onChange={(e) => setLinkedin(e.target.value)}
+                            placeholder="https://linkedin.com/in/..."
+                        />
                     </div>
                     <div className="profil-field">
                         <label htmlFor="github">GitHub</label>
@@ -484,6 +600,7 @@ export function ProfilCandidatPage() {
                 </div>
             </div>
 
+            {/* Meta */}
             <div className="profil-card">
                 <p className="profil-card__section-title">Informations</p>
                 <div className="profil-meta">

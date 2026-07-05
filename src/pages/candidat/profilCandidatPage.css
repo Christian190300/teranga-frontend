@@ -8,7 +8,7 @@
 }
 
 .profil-page {
-    max-width: 720px;
+    max-width: 760px;
     margin: 0 auto;
     padding: 48px 24px 80px;
     font-family: 'Inter', -apple-system, sans-serif;
@@ -68,25 +68,43 @@
     border-top: 1px solid #f0f1f4;
 }
 
-/* ---------- Photo ---------- */
-.profil-photo-row {
+.profil-card__subtitle {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #14294d;
+    margin: 0 0 12px;
+}
+
+.profil-card__subtitle:not(:first-child) {
+    margin-top: 26px;
+}
+
+/* ---------- Photo (avatar + bouton overlay) ---------- */
+.profil-avatar-row {
     display: flex;
     align-items: center;
     gap: 22px;
 }
 
-.profil-photo-preview {
-    width: 88px;
-    height: 88px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #f0f1f4;
+.profil-avatar-wrap {
+    position: relative;
+    width: 92px;
+    height: 92px;
     flex-shrink: 0;
 }
 
+.profil-photo-preview {
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #f0f1f4;
+    display: block;
+}
+
 .profil-photo-placeholder {
-    width: 88px;
-    height: 88px;
+    width: 92px;
+    height: 92px;
     border-radius: 50%;
     background: #eaf0fb;
     color: #14294d;
@@ -95,13 +113,50 @@
     justify-content: center;
     font-weight: 700;
     font-size: 1.6rem;
-    flex-shrink: 0;
     border: 2px solid #f0f1f4;
 }
 
-.profil-photo-field {
+.profil-avatar-edit {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #14294d;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid white;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.profil-avatar-edit:hover {
+    background: #1e3a6b;
+}
+
+.profil-avatar-edit:has(input:disabled) {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.profil-avatar-edit svg {
+    width: 15px;
+    height: 15px;
+}
+
+.profil-avatar-info {
     flex: 1;
     min-width: 0;
+}
+
+.profil-avatar-info__title {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #14294d;
+    margin: 0 0 4px;
 }
 
 /* ---------- Hidden native file input + custom trigger button ---------- */
@@ -137,13 +192,10 @@
     border-color: #eaf0fb;
 }
 
-.profil-upload-btn:disabled {
+.profil-upload-btn--disabled {
     opacity: 0.55;
     cursor: not-allowed;
-}
-
-.profil-upload-btn--ghost {
-    background: transparent;
+    pointer-events: none;
 }
 
 .profil-field__hint {
@@ -172,6 +224,8 @@
 
 .profil-field input[type="text"],
 .profil-field input:not([type]),
+.profil-field input[type="number"],
+.profil-field select,
 .profil-field textarea {
     width: 100%;
     padding: 11px 14px;
@@ -182,9 +236,23 @@
     background: #f7f8fb;
     color: #14294d;
     transition: border-color 0.15s ease, background 0.15s ease;
+    appearance: none;
+}
+
+.profil-field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239aa1ac' stroke-width='1.5' fill='none' fill-rule='evenodd'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+}
+
+.profil-field textarea {
+    resize: vertical;
+    min-height: 100px;
 }
 
 .profil-field input:focus,
+.profil-field select:focus,
 .profil-field textarea:focus {
     outline: none;
     border-color: #c8951e;
@@ -197,13 +265,54 @@
     gap: 16px;
 }
 
-@media (max-width: 560px) {
-    .profil-field-row {
+.profil-field-row--3 {
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+@media (max-width: 640px) {
+    .profil-field-row,
+    .profil-field-row--3 {
         grid-template-columns: 1fr;
     }
 }
 
-/* ---------- CV — carte fichier ---------- */
+/* ---------- Toggles (mobilité / télétravail) ---------- */
+.profil-toggle-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.profil-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    border: 1.5px solid #e8e9ee;
+    background: #f7f8fb;
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: #667085;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+}
+
+.profil-toggle input {
+    accent-color: #14294d;
+    width: 15px;
+    height: 15px;
+    margin: 0;
+}
+
+.profil-toggle--active {
+    background: #eaf0fb;
+    border-color: #cddcf5;
+    color: #14294d;
+}
+
+/* ---------- Documents — carte fichier ---------- */
 .profil-file-card {
     display: flex;
     align-items: center;
@@ -224,7 +333,11 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    font-size: 1.1rem;
+}
+
+.profil-file-card__icon svg {
+    width: 18px;
+    height: 18px;
 }
 
 .profil-file-card__info {
@@ -253,6 +366,26 @@
     flex-shrink: 0;
 }
 
+.profil-file-card__link {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 14px;
+    border-radius: 7px;
+    border: 1.5px solid #e8e9ee;
+    background: white;
+    color: #14294d;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s ease;
+    white-space: nowrap;
+}
+
+.profil-file-card__link:hover {
+    background: #eaf0fb;
+}
+
 .profil-empty-upload {
     display: flex;
     align-items: center;
@@ -271,7 +404,7 @@
     color: #9aa1ac;
 }
 
-/* ---------- Compétences (tags) ---------- */
+/* ---------- Compétences / Formations / Certifications (tags) ---------- */
 .profil-tags {
     display: flex;
     flex-wrap: wrap;
@@ -342,12 +475,6 @@
     font-size: 0.9rem;
     font-weight: 700;
     color: #14294d;
-}
-.profil-checkbox {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.9rem;
 }
 
 /* ---------- Messages ---------- */
