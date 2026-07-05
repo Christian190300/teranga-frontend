@@ -2,6 +2,13 @@
     min-height: 100vh;
 }
 
+/* État transitoire : le rôle de l'utilisateur n'est pas encore connu, on n'affiche
+   ni Navbar ni Sidebar pour éviter le flash de layout au rechargement de page. */
+.app-shell__boot {
+    min-height: 100vh;
+    background: #f7f8fb;
+}
+
 .app-shell--horizontal .app-shell__content {
     min-height: calc(100vh - 82px);
 }

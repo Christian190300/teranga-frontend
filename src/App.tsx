@@ -6,6 +6,7 @@ import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
 import { ProfilCandidatPage } from "./pages/candidat/ProfilCandidatPage";
 import { ProfilRecruteurPage } from "./pages/recruteur/ProfilRecruteurPage";
+import { UserAdminPage } from "./pages/admin/UserAdminPage";
 
 export default function App() {
     return (
@@ -18,6 +19,7 @@ export default function App() {
                         <Route path="/inscription" element={<RegisterPage />} />
                         <Route path="/candidat/profil" element={<ProfilCandidatPage />} />
                         <Route path="/recruteur/entreprise" element={<ProfilRecruteurPage />} />
+                        <Route path="/admin/utilisateurs" element={<UserAdminPage />} />
                         {/* Routes à venir : /admin, /offres, /candidat/candidatures, /recruteur/offres, etc. */}
                     </Routes>
                 </AppLayout>

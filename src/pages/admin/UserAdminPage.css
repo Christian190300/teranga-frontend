@@ -1,0 +1,336 @@
+/* ============================================================
+   ADMIN — gestion des utilisateurs
+   ============================================================ */
+
+.admin-page {
+    --ap-navy: #14294d;
+    --ap-navy-soft: #eaf0fb;
+    --ap-gold: #c8951e;
+    --ap-gold-light: #e8b84b;
+    --ap-gold-soft: #fbf0d9;
+    --ap-gold-text: #8a6414;
+    --ap-muted: #6b7280;
+    --ap-line: #e8e9ee;
+    --ap-danger: #b3261e;
+    --ap-danger-soft: #fbeceb;
+    --ap-success: #1e7a4c;
+    --ap-success-soft: #eaf7f0;
+
+    background: #f7f8fa;
+    min-height: 100vh;
+    font-family: "Inter", sans-serif;
+    color: var(--ap-navy);
+}
+
+.admin-page * {
+    box-sizing: border-box;
+}
+
+.admin-page__container {
+    width: 100%;
+    padding: 48px 64px;
+}
+
+@media (max-width: 900px) {
+    .admin-page__container {
+        padding: 32px 24px;
+    }
+}
+
+.admin-page__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+}
+
+.admin-page__title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin: 0;
+}
+
+.admin-page__subtitle {
+    color: var(--ap-muted);
+    margin: 4px 0 0;
+    font-size: 0.92rem;
+}
+
+/* ---------- Boutons ---------- */
+.admin-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 11px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: 1.5px solid transparent;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+}
+
+.admin-btn--primary {
+    background: var(--ap-gold-light);
+    color: #0d1c38;
+}
+.admin-btn--primary:hover {
+    background: var(--ap-gold);
+}
+.admin-btn--primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.admin-btn--ghost {
+    background: white;
+    border-color: var(--ap-line);
+    color: var(--ap-navy);
+}
+.admin-btn--ghost:hover {
+    background: var(--ap-navy-soft);
+}
+.admin-btn--ghost:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+/* ---------- Barre d'outils ---------- */
+.admin-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.admin-input,
+.admin-select,
+.admin-form__field input,
+.admin-form__field select {
+    font-family: "Inter", sans-serif;
+    font-size: 0.9rem;
+    border: 1.5px solid var(--ap-line);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: var(--ap-navy);
+    background: white;
+    outline: none;
+    transition: border-color 0.15s ease;
+}
+
+.admin-input:focus,
+.admin-select:focus,
+.admin-form__field input:focus,
+.admin-form__field select:focus {
+    border-color: var(--ap-gold);
+}
+
+.admin-input {
+    width: 320px;
+    max-width: 100%;
+}
+
+.admin-toolbar__count {
+    font-size: 0.85rem;
+    color: var(--ap-muted);
+    white-space: nowrap;
+}
+
+/* ---------- Alerte ---------- */
+.admin-alert {
+    background: var(--ap-danger-soft);
+    color: var(--ap-danger);
+    border: 1.5px solid rgba(179, 38, 30, 0.25);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 0.88rem;
+    margin-bottom: 16px;
+}
+
+/* ---------- Table ---------- */
+.admin-table-wrap {
+    background: white;
+    border: 1.5px solid var(--ap-line);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(20, 41, 77, 0.04);
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table thead th {
+    text-align: left;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ap-muted);
+    padding: 14px 20px;
+    border-bottom: 1.5px solid var(--ap-line);
+    background: #fafbfc;
+}
+
+.admin-table tbody td {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--ap-line);
+    font-size: 0.9rem;
+    vertical-align: middle;
+}
+
+.admin-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.admin-table tbody tr:hover {
+    background: #fafbfc;
+}
+
+.admin-table__empty {
+    text-align: center;
+    color: var(--ap-muted);
+    padding: 40px 0 !important;
+}
+
+.admin-table__user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.admin-table__avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--ap-navy-soft);
+    color: var(--ap-navy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.admin-table__name {
+    font-weight: 600;
+    color: var(--ap-navy);
+}
+
+.admin-table__username {
+    font-size: 0.8rem;
+    color: var(--ap-muted);
+}
+
+/* ---------- Statut (badge cliquable) ---------- */
+.admin-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+}
+
+.admin-status:hover {
+    opacity: 0.8;
+}
+
+.admin-status.is-active {
+    background: var(--ap-success-soft);
+    color: var(--ap-success);
+}
+
+.admin-status.is-inactive {
+    background: var(--ap-danger-soft);
+    color: var(--ap-danger);
+}
+
+.admin-status__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+/* ---------- Pagination ---------- */
+.admin-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.admin-pagination__label {
+    font-size: 0.85rem;
+    color: var(--ap-muted);
+}
+
+/* ---------- Modal ---------- */
+.admin-modal__backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(13, 28, 56, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 100;
+}
+
+.admin-modal {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    width: 100%;
+    max-width: 460px;
+    box-shadow: 0 24px 48px -16px rgba(0, 0, 0, 0.3);
+}
+
+.admin-modal__title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    margin: 0 0 20px;
+    letter-spacing: -0.01em;
+}
+
+.admin-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.admin-form__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.admin-form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--ap-navy);
+}
+
+.admin-form__field input,
+.admin-form__field select {
+    font-weight: 400;
+}
+
+.admin-modal__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 8px;
+}

@@ -43,7 +43,7 @@ async function chargerPhotoSelonRole(role: Role | null): Promise<string | null> 
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [authenticated, setAuthenticated] = useState(authService.isAuthenticated());
     const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
-    const [isLoadingUser, setIsLoadingUser] = useState(false);
+    const [isLoadingUser, setIsLoadingUser] = useState(authService.isAuthenticated());
 
     // Garde une référence vers l'URL blob active pour pouvoir la révoquer proprement
     // (évite les fuites mémoire) sans dépendre de currentUser dans les deps d'effet.

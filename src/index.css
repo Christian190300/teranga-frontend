@@ -3,123 +3,14 @@
    Pleine largeur, une seule famille de police (Inter), hiérarchie
    par le poids et l'espacement plutôt que par l'effet. Aucun motif,
    aucun dégradé : le sérieux vient de la précision, pas de la déco.
+
+   IMPORTANT : ce fichier ne doit contenir QUE des styles préfixés
+   .home-*. Les styles de layout (.app-shell, .sidebar, etc.) vivent
+   exclusivement dans AppLayout.css / Sidebar.css / Navbar.css pour
+   éviter que deux fichiers définissent la même classe globale.
    ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-
-/* ============================================================
-   APP SHELL — sidebar verticale (admin) / navbar horizontale (candidat, recruteur)
-   ============================================================ */
-
-.app-shell {
-    min-height: 100vh;
-}
-
-/* ---------- Layout horizontal (candidat / recruteur / visiteur) ---------- */
-.app-shell--horizontal .app-shell__content {
-    min-height: calc(100vh - 82px);
-}
-
-/* ---------- Layout vertical (admin) ---------- */
-.app-shell--vertical {
-    display: flex;
-}
-
-.sidebar {
-    width: 260px;
-    flex-shrink: 0;
-    background: var(--color-forest-dark);
-    color: white;
-    min-height: 100vh;
-    padding: 24px 16px;
-    display: flex;
-    flex-direction: column;
-}
-
-.sidebar__brand {
-    font-family: var(--font-display);
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: white;
-    text-decoration: none;
-    padding: 0 12px;
-    margin-bottom: 8px;
-}
-
-.sidebar__brand span {
-    color: var(--color-gold);
-}
-
-.sidebar__role {
-    padding: 0 12px;
-    margin-bottom: 32px;
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.55);
-}
-
-.sidebar__nav {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    flex: 1;
-}
-
-.sidebar__link {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 11px 12px;
-    border-radius: 6px;
-    color: rgba(255, 255, 255, 0.75);
-    text-decoration: none;
-    font-size: 0.92rem;
-    font-weight: 500;
-    transition: background 0.15s ease, color 0.15s ease;
-}
-
-.sidebar__link:hover {
-    background: rgba(255, 255, 255, 0.06);
-    color: white;
-}
-
-.sidebar__link.active {
-    background: var(--color-gold);
-    color: var(--color-forest-dark);
-}
-
-.sidebar__footer {
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
-    padding-top: 16px;
-    margin-top: 16px;
-}
-
-.sidebar__logout {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 11px 12px;
-    border-radius: 6px;
-    background: transparent;
-    border: none;
-    color: rgba(255, 255, 255, 0.75);
-    font-size: 0.92rem;
-    font-weight: 500;
-    text-align: left;
-}
-
-.sidebar__logout:hover {
-    background: rgba(255, 255, 255, 0.06);
-    color: white;
-}
-
-.app-shell__main {
-    flex: 1;
-    min-width: 0;
-    background: var(--color-paper);
-    min-height: 100vh;
-}
-
 
 .home-page {
     --hp-navy: #14294d;
