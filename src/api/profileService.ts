@@ -7,14 +7,42 @@ import { httpClient } from "./httpClient";
 export interface ProfilCandidatDTO {
     id: number | null;
     userId: string;
+
     telephone: string | null;
     adresse: string | null;
+    sexe: string | null;
+    ville: string | null;
+    region: string | null;
+    pays: string | null;
+    mobilite: boolean | null;
+    teletravail: boolean | null;
+
+    titreProfessionnel: string | null;
+    aPropos: string | null;
+    niveauExperience: string | null;
+    anneesExperience: number | null;
+    disponibilite: string | null;
+
+    formations: string[] | null;
+    certifications: string[] | null;
+    langues: string[] | null;
+    competences: string[] | null;
+
+    linkedin: string | null;
+    github: string | null;
+    portfolio: string | null;
+
     photoContentType: string | null;
     photoPresente: boolean;
+
     cvOriginalFilename: string | null;
     cvContentType: string | null;
     cvPresent: boolean;
-    competences: string[] | null;
+
+    lettreMotivationOriginalFilename: string | null;
+    lettreMotivationContentType: string | null;
+    lettreMotivationPresente: boolean;
+
     dateCreation: string | null;
     dateMaj: string | null;
 }
@@ -22,7 +50,24 @@ export interface ProfilCandidatDTO {
 export interface UpdateProfilCandidatPayload {
     telephone?: string;
     adresse?: string;
+    sexe?: string;
+    ville?: string;
+    region?: string;
+    pays?: string;
+    mobilite?: boolean;
+    teletravail?: boolean;
+    titreProfessionnel?: string;
+    aPropos?: string;
+    niveauExperience?: string;
+    anneesExperience?: number;
+    disponibilite?: string;
+    formations?: string[];
+    certifications?: string[];
+    langues?: string[];
     competences?: string[];
+    linkedin?: string;
+    github?: string;
+    portfolio?: string;
 }
 
 export async function getMonProfilCandidat(): Promise<ProfilCandidatDTO> {
@@ -43,11 +88,6 @@ export async function uploaderPhotoCandidat(file: File): Promise<ProfilCandidatD
     return response.data;
 }
 
-/**
- * Récupère la photo de profil du candidat connecté sous forme d'URL utilisable
- * dans un <img src>. Le blob doit être révoqué (URL.revokeObjectURL) quand il
- * n'est plus utilisé, pour éviter les fuites mémoire.
- */
 export async function obtenirPhotoCandidatUrl(): Promise<string | null> {
     try {
         const response = await httpClient.get("/profil/photo", { responseType: "blob" });
@@ -65,7 +105,6 @@ export async function uploaderCvCandidat(file: File): Promise<ProfilCandidatDTO>
     return response.data;
 }
 
-/** Déclenche le téléchargement du CV du candidat connecté. */
 export async function telechargerCvCandidat(nomFichier = "cv.pdf"): Promise<void> {
     const response = await httpClient.get("/profil/cv", { responseType: "blob" });
     const url = URL.createObjectURL(response.data as Blob);
@@ -76,8 +115,26 @@ export async function telechargerCvCandidat(nomFichier = "cv.pdf"): Promise<void
     URL.revokeObjectURL(url);
 }
 
+/** Téléverse (ou remplace) la lettre de motivation (PDF) du candidat connecté. */
+export async function uploaderLettreMotivation(file: File): Promise<ProfilCandidatDTO> {
+    const formData = new FormData();
+    formData.append("file", file);
+    const response = await httpClient.post<ProfilCandidatDTO>("/profil/lettre-motivation", formData);
+    return response.data;
+}
+
+export async function telechargerLettreMotivation(nomFichier = "lettre-motivation.pdf"): Promise<void> {
+    const response = await httpClient.get("/profil/lettre-motivation", { responseType: "blob" });
+    const url = URL.createObjectURL(response.data as Blob);
+    const lien = document.createElement("a");
+    lien.href = url;
+    lien.download = nomFichier;
+    lien.click();
+    URL.revokeObjectURL(url);
+}
+
 // ---------------------------------------------------------------------------
-// Recruteur
+// Recruteur (inchangé)
 // ---------------------------------------------------------------------------
 
 export interface ProfilRecruteurDTO {
@@ -110,7 +167,6 @@ export async function updateMonProfilRecruteur(payload: UpdateProfilRecruteurPay
     return response.data;
 }
 
-/** Téléverse (ou remplace) le logo de l'entreprise du recruteur connecté. */
 export async function uploaderLogoRecruteur(file: File): Promise<ProfilRecruteurDTO> {
     const formData = new FormData();
     formData.append("file", file);
@@ -118,10 +174,6 @@ export async function uploaderLogoRecruteur(file: File): Promise<ProfilRecruteur
     return response.data;
 }
 
-/**
- * Récupère le logo de l'entreprise sous forme d'URL utilisable dans un <img src>.
- * Le blob doit être révoqué (URL.revokeObjectURL) quand il n'est plus utilisé.
- */
 export async function obtenirLogoRecruteurUrl(): Promise<string | null> {
     try {
         const response = await httpClient.get("/profil-recruteur/logo", { responseType: "blob" });

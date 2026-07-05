@@ -4,12 +4,16 @@ import {
     updateMonProfilCandidat,
     uploaderPhotoCandidat,
     uploaderCvCandidat,
+    uploaderLettreMotivation,
     obtenirPhotoCandidatUrl,
     telechargerCvCandidat,
+    telechargerLettreMotivation,
     type ProfilCandidatDTO,
 } from "../../api/profileService";
+import { useAuth } from "../../context/AuthContext";
 import { useAutoSave } from "../../hooks/useAutoSave";
 import { SaveStatusBadge } from "../../components/common/SaveStatusBadge";
+import { TagListEditor } from "../../components/common/TagListEditor";
 import "./profilCandidatPage.css";
 
 function formatDate(iso: string | null): string {
@@ -17,30 +21,66 @@ function formatDate(iso: string | null): string {
     return new Date(iso).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
 }
 
+const NIVEAUX_EXPERIENCE = ["Débutant", "Junior", "Intermédiaire", "Sénior", "Expert"];
+const DISPONIBILITES = ["Immédiate", "Sous 1 mois", "Sous 3 mois", "Non disponible"];
+
 export function ProfilCandidatPage() {
+    const { refreshPhoto } = useAuth();
+
     const [loading, setLoading] = useState(true);
     const [loadError, setLoadError] = useState<string | null>(null);
 
+    // Coordonnées personnelles
     const [telephone, setTelephone] = useState("");
     const [adresse, setAdresse] = useState("");
-    const [competences, setCompetences] = useState<string[]>([]);
-    const [newCompetence, setNewCompetence] = useState("");
+    const [sexe, setSexe] = useState("");
+    const [ville, setVille] = useState("");
+    const [region, setRegion] = useState("");
+    const [pays, setPays] = useState("");
+    const [mobilite, setMobilite] = useState(false);
+    const [teletravail, setTeletravail] = useState(false);
 
-    const [photoPresente, setPhotoPresente] = useState(false);
+    // Informations professionnelles
+    const [titreProfessionnel, setTitreProfessionnel] = useState("");
+    const [aPropos, setAPropos] = useState("");
+    const [niveauExperience, setNiveauExperience] = useState("");
+    const [anneesExperience, setAnneesExperience] = useState<number | "">("");
+    const [disponibilite, setDisponibilite] = useState("");
+
+    // Listes
+    const [formations, setFormations] = useState<string[]>([]);
+    const [certifications, setCertifications] = useState<string[]>([]);
+    const [langues, setLangues] = useState<string[]>([]);
+    const [competences, setCompetences] = useState<string[]>([]);
+
+    // Réseaux
+    const [linkedin, setLinkedin] = useState("");
+    const [github, setGithub] = useState("");
+    const [portfolio, setPortfolio] = useState("");
+
+    // Photo
     const [photoUrl, setPhotoUrl] = useState<string | null>(null);
     const [photoUploading, setPhotoUploading] = useState(false);
     const [photoError, setPhotoError] = useState<string | null>(null);
 
+    // CV
     const [cvPresent, setCvPresent] = useState(false);
     const [cvOriginalFilename, setCvOriginalFilename] = useState<string | null>(null);
     const [cvUploading, setCvUploading] = useState(false);
     const [cvError, setCvError] = useState<string | null>(null);
+
+    // Lettre de motivation
+    const [lmPresente, setLmPresente] = useState(false);
+    const [lmOriginalFilename, setLmOriginalFilename] = useState<string | null>(null);
+    const [lmUploading, setLmUploading] = useState(false);
+    const [lmError, setLmError] = useState<string | null>(null);
 
     const [dateCreation, setDateCreation] = useState<string | null>(null);
     const [dateMaj, setDateMaj] = useState<string | null>(null);
 
     const photoInputRef = useRef<HTMLInputElement>(null);
     const cvInputRef = useRef<HTMLInputElement>(null);
+    const lmInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         async function charger() {
@@ -48,16 +88,39 @@ export function ProfilCandidatPage() {
                 const data: ProfilCandidatDTO = await getMonProfilCandidat();
                 setTelephone(data.telephone ?? "");
                 setAdresse(data.adresse ?? "");
+                setSexe(data.sexe ?? "");
+                setVille(data.ville ?? "");
+                setRegion(data.region ?? "");
+                setPays(data.pays ?? "");
+                setMobilite(data.mobilite ?? false);
+                setTeletravail(data.teletravail ?? false);
+
+                setTitreProfessionnel(data.titreProfessionnel ?? "");
+                setAPropos(data.aPropos ?? "");
+                setNiveauExperience(data.niveauExperience ?? "");
+                setAnneesExperience(data.anneesExperience ?? "");
+                setDisponibilite(data.disponibilite ?? "");
+
+                setFormations(data.formations ?? []);
+                setCertifications(data.certifications ?? []);
+                setLangues(data.langues ?? []);
                 setCompetences(data.competences ?? []);
-                setPhotoPresente(data.photoPresente);
+
+                setLinkedin(data.linkedin ?? "");
+                setGithub(data.github ?? "");
+                setPortfolio(data.portfolio ?? "");
+
                 setCvPresent(data.cvPresent);
                 setCvOriginalFilename(data.cvOriginalFilename);
+                setLmPresente(data.lettreMotivationPresente);
+                setLmOriginalFilename(data.lettreMotivationOriginalFilename);
+
                 setDateCreation(data.dateCreation);
                 setDateMaj(data.dateMaj);
 
                 if (data.photoPresente) {
                     const url = await obtenirPhotoCandidatUrl();
-                    if (url) setPhotoUrl(url);
+                    setPhotoUrl(url);
                 }
             } catch {
                 setLoadError("Impossible de charger votre profil pour le moment.");
@@ -75,9 +138,33 @@ export function ProfilCandidatPage() {
     }, [photoUrl]);
 
     const saveStatus = useAutoSave(
-        { telephone, adresse, competences },
+        {
+            telephone,
+            adresse,
+            sexe,
+            ville,
+            region,
+            pays,
+            mobilite,
+            teletravail,
+            titreProfessionnel,
+            aPropos,
+            niveauExperience,
+            anneesExperience,
+            disponibilite,
+            formations,
+            certifications,
+            langues,
+            competences,
+            linkedin,
+            github,
+            portfolio,
+        },
         async (value) => {
-            const updated = await updateMonProfilCandidat(value);
+            const updated = await updateMonProfilCandidat({
+                ...value,
+                anneesExperience: value.anneesExperience === "" ? undefined : Number(value.anneesExperience),
+            });
             setDateMaj(updated.dateMaj);
         },
         900,
@@ -92,16 +179,13 @@ export function ProfilCandidatPage() {
         setPhotoUploading(true);
         try {
             const updated = await uploaderPhotoCandidat(file);
-            setPhotoPresente(updated.photoPresente);
             setDateMaj(updated.dateMaj);
 
             if (photoUrl) URL.revokeObjectURL(photoUrl);
             const url = await obtenirPhotoCandidatUrl();
-            if (url) {
-                setPhotoUrl(url);
-            } else {
-                setPhotoError("La photo a été envoyée mais n'a pas pu être affichée. Rechargez la page.");
-            }
+            setPhotoUrl(url);
+
+            await refreshPhoto();
         } catch {
             setPhotoError("Échec de l'envoi de la photo. Vérifiez le format (JPEG, PNG, WebP) et la taille (2 Mo max).");
         } finally {
@@ -129,6 +213,25 @@ export function ProfilCandidatPage() {
         }
     }
 
+    async function handleLmChange(e: React.ChangeEvent<HTMLInputElement>) {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setLmError(null);
+        setLmUploading(true);
+        try {
+            const updated = await uploaderLettreMotivation(file);
+            setLmPresente(updated.lettreMotivationPresente);
+            setLmOriginalFilename(updated.lettreMotivationOriginalFilename);
+            setDateMaj(updated.dateMaj);
+        } catch {
+            setLmError("Échec de l'envoi de la lettre. Vérifiez qu'il s'agit bien d'un PDF (5 Mo max).");
+        } finally {
+            setLmUploading(false);
+            if (lmInputRef.current) lmInputRef.current.value = "";
+        }
+    }
+
     async function handleCvDownload() {
         try {
             await telechargerCvCandidat(cvOriginalFilename ?? "cv.pdf");
@@ -137,16 +240,12 @@ export function ProfilCandidatPage() {
         }
     }
 
-    function ajouterCompetence() {
-        const value = newCompetence.trim();
-        if (value && !competences.includes(value)) {
-            setCompetences([...competences, value]);
+    async function handleLmDownload() {
+        try {
+            await telechargerLettreMotivation(lmOriginalFilename ?? "lettre-motivation.pdf");
+        } catch {
+            setLmError("Impossible de télécharger la lettre pour le moment.");
         }
-        setNewCompetence("");
-    }
-
-    function retirerCompetence(competence: string) {
-        setCompetences(competences.filter((c) => c !== competence));
     }
 
     if (loading) {
@@ -165,6 +264,7 @@ export function ProfilCandidatPage() {
 
             {loadError && <div className="profil-message profil-message--error">{loadError}</div>}
 
+            {/* Photo */}
             <div className="profil-card">
                 <p className="profil-card__section-title">Photo</p>
                 <div className="profil-photo-row">
@@ -178,126 +278,209 @@ export function ProfilCandidatPage() {
                             ref={photoInputRef}
                             type="file"
                             accept="image/jpeg,image/png,image/webp"
-                            className="profil-file-input-hidden"
                             onChange={handlePhotoChange}
                             disabled={photoUploading}
                         />
-                        <button
-                            type="button"
-                            className="profil-upload-btn"
-                            onClick={() => photoInputRef.current?.click()}
-                            disabled={photoUploading}
-                        >
-                            {photoUploading ? "Envoi en cours..." : photoPresente ? "Changer la photo" : "Importer une photo"}
-                        </button>
-                        <p className="profil-field__hint">JPEG, PNG ou WebP — 2 Mo maximum.</p>
-                        {photoError && <div className="profil-message profil-message--error">{photoError}</div>}
+                        <p className="profil-field__hint">
+                            {photoUploading
+                                ? "Envoi en cours..."
+                                : "Sélectionnez une photo depuis votre appareil (JPEG, PNG, WebP, 2 Mo max)."}
+                        </p>
+                        {photoError && <p className="profil-message profil-message--error">{photoError}</p>}
                     </div>
                 </div>
+            </div>
 
+            {/* Coordonnées personnelles */}
+            <div className="profil-card">
                 <p className="profil-card__section-title">Coordonnées</p>
                 <div className="profil-field-row">
                     <div className="profil-field">
                         <label htmlFor="telephone">Téléphone</label>
+                        <input id="telephone" value={telephone} onChange={(e) => setTelephone(e.target.value)} placeholder="+221 77 123 45 67" />
+                    </div>
+                    <div className="profil-field">
+                        <label htmlFor="sexe">Sexe</label>
+                        <select id="sexe" value={sexe} onChange={(e) => setSexe(e.target.value)}>
+                            <option value="">Non précisé</option>
+                            <option value="HOMME">Homme</option>
+                            <option value="FEMME">Femme</option>
+                        </select>
+                    </div>
+                </div>
+                <div className="profil-field">
+                    <label htmlFor="adresse">Adresse</label>
+                    <input id="adresse" value={adresse} onChange={(e) => setAdresse(e.target.value)} placeholder="Rue, quartier..." />
+                </div>
+                <div className="profil-field-row">
+                    <div className="profil-field">
+                        <label htmlFor="ville">Ville</label>
+                        <input id="ville" value={ville} onChange={(e) => setVille(e.target.value)} placeholder="Thiès" />
+                    </div>
+                    <div className="profil-field">
+                        <label htmlFor="region">Région</label>
+                        <input id="region" value={region} onChange={(e) => setRegion(e.target.value)} placeholder="Thiès" />
+                    </div>
+                    <div className="profil-field">
+                        <label htmlFor="pays">Pays</label>
+                        <input id="pays" value={pays} onChange={(e) => setPays(e.target.value)} placeholder="Sénégal" />
+                    </div>
+                </div>
+                <div className="profil-field-row">
+                    <label className="profil-checkbox">
+                        <input type="checkbox" checked={mobilite} onChange={(e) => setMobilite(e.target.checked)} />
+                        Mobilité géographique
+                    </label>
+                    <label className="profil-checkbox">
+                        <input type="checkbox" checked={teletravail} onChange={(e) => setTeletravail(e.target.checked)} />
+                        Ouvert au télétravail
+                    </label>
+                </div>
+            </div>
+
+            {/* Informations professionnelles */}
+            <div className="profil-card">
+                <p className="profil-card__section-title">Informations professionnelles</p>
+                <div className="profil-field">
+                    <label htmlFor="titreProfessionnel">Titre professionnel</label>
+                    <input
+                        id="titreProfessionnel"
+                        value={titreProfessionnel}
+                        onChange={(e) => setTitreProfessionnel(e.target.value)}
+                        placeholder="Développeur Full Stack Java/Angular"
+                    />
+                </div>
+                <div className="profil-field">
+                    <label htmlFor="aPropos">À propos</label>
+                    <textarea
+                        id="aPropos"
+                        rows={5}
+                        value={aPropos}
+                        onChange={(e) => setAPropos(e.target.value)}
+                        placeholder="Présentez-vous en quelques lignes..."
+                    />
+                </div>
+                <div className="profil-field-row">
+                    <div className="profil-field">
+                        <label htmlFor="niveauExperience">Niveau d'expérience</label>
+                        <select id="niveauExperience" value={niveauExperience} onChange={(e) => setNiveauExperience(e.target.value)}>
+                            <option value="">Non précisé</option>
+                            {NIVEAUX_EXPERIENCE.map((n) => (
+                                <option key={n} value={n}>
+                                    {n}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="profil-field">
+                        <label htmlFor="anneesExperience">Années d'expérience</label>
                         <input
-                            id="telephone"
-                            value={telephone}
-                            onChange={(e) => setTelephone(e.target.value)}
-                            placeholder="+221 77 123 45 67"
+                            id="anneesExperience"
+                            type="number"
+                            min={0}
+                            value={anneesExperience}
+                            onChange={(e) => setAnneesExperience(e.target.value === "" ? "" : Number(e.target.value))}
                         />
                     </div>
                     <div className="profil-field">
-                        <label htmlFor="adresse">Adresse</label>
-                        <input
-                            id="adresse"
-                            value={adresse}
-                            onChange={(e) => setAdresse(e.target.value)}
-                            placeholder="Thiès, Sénégal"
-                        />
+                        <label htmlFor="disponibilite">Disponibilité</label>
+                        <select id="disponibilite" value={disponibilite} onChange={(e) => setDisponibilite(e.target.value)}>
+                            <option value="">Non précisé</option>
+                            {DISPONIBILITES.map((d) => (
+                                <option key={d} value={d}>
+                                    {d}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                 </div>
+            </div>
 
+            {/* Formation / Certifications */}
+            <div className="profil-card">
+                <p className="profil-card__section-title">Formations</p>
+                <TagListEditor
+                    values={formations}
+                    onChange={setFormations}
+                    placeholder="Ex: Licence Informatique - UCAD (2022), puis Entrée"
+                    emptyLabel="Aucune formation ajoutée pour l'instant."
+                />
+
+                <p className="profil-card__section-title">Certifications</p>
+                <TagListEditor
+                    values={certifications}
+                    onChange={setCertifications}
+                    placeholder="Ex: AWS Certified Cloud Practitioner (2024), puis Entrée"
+                    emptyLabel="Aucune certification ajoutée pour l'instant."
+                />
+            </div>
+
+            {/* Compétences / Langues */}
+            <div className="profil-card">
+                <p className="profil-card__section-title">Compétences</p>
+                <TagListEditor
+                    values={competences}
+                    onChange={setCompetences}
+                    placeholder="Tapez une compétence puis Entrée (ex: Java, Spring Boot)"
+                    emptyLabel="Aucune compétence ajoutée pour l'instant."
+                />
+
+                <p className="profil-card__section-title">Langues</p>
+                <TagListEditor
+                    values={langues}
+                    onChange={setLangues}
+                    placeholder="Ex: Français - Courant, puis Entrée"
+                    emptyLabel="Aucune langue ajoutée pour l'instant."
+                />
+            </div>
+
+            {/* CV / Lettre de motivation */}
+            <div className="profil-card">
                 <p className="profil-card__section-title">CV</p>
                 <div className="profil-field">
-                    <input
-                        ref={cvInputRef}
-                        type="file"
-                        accept="application/pdf"
-                        className="profil-file-input-hidden"
-                        onChange={handleCvChange}
-                        disabled={cvUploading}
-                    />
-
-                    {cvPresent ? (
-                        <div className="profil-file-card">
-                            <span className="profil-file-card__icon">📄</span>
-                            <div className="profil-file-card__info">
-                                <div className="profil-file-card__name">{cvOriginalFilename ?? "cv.pdf"}</div>
-                                <div className="profil-file-card__meta">Document PDF</div>
-                            </div>
-                            <div className="profil-file-card__actions">
-                                <button type="button" className="profil-upload-btn" onClick={handleCvDownload}>
-                                    Voir
-                                </button>
-                                <button
-                                    type="button"
-                                    className="profil-upload-btn profil-upload-btn--ghost"
-                                    onClick={() => cvInputRef.current?.click()}
-                                    disabled={cvUploading}
-                                >
-                                    {cvUploading ? "Envoi..." : "Remplacer"}
-                                </button>
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="profil-empty-upload">
-                            <span className="profil-empty-upload__text">Aucun CV importé pour l'instant</span>
-                            <button
-                                type="button"
-                                className="profil-upload-btn"
-                                onClick={() => cvInputRef.current?.click()}
-                                disabled={cvUploading}
-                            >
-                                {cvUploading ? "Envoi en cours..." : "Importer un CV (PDF)"}
+                    <div className="profil-cv-row">
+                        <input ref={cvInputRef} type="file" accept="application/pdf" onChange={handleCvChange} disabled={cvUploading} />
+                        {cvPresent && !cvUploading && (
+                            <button type="button" className="profil-cv-link" onClick={handleCvDownload}>
+                                Voir le CV{cvOriginalFilename ? ` (${cvOriginalFilename})` : ""}
                             </button>
-                        </div>
-                    )}
-                    {cvError && <div className="profil-message profil-message--error">{cvError}</div>}
+                        )}
+                    </div>
+                    {cvUploading && <p className="profil-field__hint">Envoi en cours...</p>}
+                    {cvError && <p className="profil-message profil-message--error">{cvError}</p>}
                 </div>
 
-                <p className="profil-card__section-title">Compétences</p>
+                <p className="profil-card__section-title">Lettre de motivation</p>
                 <div className="profil-field">
-                    {competences.length > 0 ? (
-                        <div className="profil-tags">
-                            {competences.map((competence) => (
-                                <span className="profil-tag" key={competence}>
-                                    {competence}
-                                    <button
-                                        type="button"
-                                        className="profil-tag__remove"
-                                        onClick={() => retirerCompetence(competence)}
-                                        aria-label={`Retirer ${competence}`}
-                                    >
-                                        ×
-                                    </button>
-                                </span>
-                            ))}
-                        </div>
-                    ) : (
-                        <p className="profil-tags-empty">Aucune compétence ajoutée pour l'instant.</p>
-                    )}
+                    <div className="profil-cv-row">
+                        <input ref={lmInputRef} type="file" accept="application/pdf" onChange={handleLmChange} disabled={lmUploading} />
+                        {lmPresente && !lmUploading && (
+                            <button type="button" className="profil-cv-link" onClick={handleLmDownload}>
+                                Voir la lettre{lmOriginalFilename ? ` (${lmOriginalFilename})` : ""}
+                            </button>
+                        )}
+                    </div>
+                    {lmUploading && <p className="profil-field__hint">Envoi en cours...</p>}
+                    {lmError && <p className="profil-message profil-message--error">{lmError}</p>}
+                </div>
+            </div>
 
-                    <input
-                        value={newCompetence}
-                        onChange={(e) => setNewCompetence(e.target.value)}
-                        onKeyDown={(e) => {
-                            if (e.key === "Enter") {
-                                e.preventDefault();
-                                ajouterCompetence();
-                            }
-                        }}
-                        placeholder="Tapez une compétence puis Entrée (ex: Java, Spring Boot)"
-                    />
+            {/* Réseaux */}
+            <div className="profil-card">
+                <p className="profil-card__section-title">Réseaux</p>
+                <div className="profil-field-row">
+                    <div className="profil-field">
+                        <label htmlFor="linkedin">LinkedIn</label>
+                        <input id="linkedin" value={linkedin} onChange={(e) => setLinkedin(e.target.value)} placeholder="https://linkedin.com/in/..." />
+                    </div>
+                    <div className="profil-field">
+                        <label htmlFor="github">GitHub</label>
+                        <input id="github" value={github} onChange={(e) => setGithub(e.target.value)} placeholder="https://github.com/..." />
+                    </div>
+                    <div className="profil-field">
+                        <label htmlFor="portfolio">Portfolio</label>
+                        <input id="portfolio" value={portfolio} onChange={(e) => setPortfolio(e.target.value)} placeholder="https://..." />
+                    </div>
                 </div>
             </div>
 

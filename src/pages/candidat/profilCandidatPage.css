@@ -343,6 +343,12 @@
     font-weight: 700;
     color: #14294d;
 }
+.profil-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
 
 /* ---------- Messages ---------- */
 .profil-message {
