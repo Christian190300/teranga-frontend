@@ -1,5 +1,5 @@
 /* ============================================================
-   SIDEBAR — espace admin, même palette que la navbar
+   SIDEBAR — espace admin, groupée par section, lien actif plein
    ============================================================ */
 
 .sidebar,
@@ -11,8 +11,7 @@
     width: 260px;
     flex-shrink: 0;
     min-height: 100vh;
-    background: #14294d;
-    color: white;
+    background: #061b3c;
     padding: 24px 16px;
     display: flex;
     flex-direction: column;
@@ -20,46 +19,62 @@
 }
 
 .sidebar__brand {
-    display: inline-flex;
-    align-items: baseline;
-    font-weight: 800;
-    font-size: 1.2rem;
-    letter-spacing: -0.02em;
-    color: white;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 8px 24px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     text-decoration: none;
+}
+
+.sidebar__brand-mark {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: #c58e0b;
+    color: #14294d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+}
+
+.sidebar__brand-name {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: white;
+}
+
+.sidebar__section-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.4);
     padding: 0 12px;
     margin-bottom: 8px;
-}
-
-.sidebar__brand span {
-    color: #e8b84b;
-}
-
-.sidebar__role {
-    padding: 0 12px;
-    margin-bottom: 32px;
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.55);
 }
 
 .sidebar__nav {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    flex: 1;
+    gap: 2px;
+    margin-bottom: 20px;
 }
 
 .sidebar__link {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 11px 12px;
-    border-radius: 6px;
-    color: rgba(255, 255, 255, 0.75);
+    padding: 10px 12px;
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.65);
     text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 600;
+    font-size: 0.85rem;
+    font-weight: 500;
     transition: background 0.15s ease, color 0.15s ease;
 }
 
@@ -69,40 +84,75 @@
 }
 
 .sidebar__link.active {
-    background: #e8b84b;
+    background: #c58e0b;
     color: #14294d;
+    font-weight: 600;
 }
 
-.sidebar__footer {
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
+.sidebar__spacer {
+    flex: 1;
+}
+
+.sidebar__profile {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
     padding-top: 16px;
-    margin-top: 16px;
-}
-
-.sidebar__logout {
-    width: 100%;
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 11px 12px;
-    border-radius: 6px;
+    gap: 10px;
+}
+
+.sidebar__avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    color: #c58e0b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.sidebar__profile-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.sidebar__profile-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sidebar__profile-role {
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.sidebar__logout-icon {
     background: transparent;
     border: none;
-    color: rgba(255, 255, 255, 0.75);
-    font-size: 0.9rem;
-    font-weight: 600;
-    text-align: left;
+    color: rgba(255, 255, 255, 0.5);
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    border-radius: 6px;
     transition: background 0.15s ease, color 0.15s ease;
 }
 
-.sidebar__logout:hover {
-    background: rgba(255, 255, 255, 0.06);
+.sidebar__logout-icon:hover {
+    background: rgba(255, 255, 255, 0.08);
     color: white;
 }
 
-.sidebar__logout:focus-visible,
+.sidebar__logout-icon:focus-visible,
 .sidebar__link:focus-visible {
-    outline: 2px solid #e8b84b;
+    outline: 2px solid #c58e0b;
     outline-offset: 2px;
 }

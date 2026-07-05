@@ -27,6 +27,13 @@ export function ProfileMenu() {
 
     const initials = currentUser ? `${currentUser.firstName[0] ?? ""}${currentUser.lastName[0] ?? ""}`.toUpperCase() : "";
 
+    const profilePath =
+        currentUser?.role === "ADMIN"
+            ? "/admin/profil"
+            : currentUser?.role === "RECRUTEUR"
+                ? "/recruteur/entreprise"
+                : "/candidat/profil";
+
     return (
         <div className="profile-menu" ref={ref}>
             <button className="profile-menu__trigger" onClick={() => setOpen((v) => !v)}>
@@ -43,7 +50,7 @@ export function ProfileMenu() {
             </span>
                         <span className="profile-menu__dropdown-email">{currentUser?.email}</span>
                     </div>
-                    <Link to="/admin/profil" className="profile-menu__item" onClick={() => setOpen(false)}>
+                    <Link to={profilePath} className="profile-menu__item" onClick={() => setOpen(false)}>
                         <IconUserCircle /> Mon profil
                     </Link>
                     <button className="profile-menu__item profile-menu__item--danger" onClick={handleLogout}>

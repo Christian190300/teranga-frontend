@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { ProfileMenu } from "./ProfileMenu";
 import "./navbar.css";
 
 interface NavLink {
@@ -21,13 +22,8 @@ const recruteurLinks: NavLink[] = [
 ];
 
 export function Navbar() {
-    const { isAuthenticated, currentUser, logout } = useAuth();
+    const { isAuthenticated, currentUser } = useAuth();
     const navigate = useNavigate();
-
-    async function handleLogout() {
-        await logout();
-        navigate("/");
-    }
 
     const espaceLinks: NavLink[] =
         currentUser?.role === "RECRUTEUR" ? recruteurLinks : currentUser?.role === "CANDIDAT" ? candidatLinks : [];
@@ -50,11 +46,9 @@ export function Navbar() {
 
             <nav className="navbar__links">
                 {isAuthenticated ? (
-                    <button className="btn btn--ghost" onClick={handleLogout}>
-                        Se déconnecter
-                    </button>
+                    <ProfileMenu />
                 ) : (
-                    <Link to="/connexion" className="btn btn--ghost">
+                    <Link to="/connexion" className="btn btn--ghost" onClick={() => navigate("/connexion")}>
                         Commencer
                     </Link>
                 )}
