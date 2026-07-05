@@ -73,7 +73,9 @@ export function ProfilRecruteurPage() {
         async (value) => {
             const updated = await updateMonProfilRecruteur(value);
             setDateMaj(updated.dateMaj);
-        }
+        },
+        900,
+        !loading
     );
 
     async function handleLogoChange(e: React.ChangeEvent<HTMLInputElement>) {

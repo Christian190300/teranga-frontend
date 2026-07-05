@@ -78,10 +78,15 @@ export function ProfilCandidatPage() {
     }, [photoUrl]);
 
     // Sauvegarde automatique : uniquement pour les champs texte.
-    const saveStatus = useAutoSave({ telephone, adresse, competences }, async (value) => {
-        const updated = await updateMonProfilCandidat(value);
-        setDateMaj(updated.dateMaj);
-    });
+    const saveStatus = useAutoSave(
+        { telephone, adresse, competences },
+        async (value) => {
+            const updated = await updateMonProfilCandidat(value);
+            setDateMaj(updated.dateMaj);
+        },
+        900,
+        !loading
+    );
 
     async function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
         const file = e.target.files?.[0];
