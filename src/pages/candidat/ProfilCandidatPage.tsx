@@ -8,6 +8,7 @@ import {
     telechargerCvCandidat,
     type ProfilCandidatDTO,
 } from "../../api/profileService";
+import { useAuth } from "../../context/AuthContext";
 import { useAutoSave } from "../../hooks/useAutoSave";
 import { SaveStatusBadge } from "../../components/common/SaveStatusBadge";
 import "./profilCandidatPage.css";
@@ -20,6 +21,7 @@ function formatDate(iso: string | null): string {
 export function ProfilCandidatPage() {
     const [loading, setLoading] = useState(true);
     const [loadError, setLoadError] = useState<string | null>(null);
+    const { refreshPhoto } = useAuth();
 
     const [telephone, setTelephone] = useState("");
     const [adresse, setAdresse] = useState("");
@@ -104,6 +106,8 @@ export function ProfilCandidatPage() {
             }
             const url = await obtenirPhotoCandidatUrl();
             setPhotoUrl(url);
+
+            await refreshPhoto(); // met à jour la navbar
         } catch {
             setPhotoError("Échec de l'envoi de la photo. Vérifiez le format (JPEG, PNG, WebP) et la taille (2 Mo max).");
         } finally {

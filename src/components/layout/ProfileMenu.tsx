@@ -37,7 +37,11 @@ export function ProfileMenu() {
     return (
         <div className="profile-menu" ref={ref}>
             <button className="profile-menu__trigger" onClick={() => setOpen((v) => !v)}>
-                <span className="profile-menu__avatar">{initials}</span>
+                {currentUser?.photoUrl ? (
+                    <img src={currentUser.photoUrl} alt="" className="profile-menu__avatar profile-menu__avatar--img" />
+                ) : (
+                    <span className="profile-menu__avatar">{initials}</span>
+                )}
                 <span className="profile-menu__name">{currentUser?.firstName}</span>
                 <IconChevronDown />
             </button>
@@ -45,9 +49,9 @@ export function ProfileMenu() {
             {open && (
                 <div className="profile-menu__dropdown">
                     <div className="profile-menu__dropdown-header">
-            <span className="profile-menu__dropdown-name">
-              {currentUser?.firstName} {currentUser?.lastName}
-            </span>
+                        <span className="profile-menu__dropdown-name">
+                            {currentUser?.firstName} {currentUser?.lastName}
+                        </span>
                         <span className="profile-menu__dropdown-email">{currentUser?.email}</span>
                     </div>
                     <Link to={profilePath} className="profile-menu__item" onClick={() => setOpen(false)}>
