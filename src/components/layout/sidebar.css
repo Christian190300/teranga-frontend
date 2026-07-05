@@ -1,5 +1,6 @@
 /* ============================================================
    SIDEBAR — espace admin, groupée par section, lien actif plein
+   Fixe : reste immobile pendant que le contenu principal scrolle.
    ============================================================ */
 
 .sidebar,
@@ -8,14 +9,19 @@
 }
 
 .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 260px;
+    height: 100vh;
+    overflow-y: auto;
     flex-shrink: 0;
-    min-height: 100vh;
     background: #061b3c;
     padding: 24px 16px;
     display: flex;
     flex-direction: column;
     font-family: 'Inter', -apple-system, sans-serif;
+    z-index: 10;
 }
 
 .sidebar__brand {
