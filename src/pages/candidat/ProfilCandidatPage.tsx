@@ -8,7 +8,6 @@ import {
     telechargerCvCandidat,
     type ProfilCandidatDTO,
 } from "../../api/profileService";
-import { useAuth } from "../../context/AuthContext";
 import { useAutoSave } from "../../hooks/useAutoSave";
 import { SaveStatusBadge } from "../../components/common/SaveStatusBadge";
 import "./profilCandidatPage.css";
@@ -21,7 +20,6 @@ function formatDate(iso: string | null): string {
 export function ProfilCandidatPage() {
     const [loading, setLoading] = useState(true);
     const [loadError, setLoadError] = useState<string | null>(null);
-    const { refreshPhoto } = useAuth();
 
     const [telephone, setTelephone] = useState("");
     const [adresse, setAdresse] = useState("");
@@ -59,7 +57,7 @@ export function ProfilCandidatPage() {
 
                 if (data.photoPresente) {
                     const url = await obtenirPhotoCandidatUrl();
-                    setPhotoUrl(url);
+                    if (url) setPhotoUrl(url);
                 }
             } catch {
                 setLoadError("Impossible de charger votre profil pour le moment.");
@@ -70,16 +68,12 @@ export function ProfilCandidatPage() {
         charger();
     }, []);
 
-    // Libère l'URL blob de la photo quand elle change ou que le composant se démonte.
     useEffect(() => {
         return () => {
-            if (photoUrl) {
-                URL.revokeObjectURL(photoUrl);
-            }
+            if (photoUrl) URL.revokeObjectURL(photoUrl);
         };
     }, [photoUrl]);
 
-    // Sauvegarde automatique : uniquement pour les champs texte.
     const saveStatus = useAutoSave(
         { telephone, adresse, competences },
         async (value) => {
@@ -101,13 +95,13 @@ export function ProfilCandidatPage() {
             setPhotoPresente(updated.photoPresente);
             setDateMaj(updated.dateMaj);
 
-            if (photoUrl) {
-                URL.revokeObjectURL(photoUrl);
-            }
+            if (photoUrl) URL.revokeObjectURL(photoUrl);
             const url = await obtenirPhotoCandidatUrl();
-            setPhotoUrl(url);
-
-            await refreshPhoto(); // met à jour la navbar
+            if (url) {
+                setPhotoUrl(url);
+            } else {
+                setPhotoError("La photo a été envoyée mais n'a pas pu être affichée. Rechargez la page.");
+            }
         } catch {
             setPhotoError("Échec de l'envoi de la photo. Vérifiez le format (JPEG, PNG, WebP) et la taille (2 Mo max).");
         } finally {
@@ -164,9 +158,7 @@ export function ProfilCandidatPage() {
             <div className="profil-page__header">
                 <div>
                     <h1 className="profil-page__title">Mon profil candidat</h1>
-                    <p className="profil-page__subtitle">
-                        Vos modifications sont enregistrées automatiquement.
-                    </p>
+                    <p className="profil-page__subtitle">Vos modifications sont enregistrées automatiquement.</p>
                 </div>
                 <SaveStatusBadge status={saveStatus} />
             </div>
@@ -186,17 +178,20 @@ export function ProfilCandidatPage() {
                             ref={photoInputRef}
                             type="file"
                             accept="image/jpeg,image/png,image/webp"
+                            className="profil-file-input-hidden"
                             onChange={handlePhotoChange}
                             disabled={photoUploading}
                         />
-                        <p className="profil-field__hint">
-                            {photoUploading
-                                ? "Envoi en cours..."
-                                : photoPresente
-                                    ? "Sélectionnez un fichier pour remplacer votre photo (JPEG, PNG, WebP, 2 Mo max)."
-                                    : "Sélectionnez une photo depuis votre appareil (JPEG, PNG, WebP, 2 Mo max)."}
-                        </p>
-                        {photoError && <p className="profil-message profil-message--error">{photoError}</p>}
+                        <button
+                            type="button"
+                            className="profil-upload-btn"
+                            onClick={() => photoInputRef.current?.click()}
+                            disabled={photoUploading}
+                        >
+                            {photoUploading ? "Envoi en cours..." : photoPresente ? "Changer la photo" : "Importer une photo"}
+                        </button>
+                        <p className="profil-field__hint">JPEG, PNG ou WebP — 2 Mo maximum.</p>
+                        {photoError && <div className="profil-message profil-message--error">{photoError}</div>}
                     </div>
                 </div>
 
@@ -224,24 +219,50 @@ export function ProfilCandidatPage() {
 
                 <p className="profil-card__section-title">CV</p>
                 <div className="profil-field">
-                    <label htmlFor="cv">Votre CV (PDF)</label>
-                    <div className="profil-cv-row">
-                        <input
-                            ref={cvInputRef}
-                            id="cv"
-                            type="file"
-                            accept="application/pdf"
-                            onChange={handleCvChange}
-                            disabled={cvUploading}
-                        />
-                        {cvPresent && !cvUploading && (
-                            <button type="button" className="profil-cv-link" onClick={handleCvDownload}>
-                                Voir le CV{cvOriginalFilename ? ` (${cvOriginalFilename})` : ""}
+                    <input
+                        ref={cvInputRef}
+                        type="file"
+                        accept="application/pdf"
+                        className="profil-file-input-hidden"
+                        onChange={handleCvChange}
+                        disabled={cvUploading}
+                    />
+
+                    {cvPresent ? (
+                        <div className="profil-file-card">
+                            <span className="profil-file-card__icon">📄</span>
+                            <div className="profil-file-card__info">
+                                <div className="profil-file-card__name">{cvOriginalFilename ?? "cv.pdf"}</div>
+                                <div className="profil-file-card__meta">Document PDF</div>
+                            </div>
+                            <div className="profil-file-card__actions">
+                                <button type="button" className="profil-upload-btn" onClick={handleCvDownload}>
+                                    Voir
+                                </button>
+                                <button
+                                    type="button"
+                                    className="profil-upload-btn profil-upload-btn--ghost"
+                                    onClick={() => cvInputRef.current?.click()}
+                                    disabled={cvUploading}
+                                >
+                                    {cvUploading ? "Envoi..." : "Remplacer"}
+                                </button>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="profil-empty-upload">
+                            <span className="profil-empty-upload__text">Aucun CV importé pour l'instant</span>
+                            <button
+                                type="button"
+                                className="profil-upload-btn"
+                                onClick={() => cvInputRef.current?.click()}
+                                disabled={cvUploading}
+                            >
+                                {cvUploading ? "Envoi en cours..." : "Importer un CV (PDF)"}
                             </button>
-                        )}
-                    </div>
-                    {cvUploading && <p className="profil-field__hint">Envoi en cours...</p>}
-                    {cvError && <p className="profil-message profil-message--error">{cvError}</p>}
+                        </div>
+                    )}
+                    {cvError && <div className="profil-message profil-message--error">{cvError}</div>}
                 </div>
 
                 <p className="profil-card__section-title">Compétences</p>

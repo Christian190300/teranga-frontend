@@ -1,3 +1,7 @@
+/* ============================================================
+   PROFIL RECRUTEUR — design propre, navy/or, cohérent avec le reste du site
+   ============================================================ */
+
 .profil-page,
 .profil-page * {
     box-sizing: border-box;
@@ -10,32 +14,143 @@
     font-family: 'Inter', -apple-system, sans-serif;
 }
 
+/* ---------- Logo entreprise ---------- */
+.profil-photo-row {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+}
+
+.profil-photo-preview {
+    width: 88px;
+    height: 88px;
+    border-radius: 12px;
+    object-fit: contain;
+    background: white;
+    border: 2px solid #f0f1f4;
+    flex-shrink: 0;
+    padding: 8px;
+}
+
+.profil-photo-placeholder {
+    width: 88px;
+    height: 88px;
+    border-radius: 12px;
+    background: #eaf0fb;
+    color: #14294d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.6rem;
+    flex-shrink: 0;
+    border: 2px solid #f0f1f4;
+}
+
+.profil-photo-field {
+    flex: 1;
+    min-width: 0;
+}
+
+.profil-file-input-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+.profil-upload-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1.5px solid #e8e9ee;
+    background: white;
+    color: #14294d;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+    font-family: inherit;
+}
+
+.profil-upload-btn:hover {
+    background: #eaf0fb;
+    border-color: #eaf0fb;
+}
+
+.profil-upload-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+
+/* ---------- Header ---------- */
 .profil-page__header {
-    margin-bottom: 32px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 28px;
 }
 
 .profil-page__title {
-    font-size: 1.6rem;
+    font-size: 1.55rem;
     font-weight: 800;
     color: #14294d;
-    margin: 0 0 6px;
+    margin: 0 0 4px;
+    letter-spacing: -0.01em;
 }
 
 .profil-page__subtitle {
-    font-size: 0.92rem;
+    font-size: 0.9rem;
     color: #667085;
     margin: 0;
 }
 
+.profil-page__loading {
+    text-align: center;
+    padding: 80px 0;
+    color: #667085;
+    font-size: 0.92rem;
+}
+
+/* ---------- Cards ---------- */
 .profil-card {
     background: white;
     border: 1px solid #e8e9ee;
-    border-radius: 12px;
-    padding: 32px;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
 }
 
+.profil-card__section-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: #9aa1ac;
+    margin: 0 0 18px;
+}
+
+.profil-card__section-title:not(:first-child) {
+    margin-top: 32px;
+    padding-top: 28px;
+    border-top: 1px solid #f0f1f4;
+}
+
+/* ---------- Fields ---------- */
 .profil-field {
     margin-bottom: 20px;
+}
+
+.profil-field:last-child {
+    margin-bottom: 0;
 }
 
 .profil-field label {
@@ -46,7 +161,8 @@
     margin-bottom: 6px;
 }
 
-.profil-field input,
+.profil-field input[type="text"],
+.profil-field input:not([type]),
 .profil-field textarea {
     width: 100%;
     padding: 11px 14px;
@@ -56,6 +172,7 @@
     font-size: 0.92rem;
     background: #f7f8fb;
     color: #14294d;
+    transition: border-color 0.15s ease, background 0.15s ease;
 }
 
 .profil-field input:focus,
@@ -63,6 +180,12 @@
     outline: none;
     border-color: #c8951e;
     background: white;
+}
+
+.profil-field textarea {
+    resize: vertical;
+    min-height: 110px;
+    line-height: 1.6;
 }
 
 .profil-field-row {
@@ -77,49 +200,43 @@
     }
 }
 
-.profil-page__actions {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 28px;
-    padding-top: 20px;
-    border-top: 1px solid #e8e9ee;
+/* ---------- Bloc infos (lecture seule) ---------- */
+.profil-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
 }
 
-.profil-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 26px;
-    border-radius: 8px;
+@media (max-width: 560px) {
+    .profil-meta {
+        grid-template-columns: 1fr;
+    }
+}
+
+.profil-meta__item {
+    background: #f7f8fb;
+    border-radius: 10px;
+    padding: 14px 16px;
+}
+
+.profil-meta__label {
+    font-size: 0.74rem;
+    color: #9aa1ac;
+    margin-bottom: 3px;
+}
+
+.profil-meta__value {
+    font-size: 0.9rem;
     font-weight: 700;
-    font-size: 0.92rem;
-    border: none;
-    cursor: pointer;
-    background: #e8b84b;
     color: #14294d;
-    transition: background 0.15s ease;
 }
 
-.profil-btn:hover {
-    background: #c8951e;
-}
-
-.profil-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
+/* ---------- Messages ---------- */
 .profil-message {
     padding: 12px 14px;
     border-radius: 8px;
-    font-size: 0.88rem;
-    margin-bottom: 20px;
-}
-
-.profil-message--success {
-    background: #eaf6ee;
-    color: #1e7a3c;
-    border: 1px solid #b9dfc4;
+    font-size: 0.86rem;
+    margin: 10px 0 0;
 }
 
 .profil-message--error {
@@ -128,9 +245,6 @@
     border: 1px solid #f2c1bd;
 }
 
-.profil-page__loading {
-    text-align: center;
-    padding: 60px 0;
-    color: #667085;
-    font-size: 0.92rem;
+.profil-page > .profil-message--error {
+    margin-bottom: 20px;
 }

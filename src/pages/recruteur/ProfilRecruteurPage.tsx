@@ -28,11 +28,10 @@ export function ProfilRecruteurPage() {
     const [logoUrl, setLogoUrl] = useState<string | null>(null);
     const [logoUploading, setLogoUploading] = useState(false);
     const [logoError, setLogoError] = useState<string | null>(null);
+    const logoInputRef = useRef<HTMLInputElement>(null);
 
     const [dateCreation, setDateCreation] = useState<string | null>(null);
     const [dateMaj, setDateMaj] = useState<string | null>(null);
-
-    const logoInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         async function charger() {
@@ -48,7 +47,7 @@ export function ProfilRecruteurPage() {
 
                 if (data.logoPresent) {
                     const url = await obtenirLogoRecruteurUrl();
-                    setLogoUrl(url);
+                    if (url) setLogoUrl(url);
                 }
             } catch {
                 setLoadError("Impossible de charger le profil de votre entreprise pour le moment.");
@@ -59,12 +58,9 @@ export function ProfilRecruteurPage() {
         charger();
     }, []);
 
-    // Libère l'URL blob du logo quand il change ou que le composant se démonte.
     useEffect(() => {
         return () => {
-            if (logoUrl) {
-                URL.revokeObjectURL(logoUrl);
-            }
+            if (logoUrl) URL.revokeObjectURL(logoUrl);
         };
     }, [logoUrl]);
 
@@ -89,11 +85,13 @@ export function ProfilRecruteurPage() {
             setLogoPresent(updated.logoPresent);
             setDateMaj(updated.dateMaj);
 
-            if (logoUrl) {
-                URL.revokeObjectURL(logoUrl);
-            }
+            if (logoUrl) URL.revokeObjectURL(logoUrl);
             const url = await obtenirLogoRecruteurUrl();
-            setLogoUrl(url);
+            if (url) {
+                setLogoUrl(url);
+            } else {
+                setLogoError("Le logo a été envoyé mais n'a pas pu être affiché. Rechargez la page.");
+            }
         } catch {
             setLogoError("Échec de l'envoi du logo. Vérifiez le format (JPEG, PNG, WebP) et la taille (2 Mo max).");
         } finally {
@@ -124,24 +122,29 @@ export function ProfilRecruteurPage() {
                     {logoUrl ? (
                         <img src={logoUrl} alt="Logo de l'entreprise" className="profil-photo-preview" />
                     ) : (
-                        <div className="profil-photo-placeholder">?</div>
+                        <div className="profil-photo-placeholder">
+                            {nomEntreprise ? nomEntreprise[0].toUpperCase() : "?"}
+                        </div>
                     )}
                     <div className="profil-photo-field">
                         <input
                             ref={logoInputRef}
                             type="file"
                             accept="image/jpeg,image/png,image/webp"
+                            className="profil-file-input-hidden"
                             onChange={handleLogoChange}
                             disabled={logoUploading}
                         />
-                        <p className="profil-field__hint">
-                            {logoUploading
-                                ? "Envoi en cours..."
-                                : logoPresent
-                                    ? "Sélectionnez un fichier pour remplacer le logo (JPEG, PNG, WebP, 2 Mo max)."
-                                    : "Sélectionnez le logo de votre entreprise (JPEG, PNG, WebP, 2 Mo max)."}
-                        </p>
-                        {logoError && <p className="profil-message profil-message--error">{logoError}</p>}
+                        <button
+                            type="button"
+                            className="profil-upload-btn"
+                            onClick={() => logoInputRef.current?.click()}
+                            disabled={logoUploading}
+                        >
+                            {logoUploading ? "Envoi en cours..." : logoPresent ? "Changer le logo" : "Importer un logo"}
+                        </button>
+                        <p className="profil-field__hint">JPEG, PNG ou WebP — 2 Mo maximum.</p>
+                        {logoError && <div className="profil-message profil-message--error">{logoError}</div>}
                     </div>
                 </div>
 

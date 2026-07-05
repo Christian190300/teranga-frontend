@@ -1,3 +1,7 @@
+/* ============================================================
+   PROFIL CANDIDAT — design propre, navy/or, cohérent avec le reste du site
+   ============================================================ */
+
 .profil-page,
 .profil-page * {
     box-sizing: border-box;
@@ -10,71 +14,79 @@
     font-family: 'Inter', -apple-system, sans-serif;
 }
 
+/* ---------- Header ---------- */
 .profil-page__header {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     gap: 16px;
-    margin-bottom: 32px;
+    margin-bottom: 28px;
 }
 
 .profil-page__title {
-    font-size: 1.6rem;
+    font-size: 1.55rem;
     font-weight: 800;
     color: #14294d;
-    margin: 0 0 6px;
+    margin: 0 0 4px;
+    letter-spacing: -0.01em;
 }
 
 .profil-page__subtitle {
-    font-size: 0.92rem;
+    font-size: 0.9rem;
     color: #667085;
     margin: 0;
 }
 
+.profil-page__loading {
+    text-align: center;
+    padding: 80px 0;
+    color: #667085;
+    font-size: 0.92rem;
+}
+
+/* ---------- Cards ---------- */
 .profil-card {
     background: white;
     border: 1px solid #e8e9ee;
-    border-radius: 12px;
-    padding: 32px;
+    border-radius: 14px;
+    padding: 28px 32px;
     margin-bottom: 20px;
 }
 
 .profil-card__section-title {
-    font-size: 0.78rem;
+    font-size: 0.72rem;
     font-weight: 700;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
     color: #9aa1ac;
-    margin: 0 0 16px;
+    margin: 0 0 18px;
 }
 
 .profil-card__section-title:not(:first-child) {
-    margin-top: 28px;
-    padding-top: 24px;
-    border-top: 1px solid #e8e9ee;
+    margin-top: 32px;
+    padding-top: 28px;
+    border-top: 1px solid #f0f1f4;
 }
 
 /* ---------- Photo ---------- */
 .profil-photo-row {
     display: flex;
     align-items: center;
-    gap: 20px;
-    margin-bottom: 24px;
+    gap: 22px;
 }
 
 .profil-photo-preview {
-    width: 84px;
-    height: 84px;
+    width: 88px;
+    height: 88px;
     border-radius: 50%;
     object-fit: cover;
-    background: #eaf0fb;
-    border: 1px solid #e8e9ee;
+    border: 2px solid #f0f1f4;
     flex-shrink: 0;
 }
 
 .profil-photo-placeholder {
-    width: 84px;
-    height: 84px;
+    width: 88px;
+    height: 88px;
     border-radius: 50%;
     background: #eaf0fb;
     color: #14294d;
@@ -82,13 +94,63 @@
     align-items: center;
     justify-content: center;
     font-weight: 700;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     flex-shrink: 0;
-    border: 1px solid #e8e9ee;
+    border: 2px solid #f0f1f4;
 }
 
 .profil-photo-field {
     flex: 1;
+    min-width: 0;
+}
+
+/* ---------- Hidden native file input + custom trigger button ---------- */
+.profil-file-input-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+.profil-upload-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1.5px solid #e8e9ee;
+    background: white;
+    color: #14294d;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+    font-family: inherit;
+}
+
+.profil-upload-btn:hover {
+    background: #eaf0fb;
+    border-color: #eaf0fb;
+}
+
+.profil-upload-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.profil-upload-btn--ghost {
+    background: transparent;
+}
+
+.profil-field__hint {
+    font-size: 0.78rem;
+    color: #9aa1ac;
+    margin: 8px 0 0;
+    line-height: 1.5;
 }
 
 /* ---------- Fields ---------- */
@@ -108,7 +170,8 @@
     margin-bottom: 6px;
 }
 
-.profil-field input,
+.profil-field input[type="text"],
+.profil-field input:not([type]),
 .profil-field textarea {
     width: 100%;
     padding: 11px 14px;
@@ -118,6 +181,7 @@
     font-size: 0.92rem;
     background: #f7f8fb;
     color: #14294d;
+    transition: border-color 0.15s ease, background 0.15s ease;
 }
 
 .profil-field input:focus,
@@ -125,12 +189,6 @@
     outline: none;
     border-color: #c8951e;
     background: white;
-}
-
-.profil-field__hint {
-    font-size: 0.78rem;
-    color: #9aa1ac;
-    margin-top: 4px;
 }
 
 .profil-field-row {
@@ -145,34 +203,72 @@
     }
 }
 
-/* ---------- CV ---------- */
-.profil-cv-row {
+/* ---------- CV — carte fichier ---------- */
+.profil-file-card {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 14px;
+    padding: 14px 16px;
+    background: #f7f8fb;
+    border: 1px solid #e8e9ee;
+    border-radius: 10px;
 }
 
-.profil-cv-row input {
-    flex: 1;
-}
-
-.profil-cv-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 11px 16px;
+.profil-file-card__icon {
+    width: 38px;
+    height: 38px;
     border-radius: 8px;
-    background: #14294d;
-    color: white;
-    font-size: 0.85rem;
+    background: #eaf0fb;
+    color: #14294d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1.1rem;
+}
+
+.profil-file-card__info {
+    flex: 1;
+    min-width: 0;
+}
+
+.profil-file-card__name {
+    font-size: 0.88rem;
     font-weight: 600;
-    text-decoration: none;
+    color: #14294d;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.profil-file-card__meta {
+    font-size: 0.76rem;
+    color: #9aa1ac;
+    margin-top: 1px;
+}
+
+.profil-file-card__actions {
+    display: flex;
+    gap: 8px;
     flex-shrink: 0;
 }
 
-.profil-cv-link:hover {
-    background: #0d1c38;
+.profil-empty-upload {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    padding: 28px 16px;
+    border: 1.5px dashed #e8e9ee;
+    border-radius: 10px;
+    background: #fafbfc;
+    text-align: center;
+}
+
+.profil-empty-upload__text {
+    font-size: 0.82rem;
+    color: #9aa1ac;
 }
 
 /* ---------- Compétences (tags) ---------- */
@@ -180,14 +276,14 @@
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
 .profil-tag {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 6px 10px 6px 12px;
+    padding: 6px 10px 6px 13px;
     background: #eaf0fb;
     color: #14294d;
     border-radius: 999px;
@@ -200,10 +296,11 @@
     border: none;
     color: #14294d;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 1rem;
     line-height: 1;
     padding: 0;
-    opacity: 0.6;
+    opacity: 0.5;
+    transition: opacity 0.15s ease;
 }
 
 .profil-tag__remove:hover {
@@ -213,7 +310,7 @@
 .profil-tags-empty {
     font-size: 0.85rem;
     color: #9aa1ac;
-    margin-bottom: 10px;
+    margin: 0 0 12px;
 }
 
 /* ---------- Bloc infos (lecture seule) ---------- */
@@ -231,27 +328,28 @@
 
 .profil-meta__item {
     background: #f7f8fb;
-    border-radius: 8px;
-    padding: 12px 14px;
+    border-radius: 10px;
+    padding: 14px 16px;
 }
 
 .profil-meta__label {
-    font-size: 0.75rem;
+    font-size: 0.74rem;
     color: #9aa1ac;
-    margin-bottom: 2px;
+    margin-bottom: 3px;
 }
 
 .profil-meta__value {
-    font-size: 0.88rem;
-    font-weight: 600;
+    font-size: 0.9rem;
+    font-weight: 700;
     color: #14294d;
 }
 
+/* ---------- Messages ---------- */
 .profil-message {
     padding: 12px 14px;
     border-radius: 8px;
-    font-size: 0.88rem;
-    margin-bottom: 20px;
+    font-size: 0.86rem;
+    margin: 10px 0 0;
 }
 
 .profil-message--error {
@@ -260,9 +358,6 @@
     border: 1px solid #f2c1bd;
 }
 
-.profil-page__loading {
-    text-align: center;
-    padding: 60px 0;
-    color: #667085;
-    font-size: 0.92rem;
+.profil-page > .profil-message--error {
+    margin-bottom: 20px;
 }
