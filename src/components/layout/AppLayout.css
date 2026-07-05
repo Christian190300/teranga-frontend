@@ -1,0 +1,25 @@
+.app-shell {
+    min-height: 100vh;
+}
+
+.app-shell--horizontal .app-shell__content {
+    min-height: calc(100vh - 82px);
+}
+
+.app-shell--vertical {
+    display: flex;
+}
+
+.app-shell__main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.app-shell__content-admin {
+    flex: 1;
+    padding: 32px;
+    background: #f7f8fb;
+}

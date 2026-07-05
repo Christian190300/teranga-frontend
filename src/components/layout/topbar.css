@@ -1,0 +1,27 @@
+.topbar,
+.topbar * {
+    box-sizing: border-box;
+}
+
+.topbar {
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    background: white;
+    border-bottom: 1px solid #e8e9ee;
+    position: sticky;
+    top: 0;
+    z-index: 40;
+}
+
+.topbar__spacer {
+    flex: 1;
+}
+
+.topbar__actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
