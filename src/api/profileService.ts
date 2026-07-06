@@ -134,18 +134,36 @@ export async function telechargerLettreMotivation(nomFichier = "lettre-motivatio
 }
 
 // ---------------------------------------------------------------------------
-// Recruteur (inchangé)
+// Recruteur
 // ---------------------------------------------------------------------------
 
 export interface ProfilRecruteurDTO {
     id: number | null;
     userId: string;
+
     nomEntreprise: string | null;
     secteurActivite: string | null;
+    tailleEntreprise: string | null;
     description: string | null;
-    telephoneEntreprise: string | null;
+    siteWeb: string | null;
+
     logoContentType: string | null;
     logoPresent: boolean;
+
+    nomContact: string | null;
+    fonctionContact: string | null;
+    emailProfessionnel: string | null;
+    telephoneEntreprise: string | null;
+
+    pays: string | null;
+    region: string | null;
+    ville: string | null;
+    adresse: string | null;
+
+    linkedin: string | null;
+    facebook: string | null;
+    twitter: string | null;
+
     dateCreation: string | null;
     dateMaj: string | null;
 }
@@ -153,8 +171,20 @@ export interface ProfilRecruteurDTO {
 export interface UpdateProfilRecruteurPayload {
     nomEntreprise?: string;
     secteurActivite?: string;
+    tailleEntreprise?: string;
     description?: string;
+    siteWeb?: string;
+    nomContact?: string;
+    fonctionContact?: string;
+    emailProfessionnel?: string;
     telephoneEntreprise?: string;
+    pays?: string;
+    region?: string;
+    ville?: string;
+    adresse?: string;
+    linkedin?: string;
+    facebook?: string;
+    twitter?: string;
 }
 
 export async function getMonProfilRecruteur(): Promise<ProfilRecruteurDTO> {
