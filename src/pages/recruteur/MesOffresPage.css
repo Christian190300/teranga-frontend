@@ -1,0 +1,221 @@
+.offres-page {
+    --op-navy: #14294d;
+    --op-navy-soft: #eaf0fb;
+    --op-gold: #c8951e;
+    --op-gold-light: #e8b84b;
+    --op-gold-soft: #fbf0d9;
+    --op-gold-text: #8a6414;
+    --op-muted: #6b7280;
+    --op-line: #e8e9ee;
+    --op-danger: #b3261e;
+    --op-danger-soft: #fbeceb;
+    --op-success: #1e7a4c;
+    --op-success-soft: #eaf7f0;
+
+    font-family: "Inter", sans-serif;
+    color: var(--op-navy);
+    width: 100%;
+    padding: 8px 0 48px;
+}
+
+.offres-page * {
+    box-sizing: border-box;
+}
+
+.offres-page__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+}
+
+.offres-page__title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin: 0;
+}
+
+.offres-page__subtitle {
+    color: var(--op-muted);
+    margin: 4px 0 0;
+    font-size: 0.92rem;
+}
+
+/* ---------- Boutons ---------- */
+.offres-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.87rem;
+    border: 1.5px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+    white-space: nowrap;
+}
+
+.offres-btn--primary {
+    background: var(--op-gold-light);
+    color: #0d1c38;
+}
+.offres-btn--primary:hover {
+    background: var(--op-gold);
+}
+
+.offres-btn--gold {
+    background: var(--op-gold-soft);
+    color: var(--op-gold-text);
+}
+.offres-btn--gold:hover {
+    background: var(--op-gold-light);
+    color: #0d1c38;
+}
+
+.offres-btn--ghost {
+    background: white;
+    border-color: var(--op-line);
+    color: var(--op-navy);
+}
+.offres-btn--ghost:hover {
+    background: var(--op-navy-soft);
+}
+
+.offres-btn--danger {
+    background: white;
+    border-color: var(--op-line);
+    color: var(--op-danger);
+}
+.offres-btn--danger:hover {
+    background: var(--op-danger-soft);
+    border-color: rgba(179, 38, 30, 0.25);
+}
+
+.offres-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ---------- Alerte / vide ---------- */
+.offres-alert {
+    background: var(--op-danger-soft);
+    color: var(--op-danger);
+    border: 1.5px solid rgba(179, 38, 30, 0.25);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 0.88rem;
+    margin-bottom: 16px;
+}
+
+.offres-empty {
+    background: white;
+    border: 1.5px dashed var(--op-line);
+    border-radius: 14px;
+    padding: 48px 24px;
+    text-align: center;
+    color: var(--op-muted);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+/* ---------- Liste des offres ---------- */
+.offres-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.offre-card {
+    background: white;
+    border: 1.5px solid var(--op-line);
+    border-radius: 14px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    box-shadow: 0 2px 6px rgba(20, 41, 77, 0.04);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.offre-card:hover {
+    border-color: var(--op-navy);
+    box-shadow: 0 10px 24px rgba(20, 41, 77, 0.08);
+}
+
+.offre-card__main {
+    min-width: 0;
+    flex: 1;
+}
+
+.offre-card__top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.offre-card__type {
+    font-size: 0.78rem;
+    color: var(--op-muted);
+}
+
+.offre-card__titre {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 0 0 4px;
+    letter-spacing: -0.01em;
+}
+
+.offre-card__meta {
+    font-size: 0.85rem;
+    color: var(--op-muted);
+    margin: 0;
+}
+
+.offre-card__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* ---------- Badge de statut ---------- */
+.offre-statut {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.offre-statut--brouillon {
+    background: var(--op-navy-soft);
+    color: var(--op-navy);
+}
+
+.offre-statut--publiee {
+    background: var(--op-success-soft);
+    color: var(--op-success);
+}
+
+.offre-statut--fermee {
+    background: #f1f2f4;
+    color: var(--op-muted);
+}
+
+.offre-statut--expiree {
+    background: var(--op-danger-soft);
+    color: var(--op-danger);
+}
