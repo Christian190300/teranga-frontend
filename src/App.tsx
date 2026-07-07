@@ -12,7 +12,6 @@ import {OffresPubliquesPage} from "./pages/offres/OffresPubliquesPage.tsx";
 import {OffresRecruteurPage} from "./pages/recruteur/OffresRecruteurPage.tsx";
 import {OffreFormPage} from "./pages/recruteur/OffreFormPage.tsx";
 import {OffresAdminPage} from "./pages/admin/OffresAdminPage.tsx";
-import {OffreDetailPage} from "./pages/offres/OffreDetailPage.tsx";
 import { EntrepriseAdminPage } from "./pages/admin/EntrepriseAdminPage";
 
 export default function App() {
@@ -34,7 +33,6 @@ export default function App() {
                         <Route path="/recruteur/offres/nouvelle" element={<OffreFormPage />} />
                         <Route path="/recruteur/offres/:id/modifier" element={<OffreFormPage />} />
                         <Route path="/admin/offres" element={<OffresAdminPage />} />
-                        <Route path="/offres/:id" element={<OffreDetailPage />} />
                         <Route path="/admin/entreprises" element={<EntrepriseAdminPage />} />
 
                         {/* Routes à venir : /admin, /offres, /candidat/candidatures, /recruteur/offres, etc. */}

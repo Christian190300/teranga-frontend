@@ -70,6 +70,16 @@ export interface UpdateProfilCandidatPayload {
     portfolio?: string;
 }
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
+
+/**
+ * Construit l'URL publique (sans authentification) du logo d'un recruteur donné.
+ * Utilisable directement dans un <img src>, pas besoin de fetch en blob.
+ */
+export function obtenirLogoEntreprisePublicUrl(recruteurId: string): string {
+    return `${API_BASE_URL}/profil-recruteur/public/${recruteurId}/logo`;
+}
+
 export async function getMonProfilCandidat(): Promise<ProfilCandidatDTO> {
     const response = await httpClient.get<ProfilCandidatDTO>("/profil");
     return response.data;

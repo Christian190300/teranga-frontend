@@ -282,9 +282,9 @@ export function ProfilRecruteurPage() {
                 </div>
                 <div className="profil-field-row">
                     <div className="profil-field">
-                        <label htmlFor="emailProfessionnel">Email professionnel</label>
+                        <label htmlFor="telephoneEntreprise">Email professionnel</label>
                         <input
-                            id="emailProfessionnel"
+                            id="telephoneEntreprise"
                             type="email"
                             value={emailProfessionnel}
                             onChange={(e) => setEmailProfessionnel(e.target.value)}

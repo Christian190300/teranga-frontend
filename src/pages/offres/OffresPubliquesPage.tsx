@@ -9,6 +9,7 @@ import {
     type OffreDTO,
 } from "../../api/offreService";
 import { useAuth } from "../../context/AuthContext";
+import { LogoEntreprise } from "../../components/common/LogoEntreprise";
 import { getCouleurContrat } from "./offreColors";
 import "./offres.css";
 
@@ -24,11 +25,6 @@ function formatSalaire(offre: OffreDTO): string | null {
 function formatDate(iso: string | null): string {
     if (!iso) return "—";
     return new Date(iso).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
-}
-
-function initiales(nom: string | null): string {
-    if (!nom) return "?";
-    return nom.slice(0, 2).toUpperCase();
 }
 
 export function OffresPubliquesPage() {
@@ -60,6 +56,7 @@ export function OffresPubliquesPage() {
                 setLoading(false);
             }
         }
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         charger();
     }, [page]);
 
@@ -101,8 +98,7 @@ export function OffresPubliquesPage() {
     }
 
     const estCandidat = currentUser?.role === "CANDIDAT";
-    const modalCouleur = modalOffre ? getCouleurContrat(modalOffre.typeContrat) : null;
-
+    modalOffre ? getCouleurContrat(modalOffre.typeContrat) : null;
     return (
         <div className="offres-page">
             <div className="offres-page__header">
@@ -115,17 +111,9 @@ export function OffresPubliquesPage() {
             {error && <div className="offre-message--error">{error}</div>}
 
             {loading ? (
-                <div className="offres-skeleton-grid" aria-busy="true" aria-label="Chargement des offres">
-                    {Array.from({ length: TAILLE_PAGE }).map((_, i) => (
-                        <div className="offre-skeleton" key={i} style={{ animationDelay: `${i * 0.05}s` }} />
-                    ))}
-                </div>
+                <div className="offres-page__loading">Chargement des offres...</div>
             ) : offres.length === 0 ? (
-                <div className="offres-page__empty">
-                    <div className="offres-page__empty-icon" />
-                    <p className="offres-page__empty-title">Aucune offre pour le moment</p>
-                    <p>Revenez bientôt : de nouvelles opportunités sont publiées chaque semaine.</p>
-                </div>
+                <div className="offres-page__empty">Aucune offre disponible pour le moment.</div>
             ) : (
                 <>
                     <div className="offres-grid">
@@ -141,13 +129,17 @@ export function OffresPubliquesPage() {
                                         {
                                             "--offre-color": couleur.bar,
                                             "--offre-color-soft": couleur.bg,
-                                            "--offre-color-gradient": couleur.gradient,
                                         } as React.CSSProperties
                                     }
                                     onClick={() => ouvrirModal(offre.id)}
                                 >
                                     <div className="offre-tile__top">
-                                        <div className="offre-tile__logo">{initiales(offre.nomEntreprise)}</div>
+                                        <LogoEntreprise
+                                            recruteurId={offre.recruteurId}
+                                            logoPresent={offre.logoPresent}
+                                            nomEntreprise={offre.nomEntreprise}
+                                            className="offre-tile__logo"
+                                        />
                                         <div className="offre-tile__entreprise">
                                             <p className="offre-tile__nom-entreprise">{offre.nomEntreprise ?? "Entreprise"}</p>
                                         </div>
@@ -168,7 +160,6 @@ export function OffresPubliquesPage() {
                                         ) : (
                                             <span className="offre-tile__salaire-vide">Salaire non communiqué</span>
                                         )}
-                                        <span className="offre-tile__voir">Voir l'offre →</span>
                                     </div>
 
                                     {estCandidat && offre.statut === "PUBLIEE" && (
@@ -194,8 +185,8 @@ export function OffresPubliquesPage() {
                                 Précédent
                             </button>
                             <span className="offres-pagination__info">
-                Page {page + 1} / {totalPages}
-              </span>
+                                Page {page + 1} / {totalPages}
+                            </span>
                             <button className="btn-secondary" disabled={page + 1 >= totalPages} onClick={() => setPage((p) => p + 1)}>
                                 Suivant
                             </button>
@@ -218,33 +209,28 @@ export function OffresPubliquesPage() {
                             </div>
                         ) : (
                             <>
-                                <div
-                                    className="offre-modal__header offre-weave"
-                                    style={
-                                        {
-                                            "--contrat-color": modalCouleur?.bar,
-                                            "--contrat-color-soft": modalCouleur?.shadow,
-                                        } as React.CSSProperties
-                                    }
-                                >
+                                <div className="offre-modal__header">
                                     <button className="offre-modal__close" onClick={fermerModal} aria-label="Fermer">
                                         ✕
                                     </button>
-                                    <div className="offre-detail__logo" style={{ background: modalCouleur?.gradient }}>
-                                        {initiales(modalOffre.nomEntreprise)}
-                                    </div>
+                                    <LogoEntreprise
+                                        recruteurId={modalOffre.recruteurId}
+                                        logoPresent={modalOffre.logoPresent}
+                                        nomEntreprise={modalOffre.nomEntreprise}
+                                        className="offre-detail__logo"
+                                    />
                                     <p className="offre-detail__entreprise">{modalOffre.nomEntreprise ?? "Entreprise"}</p>
                                     <h1 className="offre-detail__titre">{modalOffre.titre}</h1>
                                     <p className="offre-detail__lieu">
                                         {[modalOffre.ville, modalOffre.region, modalOffre.pays].filter(Boolean).join(", ") || "Lieu non précisé"}
                                     </p>
                                     <div className="offre-detail__tags">
-                    <span
-                        className="offre-detail__tag"
-                        style={{ background: getCouleurContrat(modalOffre.typeContrat).bar, color: "white" }}
-                    >
-                      {LABELS_TYPE_CONTRAT[modalOffre.typeContrat]}
-                    </span>
+                                        <span
+                                            className="offre-detail__tag"
+                                            style={{ background: getCouleurContrat(modalOffre.typeContrat).bar, color: "white" }}
+                                        >
+                                            {LABELS_TYPE_CONTRAT[modalOffre.typeContrat]}
+                                        </span>
                                         {modalOffre.teletravail && <span className="offre-detail__tag">Télétravail</span>}
                                         {modalOffre.hybride && <span className="offre-detail__tag">Hybride</span>}
                                         {modalOffre.niveauExperience && (
@@ -304,15 +290,15 @@ export function OffresPubliquesPage() {
                                             <div className="offre-detail__chips" style={{ marginBottom: 12 }}>
                                                 {modalOffre.competences?.map((c) => (
                                                     <span className="offre-detail__chip" key={c}>
-                            {c}
-                          </span>
+                                                        {c}
+                                                    </span>
                                                 ))}
                                             </div>
                                             <div className="offre-detail__chips">
                                                 {modalOffre.langues?.map((l) => (
                                                     <span className="offre-detail__chip" key={l}>
-                            {l}
-                          </span>
+                                                        {l}
+                                                    </span>
                                                 ))}
                                             </div>
                                         </div>
@@ -324,8 +310,8 @@ export function OffresPubliquesPage() {
                                             <div className="offre-detail__chips">
                                                 {modalOffre.avantages.map((a) => (
                                                     <span className="offre-detail__chip" key={a}>
-                            {a}
-                          </span>
+                                                        {a}
+                                                    </span>
                                                 ))}
                                             </div>
                                         </div>
