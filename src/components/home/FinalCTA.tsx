@@ -10,7 +10,7 @@ export function FinalCTA() {
                 <Link to="/inscription?role=candidat" className="home-btn home-btn--gold">
                     Créer mon profil
                 </Link>
-                <Link to="/offres" className="home-btn home-btn--outline">
+                <Link to="/inscription?role=candidat" className="home-btn home-btn--outline">
                     Voir les offres
                 </Link>
             </div>
