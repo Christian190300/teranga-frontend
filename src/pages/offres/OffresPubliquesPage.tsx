@@ -101,6 +101,7 @@ export function OffresPubliquesPage() {
     }
 
     const estCandidat = currentUser?.role === "CANDIDAT";
+    const modalCouleur = modalOffre ? getCouleurContrat(modalOffre.typeContrat) : null;
 
     return (
         <div className="offres-page">
@@ -114,9 +115,17 @@ export function OffresPubliquesPage() {
             {error && <div className="offre-message--error">{error}</div>}
 
             {loading ? (
-                <div className="offres-page__loading">Chargement des offres...</div>
+                <div className="offres-skeleton-grid" aria-busy="true" aria-label="Chargement des offres">
+                    {Array.from({ length: TAILLE_PAGE }).map((_, i) => (
+                        <div className="offre-skeleton" key={i} style={{ animationDelay: `${i * 0.05}s` }} />
+                    ))}
+                </div>
             ) : offres.length === 0 ? (
-                <div className="offres-page__empty">Aucune offre disponible pour le moment.</div>
+                <div className="offres-page__empty">
+                    <div className="offres-page__empty-icon" />
+                    <p className="offres-page__empty-title">Aucune offre pour le moment</p>
+                    <p>Revenez bientôt : de nouvelles opportunités sont publiées chaque semaine.</p>
+                </div>
             ) : (
                 <>
                     <div className="offres-grid">
@@ -132,6 +141,7 @@ export function OffresPubliquesPage() {
                                         {
                                             "--offre-color": couleur.bar,
                                             "--offre-color-soft": couleur.bg,
+                                            "--offre-color-gradient": couleur.gradient,
                                         } as React.CSSProperties
                                     }
                                     onClick={() => ouvrirModal(offre.id)}
@@ -158,6 +168,7 @@ export function OffresPubliquesPage() {
                                         ) : (
                                             <span className="offre-tile__salaire-vide">Salaire non communiqué</span>
                                         )}
+                                        <span className="offre-tile__voir">Voir l'offre →</span>
                                     </div>
 
                                     {estCandidat && offre.statut === "PUBLIEE" && (
@@ -207,11 +218,21 @@ export function OffresPubliquesPage() {
                             </div>
                         ) : (
                             <>
-                                <div className="offre-modal__header">
+                                <div
+                                    className="offre-modal__header offre-weave"
+                                    style={
+                                        {
+                                            "--contrat-color": modalCouleur?.bar,
+                                            "--contrat-color-soft": modalCouleur?.shadow,
+                                        } as React.CSSProperties
+                                    }
+                                >
                                     <button className="offre-modal__close" onClick={fermerModal} aria-label="Fermer">
                                         ✕
                                     </button>
-                                    <div className="offre-detail__logo">{initiales(modalOffre.nomEntreprise)}</div>
+                                    <div className="offre-detail__logo" style={{ background: modalCouleur?.gradient }}>
+                                        {initiales(modalOffre.nomEntreprise)}
+                                    </div>
                                     <p className="offre-detail__entreprise">{modalOffre.nomEntreprise ?? "Entreprise"}</p>
                                     <h1 className="offre-detail__titre">{modalOffre.titre}</h1>
                                     <p className="offre-detail__lieu">
