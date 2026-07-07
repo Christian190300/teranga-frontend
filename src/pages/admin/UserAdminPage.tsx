@@ -150,12 +150,12 @@ export function UserAdminPage() {
                                     <td>
                                         <select
                                             className="admin-select"
-                                            value={u.roles?.[0] ?? ""}
+                                            value={u.roles.find(r => r.startsWith("ROLE_")) ?? ""}
                                             onChange={(e) => handleChangerRole(u.id, e.target.value)}
                                         >
                                             {ROLES_GERES.map((role) => (
                                                 <option key={role} value={role}>
-                                                    {role}
+                                                    {role.replace("ROLE_", "")}
                                                 </option>
                                             ))}
                                         </select>

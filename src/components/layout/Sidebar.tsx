@@ -8,6 +8,7 @@ const generalLinks = [
     { to: "/admin/utilisateurs", label: "Utilisateurs", icon: <IconUsers /> },
     { to: "/admin/entreprises", label: "Entreprises", icon: <IconBuilding /> },
     { to: "/admin/offres", label: "Offres", icon: <IconBriefcase /> },
+    { to: "/admin/creerformation", label: "Creer Formation", icon: <IconBriefcase /> },
 ];
 
 const systemLinks = [{ to: "/admin/parametres", label: "Paramètres", icon: <IconSettings /> }];

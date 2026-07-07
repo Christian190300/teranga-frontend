@@ -29,7 +29,17 @@ export interface Activation {
 }
 
 // À vérifier contre KeycloakAdminService.ROLES_GERES côté backend.
-export const ROLES_GERES = ["CANDIDAT", "RECRUTEUR", "ADMIN"] as const;
+export const ROLES_GERES = [
+    "ROLE_CANDIDAT",
+    "ROLE_RECRUTEUR",
+    "ROLE_ADMIN",
+] as const;
+
+export const LABELS_ROLES: Record<string, string> = {
+    ROLE_CANDIDAT: "Candidat",
+    ROLE_RECRUTEUR: "Recruteur",
+    ROLE_ADMIN: "Administrateur",
+};
 export type RoleGere = (typeof ROLES_GERES)[number];
 
 export interface ListeUtilisateursResultat {

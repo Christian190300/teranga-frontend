@@ -12,6 +12,7 @@ const candidatLinks: NavLink[] = [
     { to: "/offres", label: "Offres d'emploi" },
     { to: "/candidat/candidatures", label: "Mes candidatures" },
     { to: "/candidat/profil", label: "Mon profil" },
+    { to: "/candidat/formation", label: "Mes formation" },
 ];
 
 const recruteurLinks: NavLink[] = [
