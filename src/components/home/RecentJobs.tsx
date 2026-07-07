@@ -1,59 +1,107 @@
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { IconBriefcase, IconCoin, IconMapPin } from "./icons";
-
-interface JobPreview {
-    title: string;
-    company: string;
-    location: string;
-    salary: string;
-    accent: "navy" | "gold";
-}
-
-// Données de démonstration — à remplacer par un appel à l'API /api/offres quand ce module existera.
-const jobs: JobPreview[] = [
-    { title: "Chargée d'affaires", company: "Nouvelle Entreprise", location: "Nord Foire", salary: "Salaire à négocier", accent: "navy" },
-    { title: "Gestionnaire de projet", company: "Agence numérique Dakar", location: "Dakar", salary: "1200k – 1800k FCFA", accent: "gold" },
-    { title: "Spécialiste Contenu", company: "Agence numérique Dakar", location: "Dakar", salary: "1000k – 1500k FCFA", accent: "navy" },
-];
+import {
+    LABELS_TYPE_CONTRAT,
+    type OffreDTO,
+    listerOffresPubliques,
+} from "../../api/offreService";
 
 export function RecentJobs() {
+    const [jobs, setJobs] = useState<OffreDTO[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    const estConnecte = !!localStorage.getItem("access_token");
+
+    useEffect(() => {
+        async function charger() {
+            try {
+                const resultat = await listerOffresPubliques(0, 3);
+
+                // Tri par date de publication décroissante
+                const offres = [...resultat.content].sort(
+                    (a, b) =>
+                        new Date(b.datePublication ?? 0).getTime() -
+                        new Date(a.datePublication ?? 0).getTime()
+                );
+
+                setJobs(offres);
+            } catch (error) {
+                console.error("Erreur lors du chargement des offres :", error);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        charger();
+    }, []);
+
     return (
         <section className="home-section home-container">
             <div className="home-section__head">
                 <div>
-                    <h2 className="home-section__title">Opportunités récentes</h2>
-                    <p className="home-section__subtitle">Les derniers postes publiés par les entreprises qui recrutent.</p>
+                    <h2 className="home-section__title">
+                        Opportunités récentes
+                    </h2>
+
+                    <p className="home-section__subtitle">
+                        Les derniers postes publiés par les entreprises qui recrutent.
+                    </p>
                 </div>
-                <Link to="/offres" className="home-btn home-btn--text">
+
+                <Link
+                    to={estConnecte ? "/offres" : "/connexion"}
+                    className="home-btn home-btn--text"
+                >
                     Voir toutes les offres →
                 </Link>
             </div>
 
             <div className="home-jobs-grid">
-                {jobs.map((job) => (
-                    <article className={`home-job-card ${job.accent === "gold" ? "home-job-card--gold" : ""}`} key={job.title}>
-                        <div className="home-job-card__top">
-                            <div className="home-job-card__icon">
-                                <IconBriefcase />
+                {loading ? (
+                    <p>Chargement des offres...</p>
+                ) : (
+                    jobs.map((job) => (
+                        <article className="home-job-card" key={job.id}>
+                            <div className="home-job-card__top">
+                                <div className="home-job-card__icon">
+                                    <IconBriefcase />
+                                </div>
+
+                                <span className="home-pill">
+                                    {LABELS_TYPE_CONTRAT[job.typeContrat]}
+                                </span>
                             </div>
-                            <span className="home-pill">Ouvert</span>
-                        </div>
 
-                        <div>
-                            <h3>{job.title}</h3>
-                            <p className="home-job-card__company">{job.company}</p>
-                        </div>
+                            <div>
+                                <h3>{job.titre}</h3>
 
-                        <div className="home-job-card__meta">
-              <span>
-                <IconMapPin /> {job.location}
-              </span>
-                            <span>
-                <IconCoin /> {job.salary}
-              </span>
-                        </div>
-                    </article>
-                ))}
+                                <p className="home-job-card__company">
+                                    {job.nomEntreprise ?? "Entreprise"}
+                                </p>
+                            </div>
+
+                            <div className="home-job-card__meta">
+                                <span>
+                                    <IconMapPin />
+                                    {job.ville ??
+                                        job.region ??
+                                        job.pays ??
+                                        "Non précisé"}
+                                </span>
+
+                                <span>
+                                    <IconCoin />
+                                    {job.salaireVisible
+                                        ? `${job.salaireMin ?? "-"} - ${
+                                            job.salaireMax ?? "-"
+                                        } ${job.devise ?? ""}`
+                                        : "Salaire non communiqué"}
+                                </span>
+                            </div>
+                        </article>
+                    ))
+                )}
             </div>
         </section>
     );
