@@ -1,0 +1,20 @@
+/* ============================================================
+   ENTREPRISE ADMIN — vient compléter UserAdminPage.css (chargé en
+   même temps), pas le redéfinir. Toutes les classes .admin-page,
+   .admin-table, .admin-toolbar, etc. viennent de ce fichier partagé.
+   ============================================================ */
+
+.admin-btn--danger {
+    background: white;
+    border-color: #f2c1bd;
+    color: #b3261e;
+}
+
+.admin-btn--danger:hover {
+    background: #fbeceb;
+}
+
+.admin-btn--danger:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
