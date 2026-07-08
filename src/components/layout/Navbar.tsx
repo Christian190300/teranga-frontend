@@ -1,5 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import { Link, NavLink, useNavigate } from "react-router-dom";import { useAuth } from "../../context/AuthContext";
 import { ProfileMenu } from "./ProfileMenu";
 import "./navbar.css";
 
@@ -38,9 +37,15 @@ export function Navbar() {
             {isAuthenticated && espaceLinks.length > 0 && (
                 <nav className="navbar__menu">
                     {espaceLinks.map((link) => (
-                        <Link key={link.to} to={link.to} className="navbar__menu-link">
+                        <NavLink
+                            key={link.to}
+                            to={link.to}
+                            className={({ isActive }) =>
+                                `navbar__menu-link ${isActive ? "active" : ""}`
+                            }
+                        >
                             {link.label}
-                        </Link>
+                        </NavLink>
                     ))}
                 </nav>
             )}

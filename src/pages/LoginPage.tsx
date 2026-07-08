@@ -1,6 +1,7 @@
 import { type FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { getMonCompte } from "../api/authService";
 import "./authPage.css"
 
 function LogoMark({ size = 36, light = false }: { size?: number; light?: boolean }) {
@@ -110,7 +111,21 @@ export function LoginPage() {
 
         try {
             await login(email, password);
-            navigate("/");
+
+            const compte = await getMonCompte();
+
+            const authorities = compte.compte.authorities;
+
+            if (authorities.includes("ROLE_ADMIN")) {
+                navigate("/admin");
+            } else if (authorities.includes("ROLE_RECRUTEUR")) {
+                navigate("/recruteur/offres");
+            } else if (authorities.includes("ROLE_CANDIDAT")) {
+                navigate("/offres");
+            } else {
+                navigate("/");
+            }
+
         } catch {
             setError("Email ou mot de passe incorrect.");
         } finally {
