@@ -51,6 +51,48 @@ function IconDocument() {
 
 const NIVEAUX_EXPERIENCE = ["Débutant", "Junior", "Intermédiaire", "Sénior", "Expert"];
 const DISPONIBILITES = ["Immédiate", "Sous 1 mois", "Sous 3 mois", "Non disponible"];
+const PAYS = ["Sénégal"];
+
+const REGIONS = [
+    "Dakar",
+    "Diourbel",
+    "Fatick",
+    "Kaffrine",
+    "Kaolack",
+    "Kédougou",
+    "Kolda",
+    "Louga",
+    "Matam",
+    "Saint-Louis",
+    "Sédhiou",
+    "Tambacounda",
+    "Thiès",
+    "Ziguinchor"
+];
+
+const VILLES = [
+    "Dakar",
+    "Pikine",
+    "Guédiawaye",
+    "Rufisque",
+    "Thiès",
+    "Mbour",
+    "Tivaouane",
+    "Saint-Louis",
+    "Richard-Toll",
+    "Kaolack",
+    "Fatick",
+    "Diourbel",
+    "Touba",
+    "Louga",
+    "Kolda",
+    "Ziguinchor",
+    "Sédhiou",
+    "Tambacounda",
+    "Kédougou",
+    "Matam",
+    "Kaffrine"
+];
 
 export function ProfilCandidatPage() {
     const { refreshPhoto } = useAuth();
@@ -357,15 +399,48 @@ export function ProfilCandidatPage() {
                 <div className="profil-field-row profil-field-row--3">
                     <div className="profil-field">
                         <label htmlFor="ville">Ville</label>
-                        <input id="ville" value={ville} onChange={(e) => setVille(e.target.value)} placeholder="Thiès" />
+                        <select
+                            id="ville"
+                            value={ville}
+                            onChange={(e) => setVille(e.target.value)}
+                        >
+                            <option value="">Sélectionnez une ville</option>
+                            {VILLES.map((v) => (
+                                <option key={v} value={v}>
+                                    {v}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     <div className="profil-field">
                         <label htmlFor="region">Région</label>
-                        <input id="region" value={region} onChange={(e) => setRegion(e.target.value)} placeholder="Thiès" />
+                        <select
+                            id="region"
+                            value={region}
+                            onChange={(e) => setRegion(e.target.value)}
+                        >
+                            <option value="">Sélectionnez une région</option>
+                            {REGIONS.map((r) => (
+                                <option key={r} value={r}>
+                                    {r}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     <div className="profil-field">
                         <label htmlFor="pays">Pays</label>
-                        <input id="pays" value={pays} onChange={(e) => setPays(e.target.value)} placeholder="Sénégal" />
+                        <select
+                            id="pays"
+                            value={pays}
+                            onChange={(e) => setPays(e.target.value)}
+                        >
+                            <option value="">Sélectionnez un pays</option>
+                            {PAYS.map((p) => (
+                                <option key={p} value={p}>
+                                    {p}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                 </div>
 

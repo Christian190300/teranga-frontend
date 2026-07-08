@@ -31,6 +31,80 @@ function IconCamera() {
 }
 
 const TAILLES_ENTREPRISE = ["1-10", "11-50", "51-200", "201-500", "500+"];
+const SECTEURS_ACTIVITE = [
+    "Agriculture",
+    "Agroalimentaire",
+    "Assurance",
+    "Banque et Finance",
+    "BTP / Construction",
+    "Commerce et Distribution",
+    "Communication",
+    "Conseil",
+    "Éducation et Formation",
+    "Énergie",
+    "Environnement",
+    "Hôtellerie et Restauration",
+    "Immobilier",
+    "Industrie",
+    "Informatique / IT",
+    "Logistique et Transport",
+    "Marketing et Publicité",
+    "Médias",
+    "Mines",
+    "ONG / Associations",
+    "Pêche",
+    "Pharmaceutique",
+    "Santé",
+    "Sécurité",
+    "Services",
+    "Télécommunications",
+    "Textile",
+    "Tourisme",
+    "Administration publique",
+    "Autre"
+];
+const PAYS = ["Sénégal"];
+
+const REGIONS = [
+    "Dakar",
+    "Diourbel",
+    "Fatick",
+    "Kaffrine",
+    "Kaolack",
+    "Kédougou",
+    "Kolda",
+    "Louga",
+    "Matam",
+    "Saint-Louis",
+    "Sédhiou",
+    "Tambacounda",
+    "Thiès",
+    "Ziguinchor"
+];
+
+const VILLES = [
+    "Dakar",
+    "Pikine",
+    "Guédiawaye",
+    "Rufisque",
+    "Thiès",
+    "Mbour",
+    "Tivaouane",
+    "Saint-Louis",
+    "Richard-Toll",
+    "Kaolack",
+    "Fatick",
+    "Diourbel",
+    "Touba",
+    "Louga",
+    "Kolda",
+    "Ziguinchor",
+    "Sédhiou",
+    "Tambacounda",
+    "Kédougou",
+    "Matam",
+    "Kaffrine"
+];
 
 export function ProfilRecruteurPage() {
     const { refreshPhoto } = useAuth();
@@ -225,12 +299,19 @@ export function ProfilRecruteurPage() {
                 <div className="profil-field-row">
                     <div className="profil-field">
                         <label htmlFor="secteurActivite">Secteur d'activité</label>
-                        <input
+                        <select
                             id="secteurActivite"
                             value={secteurActivite}
                             onChange={(e) => setSecteurActivite(e.target.value)}
-                            placeholder="Télécommunications, BTP, Finance..."
-                        />
+                        >
+                            <option value="">Sélectionnez un secteur</option>
+
+                            {SECTEURS_ACTIVITE.map((secteur) => (
+                                <option key={secteur} value={secteur}>
+                                    {secteur}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     <div className="profil-field">
                         <label htmlFor="tailleEntreprise">Taille de l'entreprise</label>
@@ -313,15 +394,48 @@ export function ProfilRecruteurPage() {
                 <div className="profil-field-row profil-field-row--3">
                     <div className="profil-field">
                         <label htmlFor="ville">Ville</label>
-                        <input id="ville" value={ville} onChange={(e) => setVille(e.target.value)} placeholder="Dakar" />
+                        <select
+                            id="ville"
+                            value={ville}
+                            onChange={(e) => setVille(e.target.value)}
+                        >
+                            <option value="">Sélectionnez une ville</option>
+                            {VILLES.map((v) => (
+                                <option key={v} value={v}>
+                                    {v}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     <div className="profil-field">
                         <label htmlFor="region">Région</label>
-                        <input id="region" value={region} onChange={(e) => setRegion(e.target.value)} placeholder="Dakar" />
+                        <select
+                            id="region"
+                            value={region}
+                            onChange={(e) => setRegion(e.target.value)}
+                        >
+                            <option value="">Sélectionnez une région</option>
+                            {REGIONS.map((r) => (
+                                <option key={r} value={r}>
+                                    {r}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     <div className="profil-field">
                         <label htmlFor="pays">Pays</label>
-                        <input id="pays" value={pays} onChange={(e) => setPays(e.target.value)} placeholder="Sénégal" />
+                        <select
+                            id="pays"
+                            value={pays}
+                            onChange={(e) => setPays(e.target.value)}
+                        >
+                            <option value="">Sélectionnez un pays</option>
+                            {PAYS.map((p) => (
+                                <option key={p} value={p}>
+                                    {p}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                 </div>
             </div>
