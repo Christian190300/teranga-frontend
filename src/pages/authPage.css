@@ -113,6 +113,18 @@
     pointer-events: none;
 }
 
+.input-with-icon select {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 0.9rem 1rem 0.9rem 2.8rem;
+    font-size: 0.95rem;
+    color: inherit;
+    appearance: none;
+    cursor: pointer;
+}
+
 .auth-panel__content {
     position: relative;
     z-index: 1;

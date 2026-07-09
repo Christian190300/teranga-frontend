@@ -1,4 +1,5 @@
 import { httpClient } from "./httpClient";
+import type { OffreDTO } from "./offreService";
 
 // Miroir des DTOs Java (com.terangasenegal.user.service.dto)
 
@@ -28,6 +29,14 @@ export interface Activation {
     actif: boolean;
 }
 
+export interface PageOffres {
+    content: OffreDTO[];
+    totalElements: number;
+    totalPages: number;
+    number: number; // page courante (0-indexée)
+    size: number;
+}
+
 // À vérifier contre KeycloakAdminService.ROLES_GERES côté backend.
 export const ROLES_GERES = [
     "ROLE_CANDIDAT",
@@ -45,6 +54,11 @@ export type RoleGere = (typeof ROLES_GERES)[number];
 export interface ListeUtilisateursResultat {
     utilisateurs: AdminUtilisateur[];
     total: number;
+}
+export interface UtilisateursStatistiques {
+    total: number;
+    actifs: number;
+    inactifs: number;
 }
 
 const BASE_URL = "/admin/utilisateurs";
@@ -74,3 +88,21 @@ export async function changerRole(id: string, dto: ChangerRole): Promise<void> {
 export async function definirActivation(id: string, dto: Activation): Promise<void> {
     await httpClient.put(`${BASE_URL}/${id}/activation`, dto);
 }
+
+/**
+ * Liste ADMIN : toutes les offres, tous statuts confondus, tous recruteurs.
+ * Backend : GET /api/offres/toutes (protégé ROLE_ADMIN), renvoie un objet Page
+ * Spring Data brut (pas une liste + header, contrairement aux endpoints /admin/*).
+ */
+export async function listerToutesOffresAdmin(page: number, size: number): Promise<PageOffres> {
+    const response = await httpClient.get<PageOffres>("/offres/toutes", {
+        params: { page, size },
+    });
+    return response.data;
+}
+
+export async function obtenirStatistiquesUtilisateurs(): Promise<UtilisateursStatistiques> {
+    const response = await httpClient.get<UtilisateursStatistiques>(`${BASE_URL}/statistiques`);
+    return response.data;
+}
+

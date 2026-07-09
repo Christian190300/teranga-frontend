@@ -158,6 +158,39 @@ const featuresRecruteur = [
     "Suivez vos candidatures depuis un seul tableau de bord",
 ];
 
+const SECTEURS_ACTIVITE = [
+    "Agriculture",
+    "Agroalimentaire",
+    "Assurance",
+    "Banque et Finance",
+    "BTP / Construction",
+    "Commerce et Distribution",
+    "Communication",
+    "Conseil",
+    "Éducation et Formation",
+    "Énergie",
+    "Environnement",
+    "Hôtellerie et Restauration",
+    "Immobilier",
+    "Industrie",
+    "Informatique / IT",
+    "Logistique et Transport",
+    "Marketing et Publicité",
+    "Médias",
+    "Mines",
+    "ONG / Associations",
+    "Pêche",
+    "Pharmaceutique",
+    "Santé",
+    "Sécurité",
+    "Services",
+    "Télécommunications",
+    "Textile",
+    "Tourisme",
+    "Administration publique",
+    "Autre",
+];
+
 export function RegisterPage() {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
@@ -415,12 +448,19 @@ export function RegisterPage() {
                                         <span className="input-with-icon__icon">
                                             <IconBriefcase />
                                         </span>
-                                        <input
+                                        <select
                                             id="secteurActivite"
                                             value={secteurActivite}
                                             onChange={(e) => setSecteurActivite(e.target.value)}
-                                            placeholder="Ex : Technologie, BTP, Finance..."
-                                        />
+                                        >
+                                            <option value="ville">Sélectionnez un secteur</option>
+
+                                            {SECTEURS_ACTIVITE.map((secteur) => (
+                                                <option key={secteur} value={secteur}>
+                                                    {secteur}
+                                                </option>
+                                            ))}
+                                        </select>
                                     </div>
                                 </div>
 

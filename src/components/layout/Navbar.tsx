@@ -40,6 +40,7 @@ export function Navbar() {
                         <NavLink
                             key={link.to}
                             to={link.to}
+                            end={link.to === "/recruteur/offres"}
                             className={({ isActive }) =>
                                 `navbar__menu-link ${isActive ? "active" : ""}`
                             }

@@ -13,6 +13,7 @@ import {OffresRecruteurPage} from "./pages/recruteur/OffresRecruteurPage.tsx";
 import {OffreFormPage} from "./pages/recruteur/OffreFormPage.tsx";
 import {OffresAdminPage} from "./pages/admin/OffresAdminPage.tsx";
 import { EntrepriseAdminPage } from "./pages/admin/EntrepriseAdminPage";
+import { AdminDashboardPage } from "./pages/admin/AdminDashboardPage";
 
 export default function App() {
     return (
@@ -34,6 +35,7 @@ export default function App() {
                         <Route path="/recruteur/offres/:id/modifier" element={<OffreFormPage />} />
                         <Route path="/admin/offres" element={<OffresAdminPage />} />
                         <Route path="/admin/entreprises" element={<EntrepriseAdminPage />} />
+                        <Route path="/admin" element={<AdminDashboardPage />} />
 
                         {/* Routes à venir : /admin, /offres, /candidat/candidatures, /recruteur/offres, etc. */}
                     </Routes>

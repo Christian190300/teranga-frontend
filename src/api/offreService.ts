@@ -88,7 +88,7 @@ export interface UpsertOffrePayload {
 /** Alias : OffreFormModal utilise ce nom, OffreFormPage utilise UpsertOffrePayload. Même forme. */
 export type UpsertOffreDTO = UpsertOffrePayload;
 
-interface SpringPage<T> {
+export interface SpringPage<T> {
     content: T[];
     totalElements: number;
     totalPages: number;
