@@ -10,10 +10,14 @@ import {
 } from "../../api/offreService";
 import { useAuth } from "../../context/AuthContext";
 import { LogoEntreprise } from "../../components/common/LogoEntreprise";
+import { CandidatureFormulaire } from "../candidat/CandidatureFormulaire";
 import { getCouleurContrat } from "./offreColors";
 import "./offres.css";
+import { aDejaPostule } from "../../api/candidatureService";
 
 const TAILLE_PAGE = 9;
+
+type EtapeCandidature = "idle" | "formulaire" | "succes";
 
 function formatSalaire(offre: OffreDTO): string | null {
     if (!offre.salaireVisible || (!offre.salaireMin && !offre.salaireMax)) return null;
@@ -39,9 +43,11 @@ export function OffresPubliquesPage() {
     const [modalOffreId, setModalOffreId] = useState<number | null>(null);
     const [modalOffre, setModalOffre] = useState<OffreDTO | null>(null);
     const [loadingModal, setLoadingModal] = useState(false);
+    const [dejaPostule, setDejaPostule] = useState(false);
 
-    const [postulationEnvoyee, setPostulationEnvoyee] = useState(false);
-    const [postulationEnCours, setPostulationEnCours] = useState(false);
+    const [etapeCandidature, setEtapeCandidature] = useState<EtapeCandidature>("idle");
+
+    const estCandidat = currentUser?.role === "CANDIDAT";
 
     useEffect(() => {
         async function charger() {
@@ -56,7 +62,6 @@ export function OffresPubliquesPage() {
                 setLoading(false);
             }
         }
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         charger();
     }, [page]);
 
@@ -70,11 +75,15 @@ export function OffresPubliquesPage() {
 
     async function ouvrirModal(id: number) {
         setModalOffreId(id);
-        setPostulationEnvoyee(false);
+        setEtapeCandidature("idle");
         setLoadingModal(true);
         try {
             const data = await obtenirOffre(id);
             setModalOffre(data);
+            if (estCandidat) {
+                const deja = await aDejaPostule(id);
+                setDejaPostule(deja);
+            }
         } catch {
             setModalOffre(null);
         } finally {
@@ -82,23 +91,23 @@ export function OffresPubliquesPage() {
         }
     }
 
+    /** Clic sur "Postuler" depuis une tuile : ouvre le modal directement sur le formulaire. */
+    async function handleClicPostulerDepuisTuile(e: React.MouseEvent, offreId: number) {
+        e.stopPropagation();
+        await ouvrirModal(offreId);
+        setEtapeCandidature("formulaire");
+    }
+
+    function ouvrirFormulaire() {
+        setEtapeCandidature("formulaire");
+    }
+
     function fermerModal() {
         setModalOffreId(null);
         setModalOffre(null);
+        setEtapeCandidature("idle");
     }
 
-    async function handlePostuler() {
-        setPostulationEnCours(true);
-        try {
-            await new Promise((resolve) => setTimeout(resolve, 600));
-            setPostulationEnvoyee(true);
-        } finally {
-            setPostulationEnCours(false);
-        }
-    }
-
-    const estCandidat = currentUser?.role === "CANDIDAT";
-    modalOffre ? getCouleurContrat(modalOffre.typeContrat) : null;
     return (
         <div className="offres-page">
             <div className="offres-page__header">
@@ -122,8 +131,10 @@ export function OffresPubliquesPage() {
                             const lieu = [offre.ville, offre.pays].filter(Boolean).join(", ");
                             const salaire = formatSalaire(offre);
                             return (
-                                <button
+                                <div
                                     key={offre.id}
+                                    role="button"
+                                    tabIndex={0}
                                     className="offre-tile"
                                     style={
                                         {
@@ -132,6 +143,7 @@ export function OffresPubliquesPage() {
                                         } as React.CSSProperties
                                     }
                                     onClick={() => ouvrirModal(offre.id)}
+                                    onKeyDown={(e) => e.key === "Enter" && ouvrirModal(offre.id)}
                                 >
                                     <div className="offre-tile__top">
                                         <LogoEntreprise
@@ -163,18 +175,11 @@ export function OffresPubliquesPage() {
                                     </div>
 
                                     {estCandidat && offre.statut === "PUBLIEE" && (
-                                        <button
-                                            type="button"
-                                            className="btn-gold offre-tile__postuler"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                ouvrirModal(offre.id);
-                                            }}
-                                        >
+                                        <button className="btn-gold" onClick={(e) => handleClicPostulerDepuisTuile(e, offre.id)}>
                                             Postuler
                                         </button>
                                     )}
-                                </button>
+                                </div>
                             );
                         })}
                     </div>
@@ -240,6 +245,31 @@ export function OffresPubliquesPage() {
                                 </div>
 
                                 <div className="offre-modal__body">
+                                    {/* --- Formulaire / confirmation de candidature --- */}
+                                    {estCandidat && etapeCandidature !== "idle" && (
+                                        <div className="offre-detail__section">
+                                            {etapeCandidature === "formulaire" && (
+                                                <>
+                                                    <p className="offre-detail__section-title">Votre candidature</p>
+                                                    <CandidatureFormulaire
+                                                        offreId={modalOffre.id}
+                                                        onAnnuler={() => setEtapeCandidature("idle")}
+                                                        onSucces={() => {
+                                                            setEtapeCandidature("succes");
+                                                            setDejaPostule(true);
+                                                        }}
+                                                    />
+                                                </>
+                                            )}
+
+                                            {etapeCandidature === "succes" && (
+                                                <div className="candidature-form__success">
+                                                    ✓ Votre candidature a bien été envoyée. Vous pouvez suivre son statut dans « Mes candidatures ».
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+
                                     {modalOffre.description && (
                                         <div className="offre-detail__section">
                                             <p className="offre-detail__section-title">Description du poste</p>
@@ -344,9 +374,9 @@ export function OffresPubliquesPage() {
 
                                 <div className="offre-modal__footer">
                                     <span className="offre-detail__fact-value">{formatSalaire(modalOffre) ?? "Salaire non communiqué"}</span>
-                                    {estCandidat && modalOffre.statut === "PUBLIEE" && (
-                                        <button className="btn-gold" onClick={handlePostuler} disabled={postulationEnCours || postulationEnvoyee}>
-                                            {postulationEnCours ? "Envoi..." : postulationEnvoyee ? "Candidature envoyée" : "Postuler"}
+                                    {estCandidat && modalOffre.statut === "PUBLIEE" && etapeCandidature === "idle" && (
+                                        <button className="btn-gold" onClick={ouvrirFormulaire} disabled={dejaPostule}>
+                                            {dejaPostule ? "Candidature envoyée" : "Postuler"}
                                         </button>
                                     )}
                                 </div>

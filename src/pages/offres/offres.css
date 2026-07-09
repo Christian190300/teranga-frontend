@@ -104,6 +104,32 @@
     justify-content: center;
 }
 
+.offre-field__requis {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--gold-deep);
+    background: var(--gold-soft);
+    padding: 2px 8px;
+    border-radius: 999px;
+    margin-left: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.offre-field__ok {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #1e7e34;
+    margin-left: 8px;
+}
+
+.offre-field input[type="file"] {
+    padding: 9px 12px;
+    background: white;
+    cursor: pointer;
+}
+
+
 .offres-page__empty-icon::before {
     content: "";
     width: 18px;
@@ -253,6 +279,177 @@
     transition: box-shadow 0.28s var(--ease), border-color 0.28s var(--ease), transform 0.28s var(--ease);
     position: relative;
     animation: offreFadeIn 0.5s var(--ease) both;
+}
+
+/* ============================================================
+   FORMULAIRE DE CANDIDATURE — habillage complet
+   ============================================================ */
+
+.candidature-form {
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 24px 26px;
+    animation: offreFadeIn 0.3s var(--ease) both;
+}
+
+.candidature-form__hint {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin: 0 0 20px;
+    padding-bottom: 18px;
+    border-bottom: 1px dashed var(--border);
+}
+
+/* Regroupement visuel des champs profil, distinct du reste du form */
+.candidature-form__champs {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.candidature-form .offre-field {
+    margin-bottom: 0;
+}
+
+.candidature-form .offre-field label {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 7px;
+}
+
+.candidature-form .offre-field input,
+.candidature-form .offre-field select,
+.candidature-form .offre-field textarea {
+    background: white;
+}
+
+.candidature-form .offre-field input:disabled,
+.candidature-form .offre-field select:disabled,
+.candidature-form .offre-field textarea:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Séparateur avant la section fichiers */
+.candidature-form__fichiers {
+    padding-top: 18px;
+    margin-top: 4px;
+    border-top: 1px dashed var(--border);
+}
+
+.candidature-form__fichiers-titre {
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 0 0 14px;
+}
+
+/* Zone de dépôt de fichier, plus visuelle qu'un simple <input type="file"> nu */
+.candidature-form__file {
+    position: relative;
+    border: 1.5px dashed var(--border);
+    border-radius: var(--radius-sm);
+    background: white;
+    padding: 14px 16px;
+    transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
+}
+
+.candidature-form__file:hover {
+    border-color: var(--gold-light);
+    background: var(--gold-soft);
+}
+
+.candidature-form__file--obligatoire {
+    border-color: var(--gold);
+}
+
+.candidature-form__file input[type="file"] {
+    width: 100%;
+    font-size: 0.82rem;
+    color: var(--navy);
+    cursor: pointer;
+}
+
+.candidature-form__file input[type="file"]::file-selector-button {
+    padding: 7px 14px;
+    margin-right: 12px;
+    border: none;
+    border-radius: 7px;
+    background: var(--navy);
+    color: white;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s var(--ease);
+}
+
+.candidature-form__file input[type="file"]::file-selector-button:hover {
+    background: var(--navy-lighter);
+}
+
+/* Message pour le recruteur */
+.candidature-form__message {
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px dashed var(--border);
+}
+
+.candidature-form textarea {
+    width: 100%;
+    min-height: 100px;
+}
+
+/* Bandeau d'erreur / succès */
+.candidature-form .offre-message--error {
+    margin: 18px 0 0;
+}
+
+.candidature-form__success {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #e5f3ea;
+    color: #1e7e34;
+    border: 1px solid #b7ddc2;
+    padding: 16px 18px;
+    border-radius: var(--radius-md);
+    font-size: 0.92rem;
+    font-weight: 600;
+    animation: offreFadeIn 0.3s var(--ease) both;
+}
+
+.candidature-form__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+}
+
+@media (max-width: 560px) {
+    .candidature-form {
+        padding: 18px;
+    }
+
+    .candidature-form__actions {
+        flex-direction: column-reverse;
+    }
+
+    .candidature-form__actions button {
+        width: 100%;
+    }
 }
 
 .offres-grid .offre-tile:nth-child(2) { animation-delay: 0.04s; }
