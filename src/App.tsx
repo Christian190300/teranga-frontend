@@ -17,6 +17,8 @@ import { AdminDashboardPage } from "./pages/admin/AdminDashboardPage";
 import { MesCandidaturesPage } from "./pages/candidat/MesCandidaturesPage";
 import { CandidaturesOffrePage } from "./pages/recruteur/CandidaturesOffrePage";
 import { CandidaturesRecuesPage } from "./pages/recruteur/CandidaturesRecuesPage";
+import { FormationsAdminPage } from "./pages/admin/FormationsAdminPage";
+import { FormationWizardPage } from "./pages/admin/FormationWizardPage";
 
 
 export default function App() {
@@ -43,6 +45,9 @@ export default function App() {
                         <Route path="/candidat/candidatures" element={<MesCandidaturesPage />} />
                         <Route path="/recruteur/offres/:offreId/candidatures" element={<CandidaturesOffrePage />} />
                         <Route path="/recruteur/candidatures" element={<CandidaturesRecuesPage />} />
+                        <Route path="/admin/formations" element={<FormationsAdminPage />} />
+                        <Route path="/admin/formations/nouvelle" element={ <FormationWizardPage />}/>
+                        <Route path="/admin/formations/:id/modifier" element={ <FormationWizardPage />}/>
 
                         {/* Routes à venir : /admin, /offres, /candidat/candidatures, /recruteur/offres, etc. */}
                     </Routes>

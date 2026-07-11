@@ -1,0 +1,287 @@
+@import url("../public/offres.css");
+
+.lecteur-formation {
+    display: flex;
+    min-height: calc(100vh - 64px); /* ajuste selon la hauteur réelle de ton header */
+    background: var(--bg-page);
+    font-family: var(--font-body);
+}
+
+/* ============================================================
+   SIDEBAR
+   ============================================================ */
+
+.lecteur-sidebar {
+    width: 340px;
+    flex-shrink: 0;
+    background: white;
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 24px 0;
+}
+
+@media (max-width: 900px) {
+    .lecteur-formation {
+        flex-direction: column;
+    }
+    .lecteur-sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        max-height: 50vh;
+    }
+}
+
+.lecteur-sidebar__retour {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 24px 16px;
+    font-size: 0.83rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-decoration: none;
+}
+
+.lecteur-sidebar__retour:hover {
+    color: var(--navy);
+}
+
+.lecteur-sidebar__progression {
+    padding: 0 24px 20px;
+    border-bottom: 1px solid var(--bg-soft);
+    margin-bottom: 8px;
+}
+
+.lecteur-sidebar__progression-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 8px;
+}
+
+.lecteur-progress-bar {
+    height: 8px;
+    border-radius: 999px;
+    background: var(--bg-soft);
+    overflow: hidden;
+}
+
+.lecteur-progress-bar__remplissage {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold-deep), var(--gold));
+    border-radius: 999px;
+    transition: width 0.3s var(--ease);
+}
+
+.lecteur-sidebar__certifie {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #1e7e34;
+    background: #e5f3ea;
+    padding: 5px 12px;
+    border-radius: 999px;
+}
+
+/* ---------- Chapitres ---------- */
+
+.lecteur-chapitres {
+    padding: 8px 0;
+}
+
+.lecteur-chapitre {
+    border-bottom: 1px solid var(--bg-soft);
+}
+
+.lecteur-chapitre__header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 24px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s var(--ease);
+}
+
+.lecteur-chapitre__header:hover,
+.lecteur-chapitre__header--ouvert {
+    background: var(--bg-soft);
+}
+
+.lecteur-chapitre__numero {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: white;
+    font-size: 0.72rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.lecteur-chapitre__titre {
+    flex: 1;
+    font-size: 0.87rem;
+    font-weight: 700;
+    color: var(--navy-ink);
+}
+
+.lecteur-chapitre__chevron {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+}
+
+.lecteur-lecons {
+    padding: 4px 0 10px;
+    background: var(--bg-soft);
+}
+
+.lecteur-lecon,
+.lecteur-quiz-lien {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 24px 10px 48px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    text-align: left;
+    font-size: 0.82rem;
+    color: var(--text-body);
+    text-decoration: none;
+    transition: background 0.15s var(--ease);
+}
+
+.lecteur-lecon:hover,
+.lecteur-quiz-lien:hover {
+    background: white;
+}
+
+.lecteur-lecon--active {
+    background: white;
+    color: var(--navy);
+    font-weight: 700;
+    border-left: 3px solid var(--gold);
+}
+
+.lecteur-lecon__icone {
+    flex-shrink: 0;
+    font-size: 0.78rem;
+}
+
+.lecteur-lecon__titre {
+    flex: 1;
+}
+
+.lecteur-lecon__duree {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+
+.lecteur-quiz-lien {
+    color: var(--gold-deep);
+    font-weight: 600;
+}
+
+.lecteur-quiz-final {
+    margin-top: 8px;
+    padding-top: 12px;
+    border-top: 2px solid var(--bg-soft);
+}
+
+.lecteur-quiz-final__titre {
+    padding: 0 24px 8px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--text-muted);
+}
+
+.lecteur-quiz-lien--final {
+    padding-left: 24px;
+    color: var(--navy);
+    font-weight: 700;
+}
+
+/* ============================================================
+   CONTENU PRINCIPAL
+   ============================================================ */
+
+.lecteur-contenu {
+    flex: 1;
+    padding: 36px 48px;
+    max-width: 900px;
+}
+
+@media (max-width: 640px) {
+    .lecteur-contenu {
+        padding: 24px 20px;
+    }
+}
+
+.lecteur-contenu__header {
+    margin-bottom: 20px;
+}
+
+.lecteur-contenu__fil {
+    font-size: 0.76rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin: 0 0 8px;
+}
+
+.lecteur-contenu__titre {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--navy-ink);
+    margin: 0;
+}
+
+.lecteur-video-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: var(--navy-ink);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-card-hover);
+}
+
+.lecteur-video-wrapper iframe,
+.lecteur-video-wrapper video {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+}
+
+.lecteur-contenu__sans-video {
+    padding: 60px 24px;
+    text-align: center;
+    color: var(--text-muted);
+    background: white;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-lg);
+    margin-bottom: 20px;
+}
+
+.lecteur-telecharger {
+    display: inline-flex;
+}
