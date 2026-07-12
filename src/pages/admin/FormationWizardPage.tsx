@@ -886,7 +886,7 @@ function SousListeQuestions({ quizId, onChange }: { quizId: number; onChange: ()
                         </div>
                         <p className="question-item__texte">{q.question}</p>
                         <ul className="question-item__reponses">
-                            {q.reponses.map((r) => (
+                            {(q.reponses ?? []).map((r) => (
                                 <li key={r.id} className={r.estBonneReponse ? "question-item__reponse--correcte" : ""}>
                                     {r.estBonneReponse ? "✓ " : "· "}
                                     {r.texte}
