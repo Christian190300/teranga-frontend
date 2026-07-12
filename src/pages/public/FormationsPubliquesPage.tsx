@@ -241,7 +241,7 @@ export function FormationsPubliquesPage() {
                                     {estCandidat && (modalFormation.dejaInscrit || inscriptionReussie) && (
                                         <div className="candidature-form__success">
                                             ✓ Vous êtes inscrit à cette formation.{" "}
-                                            <Link to="/mes-formations" className="offre-detail__cta-info">
+                                            <Link to="/candidat/formation" className="offre-detail__cta-info">
                                                 Accéder à mon espace de formation →
                                             </Link>
                                         </div>

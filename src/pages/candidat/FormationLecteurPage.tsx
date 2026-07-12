@@ -140,7 +140,7 @@ export function FormationLecteurPage() {
     return (
         <div className="lecteur-formation">
             <aside className="lecteur-sidebar">
-                <Link to="/mes-formations" className="lecteur-sidebar__retour">
+                <Link to="/candidat/formation" className="lecteur-sidebar__retour">
                     ← Mes formations
                 </Link>
 
@@ -182,7 +182,7 @@ export function FormationLecteurPage() {
                                     ))}
 
                                     {chapitre.quiz.map((quiz) => (
-                                        <Link key={quiz.id} to={`/formations/${idNumerique}/quiz/${quiz.id}`} className="lecteur-quiz-lien">
+                                        <Link key={quiz.id} to={`/candidat/formation/${idNumerique}/quiz/${quiz.id}`} className="lecteur-quiz-lien">
                                             <span className="lecteur-lecon__icone">📝</span>
                                             <span className="lecteur-lecon__titre">{quiz.titre}</span>
                                             <span className="lecteur-lecon__duree">{quiz.nombreQuestions} question(s)</span>
@@ -197,7 +197,7 @@ export function FormationLecteurPage() {
                         <div className="lecteur-quiz-final">
                             <p className="lecteur-quiz-final__titre">Évaluation finale</p>
                             {quizFinal.map((quiz) => (
-                                <Link key={quiz.id} to={`/formations/${idNumerique}/quiz/${quiz.id}`} className="lecteur-quiz-lien lecteur-quiz-lien--final">
+                                <Link key={quiz.id} to={`/candidat/formation/${idNumerique}/quiz/${quiz.id}`} className="lecteur-quiz-lien lecteur-quiz-lien--final">
                                     <span className="lecteur-lecon__icone">🏁</span>
                                     <span className="lecteur-lecon__titre">{quiz.titre}</span>
                                     <span className="lecteur-lecon__duree">Seuil {quiz.noteMinimale}%</span>

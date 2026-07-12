@@ -55,6 +55,21 @@ export function FormationQuizPage() {
             setLoading(false);
         }
     }
+
+    function toggleReponse(question: QuestionQCMDTO, reponseId: number) {
+        setReponsesChoisies((prev) => {
+            const actuelles = prev[question.id] ?? [];
+            if (question.typeQuestion === "REPONSE_UNIQUE") {
+                return { ...prev, [question.id]: [reponseId] };
+            }
+            const dejaChoisie = actuelles.includes(reponseId);
+            return {
+                ...prev,
+                [question.id]: dejaChoisie ? actuelles.filter((id) => id !== reponseId) : [...actuelles, reponseId],
+            };
+        });
+    }
+
     const nombreQuestionsRepondues = questions.filter((q) => (reponsesChoisies[q.id]?.length ?? 0) > 0).length;
     const toutesRepondues = questions.length > 0 && nombreQuestionsRepondues === questions.length;
 
@@ -84,10 +99,6 @@ export function FormationQuizPage() {
         setResultat(null);
     }
 
-    // Retrouve le texte d'une réponse : les DTO de questions candidat n'exposent pas les libellés
-    // des réponses (voir obtenirQuestionsPourPassage), donc on les récupère depuis la correction elle-même
-    // pour l'affichage post-soumission — voir correspondanceTexte plus bas.
-
     if (loading) {
         return <div className="offres-page__loading">Chargement du quiz...</div>;
     }
@@ -96,7 +107,7 @@ export function FormationQuizPage() {
         return (
             <div className="offres-page">
                 <div className="offre-message--error">{erreur}</div>
-                <Link to={`/formations/${formationIdNum}`} className="btn-secondary" style={{ marginTop: 16, display: "inline-flex" }}>
+                <Link to={`/candidat/formation/${formationIdNum}`} className="btn-secondary" style={{ marginTop: 16, display: "inline-flex" }}>
                     ← Retour à la formation
                 </Link>
             </div>
@@ -106,7 +117,7 @@ export function FormationQuizPage() {
     return (
         <div className="quiz-page">
             <div className="quiz-page__header">
-                <Link to={`/formations/${formationIdNum}`} className="quiz-page__retour">
+                <Link to={`/candidat/formation/${formationIdNum}`} className="quiz-page__retour">
                     ← Retour à la formation
                 </Link>
                 <h1 className="quiz-page__titre">{quiz?.titre ?? "Quiz"}</h1>
@@ -140,7 +151,22 @@ export function FormationQuizPage() {
                             </div>
                             <p className="quiz-question-card__texte">{question.question}</p>
 
-                            {/* ⚠️ Les propositions de réponse ne sont pas encore incluses dans obtenirQuestionsPourPassage — voir note ci-dessous */}
+                            <div className="quiz-question-card__reponses">
+                                {question.reponsesPubliques.map((reponse) => {
+                                    const choisie = (reponsesChoisies[question.id] ?? []).includes(reponse.id);
+                                    return (
+                                        <label key={reponse.id} className={`quiz-reponse-option ${choisie ? "quiz-reponse-option--choisie" : ""}`}>
+                                            <input
+                                                type={question.typeQuestion === "REPONSE_UNIQUE" ? "radio" : "checkbox"}
+                                                name={`question-${question.id}`}
+                                                checked={choisie}
+                                                onChange={() => toggleReponse(question, reponse.id)}
+                                            />
+                                            <span>{reponse.texte}</span>
+                                        </label>
+                                    );
+                                })}
+                            </div>
                         </div>
                     ))}
 
@@ -189,7 +215,7 @@ function ResultatQuizAffichage({
                 <div className="candidature-form__success" style={{ marginBottom: 20 }}>
                     🏆 Félicitations, vous avez obtenu votre certification
                     {resultat.numeroCertification ? ` (N° ${resultat.numeroCertification})` : ""} !{" "}
-                    <Link to="/mes-certifications" className="offre-detail__cta-info">
+                    <Link to="/candidat/formation" className="offre-detail__cta-info">
                         Voir mes certifications →
                     </Link>
                 </div>
@@ -224,7 +250,7 @@ function ResultatQuizAffichage({
                         Repasser le quiz
                     </button>
                 )}
-                <Link to={`/formations/${formationId}`} className="btn-gold">
+                <Link to={`/candidat/formation/${formationId}`} className="btn-gold">
                     Retour à la formation
                 </Link>
             </div>

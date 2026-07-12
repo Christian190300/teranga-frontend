@@ -371,8 +371,16 @@
     margin-bottom: 8px;
 }
 
+.ligne-reponse input[type="radio"],
+.ligne-reponse input[type="checkbox"] {
+    width: auto;
+    flex: 0 0 auto;
+    accent-color: var(--gold-deep);
+}
+
 .ligne-reponse__texte {
-    flex: 1;
+    flex: 1 1 auto;
+    min-width: 0;
     padding: 8px 12px;
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
