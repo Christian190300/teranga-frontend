@@ -19,6 +19,11 @@ import { CandidaturesOffrePage } from "./pages/recruteur/CandidaturesOffrePage";
 import { CandidaturesRecuesPage } from "./pages/recruteur/CandidaturesRecuesPage";
 import { FormationsAdminPage } from "./pages/admin/FormationsAdminPage";
 import { FormationWizardPage } from "./pages/admin/FormationWizardPage";
+import { MesFormationsPage } from "./pages/candidat/MesFormationsPage";
+import { FormationLecteurPage } from "./pages/candidat/FormationLecteurPage";
+import { FormationQuizPage } from "./pages/candidat/FormationQuizPage";
+import { FormationsPubliquesPage } from "./pages/public/FormationsPubliquesPage";
+
 
 
 export default function App() {
@@ -48,7 +53,10 @@ export default function App() {
                         <Route path="/admin/formations" element={<FormationsAdminPage />} />
                         <Route path="/admin/formations/nouvelle" element={ <FormationWizardPage />}/>
                         <Route path="/admin/formations/:id/modifier" element={ <FormationWizardPage />}/>
-
+                        <Route path="/formations" element={<FormationsPubliquesPage />} />
+                        <Route path="/candidat/formation" element={<MesFormationsPage />} />
+                        <Route path="/candidat/formation/:formationId" element={<FormationLecteurPage />} />
+                        <Route path="/candidat/formation/:formationId/quiz/:quizId" element={<FormationQuizPage />} />
                         {/* Routes à venir : /admin, /offres, /candidat/candidatures, /recruteur/offres, etc. */}
                     </Routes>
                 </AppLayout>
