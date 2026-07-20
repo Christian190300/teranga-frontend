@@ -23,7 +23,7 @@ import { MesFormationsPage } from "./pages/candidat/MesFormationsPage";
 import { FormationLecteurPage } from "./pages/candidat/FormationLecteurPage";
 import { FormationQuizPage } from "./pages/candidat/FormationQuizPage";
 import { FormationsPubliquesPage } from "./pages/public/FormationsPubliquesPage";
-
+import { OffreDetailPage } from "./pages/public/OffreDetailPage";
 
 
 export default function App() {
@@ -41,6 +41,7 @@ export default function App() {
                         <Route path="/admin/utilisateurs" element={<UserAdminPage />} />
                         <Route path="/recruteur/offres" element={<MesOffresPage />} />
                         <Route path="/offres" element={<OffresPubliquesPage />} />
+                        <Route path="/offres/:id" element={<OffreDetailPage />} />
                         <Route path="/recruteur/offres" element={<OffresRecruteurPage />} />
                         <Route path="/recruteur/offres/nouvelle" element={<OffreFormPage />} />
                         <Route path="/recruteur/offres/:id/modifier" element={<OffreFormPage />} />
@@ -60,6 +61,7 @@ export default function App() {
                         {/* Routes à venir : /admin, /offres, /candidat/candidatures, /recruteur/offres, etc. */}
                     </Routes>
                 </AppLayout>
+                <footer/>
             </BrowserRouter>
         </AuthProvider>
     );

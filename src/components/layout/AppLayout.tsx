@@ -4,13 +4,11 @@ import { useAuth } from "../../context/AuthContext";
 import { Navbar } from "./Navbar";
 import { Sidebar } from "./Sidebar";
 import { Topbar } from "./Topbar";
+import { Footer } from "./Footer";
 
 export function AppLayout({ children }: { children: ReactNode }) {
     const { currentUser, isLoadingUser, isAuthenticated } = useAuth();
 
-    // Tant qu'on ne sait pas encore si l'utilisateur est admin (vérification en cours
-    // juste après un rechargement de page), on n'affiche aucun des deux layouts —
-    // ça évite le flash Navbar → Sidebar avec changement de taille/couleur.
     if (isAuthenticated && isLoadingUser) {
         return <div className="app-shell__boot" aria-hidden="true" />;
     }
@@ -33,6 +31,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
         <div className="app-shell app-shell--horizontal">
             <Navbar />
             <div className="app-shell__content">{children}</div>
+            <Footer />
         </div>
     );
 }
