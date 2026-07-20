@@ -235,7 +235,7 @@ export function ProfilRecruteurPage() {
 
             await refreshPhoto();
         } catch {
-            setLogoError("Échec de l'envoi. Format accepté : JPEG, PNG, WebP (2 Mo max).");
+            setLogoError("Échec de l'envoi. Format accepté : JPEG, PNG, WebP (5 Mo max).");
         } finally {
             setLogoUploading(false);
             if (logoInputRef.current) logoInputRef.current.value = "";
@@ -285,7 +285,7 @@ export function ProfilRecruteurPage() {
                             {logoUploading ? "Envoi en cours..." : "Cliquez sur l'icône pour changer le logo"}
                         </p>
                         <p className="profil-field__hint" style={{ margin: 0 }}>
-                            JPEG, PNG ou WebP — 2 Mo maximum.
+                            JPEG, PNG ou WebP — 5 Mo maximum.
                         </p>
                         {logoError && <p className="profil-message profil-message--error">{logoError}</p>}
                     </div>

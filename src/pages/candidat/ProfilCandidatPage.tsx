@@ -257,7 +257,7 @@ export function ProfilCandidatPage() {
 
             await refreshPhoto();
         } catch {
-            setPhotoError("Échec de l'envoi. Format accepté : JPEG, PNG, WebP (2 Mo max).");
+            setPhotoError("Échec de l'envoi. Format accepté : JPEG, PNG, WebP (5 Mo max).");
         } finally {
             setPhotoUploading(false);
             if (photoInputRef.current) photoInputRef.current.value = "";
@@ -361,7 +361,7 @@ export function ProfilCandidatPage() {
                             {photoUploading ? "Envoi en cours..." : "Cliquez sur l'icône pour changer votre photo"}
                         </p>
                         <p className="profil-field__hint" style={{ margin: 0 }}>
-                            JPEG, PNG ou WebP — 2 Mo maximum.
+                            JPEG, PNG ou WebP — 5 Mo maximum.
                         </p>
                         {photoError && <p className="profil-message profil-message--error">{photoError}</p>}
                     </div>
