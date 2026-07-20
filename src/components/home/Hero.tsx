@@ -141,7 +141,7 @@ export function Hero() {
                             <IconUsers />
                         </div>
                         <div>
-                            <div className="home-stats-panel__value">0+</div>
+                            <div className="home-stats-panel__value">500+</div>
                             <div className="home-stats-panel__label">Talents inscrits</div>
                         </div>
                     </div>
@@ -159,7 +159,7 @@ export function Hero() {
                             <IconGlobe />
                         </div>
                         <div>
-                            <div className="home-stats-panel__value">21+</div>
+                            <div className="home-stats-panel__value">50+</div>
                             <div className="home-stats-panel__label">Entreprises</div>
                         </div>
                     </div>

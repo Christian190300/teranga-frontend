@@ -174,7 +174,7 @@ export function LoginPage() {
                             <span>Offres actives</span>
                         </div>
                         <div className="auth-panel__stat">
-                            <strong>21+</strong>
+                            <strong>50+</strong>
                             <span>Entreprises</span>
                         </div>
                         <div className="auth-panel__stat">
