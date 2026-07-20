@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import {
     listerCandidaturesRecues,
     changerStatutCandidature,
+    telechargerCvCandidature,
+    telechargerLettreMotivationCandidature,
     LABELS_STATUT_CANDIDATURE,
     type CandidatureDTO,
     type StatutCandidature,
@@ -124,15 +126,28 @@ export function CandidaturesRecuesPage() {
                             </span>
 
                             {c.offreId && (
-                                <Link to={`/offres/${c.offreId}/candidatures`} className="btn-secondary">
+                                <Link to={`/recruteur/offres/${c.offreId}/candidatures`} className="btn-secondary">
                                     Voir toutes les candidatures de cette offre
                                 </Link>
                             )}
 
                             {c.cvPresent && (
-                                <span className="btn-secondary" style={{ cursor: "default" }}>
+                                <button
+                                    type="button"
+                                    className="btn-secondary"
+                                    onClick={() => telechargerCvCandidature(c.id, c.cvOriginalFilename ?? "cv.pdf")}
+                                >
                                     📄 CV{c.cvOriginalFilename ? ` — ${c.cvOriginalFilename}` : ""}
-                                </span>
+                                </button>
+                            )}
+                            {c.lettreMotivationPresente && (
+                                <button
+                                    type="button"
+                                    className="btn-secondary"
+                                    onClick={() => telechargerLettreMotivationCandidature(c.id, c.lettreMotivationOriginalFilename ?? "lettre-motivation.pdf")}
+                                >
+                                    📎 Lettre de motivation
+                                </button>
                             )}
 
                             <select

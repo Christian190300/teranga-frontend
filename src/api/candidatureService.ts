@@ -82,3 +82,25 @@ export async function listerCandidaturesRecues(): Promise<CandidatureDTO[]> {
     const response = await httpClient.get<CandidatureDTO[]>("/candidatures/recues");
     return response.data;
 }
+
+/** GET /api/candidatures/{id}/cv — le recruteur télécharge le CV du candidat. */
+export async function telechargerCvCandidature(candidatureId: number, filename: string): Promise<void> {
+    const response = await httpClient.get(`/candidatures/${candidatureId}/cv`, { responseType: "blob" });
+    const url = URL.createObjectURL(response.data as Blob);
+    const lien = document.createElement("a");
+    lien.href = url;
+    lien.download = filename;
+    lien.click();
+    URL.revokeObjectURL(url);
+}
+
+/** GET /api/candidatures/{id}/lettre-motivation — le recruteur télécharge la lettre du candidat. */
+export async function telechargerLettreMotivationCandidature(candidatureId: number, filename: string): Promise<void> {
+    const response = await httpClient.get(`/candidatures/${candidatureId}/lettre-motivation`, { responseType: "blob" });
+    const url = URL.createObjectURL(response.data as Blob);
+    const lien = document.createElement("a");
+    lien.href = url;
+    lien.download = filename;
+    lien.click();
+    URL.revokeObjectURL(url);
+}
