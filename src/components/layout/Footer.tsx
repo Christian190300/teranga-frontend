@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import "./footer.css";
 
+
 const ANNEE = new Date().getFullYear();
 
 export function Footer() {
@@ -42,9 +43,6 @@ export function Footer() {
 
                 <div className="footer__colonne">
                     <p className="footer__titre-colonne">Ressources</p>
-                    <Link to="/talents" className="footer__lien">
-                        Explorer les talents
-                    </Link>
                     <Link to="/offres" className="footer__lien">
                         Offres d'emploi
                     </Link>

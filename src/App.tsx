@@ -27,7 +27,8 @@ import { OffreDetailPage } from "./pages/public/OffreDetailPage";
 import {ForgotPasswordPage} from "./pages/ForgotPasswordPage.tsx";
 import {ResetPasswordPage} from "./pages/ResetPasswordPage.tsx";
 import {PremiereConnexionPage} from "./pages/PremiereConnexionPage.tsx";
-
+import AboutPage from "./pages/AboutPage";
+import ContactPage from "./pages/ContactPage";
 
 export default function App() {
     return (
@@ -36,6 +37,8 @@ export default function App() {
                 <AppLayout>
                     <Routes>
                         <Route path="/" element={<HomePage />} />
+                        <Route path="/a-propos" element={<AboutPage />} />
+                        <Route path="/contact" element={<ContactPage />} />
                         <Route path="/connexion" element={<LoginPage />} />
                         <Route path="/inscription" element={<RegisterPage />} />
                         <Route path="/candidat/profil" element={<ProfilCandidatPage />} />

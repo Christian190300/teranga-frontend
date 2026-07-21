@@ -1,0 +1,145 @@
+.about-page {
+    background: #f8fafc;
+    min-height: 100vh;
+    padding: 70px 20px;
+}
+
+.about-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ===========================
+   HEADER
+=========================== */
+
+.about-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.about-header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #132a63;
+    margin-bottom: 18px;
+}
+
+.about-header p {
+    max-width: 760px;
+    margin: auto;
+    color: #6b7280;
+    line-height: 1.8;
+    font-size: 16px;
+}
+
+/* ===========================
+   CARDS
+=========================== */
+
+.about-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-bottom: 50px;
+}
+
+.about-card {
+    background: white;
+    border: 1px solid #dbeafe;
+    border-radius: 14px;
+    padding: 28px;
+    transition: all .3s ease;
+}
+
+.about-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, .08);
+}
+
+.about-icon {
+    width: 46px;
+    height: 46px;
+    background: #eef4ff;
+    border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #3b82f6;
+    font-size: 20px;
+
+    margin-bottom: 18px;
+}
+
+.about-card h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #111827;
+}
+
+.about-card p {
+    color: #6b7280;
+    line-height: 1.7;
+}
+
+/* ===========================
+   HISTORY
+=========================== */
+
+.about-history {
+    background: #eef5ff;
+    border-radius: 18px;
+    padding: 50px;
+    text-align: center;
+}
+
+.about-history h2 {
+    color: #132a63;
+    font-size: 2rem;
+    margin-bottom: 25px;
+}
+
+.about-history p {
+    color: #6b7280;
+    line-height: 1.9;
+    max-width: 850px;
+    margin: 18px auto;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+
+@media (max-width: 900px) {
+    .about-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .about-history {
+        padding: 35px 25px;
+    }
+
+    .about-header h1 {
+        font-size: 1.9rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .about-page {
+        padding: 50px 15px;
+    }
+
+    .about-card {
+        padding: 22px;
+    }
+
+    .about-header h1 {
+        font-size: 1.6rem;
+    }
+
+    .about-history h2 {
+        font-size: 1.6rem;
+    }
+}
