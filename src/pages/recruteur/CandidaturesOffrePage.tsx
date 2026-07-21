@@ -5,7 +5,7 @@ import {
     changerStatutCandidature,
     LABELS_STATUT_CANDIDATURE,
     type CandidatureDTO,
-    type StatutCandidature,
+    type StatutCandidature, telechargerCvCandidature, telechargerLettreMotivationCandidature,
 } from "../../api/candidatureService";
 import "../public/offres.css";
 
@@ -117,15 +117,29 @@ export function CandidaturesOffrePage() {
                         <div className="candidature-row__actions">
                             <span className="candidature-row__meta">Postulé le {formatDate(c.dateCandidature)}</span>
 
+                            {c.offreId && (
+                                <Link to={`/recruteur/offres/${c.offreId}/candidatures`} className="btn-secondary">
+                                    Voir toutes les candidatures de cette offre
+                                </Link>
+                            )}
+
                             {c.cvPresent && (
-                                <span className="btn-secondary" style={{ cursor: "default" }}>
-                  📄 CV{c.cvOriginalFilename ? ` — ${c.cvOriginalFilename}` : ""}
-                </span>
+                                <button
+                                    type="button"
+                                    className="btn-secondary"
+                                    onClick={() => telechargerCvCandidature(c.id, c.cvOriginalFilename ?? "cv.pdf")}
+                                >
+                                    📄 CV{c.cvOriginalFilename ? ` — ${c.cvOriginalFilename}` : ""}
+                                </button>
                             )}
                             {c.lettreMotivationPresente && (
-                                <span className="btn-secondary" style={{ cursor: "default" }}>
-                  📎 Lettre de motivation
-                </span>
+                                <button
+                                    type="button"
+                                    className="btn-secondary"
+                                    onClick={() => telechargerLettreMotivationCandidature(c.id, c.lettreMotivationOriginalFilename ?? "lettre-motivation.pdf")}
+                                >
+                                    📎 Lettre de motivation
+                                </button>
                             )}
 
                             <select

@@ -24,6 +24,9 @@ import { FormationLecteurPage } from "./pages/candidat/FormationLecteurPage";
 import { FormationQuizPage } from "./pages/candidat/FormationQuizPage";
 import { FormationsPubliquesPage } from "./pages/public/FormationsPubliquesPage";
 import { OffreDetailPage } from "./pages/public/OffreDetailPage";
+import {ForgotPasswordPage} from "./pages/ForgotPasswordPage.tsx";
+import {ResetPasswordPage} from "./pages/ResetPasswordPage.tsx";
+import {PremiereConnexionPage} from "./pages/PremiereConnexionPage.tsx";
 
 
 export default function App() {
@@ -58,6 +61,9 @@ export default function App() {
                         <Route path="/candidat/formation" element={<MesFormationsPage />} />
                         <Route path="/candidat/formation/:formationId" element={<FormationLecteurPage />} />
                         <Route path="/candidat/formation/:formationId/quiz/:quizId" element={<FormationQuizPage />} />
+                        <Route path="/mot-de-passe-oublie" element={<ForgotPasswordPage />} />
+                        <Route path="/reinitialiser-mot-de-passe" element={<ResetPasswordPage />} />
+                        <Route path="/premiere-connexion" element={<PremiereConnexionPage />} />
                         {/* Routes à venir : /admin, /offres, /candidat/candidatures, /recruteur/offres, etc. */}
                     </Routes>
                 </AppLayout>

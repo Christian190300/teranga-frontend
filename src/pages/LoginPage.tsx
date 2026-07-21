@@ -2,6 +2,7 @@ import { type FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { getMonCompte } from "../api/authService";
+import { PremiereConnexionRequiredError } from "../api/authService";
 import "./authPage.css"
 
 function LogoMark({ size = 36, light = false }: { size?: number; light?: boolean }) {
@@ -125,8 +126,11 @@ export function LoginPage() {
             } else {
                 navigate("/");
             }
-
-        } catch {
+        } catch (err) {
+            if (err instanceof PremiereConnexionRequiredError) {
+                navigate("/premiere-connexion", { state: { email, motDePasseTemporaire: password } });
+                return;
+            }
             setError("Email ou mot de passe incorrect.");
         } finally {
             setLoading(false);

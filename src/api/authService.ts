@@ -27,8 +27,22 @@ interface TokenResponse {
 }
 
 /**
+ * Levée par login() quand Keycloak signale un mot de passe temporaire non encore changé
+ * (grant "password" refusé avec error_description "Account is not fully set up").
+ * Le mot de passe fourni est correct : il faut simplement rediriger vers l'écran
+ * "première connexion" pour que l'utilisateur définisse son mot de passe définitif.
+ */
+export class PremiereConnexionRequiredError extends Error {
+    constructor() {
+        super("premiere_connexion_requise");
+        this.name = "PremiereConnexionRequiredError";
+    }
+}
+
+/**
  * Connexion directe contre Keycloak (grant "password").
  * Le client utilisé doit être PUBLIC (pas de secret) avec "Direct Access Grants" activé.
+ * @throws {PremiereConnexionRequiredError} si le mot de passe est correct mais temporaire.
  */
 export async function login(email: string, password: string): Promise<void> {
     const url = `${KEYCLOAK_URL}/realms/${REALM}/protocol/openid-connect/token`;
@@ -39,12 +53,22 @@ export async function login(email: string, password: string): Promise<void> {
     body.set("username", email);
     body.set("password", password);
 
-    const response = await axios.post<TokenResponse>(url, body, {
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    });
+    try {
+        const response = await axios.post<TokenResponse>(url, body, {
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        });
 
-    localStorage.setItem("ts_access_token", response.data.access_token);
-    localStorage.setItem("ts_refresh_token", response.data.refresh_token);
+        localStorage.setItem("ts_access_token", response.data.access_token);
+        localStorage.setItem("ts_refresh_token", response.data.refresh_token);
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            const description = error.response?.data?.error_description as string | undefined;
+            if (description?.includes("Account is not fully set up")) {
+                throw new PremiereConnexionRequiredError();
+            }
+        }
+        throw error;
+    }
 }
 
 /**
@@ -87,4 +111,23 @@ export function isAuthenticated(): boolean {
 export async function getMonCompte() {
     const response = await httpClient.get("/account");
     return response.data;
+}
+
+// ---------------------------------------------------------------------------
+// Première connexion / mot de passe oublié
+// ---------------------------------------------------------------------------
+
+/** POST /api/auth/premiere-connexion : définit le mot de passe définitif après une création par l'admin. */
+export async function premiereConnexion(email: string, motDePasseTemporaire: string, nouveauMotDePasse: string): Promise<void> {
+    await httpClient.post("/auth/premiere-connexion", { email, motDePasseTemporaire, nouveauMotDePasse });
+}
+
+/** POST /api/auth/mot-de-passe-oublie : envoie un email de réinitialisation. */
+export async function demanderResetMotDePasse(email: string): Promise<void> {
+    await httpClient.post("/auth/mot-de-passe-oublie", { email });
+}
+
+/** POST /api/auth/reinitialiser-mot-de-passe : applique le nouveau mot de passe via le token reçu par email. */
+export async function reinitialiserMotDePasse(token: string, nouveauMotDePasse: string): Promise<void> {
+    await httpClient.post("/auth/reinitialiser-mot-de-passe", { token, nouveauMotDePasse });
 }
