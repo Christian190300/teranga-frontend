@@ -228,3 +228,34 @@ export async function telechargerCertificatPdf(certificationId: number, nomFichi
     lien.click();
     URL.revokeObjectURL(url);
 }
+
+/**
+ * Retourne une URL temporaire pour afficher un PDF dans le navigateur.
+ */
+export async function obtenirDocumentLeconUrl(leconId: number): Promise<string> {
+    const response = await httpClient.get(
+        `/formations/lecons/${leconId}/document`,
+        { responseType: "blob" }
+    );
+
+    const blob = new Blob([response.data], {
+        type: "application/pdf",
+    });
+
+    return URL.createObjectURL(blob);
+}
+
+export async function afficherDocumentLecon(leconId: number): Promise<string> {
+    const response = await httpClient.get(
+        `/formations/lecons/${leconId}/document`,
+        {
+            responseType: "blob",
+        }
+    );
+
+    const blob = new Blob([response.data], {
+        type: "application/pdf",
+    });
+
+    return URL.createObjectURL(blob);
+}

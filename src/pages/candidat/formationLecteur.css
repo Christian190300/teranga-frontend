@@ -7,6 +7,23 @@
     font-family: var(--font-body);
 }
 
+.lecteur-pdf-wrapper {
+    width: 100%;
+    height: 700px;
+    margin-top: 24px;
+    background: white;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-card);
+}
+
+.lecteur-pdf-wrapper iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
 /* ============================================================
    SIDEBAR
    ============================================================ */

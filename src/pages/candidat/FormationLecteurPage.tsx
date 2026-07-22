@@ -5,7 +5,7 @@ import {
     obtenirQuizFinalFormation,
     mesInscriptions,
     mettreAJourProgression,
-    telechargerDocumentLecon,
+    afficherDocumentLecon,
     type ContenuChapitreDTO,
     type QuizDTO,
     type LeconDTO,
@@ -44,6 +44,7 @@ export function FormationLecteurPage() {
 
     const [chapitreOuvertId, setChapitreOuvertId] = useState<number | null>(null);
     const [leconActive, setLeconActive] = useState<{ chapitreId: number; lecon: LeconDTO } | null>(null);
+    const [pdfUrl, setPdfUrl] = useState<string | null>(null);
 
     useEffect(() => {
         charger();
@@ -94,6 +95,16 @@ export function FormationLecteurPage() {
 
     async function handleSelectionnerLecon(chapitreId: number, lecon: LeconDTO) {
         setLeconActive({ chapitreId, lecon });
+        setPdfUrl(null);
+
+        if (lecon.documentPdfPresent) {
+            try {
+                const url = await afficherDocumentLecon(lecon.id);
+                setPdfUrl(url);
+            } catch {
+                setErreur("Impossible de charger le document PDF.");
+            }
+        }
         setChapitreOuvertId(chapitreId);
 
         const index = chapitres.findIndex((c) => c.id === chapitreId);
@@ -108,15 +119,6 @@ export function FormationLecteurPage() {
             setInscription(misAJour);
         } catch {
             // Non bloquant pour la navigation si la mise à jour échoue
-        }
-    }
-
-    async function handleTelechargerDocument() {
-        if (!leconActive?.lecon.documentPdfPresent) return;
-        try {
-            await telechargerDocumentLecon(leconActive.lecon.id, `${leconActive.lecon.titre}.pdf`);
-        } catch {
-            setErreur("Impossible de télécharger ce document.");
         }
     }
 
@@ -241,10 +243,15 @@ export function FormationLecteurPage() {
                             <div className="lecteur-contenu__sans-video">Aucune vidéo pour cette leçon.</div>
                         )}
 
-                        {leconActive.lecon.documentPdfPresent && (
-                            <button className="btn-secondary lecteur-telecharger" onClick={handleTelechargerDocument}>
-                                📄 Télécharger le support PDF
-                            </button>
+                        {pdfUrl && (
+                            <div className="lecteur-pdf-wrapper">
+
+                                <iframe
+                                    src={pdfUrl}
+                                    title="Support PDF"
+                                />
+
+                            </div>
                         )}
                     </>
                 )}
