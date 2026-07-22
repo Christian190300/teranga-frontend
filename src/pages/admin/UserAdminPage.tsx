@@ -5,12 +5,26 @@ import {
     definirActivation,
     listerUtilisateurs,
     ROLES_GERES,
+    LABELS_ROLES,
 } from "../../api/adminUserService";
 import type { AdminUtilisateur, CreerUtilisateurAdmin } from "../../api/adminUserService";
-import { IconUsers } from "../../components/home/icons";
+import { CreerUtilisateurModal } from "./CreerUtilisateurModal";
 import "./UserAdminPage.css";
 
 const PAGE_SIZE = 20;
+
+function initiales(prenom: string, nom: string): string {
+    return `${prenom[0] ?? ""}${nom[0] ?? ""}`.toUpperCase() || "?";
+}
+
+function IconSearch() {
+    return (
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="1.8" />
+            <path d="M20 20l-3.5-3.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+        </svg>
+    );
+}
 
 export function UserAdminPage() {
     const [utilisateurs, setUtilisateurs] = useState<AdminUtilisateur[]>([]);
@@ -28,7 +42,7 @@ export function UserAdminPage() {
             const resultat = await listerUtilisateurs(page, PAGE_SIZE, recherche);
             setUtilisateurs(resultat.utilisateurs);
             setTotal(resultat.total);
-        } catch (e) {
+        } catch {
             setErreur("Impossible de charger les utilisateurs. Réessaie dans un instant.");
         } finally {
             setChargement(false);
@@ -36,6 +50,7 @@ export function UserAdminPage() {
     }, [page, recherche]);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- fetch au montage, pattern standard
         charger();
     }, [charger]);
 
@@ -44,7 +59,7 @@ export function UserAdminPage() {
         setUtilisateurs((liste) => liste.map((u) => (u.id === id ? { ...u, roles: [role] } : u)));
         try {
             await apiChangerRole(id, { role });
-        } catch (e) {
+        } catch {
             setUtilisateurs(precedent);
             setErreur("Le changement de rôle a échoué.");
         }
@@ -52,15 +67,11 @@ export function UserAdminPage() {
 
     async function handleToggleActivation(utilisateur: AdminUtilisateur) {
         const nouveauStatut = !utilisateur.enabled;
-        setUtilisateurs((liste) =>
-            liste.map((u) => (u.id === utilisateur.id ? { ...u, enabled: nouveauStatut } : u))
-        );
+        setUtilisateurs((liste) => liste.map((u) => (u.id === utilisateur.id ? { ...u, enabled: nouveauStatut } : u)));
         try {
             await definirActivation(utilisateur.id, { actif: nouveauStatut });
-        } catch (e) {
-            setUtilisateurs((liste) =>
-                liste.map((u) => (u.id === utilisateur.id ? { ...u, enabled: !nouveauStatut } : u))
-            );
+        } catch {
+            setUtilisateurs((liste) => liste.map((u) => (u.id === utilisateur.id ? { ...u, enabled: !nouveauStatut } : u)));
             setErreur("Le changement de statut a échoué.");
         }
     }
@@ -72,6 +83,7 @@ export function UserAdminPage() {
     }
 
     const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+    const actifs = utilisateurs.filter((u) => u.enabled).length;
 
     return (
         <div className="admin-page">
@@ -79,26 +91,42 @@ export function UserAdminPage() {
                 <div className="admin-page__head">
                     <div>
                         <h1 className="admin-page__title">Utilisateurs</h1>
-                        <p className="admin-page__subtitle">
-                            Gère les comptes, les rôles et l'accès à la plateforme.
-                        </p>
+                        <p className="admin-page__subtitle">Gère les comptes, les rôles et l'accès à la plateforme.</p>
                     </div>
                     <button className="admin-btn admin-btn--primary" onClick={() => setModalOuvert(true)}>
                         + Ajouter un utilisateur
                     </button>
                 </div>
 
+                <div className="admin-stats-row">
+                    <div className="admin-stat-pill">
+                        <span className="admin-stat-pill__value">{total}</span>
+                        <span className="admin-stat-pill__label">Utilisateur(s) au total</span>
+                    </div>
+                    <div className="admin-stat-pill admin-stat-pill--success">
+                        <span className="admin-stat-pill__value">{actifs}</span>
+                        <span className="admin-stat-pill__label">Actifs sur cette page</span>
+                    </div>
+                    <div className="admin-stat-pill admin-stat-pill--danger">
+                        <span className="admin-stat-pill__value">{utilisateurs.length - actifs}</span>
+                        <span className="admin-stat-pill__label">Bloqués sur cette page</span>
+                    </div>
+                </div>
+
                 <div className="admin-toolbar">
-                    <input
-                        type="search"
-                        className="admin-input"
-                        placeholder="Rechercher par nom ou email…"
-                        value={recherche}
-                        onChange={(e) => {
-                            setPage(0);
-                            setRecherche(e.target.value);
-                        }}
-                    />
+                    <div className="admin-search">
+                        <IconSearch />
+                        <input
+                            type="search"
+                            className="admin-search__input"
+                            placeholder="Rechercher par nom ou email…"
+                            value={recherche}
+                            onChange={(e) => {
+                                setPage(0);
+                                setRecherche(e.target.value);
+                            }}
+                        />
+                    </div>
                     <span className="admin-toolbar__count">{total} utilisateur(s)</span>
                 </div>
 
@@ -133,16 +161,12 @@ export function UserAdminPage() {
                                 <tr key={u.id}>
                                     <td>
                                         <div className="admin-table__user">
-                                            <div className="admin-table__avatar">
-                                                <IconUsers />
-                                            </div>
+                                            <div className="admin-table__avatar">{initiales(u.firstName, u.lastName)}</div>
                                             <div>
                                                 <div className="admin-table__name">
                                                     {u.firstName} {u.lastName}
                                                 </div>
-                                                <div className="admin-table__username">
-                                                    @{u.username}
-                                                </div>
+                                                <div className="admin-table__username">@{u.username}</div>
                                             </div>
                                         </div>
                                     </td>
@@ -150,12 +174,12 @@ export function UserAdminPage() {
                                     <td>
                                         <select
                                             className="admin-select"
-                                            value={u.roles.find(r => r.startsWith("ROLE_")) ?? ""}
+                                            value={u.roles.find((r) => r.startsWith("ROLE_")) ?? ""}
                                             onChange={(e) => handleChangerRole(u.id, e.target.value)}
                                         >
                                             {ROLES_GERES.map((role) => (
                                                 <option key={role} value={role}>
-                                                    {role.replace("ROLE_", "")}
+                                                    {LABELS_ROLES[role] ?? role.replace("ROLE_", "")}
                                                 </option>
                                             ))}
                                         </select>
@@ -178,135 +202,19 @@ export function UserAdminPage() {
                 </div>
 
                 <div className="admin-pagination">
-                    <button
-                        className="admin-btn admin-btn--ghost"
-                        disabled={page === 0}
-                        onClick={() => setPage((p) => Math.max(0, p - 1))}
-                    >
+                    <button className="admin-btn admin-btn--ghost" disabled={page === 0} onClick={() => setPage((p) => Math.max(0, p - 1))}>
                         Précédent
                     </button>
                     <span className="admin-pagination__label">
                         Page {page + 1} / {totalPages}
                     </span>
-                    <button
-                        className="admin-btn admin-btn--ghost"
-                        disabled={page + 1 >= totalPages}
-                        onClick={() => setPage((p) => p + 1)}
-                    >
+                    <button className="admin-btn admin-btn--ghost" disabled={page + 1 >= totalPages} onClick={() => setPage((p) => p + 1)}>
                         Suivant
                     </button>
                 </div>
             </div>
 
-            {modalOuvert && (
-                <CreerUtilisateurModal onFermer={() => setModalOuvert(false)} onCreer={handleCreer} />
-            )}
-        </div>
-    );
-}
-
-function CreerUtilisateurModal({
-                                   onFermer,
-                                   onCreer,
-                               }: {
-    onFermer: () => void;
-    onCreer: (dto: CreerUtilisateurAdmin) => Promise<void>;
-}) {
-    const [dto, setDto] = useState<CreerUtilisateurAdmin>({
-        email: "",
-        firstName: "",
-        lastName: "",
-        password: "",
-        role: ROLES_GERES[0],
-    });
-    const [envoi, setEnvoi] = useState(false);
-    const [erreur, setErreur] = useState<string | null>(null);
-
-    async function handleSubmit(e: React.FormEvent) {
-        e.preventDefault();
-        setEnvoi(true);
-        setErreur(null);
-        try {
-            await onCreer(dto);
-        } catch (err) {
-            setErreur("La création a échoué. Vérifie les champs et réessaie.");
-        } finally {
-            setEnvoi(false);
-        }
-    }
-
-    return (
-        <div className="admin-modal__backdrop" onClick={onFermer}>
-            <div className="admin-modal" onClick={(e) => e.stopPropagation()}>
-                <h2 className="admin-modal__title">Ajouter un utilisateur</h2>
-
-                <form className="admin-form" onSubmit={handleSubmit}>
-                    <div className="admin-form__row">
-                        <label className="admin-form__field">
-                            <span>Prénom</span>
-                            <input
-                                required
-                                maxLength={50}
-                                value={dto.firstName}
-                                onChange={(e) => setDto({ ...dto, firstName: e.target.value })}
-                            />
-                        </label>
-                        <label className="admin-form__field">
-                            <span>Nom</span>
-                            <input
-                                required
-                                maxLength={50}
-                                value={dto.lastName}
-                                onChange={(e) => setDto({ ...dto, lastName: e.target.value })}
-                            />
-                        </label>
-                    </div>
-
-                    <label className="admin-form__field">
-                        <span>Email</span>
-                        <input
-                            required
-                            type="email"
-                            value={dto.email}
-                            onChange={(e) => setDto({ ...dto, email: e.target.value })}
-                        />
-                    </label>
-
-                    <label className="admin-form__field">
-                        <span>Mot de passe</span>
-                        <input
-                            required
-                            type="password"
-                            minLength={8}
-                            maxLength={100}
-                            value={dto.password}
-                            onChange={(e) => setDto({ ...dto, password: e.target.value })}
-                        />
-                    </label>
-
-                    <label className="admin-form__field">
-                        <span>Rôle</span>
-                        <select value={dto.role} onChange={(e) => setDto({ ...dto, role: e.target.value })}>
-                            {ROLES_GERES.map((role) => (
-                                <option key={role} value={role}>
-                                    {role}
-                                </option>
-                            ))}
-                        </select>
-                    </label>
-
-                    {erreur && <div className="admin-alert">{erreur}</div>}
-
-                    <div className="admin-modal__actions">
-                        <button type="button" className="admin-btn admin-btn--ghost" onClick={onFermer}>
-                            Annuler
-                        </button>
-                        <button type="submit" className="admin-btn admin-btn--primary" disabled={envoi}>
-                            {envoi ? "Création…" : "Créer l'utilisateur"}
-                        </button>
-                    </div>
-                </form>
-            </div>
+            {modalOuvert && <CreerUtilisateurModal onFermer={() => setModalOuvert(false)} onCreer={handleCreer} />}
         </div>
     );
 }
