@@ -11,10 +11,15 @@ import {
 } from "../../api/offreService";
 import { TagListEditor } from "../../components/common/TagListEditor";
 import "../offres/offres.css";
+import {SECTEURS_ACTIVITE } from "../../constants/secteursActivite";
+import { REGIONS_SENEGAL } from "../../constants/regions";
+import { PAYS } from "../../constants/pays";
+import { DISPONIBILITES } from "../../constants/disponibilites";
 
 const TYPES_CONTRAT: TypeContrat[] = ["CDI", "CDD", "STAGE", "FREELANCE", "INTERIM", "ALTERNANCE", "SERVICE_CIVIQUE", "TEMPS_PARTIEL"];
 const NIVEAUX_EXPERIENCE: NiveauExperience[] = ["DEBUTANT", "JUNIOR", "INTERMEDIAIRE", "SENIOR", "EXPERT"];
 const NIVEAUX_ETUDE: NiveauEtude[] = ["AUCUN", "BAC", "BAC_2", "BAC_3", "BAC_5", "DOCTORAT"];
+
 
 export function OffreFormPage() {
     const { id } = useParams<{ id?: string }>();
@@ -164,7 +169,20 @@ export function OffreFormPage() {
                     <div className="offre-field-row">
                         <div className="offre-field">
                             <label htmlFor="secteurActivite">Secteur d'activité</label>
-                            <input id="secteurActivite" value={secteurActivite} onChange={(e) => setSecteurActivite(e.target.value)} />
+
+                            <select
+                                id="secteurActivite"
+                                value={secteurActivite}
+                                onChange={(e) => setSecteurActivite(e.target.value)}
+                            >
+                                <option value="">Sélectionnez un secteur</option>
+
+                                {SECTEURS_ACTIVITE.map((secteur) => (
+                                    <option key={secteur} value={secteur}>
+                                        {secteur}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
                         <div className="offre-field">
                             <label htmlFor="typeContrat">Type de contrat *</label>
@@ -188,11 +206,33 @@ export function OffreFormPage() {
                         </div>
                         <div className="offre-field">
                             <label htmlFor="region">Région</label>
-                            <input id="region" value={region} onChange={(e) => setRegion(e.target.value)} />
+                            <select
+                                id="region"
+                                value={region}
+                                onChange={(e) => setRegion(e.target.value)}
+                            >
+                                <option value="">Sélectionnez une région</option>
+
+                                {REGIONS_SENEGAL.map((r) => (
+                                    <option key={r} value={r}>
+                                        {r}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
                         <div className="offre-field">
                             <label htmlFor="pays">Pays</label>
-                            <input id="pays" value={pays} onChange={(e) => setPays(e.target.value)} />
+                            <select
+                                id="pays"
+                                value={pays}
+                                onChange={(e) => setPays(e.target.value)}
+                            >
+                                {PAYS.map((p) => (
+                                    <option key={p} value={p}>
+                                        {p}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
                     </div>
                     <div className="offre-field">
@@ -355,12 +395,19 @@ export function OffreFormPage() {
                         </div>
                         <div className="offre-field">
                             <label htmlFor="disponibiliteSouhaitee">Disponibilité souhaitée</label>
-                            <input
+                            <select
                                 id="disponibiliteSouhaitee"
                                 value={disponibiliteSouhaitee}
                                 onChange={(e) => setDisponibiliteSouhaitee(e.target.value)}
-                                placeholder="Immédiate"
-                            />
+                            >
+                                <option value="">Sélectionnez une disponibilité</option>
+
+                                {DISPONIBILITES.map((d) => (
+                                    <option key={d} value={d}>
+                                        {d}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
                     </div>
                     <div className="offre-field">

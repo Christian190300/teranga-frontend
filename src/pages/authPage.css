@@ -115,14 +115,28 @@
 
 .input-with-icon select {
     width: 100%;
-    border: none;
-    outline: none;
-    background: transparent;
-    padding: 0.9rem 1rem 0.9rem 2.8rem;
+    height: 48px;
+    font-family: var(--ap-font);
     font-size: 0.95rem;
-    color: inherit;
-    appearance: none;
+    color: var(--ap-navy);
+    background: #fafafa;
+    border: 1.5px solid var(--ap-line);
+    border-radius: 10px;
+    padding: 0 14px 0 42px;
+    outline: none;
     cursor: pointer;
+    appearance: none;
+    transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.input-with-icon select:hover {
+    border-color: var(--ap-muted-light);
+}
+
+.input-with-icon select:focus {
+    background: white;
+    border-color: var(--ap-navy);
+    box-shadow: 0 0 0 3.5px rgba(20, 41, 77, 0.09);
 }
 
 .auth-panel__content {

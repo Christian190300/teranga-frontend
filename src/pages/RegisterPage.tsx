@@ -453,7 +453,7 @@ export function RegisterPage() {
                                             value={secteurActivite}
                                             onChange={(e) => setSecteurActivite(e.target.value)}
                                         >
-                                            <option value="ville">Sélectionnez un secteur</option>
+                                            <option value="">Sélectionnez un secteur</option>
 
                                             {SECTEURS_ACTIVITE.map((secteur) => (
                                                 <option key={secteur} value={secteur}>

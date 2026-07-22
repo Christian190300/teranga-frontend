@@ -161,9 +161,9 @@
     margin-bottom: 6px;
 }
 
-.profil-field input[type="text"],
-.profil-field input:not([type]),
-.profil-field textarea {
+.profil-field input,
+.profil-field textarea,
+.profil-field select {
     width: 100%;
     padding: 11px 14px;
     border: 1px solid #e8e9ee;
