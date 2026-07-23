@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { IconBuilding, IconBriefcase, IconLayoutDashboard, IconLogOut, IconSettings, IconUsers } from "../home/icons";
-import "./Sidebar.css";
+import "./sidebar.css";
 
 const generalLinks = [
     { to: "/admin", label: "Tableau de bord", icon: <IconLayoutDashboard /> },

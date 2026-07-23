@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  teranga-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: /api
+        VITE_KEYCLOAK_URL: http://localhost:9080
+        VITE_KEYCLOAK_REALM: terangaSenegal
+        VITE_KEYCLOAK_CLIENT_ID: CqCoLKNJnL7y4LvGQActbJo3hLvKb5ok
+    container_name: teranga-frontend
+    ports:
+      - "80:80"
+    restart: unless-stopped
+
+networks:
+  default:
+    name: terangasenegaluser_default
+    external: true
