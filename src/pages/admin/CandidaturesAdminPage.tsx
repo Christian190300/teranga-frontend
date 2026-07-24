@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { type CandidatureDTO, LABELS_STATUT_CANDIDATURE, listerToutesCandidaturesAdmin } from "../../api/candidatureService";
-import type {SpringPage} from "../../api/offreService";
 
 export function CandidaturesAdminPage() {
     const [candidatures, setCandidatures] = useState<CandidatureDTO[]>([]);
@@ -17,9 +16,10 @@ export function CandidaturesAdminPage() {
         setChargement(true);
         setErreur(null);
         try {
-            const resultat: SpringPage<CandidatureDTO> = await listerToutesCandidaturesAdmin(pageDemandee, 20);
-            setCandidatures(resultat.content);
-            setTotalPages(resultat.totalPages);
+            const resultat = await listerToutesCandidaturesAdmin(pageDemandee, 20);
+
+            setCandidatures(resultat);
+            setTotalPages(1);
         } catch (err) {
             setErreur("Impossible de charger les candidatures.");
         } finally {
