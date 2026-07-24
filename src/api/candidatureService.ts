@@ -1,4 +1,6 @@
 import { httpClient } from "./httpClient";
+import type {SpringPage} from "./offreService"; // réutilise le type déjà défini
+// réutilise le type déjà défini
 
 export type StatutCandidature = "ENVOYEE" | "VUE" | "ACCEPTEE" | "REFUSEE" | "RETIREE";
 
@@ -103,4 +105,10 @@ export async function telechargerLettreMotivationCandidature(candidatureId: numb
     lien.download = filename;
     lien.click();
     URL.revokeObjectURL(url);
+}
+
+/** GET /api/candidatures/toutes — admin uniquement, toutes offres et recruteurs confondus. */
+export async function listerToutesCandidaturesAdmin(page = 0, size = 20): Promise<SpringPage<CandidatureDTO>> {
+    const response = await httpClient.get<SpringPage<CandidatureDTO>>("/candidatures/toutes", { params: { page, size } });
+    return response.data;
 }

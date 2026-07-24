@@ -30,6 +30,7 @@ import {ResetPasswordPage} from "./pages/ResetPasswordPage.tsx";
 import {PremiereConnexionPage} from "./pages/PremiereConnexionPage.tsx";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
+import { CandidaturesAdminPage } from "./pages/admin/CandidaturesAdminPage";
 
 export default function App() {
     return (
@@ -69,6 +70,8 @@ export default function App() {
                         <Route path="/mot-de-passe-oublie" element={<ForgotPasswordPage />} />
                         <Route path="/reinitialiser-mot-de-passe" element={<ResetPasswordPage />} />
                         <Route path="/premiere-connexion" element={<PremiereConnexionPage />} />
+                        <Route path="/admin/offres" element={<OffresAdminPage />} />
+                        <Route path="/admin/candidatures" element={<CandidaturesAdminPage />} />
                         {/* Routes à venir : /admin, /offres, /candidat/candidatures, /recruteur/offres, etc. */}
                     </Routes>
                 </AppLayout>

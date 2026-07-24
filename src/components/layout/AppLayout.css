@@ -34,3 +34,13 @@
     padding: 32px;
     background: #f7f8fb;
 }
+@media (max-width: 768px) {
+    .app-shell__main {
+        margin-left: 0;
+    }
+
+    .app-shell__content-admin {
+        padding: 32px 16px 16px;
+        padding-top: 64px; /* évite que le contenu passe sous le bouton hamburger fixe */
+    }
+}
