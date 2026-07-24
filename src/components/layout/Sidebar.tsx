@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { IconBuilding, IconBriefcase, IconClipboardList, IconLayoutDashboard, IconLogOut, IconSettings, IconUsers } from "../home/icons";
+import { IconBuilding, IconBriefcase, IconLayoutDashboard, IconLogOut, IconSettings, IconUsers } from "../home/icons";
 import "./sidebar.css";
 
 const generalLinks = [
@@ -9,7 +9,7 @@ const generalLinks = [
     { to: "/admin/utilisateurs", label: "Utilisateurs", icon: <IconUsers /> },
     { to: "/admin/entreprises", label: "Entreprises", icon: <IconBuilding /> },
     { to: "/admin/offres", label: "Offres", icon: <IconBriefcase /> },
-    { to: "/admin/candidatures", label: "Candidatures", icon: <IconClipboardList /> },
+    { to: "/admin/candidatures", label: "Candidatures", icon: <IconBriefcase /> },
     { to: "/admin/formations", label: "Creer Formation", icon: <IconBriefcase /> },
 ];
 
