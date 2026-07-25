@@ -1,0 +1,35 @@
+.statut-badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 999px;
+    white-space: nowrap;
+    letter-spacing: 0.01em;
+}
+
+.statut-badge--envoyee {
+    background: #eaf0fb;
+    color: #14294d;
+}
+
+.statut-badge--vue {
+    background: #fbf0d9;
+    color: #8a6212;
+}
+
+.statut-badge--acceptee {
+    background: #eaf7f0;
+    color: #1e7a4c;
+}
+
+.statut-badge--refusee {
+    background: #fbeceb;
+    color: #b3261e;
+}
+
+.statut-badge--retiree {
+    background: #eef0f4;
+    color: #6b7280;
+}

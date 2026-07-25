@@ -2,6 +2,43 @@
    CANDIDATURES — listes candidat & recruteur
    ============================================================ */
 
+/* ---------- Header de page (cohérent avec offres.css) ---------- */
+.candidature-page__header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+}
+
+.candidature-page__title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--navy);
+    margin: 0 0 6px;
+    letter-spacing: -0.015em;
+}
+
+.candidature-page__subtitle {
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+/* ---------- Statut badges ---------- */
+.statut-badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 999px;
+    white-space: nowrap;
+    letter-spacing: 0.01em;
+}
+
 .statut-badge--envoyee {
     background: #eaf0fb;
     color: var(--navy);
@@ -27,6 +64,7 @@
     color: var(--text-muted);
 }
 
+/* ---------- Ligne de candidature ---------- */
 .candidature-row {
     background: white;
     border: 1px solid var(--border);
@@ -34,6 +72,12 @@
     padding: 20px 24px;
     margin-bottom: 12px;
     box-shadow: var(--shadow-card);
+    transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.candidature-row:hover {
+    box-shadow: var(--shadow-card-hover, 0 8px 24px rgba(11, 29, 58, 0.08));
+    border-color: #d9dde6;
 }
 
 .candidature-row__top {
@@ -42,6 +86,7 @@
     align-items: flex-start;
     gap: 16px;
     margin-bottom: 8px;
+    flex-wrap: wrap;
 }
 
 .candidature-row__titre {
@@ -59,12 +104,13 @@
 
 .candidature-row__message {
     font-size: 0.86rem;
-    color: var(--text-body);
+    color: var(--text-body, var(--navy));
     background: var(--bg-soft);
     border-radius: var(--radius-sm);
     padding: 10px 14px;
     margin: 10px 0 0;
     line-height: 1.5;
+    white-space: pre-line;
 }
 
 .candidature-row__actions {
@@ -85,6 +131,64 @@
     color: var(--navy);
     font-size: 0.82rem;
     font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.15s ease;
+}
+
+.candidature-row__actions select:hover {
+    border-color: #d5d9e3;
+}
+
+.candidature-row__actions select:focus-visible {
+    outline: none;
+    border-color: var(--gold);
+}
+
+/* ---------- Boutons d'action (voir CV, télécharger, retirer...) ---------- */
+.candidature-row__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: white;
+    color: var(--navy);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+    white-space: nowrap;
+}
+
+.candidature-row__btn:hover {
+    background: var(--bg-soft);
+    border-color: #d5d9e3;
+}
+
+.candidature-row__btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.candidature-row__btn--danger {
+    color: #b3261e;
+    border-color: #f2c1bd;
+}
+
+.candidature-row__btn--danger:hover {
+    background: #fbe9e7;
+    border-color: #e8a39c;
+}
+
+.candidature-row__btn--gold {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--navy);
+}
+
+.candidature-row__btn--gold:hover {
+    background: var(--gold-light, #e0b352);
 }
 
 /* ---------- Candidat card (vue recruteur) ---------- */
@@ -145,6 +249,7 @@
     border-radius: 999px;
 }
 
+/* ---------- État vide ---------- */
 .candidature-page__empty {
     text-align: center;
     padding: 100px 24px;
@@ -152,4 +257,40 @@
     background: white;
     border: 1px dashed var(--border);
     border-radius: var(--radius-lg);
+}
+
+.candidature-page__empty-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 0 0 6px;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 640px) {
+    .candidature-row__top {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .candidature-row__actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .candidature-row__actions select,
+    .candidature-row__btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .candidat-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .candidat-card__facts {
+        justify-content: center;
+    }
 }

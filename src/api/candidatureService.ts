@@ -43,6 +43,11 @@ export const LABELS_STATUT_CANDIDATURE: Record<StatutCandidature, string> = {
     RETIREE: "Retirée",
 };
 
+export interface ResultatCandidaturesAdmin {
+    candidatures: CandidatureDTO[];
+    total: number;
+}
+
 /** POST /api/offres/{offreId}/candidatures — le candidat postule. */
 export async function postulerOffre(offreId: number, message?: string): Promise<CandidatureDTO> {
     const response = await httpClient.post<CandidatureDTO>(`/offres/${offreId}/candidatures`, message ? { message } : {});
@@ -106,17 +111,11 @@ export async function telechargerLettreMotivationCandidature(candidatureId: numb
     URL.revokeObjectURL(url);
 }
 
-/** GET /api/candidatures/toutes — admin uniquement, toutes offres et recruteurs confondus. */
-export async function listerToutesCandidaturesAdmin(
-    page = 0,
-    size = 20
-): Promise<CandidatureDTO[]> {
-    const response = await httpClient.get<CandidatureDTO[]>(
-        "/candidatures/admin/toutes",
-        {
-            params: { page, size },
-        }
-    );
-
-    return response.data;
+/** GET /api/candidatures/admin/toutes — admin uniquement, toutes offres et recruteurs confondus. */
+export async function listerToutesCandidaturesAdmin(page = 0, size = 20): Promise<ResultatCandidaturesAdmin> {
+    const response = await httpClient.get<CandidatureDTO[]>("/candidatures/admin/toutes", {
+        params: { page, size },
+    });
+    const total = Number(response.headers["x-total-count"] ?? response.data.length);
+    return { candidatures: response.data, total };
 }
