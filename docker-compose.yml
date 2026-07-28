@@ -6,8 +6,8 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        VITE_API_BASE_URL: /api
-        VITE_KEYCLOAK_URL: http://localhost:9080
+        VITE_API_BASE_URL: http://152.228.235.171:8081
+        VITE_KEYCLOAK_URL: http://152.228.235.171:9080
         VITE_KEYCLOAK_REALM: terangaSenegal
         VITE_KEYCLOAK_CLIENT_ID: terangasenegal
     container_name: teranga-frontend
