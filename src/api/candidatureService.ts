@@ -119,3 +119,25 @@ export async function listerToutesCandidaturesAdmin(page = 0, size = 20): Promis
     const total = Number(response.headers["x-total-count"] ?? response.data.length);
     return { candidatures: response.data, total };
 }
+
+/** GET /api/candidatures/admin/{id}/cv — l'admin télécharge le CV, toute candidature confondue. */
+export async function telechargerCvCandidatureAdmin(candidatureId: number, filename: string): Promise<void> {
+    const response = await httpClient.get(`/candidatures/admin/${candidatureId}/cv`, { responseType: "blob" });
+    const url = URL.createObjectURL(response.data as Blob);
+    const lien = document.createElement("a");
+    lien.href = url;
+    lien.download = filename;
+    lien.click();
+    URL.revokeObjectURL(url);
+}
+
+/** GET /api/candidatures/admin/{id}/lettre-motivation — l'admin télécharge la lettre. */
+export async function telechargerLettreMotivationCandidatureAdmin(candidatureId: number, filename: string): Promise<void> {
+    const response = await httpClient.get(`/candidatures/admin/${candidatureId}/lettre-motivation`, { responseType: "blob" });
+    const url = URL.createObjectURL(response.data as Blob);
+    const lien = document.createElement("a");
+    lien.href = url;
+    lien.download = filename;
+    lien.click();
+    URL.revokeObjectURL(url);
+}

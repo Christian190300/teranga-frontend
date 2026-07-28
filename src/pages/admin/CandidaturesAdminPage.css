@@ -33,3 +33,53 @@
     background: #eef0f4;
     color: #6b7280;
 }
+.candidature-admin-list {
+    margin-bottom: 20px;
+}
+
+.candidature-admin-row__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-align: left;
+    flex-wrap: wrap;
+}
+
+.candidature-admin-row__meta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.candidature-admin-row__chevron {
+    color: #9aa1ac;
+    transition: transform 0.15s ease;
+    font-size: 0.9rem;
+}
+
+.candidature-admin-row__chevron--open {
+    transform: rotate(180deg);
+}
+
+.candidature-admin-row__details {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #f0f1f4;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+@media (max-width: 640px) {
+    .candidature-admin-row__toggle {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
