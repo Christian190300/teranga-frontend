@@ -1,21 +1,26 @@
-version: "3.8"
-
 services:
   teranga-frontend:
     build:
       context: .
       dockerfile: Dockerfile
       args:
-        VITE_API_BASE_URL: http://152.228.235.171:8081
-        VITE_KEYCLOAK_URL: http://152.228.235.171:9080
+        VITE_API_BASE_URL: https://api.talentsenegal.com/api
+        VITE_KEYCLOAK_URL: https://auth.talentsenegal.com
         VITE_KEYCLOAK_REALM: terangaSenegal
         VITE_KEYCLOAK_CLIENT_ID: terangasenegal
+
     container_name: teranga-frontend
+
     ports:
-      - "80:80"
+      - "127.0.0.1:3000:80"
+
     restart: unless-stopped
 
+    networks:
+      - teranga-network
+
+
 networks:
-  default:
-    name: terangasenegaluser_default
+  teranga-network:
     external: true
+    name: backend_teranga-network
