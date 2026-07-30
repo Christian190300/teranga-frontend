@@ -176,41 +176,53 @@ body {
 
 .home-hero__arrow {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+    bottom: 90px;
+    top: auto;
+
     z-index: 2;
+
     width: 44px;
     height: 44px;
     border-radius: 50%;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
     background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+
     color: white;
     font-size: 1.3rem;
     line-height: 1;
+
     cursor: pointer;
+
     backdrop-filter: blur(6px);
-    transition: background 0.15s ease, border-color 0.15s ease;
+
+    transition:
+            background 0.25s ease,
+            border-color 0.25s ease,
+            transform 0.25s ease;
 }
 
 .home-hero__arrow:hover {
-    background: rgba(255, 255, 255, 0.22);
-    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(245, 158, 11, 0.85);
+    border-color: rgba(245, 158, 11, 1);
+    transform: scale(1.08);
 }
 
 .home-hero__arrow:focus-visible {
     outline: 2px solid var(--hp-gold-light);
-    outline-offset: 2px;
+    outline-offset: 3px;
 }
 
 .home-hero__arrow--prev {
-    left: var(--sp-4);
+    left: 40px;
 }
 
 .home-hero__arrow--next {
-    right: var(--sp-4);
+    right: 40px;
 }
 
 @media (max-width: 640px) {
