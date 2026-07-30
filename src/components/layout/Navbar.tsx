@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { ProfileMenu } from "./ProfileMenu";
 import "./navbar.css";
@@ -35,7 +35,7 @@ function IconHamburger({ ouvert }: { ouvert: boolean }) {
 
 export function Navbar() {
     const { isAuthenticated, currentUser } = useAuth();
-    const navigate = useNavigate();
+    //const navigate = useNavigate();
     const location = useLocation();
     const [menuOuvert, setMenuOuvert] = useState(false);
 
@@ -80,9 +80,14 @@ export function Navbar() {
                 {isAuthenticated ? (
                     <ProfileMenu />
                 ) : (
-                    <Link to="/connexion" className="btn btn--ghost navbar__desktop-only" onClick={() => navigate("/connexion")}>
-                        Commencer
-                    </Link>
+                    <div className="navbar__auth-links navbar__desktop-only">
+                        <Link to="/connexion" className="btn btn--ghost">
+                            Connexion
+                        </Link>
+                        <Link to="/inscription" className="btn btn--primary">
+                            Inscription
+                        </Link>
+                    </div>
                 )}
 
                 <button
@@ -95,35 +100,6 @@ export function Navbar() {
                     <IconHamburger ouvert={menuOuvert} />
                 </button>
             </nav>
-
-            {/* ---------- Panneau mobile ---------- */}
-            <div className={`navbar__mobile-overlay${menuOuvert ? " navbar__mobile-overlay--open" : ""}`} onClick={() => setMenuOuvert(false)} />
-
-            <div className={`navbar__mobile-panel${menuOuvert ? " navbar__mobile-panel--open" : ""}`}>
-                <nav className="navbar__mobile-links">
-                    {espaceLinks.map((link) => (
-                        <NavLink
-                            key={link.to}
-                            to={link.to}
-                            end={link.to === "/recruteur/offres"}
-                            className={({ isActive }) => `navbar__mobile-link ${isActive ? "active" : ""}`}
-                        >
-                            {link.label}
-                        </NavLink>
-                    ))}
-                </nav>
-
-                {!isAuthenticated && (
-                    <div className="navbar__mobile-actions">
-                        <Link to="/connexion" className="btn btn--ghost" onClick={() => setMenuOuvert(false)}>
-                            Se connecter
-                        </Link>
-                        <Link to="/inscription" className="btn btn--primary" onClick={() => setMenuOuvert(false)}>
-                            Créer un compte
-                        </Link>
-                    </div>
-                )}
-            </div>
         </header>
     );
 }

@@ -42,6 +42,12 @@
     border-bottom: 1px solid #e8e9ee;
 }
 
+.navbar__auth-links {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 .navbar__brand {
     display: inline-flex;
     align-items: baseline;
