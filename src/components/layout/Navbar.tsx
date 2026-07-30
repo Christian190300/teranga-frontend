@@ -1,22 +1,22 @@
 import { useEffect, useState } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { ProfileMenu } from "./ProfileMenu";
 import "./navbar.css";
 
-interface NavLink {
+interface NavLinkItem {
     to: string;
     label: string;
 }
 
-const candidatLinks: NavLink[] = [
+const candidatLinks: NavLinkItem[] = [
     { to: "/offres", label: "Offres d'emploi" },
     { to: "/candidat/candidatures", label: "Mes candidatures" },
     { to: "/candidat/profil", label: "Mon profil" },
     { to: "/candidat/formation", label: "Mes formation" },
 ];
 
-const recruteurLinks: NavLink[] = [
+const recruteurLinks: NavLinkItem[] = [
     { to: "/recruteur/offres", label: "Mes offres" },
     { to: "/recruteur/offres/nouvelle", label: "Publier une offre" },
     { to: "/recruteur/candidatures", label: "Candidatures reçues" },
@@ -34,12 +34,12 @@ function IconHamburger({ ouvert }: { ouvert: boolean }) {
 }
 
 export function Navbar() {
-    const { isAuthenticated, currentUser } = useAuth();
-    //const navigate = useNavigate();
+    const { isAuthenticated, currentUser, logout } = useAuth();
+    const navigate = useNavigate();
     const location = useLocation();
     const [menuOuvert, setMenuOuvert] = useState(false);
 
-    const espaceLinks: NavLink[] =
+    const espaceLinks: NavLinkItem[] =
         currentUser?.role === "RECRUTEUR" ? recruteurLinks : currentUser?.role === "CANDIDAT" ? candidatLinks : [];
 
     // Ferme le menu mobile à chaque changement de page.
@@ -55,6 +55,12 @@ export function Navbar() {
         };
     }, [menuOuvert]);
 
+    async function handleDeconnexion() {
+        setMenuOuvert(false);
+        await logout();
+        navigate("/");
+    }
+
     return (
         <header className="container navbar">
             <Link to="/" className="navbar__brand">
@@ -62,7 +68,7 @@ export function Navbar() {
             </Link>
 
             {isAuthenticated && espaceLinks.length > 0 && (
-                <nav className="navbar__menu">
+                <nav className="navbar__menu navbar__desktop-only">
                     {espaceLinks.map((link) => (
                         <NavLink
                             key={link.to}
@@ -78,7 +84,9 @@ export function Navbar() {
 
             <nav className="navbar__links">
                 {isAuthenticated ? (
-                    <ProfileMenu />
+                    <div className="navbar__desktop-only">
+                        <ProfileMenu />
+                    </div>
                 ) : (
                     <div className="navbar__auth-links navbar__desktop-only">
                         <Link to="/connexion" className="btn btn--ghost">
@@ -100,6 +108,55 @@ export function Navbar() {
                     <IconHamburger ouvert={menuOuvert} />
                 </button>
             </nav>
+
+            {/* ---------- Menu mobile ---------- */}
+            <div
+                className={`navbar__mobile-overlay${menuOuvert ? " navbar__mobile-overlay--open" : ""}`}
+                onClick={() => setMenuOuvert(false)}
+                aria-hidden="true"
+            />
+
+            <div className={`navbar__mobile-panel${menuOuvert ? " navbar__mobile-panel--open" : ""}`}>
+                {espaceLinks.length > 0 && (
+                    <nav className="navbar__mobile-links">
+                        {espaceLinks.map((link) => (
+                            <NavLink
+                                key={link.to}
+                                to={link.to}
+                                end={link.to === "/recruteur/offres"}
+                                className={({ isActive }) => `navbar__mobile-link ${isActive ? "active" : ""}`}
+                            >
+                                {link.label}
+                            </NavLink>
+                        ))}
+                    </nav>
+                )}
+
+                <div className="navbar__mobile-actions">
+                    {isAuthenticated ? (
+                        <>
+                            <Link
+                                to={currentUser?.role === "RECRUTEUR" ? "/recruteur/entreprise" : "/candidat/profil"}
+                                className="btn btn--ghost"
+                            >
+                                Mon profil
+                            </Link>
+                            <button type="button" className="btn btn--primary" onClick={handleDeconnexion}>
+                                Se déconnecter
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <Link to="/connexion" className="btn btn--ghost">
+                                Connexion
+                            </Link>
+                            <Link to="/inscription" className="btn btn--primary">
+                                Inscription
+                            </Link>
+                        </>
+                    )}
+                </div>
+            </div>
         </header>
     );
 }
