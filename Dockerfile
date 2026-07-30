@@ -12,7 +12,7 @@ COPY . .
 # pas lues à l'exécution du conteneur. Le fichier .env local est ignoré via
 # .dockerignore, donc chaque variable doit être fournie explicitement ici.
 ARG VITE_API_BASE_URL=/api
-ARG VITE_KEYCLOAK_URL=http://localhost:9080
+ARG VITE_KEYCLOAK_URL=https://auth.talentsenegal.com
 ARG VITE_KEYCLOAK_REALM=terangaSenegal
 ARG VITE_KEYCLOAK_CLIENT_ID=terangasenegal
 
