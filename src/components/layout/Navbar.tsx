@@ -92,7 +92,7 @@ export function Navbar() {
                         <Link to="/connexion" className="btn btn--ghost">
                             Connexion
                         </Link>
-                        <Link to="/inscription" className="btn btn--primary">
+                        <Link to="/inscription" className="btn btn--ghost">
                             Inscription
                         </Link>
                     </div>
@@ -150,7 +150,7 @@ export function Navbar() {
                             <Link to="/connexion" className="btn btn--ghost">
                                 Connexion
                             </Link>
-                            <Link to="/inscription" className="btn btn--primary">
+                            <Link to="/inscription" className="btn btn--ghost">
                                 Inscription
                             </Link>
                         </>
