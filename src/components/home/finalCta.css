@@ -31,22 +31,28 @@
     border-radius: 50%;
     background: radial-gradient(
             circle,
-            rgba(239, 126, 34, 0.14) 0%,
-            rgba(239, 126, 34, 0.04) 42%,
+            rgba(232, 184, 75, 0.14) 0%,
+            rgba(232, 184, 75, 0.04) 42%,
             transparent 70%
     );
     pointer-events: none;
     z-index: -1;
 }
 
+/* ------------------------------------------------------------------
+   CONTAINER
+------------------------------------------------------------------- */
+
 .final-cta__container {
     position: relative;
     max-width: 1180px;
     min-height: 360px;
     margin: 0 auto;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     gap: 80px;
 }
 
@@ -54,10 +60,15 @@
     max-width: 720px;
 }
 
+/* ------------------------------------------------------------------
+   EYEBROW
+------------------------------------------------------------------- */
+
 .final-cta__eyebrow {
     display: inline-flex;
     align-items: center;
     gap: 10px;
+
     margin-bottom: 20px;
 
     font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
@@ -65,18 +76,25 @@
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: #f29a4a;
+
+    color: #e8b84b;
 }
 
 .final-cta__eyebrow-line {
     width: 28px;
     height: 2px;
-    background: #f29a4a;
+
+    background: #e8b84b;
     border-radius: 999px;
 }
 
+/* ------------------------------------------------------------------
+   TITLE
+------------------------------------------------------------------- */
+
 .final-cta__title {
     max-width: 680px;
+
     margin: 0 0 22px;
 
     font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
@@ -84,44 +102,61 @@
     font-weight: 800;
     line-height: 1.08;
     letter-spacing: -0.04em;
+
     color: #ffffff;
 }
 
 .final-cta__title span {
-    color: #f29a4a;
+    color: #e8b84b;
 }
+
+/* ------------------------------------------------------------------
+   TEXT
+------------------------------------------------------------------- */
 
 .final-cta__text {
     max-width: 610px;
+
     margin: 0 0 34px;
 
     font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 1.02rem;
     line-height: 1.75;
+
     color: rgba(255, 255, 255, 0.68);
 }
+
+/* ------------------------------------------------------------------
+   ACTIONS
+------------------------------------------------------------------- */
 
 .final-cta__actions {
     display: flex;
     align-items: center;
-    gap: 12px;
     flex-wrap: wrap;
+
+    gap: 12px;
+
     margin-bottom: 26px;
 }
 
 .final-cta__btn {
     min-height: 52px;
+
     display: inline-flex;
     align-items: center;
     justify-content: center;
+
     gap: 12px;
 
     padding: 0 24px;
+
     border-radius: 7px;
 
     font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.9rem;
     font-weight: 700;
+
     text-decoration: none;
     white-space: nowrap;
 
@@ -132,23 +167,34 @@
             box-shadow 0.2s ease;
 }
 
+/* ------------------------------------------------------------------
+   PRIMARY BUTTON
+------------------------------------------------------------------- */
+
 .final-cta__btn--primary {
-    background: #f08a3c;
+    background: #e8b84b;
     color: #10284a;
-    border: 1px solid #f08a3c;
-    box-shadow: 0 8px 24px rgba(240, 138, 60, 0.18);
+
+    border: 1px solid #e8b84b;
+
+    box-shadow:
+            0 8px 24px rgba(232, 184, 75, 0.18);
 }
 
 .final-cta__btn--primary:hover {
-    background: #f59d59;
-    border-color: #f59d59;
+    background: #f0c766;
+    border-color: #f0c766;
+
     transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(240, 138, 60, 0.25);
+
+    box-shadow:
+            0 12px 28px rgba(232, 184, 75, 0.25);
 }
 
 .final-cta__btn-icon {
     font-size: 1.15rem;
     line-height: 1;
+
     transition: transform 0.2s ease;
 }
 
@@ -156,51 +202,71 @@
     transform: translateX(4px);
 }
 
+/* ------------------------------------------------------------------
+   SECONDARY BUTTON
+------------------------------------------------------------------- */
+
 .final-cta__btn--secondary {
     color: #ffffff;
+
     background: rgba(255, 255, 255, 0.04);
+
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .final-cta__btn--secondary:hover {
     background: rgba(255, 255, 255, 0.09);
+
     border-color: rgba(255, 255, 255, 0.38);
+
     transform: translateY(-2px);
 }
+
+/* ------------------------------------------------------------------
+   TRUST / REASSURANCE
+------------------------------------------------------------------- */
 
 .final-cta__trust {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
+
     gap: 9px;
 
     font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 0.78rem;
+
     color: rgba(255, 255, 255, 0.48);
 }
 
 .final-cta__trust > span:not(.final-cta__separator) {
-    color: #f29a4a;
+    color: #e8b84b;
     font-weight: 700;
 }
 
 .final-cta__separator {
     width: 3px;
     height: 3px;
+
     border-radius: 50%;
+
     background: rgba(255, 255, 255, 0.25);
+
     margin: 0 4px;
 }
 
 /* ------------------------------------------------------------------
-   ÉLÉMENT VISUEL
+   VISUAL
 ------------------------------------------------------------------- */
 
 .final-cta__visual {
     position: relative;
+
     flex: 0 0 320px;
+
     width: 320px;
     height: 320px;
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -208,20 +274,29 @@
 
 .final-cta__circle {
     position: absolute;
+
     border-radius: 50%;
 }
+
+/* Outer circle */
 
 .final-cta__circle--outer {
     width: 310px;
     height: 310px;
+
     border: 1px solid rgba(255, 255, 255, 0.08);
 }
+
+/* Middle circle */
 
 .final-cta__circle--middle {
     width: 220px;
     height: 220px;
-    border: 1px solid rgba(242, 154, 74, 0.22);
+
+    border: 1px solid rgba(232, 184, 75, 0.22);
 }
+
+/* Inner circle */
 
 .final-cta__circle--inner {
     width: 112px;
@@ -231,24 +306,27 @@
     align-items: center;
     justify-content: center;
 
-    background: #f08a3c;
+    background: #e8b84b;
+
     border: 8px solid rgba(255, 255, 255, 0.06);
 
     box-shadow:
-            0 0 0 1px rgba(242, 154, 74, 0.3),
+            0 0 0 1px rgba(232, 184, 75, 0.3),
             0 20px 50px rgba(0, 0, 0, 0.2);
 }
 
 .final-cta__circle--inner span {
     font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+
     font-size: 1.6rem;
     font-weight: 900;
     letter-spacing: -0.05em;
+
     color: #10284a;
 }
 
 /* ------------------------------------------------------------------
-   RESPONSIVE
+   TABLET
 ------------------------------------------------------------------- */
 
 @media (max-width: 900px) {
@@ -263,6 +341,7 @@
 
     .final-cta__visual {
         flex: 0 0 220px;
+
         width: 220px;
         height: 220px;
     }
@@ -287,6 +366,10 @@
     }
 }
 
+/* ------------------------------------------------------------------
+   MOBILE
+------------------------------------------------------------------- */
+
 @media (max-width: 700px) {
     .final-cta {
         padding: 64px 20px;
@@ -298,6 +381,7 @@
 
     .final-cta__content {
         max-width: 100%;
+
         text-align: center;
     }
 
@@ -312,6 +396,7 @@
     .final-cta__text {
         margin-left: auto;
         margin-right: auto;
+
         font-size: 0.95rem;
     }
 
@@ -328,9 +413,14 @@
     }
 }
 
+/* ------------------------------------------------------------------
+   SMALL MOBILE
+------------------------------------------------------------------- */
+
 @media (max-width: 480px) {
     .final-cta__actions {
         flex-direction: column;
+
         width: 100%;
     }
 
@@ -340,6 +430,7 @@
 
     .final-cta__trust {
         gap: 7px;
+
         line-height: 1.8;
     }
 
