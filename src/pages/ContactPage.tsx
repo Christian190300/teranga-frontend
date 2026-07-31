@@ -3,173 +3,259 @@ import {
     FaEnvelope,
     FaPhoneAlt,
     FaMapMarkerAlt,
-    FaPaperPlane,
+    FaArrowRight,
 } from "react-icons/fa";
 
 export default function ContactPage() {
     return (
         <main className="contact-page">
-            <div className="contact-container">
 
-                {/* Header */}
-                <header className="contact-header">
-                    <span className="contact-eyebrow">CONTACT</span>
+            {/* =====================================================
+                HERO
+            ===================================================== */}
 
-                    <h1>
-                        Parlons de votre
-                        <span> projet</span>
-                    </h1>
+            <section className="contact-hero">
+                <div className="contact-container">
 
-                    <p>
-                        Une question, une suggestion ou un besoin particulier ?
-                        Notre équipe est à votre écoute.
-                    </p>
-                </header>
+                    <div className="contact-hero__content">
 
-                <div className="contact-content">
+                        <span className="contact-hero__eyebrow">
+                            NOUS CONTACTER
+                        </span>
 
-                    {/* Formulaire */}
-                    <section className="contact-form-card">
+                        <h1>
+                            Construisons ensemble
+                            <br />
+                            <span>les opportunités de demain.</span>
+                        </h1>
 
-                        <div className="contact-form-header">
-                            <div>
-                                <span className="form-label">NOUS ÉCRIRE</span>
-                                <h2>Envoyez-nous un message</h2>
+                        <p>
+                            Une question sur Talent Sénégal, un projet de recrutement
+                            ou une demande de partenariat ? Notre équipe est à votre
+                            disposition pour vous accompagner.
+                        </p>
+
+                    </div>
+
+                </div>
+            </section>
+
+
+            {/* =====================================================
+                CONTACT AREA
+            ===================================================== */}
+
+            <section className="contact-main">
+
+                <div className="contact-container">
+
+                    <div className="contact-layout">
+
+                        {/* =================================================
+                            INFORMATIONS
+                        ================================================= */}
+
+                        <aside className="contact-details">
+
+                            <div className="contact-details__heading">
+                                <span>PARLONS-NOUS</span>
+
+                                <h2>
+                                    Une équipe
+                                    <br />
+                                    à votre écoute.
+                                </h2>
+                            </div>
+
+                            <p className="contact-details__intro">
+                                Nous sommes disponibles pour répondre à vos
+                                questions et vous accompagner dans vos projets
+                                professionnels.
+                            </p>
+
+
+                            <div className="contact-details__items">
+
+                                <div className="contact-detail">
+                                    <div className="contact-detail__icon">
+                                        <FaEnvelope />
+                                    </div>
+
+                                    <div>
+                                        <span>Email</span>
+                                        <a href="mailto:contact@talentsenegal.sn">
+                                            contact@talentsenegal.sn
+                                        </a>
+                                    </div>
+                                </div>
+
+
+                                <div className="contact-detail">
+                                    <div className="contact-detail__icon">
+                                        <FaPhoneAlt />
+                                    </div>
+
+                                    <div>
+                                        <span>Téléphone</span>
+                                        <a href="tel:+221770000000">
+                                            +221 77 000 00 00
+                                        </a>
+                                    </div>
+                                </div>
+
+
+                                <div className="contact-detail">
+                                    <div className="contact-detail__icon">
+                                        <FaMapMarkerAlt />
+                                    </div>
+
+                                    <div>
+                                        <span>Siège</span>
+                                        <p>Dakar, Sénégal</p>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div className="contact-details__footer">
+                                <div className="contact-line" />
+
                                 <p>
-                                    Remplissez le formulaire et notre équipe
-                                    vous répondra dans les meilleurs délais.
+                                    Talent Sénégal
+                                    <br />
+                                    La plateforme qui rapproche
+                                    les talents et les opportunités.
                                 </p>
                             </div>
-                        </div>
 
-                        <form className="contact-form">
+                        </aside>
 
-                            <div className="form-row">
 
-                                <div className="form-group">
-                                    <label htmlFor="name">
-                                        Nom complet
+                        {/* =================================================
+                            FORMULAIRE
+                        ================================================= */}
+
+                        <section className="contact-form-section">
+
+                            <div className="contact-form-heading">
+
+                                <span>VOTRE MESSAGE</span>
+
+                                <h2>
+                                    Comment pouvons-nous
+                                    <br />
+                                    vous aider ?
+                                </h2>
+
+                                <p>
+                                    Décrivez-nous votre demande. Nous vous
+                                    répondrons dans les meilleurs délais.
+                                </p>
+
+                            </div>
+
+
+                            <form className="contact-form">
+
+                                <div className="contact-form__row">
+
+                                    <div className="contact-field">
+
+                                        <label htmlFor="name">
+                                            Nom complet
+                                        </label>
+
+                                        <input
+                                            id="name"
+                                            type="text"
+                                            placeholder="Votre nom complet"
+                                            autoComplete="name"
+                                            required
+                                        />
+
+                                    </div>
+
+
+                                    <div className="contact-field">
+
+                                        <label htmlFor="email">
+                                            Adresse email
+                                        </label>
+
+                                        <input
+                                            id="email"
+                                            type="email"
+                                            placeholder="vous@exemple.com"
+                                            autoComplete="email"
+                                            required
+                                        />
+
+                                    </div>
+
+                                </div>
+
+
+                                <div className="contact-field">
+
+                                    <label htmlFor="subject">
+                                        Sujet
                                     </label>
 
                                     <input
-                                        id="name"
+                                        id="subject"
                                         type="text"
-                                        placeholder="Votre nom complet"
-                                        autoComplete="name"
+                                        placeholder="Objet de votre demande"
                                         required
                                     />
+
                                 </div>
 
-                                <div className="form-group">
-                                    <label htmlFor="email">
-                                        Adresse email
+
+                                <div className="contact-field">
+
+                                    <label htmlFor="message">
+                                        Votre message
                                     </label>
 
-                                    <input
-                                        id="email"
-                                        type="email"
-                                        placeholder="vous@exemple.com"
-                                        autoComplete="email"
+                                    <textarea
+                                        id="message"
+                                        rows={7}
+                                        placeholder="Écrivez votre message..."
                                         required
                                     />
+
                                 </div>
 
-                            </div>
 
-                            <div className="form-group">
-                                <label htmlFor="subject">
-                                    Sujet
-                                </label>
+                                <div className="contact-form__bottom">
 
-                                <input
-                                    id="subject"
-                                    type="text"
-                                    placeholder="Comment pouvons-nous vous aider ?"
-                                    required
-                                />
-                            </div>
+                                    <p>
+                                        En envoyant ce formulaire, vous acceptez
+                                        que Talent Sénégal utilise ces informations
+                                        uniquement pour répondre à votre demande.
+                                    </p>
 
-                            <div className="form-group">
-                                <label htmlFor="message">
-                                    Message
-                                </label>
+                                    <button
+                                        type="submit"
+                                        className="contact-submit"
+                                    >
+                                        <span>Envoyer le message</span>
+                                        <FaArrowRight />
+                                    </button>
 
-                                <textarea
-                                    id="message"
-                                    rows={6}
-                                    placeholder="Décrivez votre demande..."
-                                    required
-                                />
-                            </div>
+                                </div>
 
-                            <button
-                                type="submit"
-                                className="contact-submit"
-                            >
-                                <span>Envoyer le message</span>
-                                <FaPaperPlane />
-                            </button>
+                            </form>
 
-                        </form>
+                        </section>
 
-                    </section>
-
-                    {/* Informations */}
-                    <aside className="contact-info">
-
-                        <div className="contact-info-intro">
-                            <span className="form-label">NOS COORDONNÉES</span>
-
-                            <h2>
-                                Nous sommes
-                                <br />
-                                <span>à votre écoute.</span>
-                            </h2>
-
-                            <p>
-                                Que vous soyez candidat, recruteur ou partenaire,
-                                notre équipe est disponible pour vous accompagner.
-                            </p>
-                        </div>
-
-                        <div className="info-card">
-                            <div className="info-icon">
-                                <FaEnvelope />
-                            </div>
-
-                            <div className="info-content">
-                                <span>Email</span>
-                                <h3>contact@talentsenegal.sn</h3>
-                            </div>
-                        </div>
-
-                        <div className="info-card">
-                            <div className="info-icon">
-                                <FaPhoneAlt />
-                            </div>
-
-                            <div className="info-content">
-                                <span>Téléphone</span>
-                                <h3>+221 77 000 00 00</h3>
-                            </div>
-                        </div>
-
-                        <div className="info-card">
-                            <div className="info-icon">
-                                <FaMapMarkerAlt />
-                            </div>
-
-                            <div className="info-content">
-                                <span>Localisation</span>
-                                <h3>Dakar, Sénégal</h3>
-                            </div>
-                        </div>
-
-                    </aside>
+                    </div>
 
                 </div>
 
-            </div>
+            </section>
+
         </main>
     );
 }
