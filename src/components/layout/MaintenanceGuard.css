@@ -1,0 +1,36 @@
+.maintenance-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: linear-gradient(150deg, #0b1d3a 0%, #24427a 100%);
+}
+
+.maintenance-page__card {
+    max-width: 480px;
+    text-align: center;
+    background: white;
+    border-radius: 18px;
+    padding: 48px 40px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+}
+
+.maintenance-page__icon {
+    font-size: 2.8rem;
+    margin-bottom: 16px;
+}
+
+.maintenance-page__title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #14294d;
+    margin: 0 0 12px;
+}
+
+.maintenance-page__text {
+    font-size: 0.92rem;
+    color: #6b7280;
+    line-height: 1.6;
+    margin: 0;
+}
