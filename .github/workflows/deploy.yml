@@ -1,24 +1,40 @@
-- name: Deploy backend on VPS
-  uses: appleboy/ssh-action@v1.0.3
-  with:
-    host: ${{ secrets.SERVER_HOST }}
-    username: ubuntu
-    key: ${{ secrets.SSH_KEY }}
-    script: |
-      set -e
+name: Deploy Frontend Production
 
-      cd /opt/talent-senegal/backend
+on:
+  push:
+    branches:
+      - main
 
-      echo "=== Téléchargement de la nouvelle image ==="
-      docker pull christian190300/terangasenegaluser:latest
+jobs:
+  deploy:
 
-      echo "=== Redémarrage du backend ==="
-      docker compose up -d --force-recreate backend
+    runs-on: ubuntu-latest
 
-      echo "=== Nettoyage ==="
-      docker image prune -f
+    steps:
 
-      echo "=== Vérification ==="
-      docker ps --filter "name=teranga-backend"
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      echo "=== Déploiement terminé ==="
+
+      - name: Deploy on VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: 22
+
+          script: |
+            cd /opt/talent-senegal/frontend
+
+            echo "Mise à jour du code"
+            git pull origin main
+
+            echo "Rebuild frontend"
+            docker compose down
+
+            docker compose build --no-cache
+
+            docker compose up -d
+
+            echo "Déploiement terminé"
