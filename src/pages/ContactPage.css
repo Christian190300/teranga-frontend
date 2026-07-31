@@ -1,150 +1,597 @@
-.contact-page{
-    background:#f8fafc;
-    min-height:100vh;
-    padding:70px 20px;
+.contact-page {
+    min-height: 100vh;
+    padding: 88px 24px 100px;
+
+    background:
+            radial-gradient(
+                    circle at 8% 5%,
+                    rgba(232, 184, 75, 0.06),
+                    transparent 28%
+            ),
+            linear-gradient(
+                    180deg,
+                    #f8fafc 0%,
+                    #f5f7fb 100%
+            );
+
+    color: #172033;
 }
 
-.contact-container{
-    max-width:1150px;
-    margin:auto;
+.contact-container {
+    width: 100%;
+    max-width: 1160px;
+    margin: 0 auto;
 }
 
-.contact-header{
-    text-align:center;
-    margin-bottom:45px;
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.contact-header {
+    position: relative;
+
+    max-width: 760px;
+    margin: 0 auto 60px;
+
+    text-align: center;
 }
 
-.contact-header h1{
-    color:#0d2d68;
-    font-size:2.5rem;
-    margin-bottom:15px;
+.contact-header::before {
+    content: "";
+
+    display: block;
+
+    width: 46px;
+    height: 4px;
+
+    margin: 0 auto 22px;
+
+    border-radius: 999px;
+
+    background: #e8b84b;
 }
 
-.contact-header p{
-    color:#64748b;
-    font-size:20px;
+.contact-header h1 {
+    margin: 0 0 16px;
+
+    font-family:
+            "Inter",
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            sans-serif;
+
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.15;
+
+    font-weight: 800;
+    letter-spacing: -0.035em;
+
+    color: #0b1d3a;
 }
 
-.contact-content{
-    display:grid;
-    grid-template-columns:1.1fr .9fr;
-    gap:30px;
+.contact-header p {
+    margin: 0;
+
+    font-family:
+            "Inter",
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            sans-serif;
+
+    font-size: 1.05rem;
+    line-height: 1.7;
+
+    color: #64748b;
 }
 
-/************* FORM *************/
 
-.contact-form-card{
-    background:white;
-    border:1px solid #dbeafe;
-    border-radius:16px;
-    padding:30px;
-    box-shadow:0 5px 18px rgba(0,0,0,.06);
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
+
+.contact-content {
+    display: grid;
+
+    grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+
+    gap: 24px;
+
+    align-items: start;
 }
 
-.contact-form-card h2{
-    margin-bottom:25px;
-    color:#0d2d68;
-    font-size:1.5rem;
+
+/* =========================================================
+   FORM CARD
+   ========================================================= */
+
+.contact-form-card {
+    position: relative;
+
+    padding: 34px;
+
+    background: rgba(255, 255, 255, 0.94);
+
+    border: 1px solid #e5eaf1;
+    border-radius: 20px;
+
+    box-shadow:
+            0 2px 5px rgba(15, 23, 42, 0.02),
+            0 14px 35px rgba(15, 23, 42, 0.05);
 }
 
-.form-group{
-    margin-bottom:18px;
+.contact-form-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 3px;
+
+    border-radius: 20px 20px 0 0;
+
+    background: linear-gradient(
+            90deg,
+            #e8b84b,
+            rgba(232, 184, 75, 0.15)
+    );
 }
 
-.form-group label{
-    display:block;
-    margin-bottom:8px;
-    font-weight:600;
-    color:#1f2937;
+.contact-form-card h2 {
+    margin: 0 0 28px;
+
+    font-family:
+            "Inter",
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            sans-serif;
+
+    font-size: 1.35rem;
+    line-height: 1.3;
+
+    font-weight: 750;
+
+    color: #0b1d3a;
+}
+
+
+/* =========================================================
+   FORM GROUP
+   ========================================================= */
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-family:
+            "Inter",
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            sans-serif;
+
+    font-size: 0.88rem;
+    font-weight: 650;
+
+    color: #334155;
 }
 
 .form-group input,
-.form-group textarea{
-    width:100%;
-    border:1px solid #cbd5e1;
-    border-radius:8px;
-    padding:12px;
-    font-size:15px;
-    outline:none;
-    transition:.3s;
+.form-group textarea {
+    display: block;
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 13px 14px;
+
+    border: 1px solid #d9e0e9;
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #172033;
+
+    font-family:
+            "Inter",
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            sans-serif;
+
+    font-size: 0.94rem;
+
+    outline: none;
+
+    transition:
+            border-color 0.2s ease,
+            box-shadow 0.2s ease,
+            background 0.2s ease;
+}
+
+.form-group textarea {
+    min-height: 145px;
+
+    resize: vertical;
+
+    line-height: 1.6;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #a0aec0;
+}
+
+.form-group input:hover,
+.form-group textarea:hover {
+    border-color: #c6d0dc;
 }
 
 .form-group input:focus,
-.form-group textarea:focus{
-    border-color:#2563eb;
+.form-group textarea:focus {
+    border-color: #e8b84b;
+
+    background: #fffefa;
+
+    box-shadow:
+            0 0 0 3px rgba(232, 184, 75, 0.12);
 }
 
-.contact-form-card button{
-    width:100%;
-    background:#2563eb;
-    color:white;
-    border:none;
-    border-radius:8px;
-    padding:14px;
-    font-size:16px;
-    font-weight:600;
-    cursor:pointer;
-    transition:.3s;
+
+/* =========================================================
+   SUBMIT BUTTON
+   ========================================================= */
+
+.contact-form-card button {
+    position: relative;
+
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    margin-top: 6px;
+
+    padding: 14px 22px;
+
+    border: 1px solid #e8b84b;
+    border-radius: 10px;
+
+    background: #e8b84b;
+
+    color: #0b1d3a;
+
+    font-family:
+            "Inter",
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            sans-serif;
+
+    font-size: 0.95rem;
+    font-weight: 750;
+
+    cursor: pointer;
+
+    transition:
+            background 0.2s ease,
+            border-color 0.2s ease,
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
 }
 
-.contact-form-card button:hover{
-    background:#1d4ed8;
+.contact-form-card button:hover {
+    background: #f0c663;
+    border-color: #f0c663;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+            0 8px 20px rgba(232, 184, 75, 0.2);
 }
 
-/************* INFO *************/
-
-.contact-info{
-    display:flex;
-    flex-direction:column;
-    gap:24px;
+.contact-form-card button:active {
+    transform: translateY(0);
 }
 
-.info-card{
-    background:white;
-    border:1px solid #dbeafe;
-    border-radius:16px;
-    padding:24px;
-    display:flex;
-    align-items:center;
-    gap:18px;
-    box-shadow:0 5px 18px rgba(0,0,0,.06);
+.contact-form-card button:focus-visible {
+    outline: none;
+
+    box-shadow:
+            0 0 0 3px rgba(232, 184, 75, 0.2),
+            0 8px 20px rgba(232, 184, 75, 0.15);
 }
 
-.info-icon{
-    width:50px;
-    height:50px;
-    border-radius:12px;
-    background:#eef4ff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:#2563eb;
-    font-size:22px;
+
+/* =========================================================
+   CONTACT INFORMATION
+   ========================================================= */
+
+.contact-info {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
 }
 
-.info-card h3{
-    color:#0d2d68;
-    margin-bottom:6px;
+
+/* =========================================================
+   INFO CARD
+   ========================================================= */
+
+.info-card {
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    min-height: 92px;
+
+    padding: 22px;
+
+    background: rgba(255, 255, 255, 0.94);
+
+    border: 1px solid #e5eaf1;
+    border-radius: 17px;
+
+    box-shadow:
+            0 2px 5px rgba(15, 23, 42, 0.02),
+            0 10px 25px rgba(15, 23, 42, 0.04);
+
+    transition:
+            transform 0.25s ease,
+            border-color 0.25s ease,
+            box-shadow 0.25s ease;
 }
 
-.info-card p{
-    color:#64748b;
+.info-card:hover {
+    transform: translateY(-3px);
+
+    border-color: rgba(232, 184, 75, 0.35);
+
+    box-shadow:
+            0 10px 28px rgba(15, 23, 42, 0.07);
 }
 
-/************* Responsive *************/
 
-@media(max-width:900px){
+/* =========================================================
+   INFO ICON
+   ========================================================= */
 
-    .contact-content{
-        grid-template-columns:1fr;
+.info-icon {
+    flex: 0 0 auto;
+
+    width: 50px;
+    height: 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 14px;
+
+    background: rgba(232, 184, 75, 0.12);
+
+    border: 1px solid rgba(232, 184, 75, 0.2);
+
+    color: #d49f2e;
+
+    font-size: 19px;
+
+    transition:
+            background 0.25s ease,
+            transform 0.25s ease;
+}
+
+.info-card:hover .info-icon {
+    background: rgba(232, 184, 75, 0.18);
+
+    transform: scale(1.04);
+}
+
+
+/* =========================================================
+   INFO TEXT
+   ========================================================= */
+
+.info-card h3 {
+    margin: 0 0 5px;
+
+    font-family:
+            "Inter",
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            sans-serif;
+
+    font-size: 0.98rem;
+    font-weight: 700;
+
+    color: #0b1d3a;
+}
+
+.info-card p {
+    margin: 0;
+
+    font-family:
+            "Inter",
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            sans-serif;
+
+    font-size: 0.91rem;
+    line-height: 1.5;
+
+    color: #64748b;
+
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+    .contact-page {
+        padding: 72px 20px 80px;
     }
 
-    .contact-header h1{
-        font-size:2rem;
+    .contact-header {
+        margin-bottom: 48px;
     }
 
-    .contact-header p{
-        font-size:17px;
+    .contact-content {
+        grid-template-columns: 1fr;
+        gap: 20px;
     }
 
+    .contact-info {
+        display: grid;
+
+        grid-template-columns: repeat(3, 1fr);
+
+        gap: 14px;
+    }
+
+    .info-card {
+        min-height: 150px;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        justify-content: center;
+
+        gap: 14px;
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 650px) {
+    .contact-page {
+        padding: 58px 16px 70px;
+    }
+
+    .contact-header {
+        margin-bottom: 40px;
+    }
+
+    .contact-header::before {
+        width: 38px;
+        height: 3px;
+
+        margin-bottom: 18px;
+    }
+
+    .contact-header h1 {
+        font-size: 1.9rem;
+    }
+
+    .contact-header p {
+        font-size: 0.96rem;
+        line-height: 1.65;
+    }
+
+    .contact-form-card {
+        padding: 25px 20px;
+
+        border-radius: 17px;
+    }
+
+    .contact-form-card h2 {
+        font-size: 1.2rem;
+
+        margin-bottom: 24px;
+    }
+
+    .form-group {
+        margin-bottom: 17px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        padding: 12px 13px;
+
+        font-size: 0.92rem;
+    }
+
+    .form-group textarea {
+        min-height: 130px;
+    }
+
+    .contact-info {
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 12px;
+    }
+
+    .info-card {
+        min-height: auto;
+
+        flex-direction: row;
+
+        align-items: center;
+
+        padding: 18px;
+    }
+
+    .info-icon {
+        width: 46px;
+        height: 46px;
+
+        border-radius: 12px;
+
+        font-size: 17px;
+    }
+
+    .info-card h3 {
+        font-size: 0.94rem;
+    }
+
+    .info-card p {
+        font-size: 0.87rem;
+    }
+}
+
+
+/* =========================================================
+   ACCESSIBILITÉ
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    .contact-form-card button,
+    .info-card,
+    .info-icon {
+        transition: none;
+    }
+
+    .contact-form-card button:hover,
+    .info-card:hover {
+        transform: none;
+    }
 }
