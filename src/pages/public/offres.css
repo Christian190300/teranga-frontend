@@ -294,3 +294,24 @@
         justify-content: center;
     }
 }
+
+/* ---------- CTA "Postuler" — empilé sur mobile ---------- */
+@media (max-width: 640px) {
+    .offre-detail__cta {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        position: sticky;
+        bottom: 12px;
+        padding: 16px 18px;
+    }
+
+    .offre-detail__cta > div:first-child {
+        text-align: center;
+    }
+
+    .offre-detail__cta .btn-gold {
+        width: 100%;
+        justify-content: center;
+    }
+}
