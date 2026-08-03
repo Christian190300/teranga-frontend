@@ -1,9 +1,15 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import "./footer.css";
 
 const ANNEE = new Date().getFullYear();
 
 export function Footer() {
+    const { isAuthenticated, currentUser } = useAuth();
+
+    const estCandidat = currentUser?.role === "CANDIDAT";
+    const estRecruteur = currentUser?.role === "RECRUTEUR";
+
     return (
         <footer className="footer">
             <div className="footer__accent" aria-hidden="true" />
@@ -51,16 +57,35 @@ export function Footer() {
                         <h3>Candidats</h3>
                         <Link to="/offres">Offres d'emploi</Link>
                         <Link to="/formations">Formations</Link>
-                        <Link to="/inscription?role=candidat">Créer mon profil</Link>
-                        <Link to="/connexion">Suivre mes candidatures</Link>
+                        {estCandidat ? (
+                            <>
+                                <Link to="/candidat/profil">Mon profil</Link>
+                                <Link to="/candidat/candidatures">Mes candidatures</Link>
+                            </>
+                        ) : (
+                            <>
+                                <Link to="/inscription?role=candidat">Créer mon profil</Link>
+                                <Link to="/connexion">Suivre mes candidatures</Link>
+                            </>
+                        )}
                     </div>
 
                     {/* RECRUTEURS */}
                     <div className="footer__column">
                         <h3>Recruteurs</h3>
-                        <Link to="/inscription?role=recruteur">Publier une offre</Link>
-                        <Link to="/connexion">Espace recruteur</Link>
-                        <Link to="/a-propos">Pourquoi nous choisir</Link>
+                        {estRecruteur ? (
+                            <>
+                                <Link to="/recruteur/offres/nouvelle">Publier une offre</Link>
+                                <Link to="/recruteur/offres">Mes offres</Link>
+                                <Link to="/recruteur/candidatures">Candidatures reçues</Link>
+                            </>
+                        ) : (
+                            <>
+                                <Link to="/inscription?role=recruteur">Publier une offre</Link>
+                                <Link to="/connexion">Espace recruteur</Link>
+                                <Link to="/a-propos">Pourquoi nous choisir</Link>
+                            </>
+                        )}
                     </div>
 
                     {/* ENTREPRISE */}
@@ -68,6 +93,7 @@ export function Footer() {
                         <h3>Talent Sénégal</h3>
                         <Link to="/a-propos">À propos</Link>
                         <Link to="/contact">Nous contacter</Link>
+                        {!isAuthenticated && <Link to="/connexion">Se connecter</Link>}
                     </div>
 
                     {/* CONTACT */}
