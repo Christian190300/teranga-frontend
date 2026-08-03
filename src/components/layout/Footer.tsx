@@ -52,7 +52,7 @@ export function Footer() {
                         <Link to="/offres">Offres d'emploi</Link>
                         <Link to="/formations">Formations</Link>
                         <Link to="/inscription?role=candidat">Créer mon profil</Link>
-                        <Link to="/candidat/candidatures">Suivre mes candidatures</Link>
+                        <Link to="/inscription?role=candidat">Suivre mes candidatures</Link>
                     </div>
 
                     {/* RECRUTEURS */}
