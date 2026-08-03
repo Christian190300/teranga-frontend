@@ -726,6 +726,21 @@ body {
     background: rgba(20, 41, 77, 0.06);
 }
 
+.page-transition {
+    animation: page-slide-in 0.35s ease-out;
+}
+
+@keyframes page-slide-in {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* ---------- Accessibilité ---------- */
 @media (prefers-reduced-motion: reduce) {
     .home-page * {

@@ -141,7 +141,7 @@ export function Navbar() {
                             >
                                 Mon profil
                             </Link>
-                            <button type="button" className="btn btn--primary" onClick={handleDeconnexion}>
+                            <button type="button" className="btn btn--ghost" onClick={handleDeconnexion}>
                                 Se déconnecter
                             </button>
                         </>

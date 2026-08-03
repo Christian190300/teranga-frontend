@@ -1,5 +1,6 @@
 import "./AppLayout.css";
 import type { ReactNode } from "react";
+import { useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { Navbar } from "./Navbar";
 import { Sidebar } from "./Sidebar";
@@ -8,6 +9,7 @@ import { Footer } from "./Footer";
 
 export function AppLayout({ children }: { children: ReactNode }) {
     const { currentUser, isLoadingUser, isAuthenticated } = useAuth();
+    const { pathname } = useLocation();
 
     if (isAuthenticated && isLoadingUser) {
         return <div className="app-shell__boot" aria-hidden="true" />;
@@ -21,7 +23,9 @@ export function AppLayout({ children }: { children: ReactNode }) {
                 <Sidebar />
                 <div className="app-shell__main">
                     <Topbar />
-                    <main className="app-shell__content-admin">{children}</main>
+                    <main className="app-shell__content-admin page-transition" key={pathname}>
+                        {children}
+                    </main>
                 </div>
             </div>
         );
@@ -30,7 +34,9 @@ export function AppLayout({ children }: { children: ReactNode }) {
     return (
         <div className="app-shell app-shell--horizontal">
             <Navbar />
-            <div className="app-shell__content">{children}</div>
+            <div className="app-shell__content page-transition" key={pathname}>
+                {children}
+            </div>
             <Footer />
         </div>
     );

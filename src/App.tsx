@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { AppLayout } from "./components/layout/AppLayout";
 import { MaintenanceGuard } from "./components/layout/MaintenanceGuard";
+import { ScrollToTop } from "./components/layout/ScrollToTop";
 import { HomePage } from "./pages/HomePage";
 import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
@@ -37,6 +38,7 @@ export default function App() {
     return (
         <AuthProvider>
             <BrowserRouter>
+                <ScrollToTop />
                 <MaintenanceGuard>
                     <AppLayout>
                         <Routes>
