@@ -64,7 +64,7 @@ export default function ContactPage() {
                                 <div className="contact-detail__content">
                                     <span>Téléphone</span>
                                     <a href="tel:+221770000000">
-                                        +221 77 000 00 00
+                                        +221 77 707 24 24
                                     </a>
                                 </div>
                             </div>
@@ -76,7 +76,7 @@ export default function ContactPage() {
 
                                 <div className="contact-detail__content">
                                     <span>Localisation</span>
-                                    <p>Dakar, Sénégal</p>
+                                    <p>Nord Foire Dakar, Sénégal</p>
                                 </div>
                             </div>
 
