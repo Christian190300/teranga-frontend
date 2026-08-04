@@ -28,8 +28,6 @@ function versIso(valeurInput: string): string | undefined {
 const TYPES_CONTRAT: TypeContrat[] = ["CDI", "CDD", "STAGE", "FREELANCE", "INTERIM", "ALTERNANCE", "SERVICE_CIVIQUE", "TEMPS_PARTIEL"];
 const NIVEAUX_EXPERIENCE: NiveauExperience[] = ["DEBUTANT", "JUNIOR", "INTERMEDIAIRE", "SENIOR", "EXPERT"];
 const NIVEAUX_ETUDE: NiveauEtude[] = ["AUCUN", "BAC", "BAC_2", "BAC_3", "BAC_5", "DOCTORAT"];
-const [dateExpiration, setDateExpiration] = useState<string | undefined>(undefined);
-const [dateDebut, setDateDebut] = useState<string | undefined>(undefined);
 
 export function OffreFormPage() {
     const { id } = useParams<{ id?: string }>();
@@ -41,6 +39,8 @@ export function OffreFormPage() {
     const [error, setError] = useState<string | null>(null);
 
     const [titre, setTitre] = useState("");
+    const [dateExpiration, setDateExpiration] = useState<string | undefined>(undefined);   // AJOUT ICI
+    const [dateDebut, setDateDebut] = useState<string | undefined>(undefined); 
     const [secteurActivite, setSecteurActivite] = useState("");
     const [typeContrat, setTypeContrat] = useState<TypeContrat>("CDI");
     const [pays, setPays] = useState("Sénégal");
