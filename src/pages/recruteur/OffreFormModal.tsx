@@ -1,49 +1,19 @@
 import { useEffect, useState } from "react";
-import type { FormEvent } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import {
     creerOffre,
-    LABELS_NIVEAU_ETUDE,
-    LABELS_NIVEAU_EXPERIENCE,
-    LABELS_TYPE_CONTRAT,
     mettreAJourOffre,
-    NIVEAUX_ETUDE,
-    NIVEAUX_EXPERIENCE,
     obtenirOffre,
     TYPES_CONTRAT,
+    NIVEAUX_EXPERIENCE,
+    NIVEAUX_ETUDE,
+    LABELS_TYPE_CONTRAT,
+    LABELS_NIVEAU_EXPERIENCE,
+    LABELS_NIVEAU_ETUDE,
 } from "../../api/offreService";
-import type { NiveauEtude, NiveauExperience, OffreDTO, TypeContrat, UpsertOffreDTO } from "../../api/offreService";
-import "./OffreFormModal.css";
-
-const DTO_VIDE: UpsertOffreDTO = {
-    titre: "",
-    secteurActivite: "",
-    typeContrat: "CDI",
-    dateExpiration: undefined,
-    pays: "Sénégal",
-    region: "",
-    ville: "",
-    adresse: "",
-    teletravail: false,
-    hybride: false,
-    description: "",
-    missions: [],
-    profilRecherche: "",
-    niveauExperience: undefined,
-    experienceMinimum: undefined,
-    niveauEtude: undefined,
-    competences: [],
-    langues: [],
-    certifications: [],
-    salaireMin: undefined,
-    salaireMax: undefined,
-    devise: "FCFA",
-    salaireVisible: true,
-    avantages: [],
-    nombrePostes: 1,
-    dateDebut: undefined,
-    disponibiliteSouhaitee: "",
-    horaires: "",
-};
+import type { TypeContrat, NiveauExperience, NiveauEtude, UpsertOffrePayload } from "../../api/offreService";
+import { TagListEditor } from "../../components/common/TagListEditor";
+import "../offres/offres.css";
 
 function versInputDate(iso?: string): string {
     return iso ? iso.slice(0, 10) : "";
@@ -53,461 +23,398 @@ function versIso(valeurInput: string): string | undefined {
     return valeurInput ? new Date(`${valeurInput}T00:00:00`).toISOString() : undefined;
 }
 
-interface OffreFormModalProps {
-    /** Présent = édition d'une offre existante. Absent = création. */
-    offreId?: number;
-    onFermer: () => void;
-    /** Appelé avec l'offre créée/modifiée après un enregistrement réussi. */
-    onEnregistre: (offre: OffreDTO) => void;
-}
+export function OffreFormPage() {
+    const { id } = useParams<{ id?: string }>();
+    const navigate = useNavigate();
+    const modeEdition = Boolean(id);
 
-export function OffreFormModal({ offreId, onFermer, onEnregistre }: OffreFormModalProps) {
-    const modeEdition = offreId !== undefined;
+    const [loading, setLoading] = useState(modeEdition);
+    const [saving, setSaving] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
-    const [dto, setDto] = useState<UpsertOffreDTO>(DTO_VIDE);
-    const [chargement, setChargement] = useState(modeEdition);
-    const [envoi, setEnvoi] = useState(false);
-    const [erreur, setErreur] = useState<string | null>(null);
+    const [titre, setTitre] = useState("");
+    const [secteurActivite, setSecteurActivite] = useState("");
+    const [typeContrat, setTypeContrat] = useState<TypeContrat>("CDI");
+    const [dateExpiration, setDateExpiration] = useState<string | undefined>(undefined);
+    const [pays, setPays] = useState("Sénégal");
+    const [region, setRegion] = useState("");
+    const [ville, setVille] = useState("");
+    const [adresse, setAdresse] = useState("");
+    const [teletravail, setTeletravail] = useState(false);
+    const [hybride, setHybride] = useState(false);
+    const [description, setDescription] = useState("");
+    const [missions, setMissions] = useState<string[]>([]);
+    const [profilRecherche, setProfilRecherche] = useState("");
+    const [niveauExperience, setNiveauExperience] = useState<NiveauExperience | "">("");
+    const [experienceMinimum, setExperienceMinimum] = useState<number | "">("");
+    const [niveauEtude, setNiveauEtude] = useState<NiveauEtude | "">("");
+    const [competences, setCompetences] = useState<string[]>([]);
+    const [langues, setLangues] = useState<string[]>([]);
+    const [certifications, setCertifications] = useState<string[]>([]);
+    const [salaireMin, setSalaireMin] = useState<number | "">("");
+    const [salaireMax, setSalaireMax] = useState<number | "">("");
+    const [salaireVisible, setSalaireVisible] = useState(true);
+    const [avantages, setAvantages] = useState<string[]>([]);
+    const [nombrePostes, setNombrePostes] = useState<number | "">(1);
+    const [dateDebut, setDateDebut] = useState<string | undefined>(undefined);
+    const [disponibiliteSouhaitee, setDisponibiliteSouhaitee] = useState("");
+    const [horaires, setHoraires] = useState("");
 
     useEffect(() => {
-        if (offreId === undefined) return;
-        // eslint-disable-next-line react-hooks/set-state-in-effect -- fetch au montage, pattern standard
-        (async () => {
-            setChargement(true);
+        if (!modeEdition) return;
+        async function charger() {
             try {
-                const offre = await obtenirOffre(offreId);
-                setDto({
-                    titre: offre.titre,
-                    secteurActivite: offre.secteurActivite ?? "",
-                    typeContrat: offre.typeContrat,
-                    dateExpiration: offre.dateExpiration ?? undefined,
-                    pays: offre.pays ?? "",
-                    region: offre.region ?? "",
-                    ville: offre.ville ?? "",
-                    adresse: offre.adresse ?? "",
-                    teletravail: offre.teletravail ?? false,
-                    hybride: offre.hybride ?? false,
-                    description: offre.description ?? "",
-                    missions: offre.missions ?? [],
-                    profilRecherche: offre.profilRecherche ?? "",
-                    niveauExperience: offre.niveauExperience ?? undefined,
-                    experienceMinimum: offre.experienceMinimum ?? undefined,
-                    niveauEtude: offre.niveauEtude ?? undefined,
-                    competences: offre.competences ?? [],
-                    langues: offre.langues ?? [],
-                    certifications: offre.certifications ?? [],
-                    salaireMin: offre.salaireMin ?? undefined,
-                    salaireMax: offre.salaireMax ?? undefined,
-                    devise: offre.devise ?? "FCFA",
-                    salaireVisible: offre.salaireVisible ?? true,
-                    avantages: offre.avantages ?? [],
-                    nombrePostes: offre.nombrePostes ?? 1,
-                    dateDebut: offre.dateDebut ?? undefined,
-                    disponibiliteSouhaitee: offre.disponibiliteSouhaitee ?? "",
-                    horaires: offre.horaires ?? "",
-                });
+                const offre = await obtenirOffre(Number(id));
+                setTitre(offre.titre);
+                setSecteurActivite(offre.secteurActivite ?? "");
+                setTypeContrat(offre.typeContrat);
+                setDateExpiration(offre.dateExpiration ?? undefined);
+                setPays(offre.pays ?? "");
+                setRegion(offre.region ?? "");
+                setVille(offre.ville ?? "");
+                setAdresse(offre.adresse ?? "");
+                setTeletravail(offre.teletravail ?? false);
+                setHybride(offre.hybride ?? false);
+                setDescription(offre.description ?? "");
+                setMissions(offre.missions ?? []);
+                setProfilRecherche(offre.profilRecherche ?? "");
+                setNiveauExperience(offre.niveauExperience ?? "");
+                setExperienceMinimum(offre.experienceMinimum ?? "");
+                setNiveauEtude(offre.niveauEtude ?? "");
+                setCompetences(offre.competences ?? []);
+                setLangues(offre.langues ?? []);
+                setCertifications(offre.certifications ?? []);
+                setSalaireMin(offre.salaireMin ?? "");
+                setSalaireMax(offre.salaireMax ?? "");
+                setSalaireVisible(offre.salaireVisible ?? true);
+                setAvantages(offre.avantages ?? []);
+                setNombrePostes(offre.nombrePostes ?? 1);
+                setDateDebut(offre.dateDebut ?? undefined);
+                setDisponibiliteSouhaitee(offre.disponibiliteSouhaitee ?? "");
+                setHoraires(offre.horaires ?? "");
             } catch {
-                setErreur("Impossible de charger cette offre.");
+                setError("Impossible de charger cette offre.");
             } finally {
-                setChargement(false);
+                setLoading(false);
             }
-        })();
-    }, [offreId]);
+        }
+        charger();
+    }, [id, modeEdition]);
 
-    function champ<K extends keyof UpsertOffreDTO>(cle: K, valeur: UpsertOffreDTO[K]) {
-        setDto((prev) => ({ ...prev, [cle]: valeur }));
-    }
-
-    async function handleSubmit(e: FormEvent) {
+    async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        setEnvoi(true);
-        setErreur(null);
+        setError(null);
+        setSaving(true);
+
+        const payload: UpsertOffrePayload = {
+            titre,
+            secteurActivite: secteurActivite || undefined,
+            typeContrat,
+            dateExpiration,
+            pays: pays || undefined,
+            region: region || undefined,
+            ville: ville || undefined,
+            adresse: adresse || undefined,
+            teletravail,
+            hybride,
+            description: description || undefined,
+            missions,
+            profilRecherche: profilRecherche || undefined,
+            niveauExperience: niveauExperience || undefined,
+            experienceMinimum: experienceMinimum === "" ? undefined : Number(experienceMinimum),
+            niveauEtude: niveauEtude || undefined,
+            competences,
+            langues,
+            certifications,
+            salaireMin: salaireMin === "" ? undefined : Number(salaireMin),
+            salaireMax: salaireMax === "" ? undefined : Number(salaireMax),
+            salaireVisible,
+            avantages,
+            nombrePostes: nombrePostes === "" ? undefined : Number(nombrePostes),
+            dateDebut,
+            disponibiliteSouhaitee: disponibiliteSouhaitee || undefined,
+            horaires: horaires || undefined,
+        };
+
         try {
-            const offre = modeEdition ? await mettreAJourOffre(offreId!, dto) : await creerOffre(dto);
-            onEnregistre(offre);
+            if (modeEdition) {
+                await mettreAJourOffre(Number(id), payload);
+            } else {
+                await creerOffre(payload);
+            }
+            navigate("/recruteur/offres");
         } catch {
-            setErreur("L'enregistrement a échoué. Vérifie les champs obligatoires.");
+            setError("Impossible d'enregistrer l'offre. Vérifiez les champs obligatoires (titre, type de contrat).");
         } finally {
-            setEnvoi(false);
+            setSaving(false);
         }
     }
 
+    if (loading) {
+        return <div className="offres-page__loading">Chargement de l'offre...</div>;
+    }
+
     return (
-        <div className="offre-modal__backdrop" onClick={onFermer}>
-            <div className="offre-modal" onClick={(e) => e.stopPropagation()}>
-                <div className="offre-modal__head">
-                    <div>
-                        <h2 className="offre-modal__title">{modeEdition ? "Modifier l'offre" : "Nouvelle offre"}</h2>
-                        <p className="offre-modal__subtitle">
-                            {modeEdition
-                                ? "Les modifications s'appliquent immédiatement, même si l'offre est déjà publiée."
-                                : "L'offre est créée en brouillon — tu pourras la publier ensuite."}
-                        </p>
+        <div className="offres-page">
+            <div className="offres-page__header">
+                <div>
+                    <h1 className="offres-page__title">{modeEdition ? "Modifier l'offre" : "Nouvelle offre"}</h1>
+                    <p className="offres-page__subtitle">
+                        {modeEdition ? "Vos changements ne seront visibles qu'après enregistrement." : "L'offre sera créée en brouillon."}
+                    </p>
+                </div>
+            </div>
+
+            {error && <div className="offre-message--error">{error}</div>}
+
+            <form onSubmit={handleSubmit}>
+                <div className="offre-form-card">
+                    <p className="offre-form-card__section-title">Informations générales</p>
+                    <div className="offre-field">
+                        <label htmlFor="titre">Titre du poste *</label>
+                        <input id="titre" required value={titre} onChange={(e) => setTitre(e.target.value)} placeholder="Développeur Full Stack" />
                     </div>
-                    <button type="button" className="offre-modal__close" onClick={onFermer} aria-label="Fermer">
-                        ×
+                    <div className="offre-field-row">
+                        <div className="offre-field">
+                            <label htmlFor="secteurActivite">Secteur d'activité</label>
+                            <input id="secteurActivite" value={secteurActivite} onChange={(e) => setSecteurActivite(e.target.value)} />
+                        </div>
+                        <div className="offre-field">
+                            <label htmlFor="typeContrat">Type de contrat *</label>
+                            <select id="typeContrat" value={typeContrat} onChange={(e) => setTypeContrat(e.target.value as TypeContrat)}>
+                                {TYPES_CONTRAT.map((t) => (
+                                    <option key={t} value={t}>
+                                        {LABELS_TYPE_CONTRAT[t]}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+                    <div className="offre-field-row">
+                        <div className="offre-field">
+                            <label htmlFor="dateExpiration">Date d'expiration</label>
+                            <input
+                                id="dateExpiration"
+                                type="date"
+                                min={new Date().toISOString().slice(0, 10)}
+                                value={versInputDate(dateExpiration)}
+                                onChange={(e) => setDateExpiration(versIso(e.target.value))}
+                            />
+                            <p className="offre-field__hint">
+                                Après cette date, plus personne ne pourra postuler. Laissez vide si l'offre n'expire pas.
+                            </p>
+                        </div>
+                        <div className="offre-field">
+                            <label htmlFor="nombrePostes">Nombre de postes</label>
+                            <input
+                                id="nombrePostes"
+                                type="number"
+                                min={1}
+                                value={nombrePostes}
+                                onChange={(e) => setNombrePostes(e.target.value === "" ? "" : Number(e.target.value))}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="offre-form-card">
+                    <p className="offre-form-card__section-title">Localisation</p>
+                    <div className="offre-field-row offre-field-row--3">
+                        <div className="offre-field">
+                            <label htmlFor="ville">Ville</label>
+                            <input id="ville" value={ville} onChange={(e) => setVille(e.target.value)} />
+                        </div>
+                        <div className="offre-field">
+                            <label htmlFor="region">Région</label>
+                            <input id="region" value={region} onChange={(e) => setRegion(e.target.value)} />
+                        </div>
+                        <div className="offre-field">
+                            <label htmlFor="pays">Pays</label>
+                            <input id="pays" value={pays} onChange={(e) => setPays(e.target.value)} />
+                        </div>
+                    </div>
+                    <div className="offre-field">
+                        <label htmlFor="adresse">Adresse</label>
+                        <input id="adresse" value={adresse} onChange={(e) => setAdresse(e.target.value)} />
+                    </div>
+                    <div className="offre-field-row">
+                        <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                            <input type="checkbox" checked={teletravail} onChange={(e) => setTeletravail(e.target.checked)} />
+                            Télétravail possible
+                        </label>
+                        <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                            <input type="checkbox" checked={hybride} onChange={(e) => setHybride(e.target.checked)} />
+                            Mode hybride
+                        </label>
+                    </div>
+                </div>
+
+                <div className="offre-form-card">
+                    <p className="offre-form-card__section-title">Description du poste</p>
+                    <div className="offre-field">
+                        <label htmlFor="description">Description</label>
+                        <textarea id="description" rows={5} value={description} onChange={(e) => setDescription(e.target.value)} />
+                    </div>
+                    <div className="offre-field">
+                        <label>Missions</label>
+                        <TagListEditor
+                            values={missions}
+                            onChange={setMissions}
+                            placeholder="Ex : Développer de nouvelles fonctionnalités, puis Entrée"
+                            emptyLabel="Aucune mission ajoutée."
+                        />
+                    </div>
+                </div>
+
+                <div className="offre-form-card">
+                    <p className="offre-form-card__section-title">Profil recherché</p>
+                    <div className="offre-field">
+                        <label htmlFor="profilRecherche">Profil recherché</label>
+                        <textarea id="profilRecherche" rows={4} value={profilRecherche} onChange={(e) => setProfilRecherche(e.target.value)} />
+                    </div>
+                    <div className="offre-field-row offre-field-row--3">
+                        <div className="offre-field">
+                            <label htmlFor="niveauExperience">Niveau d'expérience</label>
+                            <select
+                                id="niveauExperience"
+                                value={niveauExperience}
+                                onChange={(e) => setNiveauExperience(e.target.value as NiveauExperience)}
+                            >
+                                <option value="">Non précisé</option>
+                                {NIVEAUX_EXPERIENCE.map((n) => (
+                                    <option key={n} value={n}>
+                                        {LABELS_NIVEAU_EXPERIENCE[n]}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="offre-field">
+                            <label htmlFor="experienceMinimum">Expérience min. (années)</label>
+                            <input
+                                id="experienceMinimum"
+                                type="number"
+                                min={0}
+                                value={experienceMinimum}
+                                onChange={(e) => setExperienceMinimum(e.target.value === "" ? "" : Number(e.target.value))}
+                            />
+                        </div>
+                        <div className="offre-field">
+                            <label htmlFor="niveauEtude">Niveau d'étude</label>
+                            <select id="niveauEtude" value={niveauEtude} onChange={(e) => setNiveauEtude(e.target.value as NiveauEtude)}>
+                                <option value="">Non précisé</option>
+                                {NIVEAUX_ETUDE.map((n) => (
+                                    <option key={n} value={n}>
+                                        {LABELS_NIVEAU_ETUDE[n]}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+                    <div className="offre-field">
+                        <label>Compétences requises</label>
+                        <TagListEditor
+                            values={competences}
+                            onChange={setCompetences}
+                            placeholder="Ex : Java, puis Entrée"
+                            emptyLabel="Aucune compétence ajoutée."
+                        />
+                    </div>
+                    <div className="offre-field">
+                        <label>Langues</label>
+                        <TagListEditor
+                            values={langues}
+                            onChange={setLangues}
+                            placeholder="Ex : Français, puis Entrée"
+                            emptyLabel="Aucune langue ajoutée."
+                        />
+                    </div>
+                    <div className="offre-field">
+                        <label>Certifications souhaitées</label>
+                        <TagListEditor
+                            values={certifications}
+                            onChange={setCertifications}
+                            placeholder="Ex : AWS Certified, puis Entrée"
+                            emptyLabel="Aucune certification ajoutée."
+                        />
+                    </div>
+                </div>
+
+                <div className="offre-form-card">
+                    <p className="offre-form-card__section-title">Rémunération & avantages</p>
+                    <div className="offre-field-row">
+                        <div className="offre-field">
+                            <label htmlFor="salaireMin">Salaire minimum</label>
+                            <input
+                                id="salaireMin"
+                                type="number"
+                                min={0}
+                                value={salaireMin}
+                                onChange={(e) => setSalaireMin(e.target.value === "" ? "" : Number(e.target.value))}
+                            />
+                        </div>
+                        <div className="offre-field">
+                            <label htmlFor="salaireMax">Salaire maximum</label>
+                            <input
+                                id="salaireMax"
+                                type="number"
+                                min={0}
+                                value={salaireMax}
+                                onChange={(e) => setSalaireMax(e.target.value === "" ? "" : Number(e.target.value))}
+                            />
+                        </div>
+                    </div>
+                    <label style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }}>
+                        <input type="checkbox" checked={salaireVisible} onChange={(e) => setSalaireVisible(e.target.checked)} />
+                        Afficher le salaire publiquement
+                    </label>
+                    <div className="offre-field">
+                        <label>Avantages</label>
+                        <TagListEditor
+                            values={avantages}
+                            onChange={setAvantages}
+                            placeholder="Ex : Assurance santé, puis Entrée"
+                            emptyLabel="Aucun avantage ajouté."
+                        />
+                    </div>
+                </div>
+
+                <div className="offre-form-card">
+                    <p className="offre-form-card__section-title">Informations complémentaires</p>
+                    <div className="offre-field-row">
+                        <div className="offre-field">
+                            <label htmlFor="dateDebut">Date de début souhaitée</label>
+                            <input
+                                id="dateDebut"
+                                type="date"
+                                value={versInputDate(dateDebut)}
+                                onChange={(e) => setDateDebut(versIso(e.target.value))}
+                            />
+                        </div>
+                        <div className="offre-field">
+                            <label htmlFor="disponibiliteSouhaitee">Disponibilité souhaitée</label>
+                            <input
+                                id="disponibiliteSouhaitee"
+                                value={disponibiliteSouhaitee}
+                                onChange={(e) => setDisponibiliteSouhaitee(e.target.value)}
+                                placeholder="Immédiate"
+                            />
+                        </div>
+                    </div>
+                    <div className="offre-field">
+                        <label htmlFor="horaires">Horaires</label>
+                        <input id="horaires" value={horaires} onChange={(e) => setHoraires(e.target.value)} placeholder="Temps plein, 9h-18h" />
+                    </div>
+                </div>
+
+                <div className="offre-form-actions">
+                    <button type="button" className="btn-secondary" onClick={() => navigate("/recruteur/offres")}>
+                        Annuler
+                    </button>
+                    <button type="submit" className="btn-primary" disabled={saving}>
+                        {saving ? "Enregistrement..." : modeEdition ? "Enregistrer" : "Créer l'offre"}
                     </button>
                 </div>
-
-                {chargement ? (
-                    <div className="offre-modal__loading">Chargement…</div>
-                ) : (
-                    <form className="offre-form" onSubmit={handleSubmit}>
-                        {erreur && <div className="offre-form-alert">{erreur}</div>}
-
-                        <div className="offre-form__body">
-                            {/* ---------- Informations générales ---------- */}
-                            <section className="offre-form__section">
-                                <h3>Informations générales</h3>
-                                <div className="offre-form__grid">
-                                    <label className="offre-form__field offre-form__field--wide">
-                                        <span>Titre du poste *</span>
-                                        <input
-                                            required
-                                            maxLength={200}
-                                            value={dto.titre}
-                                            onChange={(e) => champ("titre", e.target.value)}
-                                        />
-                                    </label>
-                                    <label className="offre-form__field">
-                                        <span>Secteur d'activité</span>
-                                        <input
-                                            maxLength={150}
-                                            value={dto.secteurActivite}
-                                            onChange={(e) => champ("secteurActivite", e.target.value)}
-                                        />
-                                    </label>
-                                    <label className="offre-form__field">
-                                        <span>Type de contrat *</span>
-                                        <select
-                                            required
-                                            value={dto.typeContrat}
-                                            onChange={(e) => champ("typeContrat", e.target.value as TypeContrat)}
-                                        >
-                                            {TYPES_CONTRAT.map((t) => (
-                                                <option key={t} value={t}>
-                                                    {LABELS_TYPE_CONTRAT[t]}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </label>
-                                    <label className="offre-form__field">
-                                        <span>Date d'expiration</span>
-                                        <input
-                                            type="date"
-                                            min={new Date().toISOString().slice(0, 10)}
-                                            value={versInputDate(dto.dateExpiration)}
-                                            onChange={(e) => champ("dateExpiration", versIso(e.target.value))}
-                                        />
-                                        <small style={{ fontWeight: 400, color: "var(--om-muted)" }}>
-                                            Après cette date, plus personne ne pourra postuler. Laissez vide si l'offre n'expire pas.
-                                        </small>
-                                    </label>
-                                    <label className="offre-form__field">
-                                        <span>Nombre de postes</span>
-                                        <input
-                                            type="number"
-                                            min={1}
-                                            value={dto.nombrePostes ?? ""}
-                                            onChange={(e) =>
-                                                champ("nombrePostes", e.target.value ? Number(e.target.value) : undefined)
-                                            }
-                                        />
-                                    </label>
-                                </div>
-                            </section>
-
-                            {/* ---------- Localisation ---------- */}
-                            <section className="offre-form__section">
-                                <h3>Localisation</h3>
-                                <div className="offre-form__grid">
-                                    <label className="offre-form__field">
-                                        <span>Pays</span>
-                                        <input value={dto.pays} onChange={(e) => champ("pays", e.target.value)} />
-                                    </label>
-                                    <label className="offre-form__field">
-                                        <span>Région</span>
-                                        <input value={dto.region} onChange={(e) => champ("region", e.target.value)} />
-                                    </label>
-                                    <label className="offre-form__field">
-                                        <span>Ville</span>
-                                        <input value={dto.ville} onChange={(e) => champ("ville", e.target.value)} />
-                                    </label>
-                                    <label className="offre-form__field offre-form__field--wide">
-                                        <span>Adresse</span>
-                                        <input value={dto.adresse} onChange={(e) => champ("adresse", e.target.value)} />
-                                    </label>
-                                    <label className="offre-form__checkbox">
-                                        <input
-                                            type="checkbox"
-                                            checked={dto.teletravail ?? false}
-                                            onChange={(e) => champ("teletravail", e.target.checked)}
-                                        />
-                                        <span>Télétravail possible</span>
-                                    </label>
-                                    <label className="offre-form__checkbox">
-                                        <input
-                                            type="checkbox"
-                                            checked={dto.hybride ?? false}
-                                            onChange={(e) => champ("hybride", e.target.checked)}
-                                        />
-                                        <span>Poste hybride</span>
-                                    </label>
-                                </div>
-                            </section>
-
-                            {/* ---------- Description du poste ---------- */}
-                            <section className="offre-form__section">
-                                <h3>Description du poste</h3>
-                                <label className="offre-form__field offre-form__field--wide">
-                                    <span>Description</span>
-                                    <textarea
-                                        rows={4}
-                                        maxLength={4000}
-                                        value={dto.description}
-                                        onChange={(e) => champ("description", e.target.value)}
-                                    />
-                                </label>
-                                <TagListField
-                                    label="Missions"
-                                    valeurs={dto.missions ?? []}
-                                    onChange={(v) => champ("missions", v)}
-                                    placeholder="Ajouter une mission et valider"
-                                />
-                            </section>
-
-                            {/* ---------- Profil recherché ---------- */}
-                            <section className="offre-form__section">
-                                <h3>Profil recherché</h3>
-                                <label className="offre-form__field offre-form__field--wide">
-                                    <span>Profil recherché</span>
-                                    <textarea
-                                        rows={3}
-                                        maxLength={2000}
-                                        value={dto.profilRecherche}
-                                        onChange={(e) => champ("profilRecherche", e.target.value)}
-                                    />
-                                </label>
-                                <div className="offre-form__grid">
-                                    <label className="offre-form__field">
-                                        <span>Niveau d'expérience</span>
-                                        <select
-                                            value={dto.niveauExperience ?? ""}
-                                            onChange={(e) =>
-                                                champ(
-                                                    "niveauExperience",
-                                                    (e.target.value || undefined) as NiveauExperience | undefined
-                                                )
-                                            }
-                                        >
-                                            <option value="">—</option>
-                                            {NIVEAUX_EXPERIENCE.map((n) => (
-                                                <option key={n} value={n}>
-                                                    {LABELS_NIVEAU_EXPERIENCE[n]}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </label>
-                                    <label className="offre-form__field">
-                                        <span>Années d'expérience minimum</span>
-                                        <input
-                                            type="number"
-                                            min={0}
-                                            value={dto.experienceMinimum ?? ""}
-                                            onChange={(e) =>
-                                                champ(
-                                                    "experienceMinimum",
-                                                    e.target.value ? Number(e.target.value) : undefined
-                                                )
-                                            }
-                                        />
-                                    </label>
-                                    <label className="offre-form__field">
-                                        <span>Niveau d'étude</span>
-                                        <select
-                                            value={dto.niveauEtude ?? ""}
-                                            onChange={(e) =>
-                                                champ("niveauEtude", (e.target.value || undefined) as NiveauEtude | undefined)
-                                            }
-                                        >
-                                            <option value="">—</option>
-                                            {NIVEAUX_ETUDE.map((n) => (
-                                                <option key={n} value={n}>
-                                                    {LABELS_NIVEAU_ETUDE[n]}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </label>
-                                </div>
-                                <TagListField
-                                    label="Compétences"
-                                    valeurs={dto.competences ?? []}
-                                    onChange={(v) => champ("competences", v)}
-                                    placeholder="Ajouter une compétence et valider"
-                                />
-                                <TagListField
-                                    label="Langues"
-                                    valeurs={dto.langues ?? []}
-                                    onChange={(v) => champ("langues", v)}
-                                    placeholder="Ajouter une langue et valider"
-                                />
-                                <TagListField
-                                    label="Certifications"
-                                    valeurs={dto.certifications ?? []}
-                                    onChange={(v) => champ("certifications", v)}
-                                    placeholder="Ajouter une certification et valider"
-                                />
-                            </section>
-
-                            {/* ---------- Salaire ---------- */}
-                            <section className="offre-form__section">
-                                <h3>Salaire</h3>
-                                <div className="offre-form__grid">
-                                    <label className="offre-form__field">
-                                        <span>Salaire minimum</span>
-                                        <input
-                                            type="number"
-                                            min={0}
-                                            value={dto.salaireMin ?? ""}
-                                            onChange={(e) =>
-                                                champ("salaireMin", e.target.value ? Number(e.target.value) : undefined)
-                                            }
-                                        />
-                                    </label>
-                                    <label className="offre-form__field">
-                                        <span>Salaire maximum</span>
-                                        <input
-                                            type="number"
-                                            min={0}
-                                            value={dto.salaireMax ?? ""}
-                                            onChange={(e) =>
-                                                champ("salaireMax", e.target.value ? Number(e.target.value) : undefined)
-                                            }
-                                        />
-                                    </label>
-                                    <label className="offre-form__field">
-                                        <span>Devise</span>
-                                        <input value={dto.devise} onChange={(e) => champ("devise", e.target.value)} />
-                                    </label>
-                                    <label className="offre-form__checkbox">
-                                        <input
-                                            type="checkbox"
-                                            checked={dto.salaireVisible ?? true}
-                                            onChange={(e) => champ("salaireVisible", e.target.checked)}
-                                        />
-                                        <span>Afficher le salaire publiquement</span>
-                                    </label>
-                                </div>
-                                <TagListField
-                                    label="Avantages"
-                                    valeurs={dto.avantages ?? []}
-                                    onChange={(v) => champ("avantages", v)}
-                                    placeholder="Ajouter un avantage et valider"
-                                />
-                            </section>
-
-                            {/* ---------- Informations complémentaires ---------- */}
-                            <section className="offre-form__section">
-                                <h3>Informations complémentaires</h3>
-                                <div className="offre-form__grid">
-                                    <label className="offre-form__field">
-                                        <span>Date de début souhaitée</span>
-                                        <input
-                                            type="date"
-                                            value={versInputDate(dto.dateDebut)}
-                                            onChange={(e) => champ("dateDebut", versIso(e.target.value))}
-                                        />
-                                    </label>
-                                    <label className="offre-form__field">
-                                        <span>Disponibilité souhaitée</span>
-                                        <input
-                                            maxLength={100}
-                                            value={dto.disponibiliteSouhaitee}
-                                            onChange={(e) => champ("disponibiliteSouhaitee", e.target.value)}
-                                        />
-                                    </label>
-                                    <label className="offre-form__field">
-                                        <span>Horaires</span>
-                                        <input
-                                            maxLength={150}
-                                            value={dto.horaires}
-                                            onChange={(e) => champ("horaires", e.target.value)}
-                                        />
-                                    </label>
-                                </div>
-                            </section>
-                        </div>
-
-                        <div className="offre-modal__actions">
-                            <button type="button" className="offres-btn offres-btn--ghost" onClick={onFermer}>
-                                Annuler
-                            </button>
-                            <button type="submit" className="offres-btn offres-btn--primary" disabled={envoi}>
-                                {envoi ? "Enregistrement…" : modeEdition ? "Enregistrer les modifications" : "Créer l'offre"}
-                            </button>
-                        </div>
-                    </form>
-                )}
-            </div>
-        </div>
-    );
-}
-
-function TagListField({
-                          label,
-                          valeurs,
-                          onChange,
-                          placeholder,
-                      }: {
-    label: string;
-    valeurs: string[];
-    onChange: (valeurs: string[]) => void;
-    placeholder: string;
-}) {
-    const [saisie, setSaisie] = useState("");
-
-    function ajouter() {
-        const valeur = saisie.trim();
-        if (!valeur || valeurs.includes(valeur)) {
-            setSaisie("");
-            return;
-        }
-        onChange([...valeurs, valeur]);
-        setSaisie("");
-    }
-
-    function retirer(valeur: string) {
-        onChange(valeurs.filter((v) => v !== valeur));
-    }
-
-    return (
-        <div className="offre-form__field offre-form__field--wide offre-tags">
-            <span>{label}</span>
-            <div className="offre-tags__input-row">
-                <input
-                    value={saisie}
-                    placeholder={placeholder}
-                    onChange={(e) => setSaisie(e.target.value)}
-                    onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                            e.preventDefault();
-                            ajouter();
-                        }
-                    }}
-                />
-                <button type="button" className="offres-btn offres-btn--ghost" onClick={ajouter}>
-                    Ajouter
-                </button>
-            </div>
-            {valeurs.length > 0 && (
-                <div className="offre-tags__list">
-                    {valeurs.map((v) => (
-                        <button type="button" key={v} className="offre-tag" onClick={() => retirer(v)}>
-                            {v} ×
-                        </button>
-                    ))}
-                </div>
-            )}
+            </form>
         </div>
     );
 }
