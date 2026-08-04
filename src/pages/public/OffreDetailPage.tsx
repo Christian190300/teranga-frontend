@@ -7,6 +7,7 @@ import {
     LABELS_NIVEAU_ETUDE,
     type OffreDTO,
 } from "../../api/offreService";
+import { postulerOffre, aDejaPostule } from "../../api/candidatureService";
 import { useAuth } from "../../context/AuthContext";
 import { getCouleurContrat } from "../offres/offreColors";
 import "./offres.css";
@@ -28,6 +29,11 @@ function initiales(nom: string | null): string {
     return nom.slice(0, 2).toUpperCase();
 }
 
+function estExpiree(offre: OffreDTO): boolean {
+    if (!offre.dateExpiration) return false;
+    return new Date(offre.dateExpiration) < new Date();
+}
+
 export function OffreDetailPage() {
     const { id } = useParams<{ id: string }>();
     const { currentUser } = useAuth();
@@ -38,6 +44,7 @@ export function OffreDetailPage() {
     const [error, setError] = useState<string | null>(null);
     const [postulationEnvoyee, setPostulationEnvoyee] = useState(false);
     const [postulationEnCours, setPostulationEnCours] = useState(false);
+    const [postulationErreur, setPostulationErreur] = useState<string | null>(null);
 
     useEffect(() => {
         async function charger() {
@@ -45,6 +52,11 @@ export function OffreDetailPage() {
             try {
                 const data = await obtenirOffre(Number(id));
                 setOffre(data);
+
+                if (currentUser?.role === "CANDIDAT") {
+                    const deja = await aDejaPostule(Number(id));
+                    setPostulationEnvoyee(deja);
+                }
             } catch {
                 setError("Cette offre est introuvable ou n'est plus disponible.");
             } finally {
@@ -52,7 +64,7 @@ export function OffreDetailPage() {
             }
         }
         charger();
-    }, [id]);
+    }, [id, currentUser?.role]);
 
     function retour() {
         if (window.history.length > 1) {
@@ -63,11 +75,14 @@ export function OffreDetailPage() {
     }
 
     async function handlePostuler() {
-        // TODO : brancher sur postulerOffre() de candidatureService, comme fait dans OffresPubliquesPage.
+        if (!offre) return;
+        setPostulationErreur(null);
         setPostulationEnCours(true);
         try {
-            await new Promise((resolve) => setTimeout(resolve, 600));
+            await postulerOffre(offre.id);
             setPostulationEnvoyee(true);
+        } catch {
+            setPostulationErreur("Impossible d'envoyer votre candidature. Vérifiez que votre CV est bien renseigné dans votre profil.");
         } finally {
             setPostulationEnCours(false);
         }
@@ -88,6 +103,7 @@ export function OffreDetailPage() {
     const lieu = [offre.ville, offre.region, offre.pays].filter(Boolean).join(", ");
     const salaire = formatSalaire(offre);
     const estCandidat = currentUser?.role === "CANDIDAT";
+    const expiree = estExpiree(offre);
 
     return (
         <div className="offre-detail">
@@ -118,6 +134,11 @@ export function OffreDetailPage() {
                     {offre.teletravail && <span className="offre-detail__tag">Télétravail</span>}
                     {offre.hybride && <span className="offre-detail__tag">Hybride</span>}
                     {offre.niveauExperience && <span className="offre-detail__tag">{LABELS_NIVEAU_EXPERIENCE[offre.niveauExperience]}</span>}
+                    {expiree && (
+                        <span className="offre-detail__tag" style={{ background: "#b3261e", color: "white" }}>
+                            Expirée
+                        </span>
+                    )}
                 </div>
             </div>
 
@@ -247,6 +268,15 @@ export function OffreDetailPage() {
                         <div className="offre-detail__fact-label">Publiée le</div>
                         <div className="offre-detail__fact-value">{formatDate(offre.datePublication)}</div>
                     </div>
+                    {offre.dateExpiration && (
+                        <div>
+                            <div className="offre-detail__fact-label">Date d'expiration</div>
+                            <div className="offre-detail__fact-value" style={expiree ? { color: "#b3261e" } : undefined}>
+                                {formatDate(offre.dateExpiration)}
+                                {expiree && " (expirée)"}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -257,15 +287,30 @@ export function OffreDetailPage() {
                             {salaire ?? "Salaire non communiqué"}
                         </div>
                         <div className="offre-detail__cta-info">
-                            {postulationEnvoyee ? "Candidature envoyée ✓" : "Postulez en un clic"}
+                            {expiree
+                                ? "Cette offre a expiré"
+                                : postulationEnvoyee
+                                    ? "Candidature envoyée ✓"
+                                    : "Postulez en un clic"}
                         </div>
+                        {postulationErreur && (
+                            <div className="offre-detail__cta-info" style={{ color: "#b3261e", marginTop: 4 }}>
+                                {postulationErreur}
+                            </div>
+                        )}
                     </div>
                     <button
                         className="btn-gold"
                         onClick={handlePostuler}
-                        disabled={postulationEnCours || postulationEnvoyee}
+                        disabled={expiree || postulationEnCours || postulationEnvoyee}
                     >
-                        {postulationEnCours ? "Envoi..." : postulationEnvoyee ? "Candidature envoyée" : "Postuler"}
+                        {expiree
+                            ? "Offre expirée"
+                            : postulationEnCours
+                                ? "Envoi..."
+                                : postulationEnvoyee
+                                    ? "Candidature envoyée"
+                                    : "Postuler"}
                     </button>
                 </div>
             )}

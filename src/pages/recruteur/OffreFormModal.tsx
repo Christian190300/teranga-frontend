@@ -195,9 +195,13 @@ export function OffreFormModal({ offreId, onFermer, onEnregistre }: OffreFormMod
                                         <span>Date d'expiration</span>
                                         <input
                                             type="date"
+                                            min={new Date().toISOString().slice(0, 10)}
                                             value={versInputDate(dto.dateExpiration)}
                                             onChange={(e) => champ("dateExpiration", versIso(e.target.value))}
                                         />
+                                        <small style={{ fontWeight: 400, color: "var(--om-muted)" }}>
+                                            Après cette date, plus personne ne pourra postuler. Laissez vide si l'offre n'expire pas.
+                                        </small>
                                     </label>
                                     <label className="offre-form__field">
                                         <span>Nombre de postes</span>
