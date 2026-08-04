@@ -16,10 +16,20 @@ import { REGIONS_SENEGAL } from "../../constants/regions";
 import { PAYS } from "../../constants/pays";
 import { DISPONIBILITES } from "../../constants/disponibilites";
 
+function versInputDate(iso?: string): string {
+    return iso ? iso.slice(0, 10) : "";
+}
+
+function versIso(valeurInput: string): string | undefined {
+    return valeurInput ? new Date(`${valeurInput}T00:00:00`).toISOString() : undefined;
+}
+
+
 const TYPES_CONTRAT: TypeContrat[] = ["CDI", "CDD", "STAGE", "FREELANCE", "INTERIM", "ALTERNANCE", "SERVICE_CIVIQUE", "TEMPS_PARTIEL"];
 const NIVEAUX_EXPERIENCE: NiveauExperience[] = ["DEBUTANT", "JUNIOR", "INTERMEDIAIRE", "SENIOR", "EXPERT"];
 const NIVEAUX_ETUDE: NiveauEtude[] = ["AUCUN", "BAC", "BAC_2", "BAC_3", "BAC_5", "DOCTORAT"];
-
+const [dateExpiration, setDateExpiration] = useState<string | undefined>(undefined);
+const [dateDebut, setDateDebut] = useState<string | undefined>(undefined);
 
 export function OffreFormPage() {
     const { id } = useParams<{ id?: string }>();
@@ -86,6 +96,8 @@ export function OffreFormPage() {
                 setNombrePostes(offre.nombrePostes ?? 1);
                 setDisponibiliteSouhaitee(offre.disponibiliteSouhaitee ?? "");
                 setHoraires(offre.horaires ?? "");
+                setDateExpiration(offre.dateExpiration ?? undefined);
+                setDateDebut(offre.dateDebut ?? undefined);
             } catch {
                 setError("Impossible de charger cette offre.");
             } finally {
@@ -102,6 +114,8 @@ export function OffreFormPage() {
 
         const payload: UpsertOffrePayload = {
             titre,
+            dateExpiration,
+            dateDebut,
             secteurActivite: secteurActivite || undefined,
             typeContrat,
             pays: pays || undefined,
@@ -193,6 +207,19 @@ export function OffreFormPage() {
                                     </option>
                                 ))}
                             </select>
+                        </div>
+                        <div className="offre-field">
+                            <label htmlFor="dateExpiration">Date d'expiration</label>
+                            <input
+                                id="dateExpiration"
+                                type="date"
+                                min={new Date().toISOString().slice(0, 10)}
+                                value={versInputDate(dateExpiration)}
+                                onChange={(e) => setDateExpiration(versIso(e.target.value))}
+                            />
+                            <p className="offre-field__hint">
+                                Après cette date, plus personne ne pourra postuler. Laissez vide si l'offre n'expire pas.
+                            </p>
                         </div>
                     </div>
                 </div>
