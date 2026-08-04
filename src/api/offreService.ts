@@ -85,7 +85,7 @@ export interface UpsertOffrePayload {
     horaires?: string;
 }
 
-/** Alias : OffreFormModal utilise ce nom, OffreFormPage utilise UpsertOffrePayload. Même forme. */
+/** Alias historique : ancien composant OffreFormModal (supprimé), remplacé par OffreFormPage. Même forme. */
 export type UpsertOffreDTO = UpsertOffrePayload;
 
 export interface SpringPage<T> {
