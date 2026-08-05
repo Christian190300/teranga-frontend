@@ -33,6 +33,7 @@ import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import { CandidaturesAdminPage } from "./pages/admin/CandidaturesAdminPage";
 import { ParametresAdminPage } from "./pages/admin/ParametresAdminPage";
+import { ImportOffresPage } from "./pages/admin/ImportOffresPage.tsx";
 
 export default function App() {
     return (
@@ -74,6 +75,8 @@ export default function App() {
                             <Route path="/premiere-connexion" element={<PremiereConnexionPage />} />
                             <Route path="/admin/candidatures" element={<CandidaturesAdminPage />} />
                             <Route path="/admin/parametres" element={<ParametresAdminPage />} />
+                            <Route path="/admin/offres" element={<OffresAdminPage />} />
+                            <Route path="/admin/offres/import" element={<ImportOffresPage />} />
                         </Routes>
                     </AppLayout>
                 </MaintenanceGuard>

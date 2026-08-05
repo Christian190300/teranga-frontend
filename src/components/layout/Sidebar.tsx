@@ -9,6 +9,7 @@ const generalLinks = [
     { to: "/admin/utilisateurs", label: "Utilisateurs", icon: <IconUsers /> },
     { to: "/admin/entreprises", label: "Entreprises", icon: <IconBuilding /> },
     { to: "/admin/offres", label: "Offres", icon: <IconBriefcase /> },
+    { to: "/admin/offres/import", label: "Import SENJOB", icon: <IconBriefcase /> },
     { to: "/admin/candidatures", label: "Candidatures", icon: <IconBriefcase /> },
     { to: "/admin/formations", label: "Creer Formation", icon: <IconBriefcase /> },
 ];

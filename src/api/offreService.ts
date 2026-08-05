@@ -52,6 +52,10 @@ export interface OffreDTO {
     nomEntreprise: string | null;
     secteurActiviteEntreprise: string | null;
     logoPresent: boolean;
+
+    // ... champs existants
+    source: string | null;
+    urlSource: string | null;
 }
 
 export interface UpsertOffrePayload {
