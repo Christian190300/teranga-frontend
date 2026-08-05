@@ -94,7 +94,7 @@ export function OffresAdminPage() {
                                     </div>
 
                                     <div className="offre-tile__footer">
-                                        <span className="offre-tile__date">Recruteur : {offre.recruteurId.slice(0, 8)}…</span>
+                                        <span className="offre-tile__date">Recruteur : {offre.recruteurId ? `${offre.recruteurId.slice(0, 8)}…` : "Import automatique"}</span>
                                         <button
                                             className="btn-secondary btn-danger"
                                             disabled={suppressionEnCours === offre.id}
