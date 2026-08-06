@@ -92,9 +92,9 @@ body {
 
 /* Le conteneur occupe toute la largeur ; seul un padding fixe cadre le contenu */
 .home-page .home-container {
-    max-width: var(--page-max-width);
-    margin: 0 auto;
-    padding: 0 var(--page-padding);
+    width: 100%;
+    margin: 0;
+    padding: 0 var(--sp-6);
 }
 
 @media (max-width: 1024px) {
