@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { obtenirCandidatsPourOffre } from "../../api/matchingService";
 import type { MatchCandidatDTO } from "../../api/matchingService";
-import { ScoreCompatibilite } from "../../components/matching/ScoreCompatibilite";
+import { CandidatMatchCard } from "../../components/matching/CandidatMatchCard";
 
 export function CandidatsMatchesPage() {
     const { id } = useParams<{ id: string }>();
@@ -31,28 +31,9 @@ export function CandidatsMatchesPage() {
         <div className="offres-page">
             <h1 className="offres-page__title">Candidats correspondants</h1>
             {matches.length === 0 && <p>Aucun candidat dans la base pour le moment.</p>}
-            <div className="offre-form-card">
-                {matches.map((m) => (
-                    <div
-                        key={m.profilCandidat.id}
-                        style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            padding: "16px 0",
-                            borderBottom: "1px solid #eee",
-                        }}
-                    >
-                        <div>
-                            <strong>{m.profilCandidat.titreProfessionnel || "Candidat"}</strong>
-                            <p style={{ margin: 0, color: "#666", fontSize: 14 }}>
-                                {m.profilCandidat.ville}, {m.profilCandidat.pays} · {m.profilCandidat.anneesExperience ?? 0} an(s) d'expérience
-                            </p>
-                        </div>
-                        <ScoreCompatibilite score={m.score} />
-                    </div>
-                ))}
-            </div>
+            {matches.map((m) => (
+                <CandidatMatchCard key={m.profilCandidat.id} match={m} />
+            ))}
         </div>
     );
 }
