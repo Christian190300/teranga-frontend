@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
     listerOffresPubliques,
+    listerSecteursDisponibles,
     obtenirOffre,
     LABELS_TYPE_CONTRAT,
     LABELS_NIVEAU_EXPERIENCE,
@@ -41,10 +42,10 @@ export function OffresPubliquesPage() {
     const [error, setError] = useState<string | null>(null);
 
     // --- Filtres ---
-    const [villeInput, setVilleInput] = useState("");
-    const [secteurInput, setSecteurInput] = useState("");
-    const [villeAppliquee, setVilleAppliquee] = useState("");
-    const [secteurApplique, setSecteurApplique] = useState("");
+    const [rechercheInput, setRechercheInput] = useState("");
+    const [rechercheAppliquee, setRechercheAppliquee] = useState("");
+    const [secteurs, setSecteurs] = useState<string[]>([]);
+    const [secteurSelectionne, setSecteurSelectionne] = useState("");
 
     const [modalOffreId, setModalOffreId] = useState<number | null>(null);
     const [modalOffre, setModalOffre] = useState<OffreDTO | null>(null);
@@ -54,15 +55,21 @@ export function OffresPubliquesPage() {
     const [etapeCandidature, setEtapeCandidature] = useState<EtapeCandidature>("idle");
 
     const estCandidat = currentUser?.role === "CANDIDAT";
-    const filtresActifs = villeAppliquee !== "" || secteurApplique !== "";
+    const filtresActifs = rechercheAppliquee !== "" || secteurSelectionne !== "";
+
+    useEffect(() => {
+        listerSecteursDisponibles()
+            .then(setSecteurs)
+            .catch(() => setSecteurs([]));
+    }, []);
 
     useEffect(() => {
         async function charger() {
             setLoading(true);
             try {
                 const data = await listerOffresPubliques(page, TAILLE_PAGE, {
-                    ville: villeAppliquee,
-                    secteurActivite: secteurApplique,
+                    recherche: rechercheAppliquee,
+                    secteurActivite: secteurSelectionne,
                 });
                 setOffres(data.content);
                 setTotalPages(data.totalPages);
@@ -73,7 +80,7 @@ export function OffresPubliquesPage() {
             }
         }
         charger();
-    }, [page, villeAppliquee, secteurApplique]);
+    }, [page, rechercheAppliquee, secteurSelectionne]);
 
     useEffect(() => {
         function handleKeyDown(e: KeyboardEvent) {
@@ -86,15 +93,18 @@ export function OffresPubliquesPage() {
     function lancerRecherche(e: React.FormEvent) {
         e.preventDefault();
         setPage(0);
-        setVilleAppliquee(villeInput.trim());
-        setSecteurApplique(secteurInput.trim());
+        setRechercheAppliquee(rechercheInput.trim());
+    }
+
+    function handleChangerSecteur(e: React.ChangeEvent<HTMLSelectElement>) {
+        setSecteurSelectionne(e.target.value);
+        setPage(0);
     }
 
     function reinitialiserFiltres() {
-        setVilleInput("");
-        setSecteurInput("");
-        setVilleAppliquee("");
-        setSecteurApplique("");
+        setRechercheInput("");
+        setRechercheAppliquee("");
+        setSecteurSelectionne("");
         setPage(0);
     }
 
@@ -116,7 +126,6 @@ export function OffresPubliquesPage() {
         }
     }
 
-    /** Clic sur "Postuler" depuis une tuile : ouvre le modal directement sur le formulaire. */
     async function handleClicPostulerDepuisTuile(e: React.MouseEvent, offreId: number) {
         e.stopPropagation();
         await ouvrirModal(offreId);
@@ -143,32 +152,36 @@ export function OffresPubliquesPage() {
             </div>
 
             <form className="offres-filtres" onSubmit={lancerRecherche}>
-                <div className="offres-filtres__champ">
-                    <label htmlFor="filtre-ville" className="offres-filtres__label">
-                        Ville
-                    </label>
+                <div className="offres-filtres__search">
+                    <svg className="offres-filtres__search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" />
+                        <path d="M20 20L16.65 16.65" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                    </svg>
                     <input
-                        id="filtre-ville"
                         type="text"
-                        placeholder="ex: Dakar"
-                        value={villeInput}
-                        onChange={(e) => setVilleInput(e.target.value)}
-                        className="offres-filtres__input"
+                        placeholder="Rechercher un poste, une ville..."
+                        value={rechercheInput}
+                        onChange={(e) => setRechercheInput(e.target.value)}
+                        className="offres-filtres__search-input"
                     />
                 </div>
 
-                <div className="offres-filtres__champ">
-                    <label htmlFor="filtre-secteur" className="offres-filtres__label">
-                        Secteur d'activité
-                    </label>
-                    <input
-                        id="filtre-secteur"
-                        type="text"
-                        placeholder="ex: Marketing, Informatique..."
-                        value={secteurInput}
-                        onChange={(e) => setSecteurInput(e.target.value)}
-                        className="offres-filtres__input"
-                    />
+                <div className="offres-filtres__select-wrap">
+                    <select
+                        value={secteurSelectionne}
+                        onChange={handleChangerSecteur}
+                        className="offres-filtres__select"
+                    >
+                        <option value="">Tous les secteurs</option>
+                        {secteurs.map((s) => (
+                            <option key={s} value={s}>
+                                {s}
+                            </option>
+                        ))}
+                    </select>
+                    <svg className="offres-filtres__select-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
                 </div>
 
                 <div className="offres-filtres__actions">
@@ -186,10 +199,17 @@ export function OffresPubliquesPage() {
             {error && <div className="offre-message--error">{error}</div>}
 
             {loading ? (
-                <div className="offres-page__loading">Chargement des offres...</div>
+                <div className="offres-skeleton-grid">
+                    {Array.from({ length: TAILLE_PAGE }).map((_, i) => (
+                        <div key={i} className="offre-skeleton" />
+                    ))}
+                </div>
             ) : offres.length === 0 ? (
                 <div className="offres-page__empty">
-                    {filtresActifs ? "Aucune offre ne correspond à votre recherche." : "Aucune offre disponible pour le moment."}
+                    <div className="offres-page__empty-icon" />
+                    <p className="offres-page__empty-title">
+                        {filtresActifs ? "Aucune offre ne correspond à votre recherche." : "Aucune offre disponible pour le moment."}
+                    </p>
                 </div>
             ) : (
                 <>
@@ -243,7 +263,7 @@ export function OffresPubliquesPage() {
                                     </div>
 
                                     {estCandidat && offre.statut === "PUBLIEE" && (
-                                        <button className="btn-gold" onClick={(e) => handleClicPostulerDepuisTuile(e, offre.id)}>
+                                        <button className="btn-gold offre-tile__postuler" onClick={(e) => handleClicPostulerDepuisTuile(e, offre.id)}>
                                             Postuler
                                         </button>
                                     )}
@@ -282,7 +302,15 @@ export function OffresPubliquesPage() {
                             </div>
                         ) : (
                             <>
-                                <div className="offre-modal__header">
+                                <div
+                                    className="offre-modal__header"
+                                    style={
+                                        {
+                                            "--contrat-color": getCouleurContrat(modalOffre.typeContrat).bar,
+                                            "--contrat-color-soft": getCouleurContrat(modalOffre.typeContrat).bg,
+                                        } as React.CSSProperties
+                                    }
+                                >
                                     <button className="offre-modal__close" onClick={fermerModal} aria-label="Fermer">
                                         ✕
                                     </button>
@@ -313,7 +341,6 @@ export function OffresPubliquesPage() {
                                 </div>
 
                                 <div className="offre-modal__body">
-                                    {/* --- Formulaire / confirmation de candidature --- */}
                                     {estCandidat && etapeCandidature !== "idle" && (
                                         <div className="offre-detail__section">
                                             {etapeCandidature === "formulaire" && (

@@ -6,7 +6,7 @@ export type NiveauExperience = "DEBUTANT" | "JUNIOR" | "INTERMEDIAIRE" | "SENIOR
 export type NiveauEtude = "AUCUN" | "BAC" | "BAC_2" | "BAC_3" | "BAC_5" | "DOCTORAT";
 
 export interface FiltresOffres {
-    ville?: string;
+    recherche?: string;
     secteurActivite?: string;
 }
 
@@ -113,10 +113,16 @@ export async function listerOffresPubliques(
     filtres: FiltresOffres = {}
 ): Promise<SpringPage<OffreDTO>> {
     const params: Record<string, string | number> = { page, size };
-    if (filtres.ville) params.ville = filtres.ville;
+    if (filtres.recherche) params.recherche = filtres.recherche;
     if (filtres.secteurActivite) params.secteurActivite = filtres.secteurActivite;
 
     const response = await httpClient.get<SpringPage<OffreDTO>>("/offres", { params });
+    return response.data;
+}
+
+/** GET /api/offres/secteurs — liste des secteurs disponibles pour le filtre. */
+export async function listerSecteursDisponibles(): Promise<string[]> {
+    const response = await httpClient.get<string[]>("/offres/secteurs");
     return response.data;
 }
 

@@ -37,46 +37,111 @@
 .offres-filtres {
     display: flex;
     flex-wrap: wrap;
-    align-items: flex-end;
-    gap: 16px;
-    background: #ffffff;
-    border: 1px solid #e5e8ee;
-    border-radius: 12px;
-    padding: 16px 20px;
-    margin-bottom: 24px;
+    align-items: center;
+    gap: 14px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 14px 18px;
+    margin-bottom: 32px;
+    box-shadow: var(--shadow-card);
 }
 
-.offres-filtres__champ {
+.offres-filtres__search {
+    position: relative;
+    flex: 2;
+    min-width: 240px;
     display: flex;
-    flex-direction: column;
-    gap: 6px;
-    flex: 1;
-    min-width: 180px;
+    align-items: center;
 }
 
-.offres-filtres__label {
-    font-family: "Inter", sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    color: #14294d;
+.offres-filtres__search-icon {
+    position: absolute;
+    left: 14px;
+    width: 17px;
+    height: 17px;
+    color: var(--navy-mist);
+    pointer-events: none;
 }
 
-.offres-filtres__input {
-    font-family: "Inter", sans-serif;
-    font-size: 14px;
-    padding: 10px 12px;
-    border: 1px solid #d7dbe3;
-    border-radius: 8px;
+.offres-filtres__search-input {
+    width: 100%;
+    padding: 12px 14px 12px 40px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-soft);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--navy-ink);
+    transition: border-color 0.18s var(--ease), background 0.18s var(--ease), box-shadow 0.18s var(--ease);
+}
+
+.offres-filtres__search-input::placeholder {
+    color: var(--navy-mist);
+}
+
+.offres-filtres__search-input:focus {
     outline: none;
+    border-color: var(--gold);
+    background: white;
+    box-shadow: 0 0 0 3px var(--gold-soft);
 }
 
-.offres-filtres__input:focus {
-    border-color: #c8951e;
+.offres-filtres__select-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 200px;
+}
+
+.offres-filtres__select {
+    width: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+    padding: 12px 40px 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-soft);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--navy);
+    cursor: pointer;
+    transition: border-color 0.18s var(--ease), background 0.18s var(--ease), box-shadow 0.18s var(--ease);
+}
+
+.offres-filtres__select:focus {
+    outline: none;
+    border-color: var(--gold);
+    background: white;
+    box-shadow: 0 0 0 3px var(--gold-soft);
+}
+
+.offres-filtres__select-arrow {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--gold-deep);
+    width: 14px;
+    height: 14px;
 }
 
 .offres-filtres__actions {
     display: flex;
     gap: 8px;
+    flex-shrink: 0;
+}
+
+@media (max-width: 720px) {
+    .offres-filtres {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .offres-filtres__actions {
+        justify-content: flex-end;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
