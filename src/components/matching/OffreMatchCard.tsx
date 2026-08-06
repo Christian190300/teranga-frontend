@@ -15,7 +15,7 @@ function formatDate(dateIso: string | null): string | null {
     if (!dateIso) return null;
     const d = new Date(dateIso);
     if (Number.isNaN(d.getTime())) return null;
-    return d.toLocaleDateString("fr-FR");
+    return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
 }
 
 interface OffreMatchCardProps {
@@ -28,7 +28,7 @@ export function OffreMatchCard({ match }: OffreMatchCardProps) {
     const publieeLe = formatDate(offre.datePublication);
 
     return (
-        <div className="match-card">
+        <Link to={`/offres/${offre.id}`} className="match-card">
             <div className="match-card__body">
                 <div className="match-card__logo">
                     {offre.logoPresent ? (
@@ -39,30 +39,30 @@ export function OffreMatchCard({ match }: OffreMatchCardProps) {
                 </div>
 
                 <div className="match-card__infos">
-                    <h3 className="match-card__titre">{offre.titre}</h3>
                     {offre.nomEntreprise && <p className="match-card__entreprise">{offre.nomEntreprise}</p>}
-                    <p className="match-card__meta">
-                        <span>{LABELS_TYPE_CONTRAT[offre.typeContrat]}</span>
-                        {publieeLe && <span>{publieeLe}</span>}
-                    </p>
+                    <h3 className="match-card__titre">{offre.titre}</h3>
+
+                    <div className="match-card__tags">
+                        <span className="match-card__tag">{LABELS_TYPE_CONTRAT[offre.typeContrat]}</span>
+                        {localisation && <span className="match-card__tag">{localisation}</span>}
+                        {publieeLe && <span className="match-card__tag match-card__tag--muted">Publiée le {publieeLe}</span>}
+                    </div>
+
                     {offre.description && <p className="match-card__description">{offre.description}</p>}
-                    {localisation && (
-                        <p className="match-card__region">
-                            <strong>Région de :</strong> {localisation}
-                        </p>
-                    )}
                 </div>
 
                 <div className="match-card__score">
                     <ScoreGauge score={score} />
+                    <span className="match-card__score-label">Correspondance</span>
                 </div>
             </div>
 
             <div className="match-card__footer">
-                <Link to={`/offres/${offre.id}`} className="btn-primary btn-rounded">
+                <span className="match-card__cta">
                     Voir le détail
-                </Link>
+                    <span aria-hidden="true">→</span>
+                </span>
             </div>
-        </div>
+        </Link>
     );
 }
