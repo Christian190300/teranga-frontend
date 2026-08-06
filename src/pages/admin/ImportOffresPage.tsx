@@ -1,45 +1,60 @@
 import { useState } from "react";
 import { importerOffresSenjob } from "../../api/offreImport.service";
-import "../offres/offres.css";
+import "./importSenjob.css";
+
+type EtatImport = "idle" | "en-cours" | "succes" | "erreur";
 
 export function ImportOffresPage() {
-    const [loading, setLoading] = useState(false);
-    const [resultat, setResultat] = useState<string | null>(null);
-    const [erreur, setErreur] = useState<string | null>(null);
+    const [etat, setEtat] = useState<EtatImport>("idle");
+    const [message, setMessage] = useState<string | null>(null);
 
-    async function handleImporter() {
-        setLoading(true);
-        setErreur(null);
-        setResultat(null);
+    async function lancerImport() {
+        setEtat("en-cours");
+        setMessage(null);
         try {
-            const message = await importerOffresSenjob();
-            setResultat(message);
+            const resultat = await importerOffresSenjob();
+            setMessage(resultat);
+            setEtat("succes");
         } catch {
-            setErreur("Échec de l'import. Vérifie les logs backend.");
-        } finally {
-            setLoading(false);
+            setMessage("Impossible de lancer l'import. Vérifiez votre connexion ou réessayez plus tard.");
+            setEtat("erreur");
         }
     }
 
     return (
-        <div className="offres-page">
-            <div className="offres-page__header">
-                <div>
-                    <h1 className="offres-page__title">Import d'offres — SENJOB</h1>
-                    <p className="offres-page__subtitle">Déclenche le scraping et l'import automatique des offres SENJOB.</p>
-                </div>
+        <div className="import-senjob-page">
+            <div className="import-senjob-page__header">
+                <h1 className="import-senjob-page__title">Import SENJOB</h1>
+                <p className="import-senjob-page__subtitle">
+                    Récupère les dernières offres publiées sur SENJOB et les ajoute à la plateforme.
+                </p>
             </div>
 
-            {erreur && <div className="offre-message--error">{erreur}</div>}
+            <div className="import-senjob-card">
+                <div className="import-senjob-card__icon">↓</div>
 
-            <button className="btn-gold" disabled={loading} onClick={handleImporter} style={{ marginTop: 16 }}>
-                {loading ? "Import en cours..." : "Importer depuis SENJOB"}
-            </button>
-
-            {resultat && (
-                <div className="offre-message--error" style={{ background: "#e6f4ea", color: "#1e7e34", marginTop: 16 }}>
-                    {resultat}
+                <div className="import-senjob-card__body">
+                    <p className="import-senjob-card__label">Source</p>
+                    <p className="import-senjob-card__value">senjob.com/sn/offres-d-emploi.php</p>
                 </div>
+
+                <button
+                    className="btn-gold"
+                    onClick={lancerImport}
+                    disabled={etat === "en-cours"}
+                >
+                    {etat === "en-cours" ? "Import en cours..." : "Lancer l'import"}
+                </button>
+            </div>
+
+            {etat === "succes" && message && (
+                <div className="import-senjob-message import-senjob-message--succes">
+                    ✓ {message}
+                </div>
+            )}
+
+            {etat === "erreur" && message && (
+                <div className="offre-message--error">{message}</div>
             )}
         </div>
     );
