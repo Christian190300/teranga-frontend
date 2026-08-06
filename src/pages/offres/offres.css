@@ -34,6 +34,51 @@
     box-sizing: border-box;
 }
 
+.offres-filtres {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 16px;
+    background: #ffffff;
+    border: 1px solid #e5e8ee;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+}
+
+.offres-filtres__champ {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    min-width: 180px;
+}
+
+.offres-filtres__label {
+    font-family: "Inter", sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: #14294d;
+}
+
+.offres-filtres__input {
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    padding: 10px 12px;
+    border: 1px solid #d7dbe3;
+    border-radius: 8px;
+    outline: none;
+}
+
+.offres-filtres__input:focus {
+    border-color: #c8951e;
+}
+
+.offres-filtres__actions {
+    display: flex;
+    gap: 8px;
+}
+
 @media (prefers-reduced-motion: reduce) {
     .offres-page *,
     .offre-detail *,

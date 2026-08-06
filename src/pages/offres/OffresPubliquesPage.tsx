@@ -40,6 +40,12 @@ export function OffresPubliquesPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+    // --- Filtres ---
+    const [villeInput, setVilleInput] = useState("");
+    const [secteurInput, setSecteurInput] = useState("");
+    const [villeAppliquee, setVilleAppliquee] = useState("");
+    const [secteurApplique, setSecteurApplique] = useState("");
+
     const [modalOffreId, setModalOffreId] = useState<number | null>(null);
     const [modalOffre, setModalOffre] = useState<OffreDTO | null>(null);
     const [loadingModal, setLoadingModal] = useState(false);
@@ -48,12 +54,16 @@ export function OffresPubliquesPage() {
     const [etapeCandidature, setEtapeCandidature] = useState<EtapeCandidature>("idle");
 
     const estCandidat = currentUser?.role === "CANDIDAT";
+    const filtresActifs = villeAppliquee !== "" || secteurApplique !== "";
 
     useEffect(() => {
         async function charger() {
             setLoading(true);
             try {
-                const data = await listerOffresPubliques(page, TAILLE_PAGE);
+                const data = await listerOffresPubliques(page, TAILLE_PAGE, {
+                    ville: villeAppliquee,
+                    secteurActivite: secteurApplique,
+                });
                 setOffres(data.content);
                 setTotalPages(data.totalPages);
             } catch {
@@ -63,7 +73,7 @@ export function OffresPubliquesPage() {
             }
         }
         charger();
-    }, [page]);
+    }, [page, villeAppliquee, secteurApplique]);
 
     useEffect(() => {
         function handleKeyDown(e: KeyboardEvent) {
@@ -72,6 +82,21 @@ export function OffresPubliquesPage() {
         document.addEventListener("keydown", handleKeyDown);
         return () => document.removeEventListener("keydown", handleKeyDown);
     }, []);
+
+    function lancerRecherche(e: React.FormEvent) {
+        e.preventDefault();
+        setPage(0);
+        setVilleAppliquee(villeInput.trim());
+        setSecteurApplique(secteurInput.trim());
+    }
+
+    function reinitialiserFiltres() {
+        setVilleInput("");
+        setSecteurInput("");
+        setVilleAppliquee("");
+        setSecteurApplique("");
+        setPage(0);
+    }
 
     async function ouvrirModal(id: number) {
         setModalOffreId(id);
@@ -117,12 +142,55 @@ export function OffresPubliquesPage() {
                 </div>
             </div>
 
+            <form className="offres-filtres" onSubmit={lancerRecherche}>
+                <div className="offres-filtres__champ">
+                    <label htmlFor="filtre-ville" className="offres-filtres__label">
+                        Ville
+                    </label>
+                    <input
+                        id="filtre-ville"
+                        type="text"
+                        placeholder="ex: Dakar"
+                        value={villeInput}
+                        onChange={(e) => setVilleInput(e.target.value)}
+                        className="offres-filtres__input"
+                    />
+                </div>
+
+                <div className="offres-filtres__champ">
+                    <label htmlFor="filtre-secteur" className="offres-filtres__label">
+                        Secteur d'activité
+                    </label>
+                    <input
+                        id="filtre-secteur"
+                        type="text"
+                        placeholder="ex: Marketing, Informatique..."
+                        value={secteurInput}
+                        onChange={(e) => setSecteurInput(e.target.value)}
+                        className="offres-filtres__input"
+                    />
+                </div>
+
+                <div className="offres-filtres__actions">
+                    <button type="submit" className="btn-gold">
+                        Rechercher
+                    </button>
+                    {filtresActifs && (
+                        <button type="button" className="btn-secondary" onClick={reinitialiserFiltres}>
+                            Réinitialiser
+                        </button>
+                    )}
+                </div>
+            </form>
+
             {error && <div className="offre-message--error">{error}</div>}
 
             {loading ? (
                 <div className="offres-page__loading">Chargement des offres...</div>
             ) : offres.length === 0 ? (
-                <div className="offres-page__empty">Aucune offre disponible pour le moment.</div>
+                <div className="offres-page__empty">
+                    {filtresActifs ? "Aucune offre ne correspond à votre recherche." : "Aucune offre disponible pour le moment."}
+                </div>
             ) : (
                 <>
                     <div className="offres-grid">

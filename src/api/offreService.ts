@@ -5,6 +5,12 @@ export type StatutOffre = "BROUILLON" | "PUBLIEE" | "FERMEE" | "EXPIREE";
 export type NiveauExperience = "DEBUTANT" | "JUNIOR" | "INTERMEDIAIRE" | "SENIOR" | "EXPERT";
 export type NiveauEtude = "AUCUN" | "BAC" | "BAC_2" | "BAC_3" | "BAC_5" | "DOCTORAT";
 
+export interface FiltresOffres {
+    ville?: string;
+    secteurActivite?: string;
+}
+
+
 export interface OffreDTO {
     id: number;
     recruteurId: string;
@@ -101,8 +107,16 @@ export interface SpringPage<T> {
 }
 
 /** GET /api/offres — liste publique, uniquement les offres publiées. */
-export async function listerOffresPubliques(page = 0, size = 10): Promise<SpringPage<OffreDTO>> {
-    const response = await httpClient.get<SpringPage<OffreDTO>>("/offres", { params: { page, size } });
+export async function listerOffresPubliques(
+    page = 0,
+    size = 10,
+    filtres: FiltresOffres = {}
+): Promise<SpringPage<OffreDTO>> {
+    const params: Record<string, string | number> = { page, size };
+    if (filtres.ville) params.ville = filtres.ville;
+    if (filtres.secteurActivite) params.secteurActivite = filtres.secteurActivite;
+
+    const response = await httpClient.get<SpringPage<OffreDTO>>("/offres", { params });
     return response.data;
 }
 
