@@ -147,16 +147,23 @@ export async function refreshToken(): Promise<string | null> {
     body.set("refresh_token", refreshToken);
 
     try {
-        const response = await axios.post<TokenResponse>(url, body, {
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-            },
-        });
+
+        const response = await axios.post<TokenResponse>(
+            url,
+            body,
+            {
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+            }
+        );
+
 
         localStorage.setItem(
             "ts_access_token",
             response.data.access_token
         );
+
 
         if (response.data.refresh_token) {
             localStorage.setItem(
@@ -165,14 +172,46 @@ export async function refreshToken(): Promise<string | null> {
             );
         }
 
+
         return response.data.access_token;
 
-    } catch (error) {
-        console.error("Refresh token expiré", error);
 
-        localStorage.removeItem("ts_access_token");
-        localStorage.removeItem("ts_refresh_token");
+    } catch (error) {
+
+        console.warn(
+            "Session Keycloak expirée"
+        );
+
+        await logout();
+
+        window.location.href = "/login";
 
         return null;
+    }
+}
+export function isTokenExpired(): boolean {
+
+    const token = localStorage.getItem(
+        "ts_access_token"
+    );
+
+    if (!token) {
+        return true;
+    }
+
+
+    try {
+
+        const payload = JSON.parse(
+            atob(token.split(".")[1])
+        );
+
+
+        return payload.exp * 1000 < Date.now();
+
+
+    } catch {
+
+        return true;
     }
 }
