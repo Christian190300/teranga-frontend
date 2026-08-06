@@ -2,6 +2,13 @@
    NAVBAR — globale, cohérente avec la palette Talent Sénégal
    ============================================================ */
 
+.container {
+    width: 100%;
+    max-width: var(--page-max-width);
+    margin: 0 auto;
+    padding: 0 var(--page-padding);
+}
+
 .container,
 .container *,
 .navbar,

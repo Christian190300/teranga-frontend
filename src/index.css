@@ -26,6 +26,36 @@ body {
     color: #1f2937;
 }
 
+/* ============================================================
+   LAYOUT GLOBAL — une seule largeur de page, un seul padding,
+   partagés par toutes les pages du site
+   ============================================================ */
+
+:root {
+    --page-max-width: 1200px;
+    --page-padding: 32px;
+}
+
+@media (max-width: 1024px) {
+    :root {
+        --page-padding: 24px;
+    }
+}
+
+@media (max-width: 640px) {
+    :root {
+        --page-padding: 20px;
+    }
+}
+
+/* Classe utilitaire réutilisable si tu crées une nouvelle page plus tard */
+.page-container {
+    max-width: var(--page-max-width);
+    margin: 0 auto;
+    padding: 0 var(--page-padding);
+}
+
+
 .home-page {
     --hp-navy: #14294d;
     --hp-navy-soft: #eaf0fb;
@@ -62,9 +92,9 @@ body {
 
 /* Le conteneur occupe toute la largeur ; seul un padding fixe cadre le contenu */
 .home-page .home-container {
-    width: 100%;
-    margin: 0;
-    padding: 0 var(--sp-6);
+    max-width: var(--page-max-width);
+    margin: 0 auto;
+    padding: 0 var(--page-padding);
 }
 
 @media (max-width: 1024px) {

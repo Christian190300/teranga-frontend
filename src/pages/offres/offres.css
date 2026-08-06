@@ -163,9 +163,9 @@
 }
 
 .offres-page {
-    max-width: 1160px;
+    max-width: var(--page-max-width);
     margin: 0 auto;
-    padding: 52px 24px 96px;
+    padding: 48px var(--page-padding) 90px;;
     font-family: var(--font-body);
     background: var(--bg-page);
 }
