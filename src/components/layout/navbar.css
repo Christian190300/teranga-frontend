@@ -9,11 +9,11 @@
     box-sizing: border-box;
 }
 
-.container {
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-    padding: 0 64px;
+.navbar.container {
+    width:100%;
+    max-width:none;
+    margin:0;
+    padding:0 64px;
 }
 
 @media (max-width: 1024px) {
@@ -28,6 +28,7 @@
 }
 
 .navbar {
+    width:100%;
     position: sticky;
     top: 0;
     z-index: 50;

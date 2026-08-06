@@ -15,12 +15,21 @@
 }
 
 .matching-page {
-    max-width: 880px;
-    margin: 0 auto;
-    padding: 48px 24px 90px;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 32px 40px 90px;
     font-family: 'Inter', -apple-system, sans-serif;
 }
-
+.matching-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.match-card {
+    width: 100%;
+}
 /* ---------- Header ---------- */
 .matching-page__header {
     margin-bottom: 32px;
