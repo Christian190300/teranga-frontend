@@ -128,9 +128,14 @@ export function OffresRecruteurPage() {
                                     </button>
                                 )}
                                 {offre.statut === "PUBLIEE" && (
-                                    <button className="btn-secondary" disabled={enCours} onClick={() => handleFermer(offre.id)}>
-                                        Fermer
-                                    </button>
+                                    <>
+                                        <Link to={`/recruteur/offres/${offre.id}/candidats-matches`} className="btn-secondary">
+                                            Voir les candidats
+                                        </Link>
+                                        <button className="btn-secondary" disabled={enCours} onClick={() => handleFermer(offre.id)}>
+                                            Fermer
+                                        </button>
+                                    </>
                                 )}
                                 <button className="btn-secondary btn-danger" disabled={enCours} onClick={() => handleSupprimer(offre.id)}>
                                     Supprimer
