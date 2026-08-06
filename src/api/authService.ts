@@ -131,3 +131,48 @@ export async function demanderResetMotDePasse(email: string): Promise<void> {
 export async function reinitialiserMotDePasse(token: string, nouveauMotDePasse: string): Promise<void> {
     await httpClient.post("/auth/reinitialiser-mot-de-passe", { token, nouveauMotDePasse });
 }
+
+export async function refreshToken(): Promise<string | null> {
+    const refreshToken = localStorage.getItem("ts_refresh_token");
+
+    if (!refreshToken) {
+        return null;
+    }
+
+    const url = `${KEYCLOAK_URL}/realms/${REALM}/protocol/openid-connect/token`;
+
+    const body = new URLSearchParams();
+    body.set("grant_type", "refresh_token");
+    body.set("client_id", CLIENT_ID);
+    body.set("refresh_token", refreshToken);
+
+    try {
+        const response = await axios.post<TokenResponse>(url, body, {
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+        });
+
+        localStorage.setItem(
+            "ts_access_token",
+            response.data.access_token
+        );
+
+        if (response.data.refresh_token) {
+            localStorage.setItem(
+                "ts_refresh_token",
+                response.data.refresh_token
+            );
+        }
+
+        return response.data.access_token;
+
+    } catch (error) {
+        console.error("Refresh token expiré", error);
+
+        localStorage.removeItem("ts_access_token");
+        localStorage.removeItem("ts_refresh_token");
+
+        return null;
+    }
+}
