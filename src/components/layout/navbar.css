@@ -2,11 +2,8 @@
    NAVBAR — globale, cohérente avec la palette Talent Sénégal
    ============================================================ */
 
-.container {
-    width: 100%;
-    max-width: var(--page-max-width);
-    margin: 0 auto;
-    padding: 0 var(--page-padding);
+.navbar {
+    width:100%;
 }
 
 .container,
@@ -17,10 +14,11 @@
 }
 
 .navbar.container {
-    width:100%;
-    max-width:none;
-    margin:0;
-    padding:0 64px;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0 32px;
+    overflow: hidden;
 }
 
 @media (max-width: 1024px) {
@@ -35,7 +33,9 @@
 }
 
 .navbar {
-    width:100%;
+    width: 100%;
+    max-width: 100vw;
+    overflow: hidden;
     position: sticky;
     top: 0;
     z-index: 50;
@@ -54,6 +54,23 @@
     display: flex;
     align-items: center;
     gap: 10px;
+}
+
+.navbar__menu {
+    min-width: 0;
+}
+
+.navbar__links,
+.navbar__auth-links {
+    flex-shrink: 0;
+}
+
+.app-shell__main {
+    margin-left:260px;
+}
+
+.app-shell__main .navbar {
+    width: 100%;
 }
 
 .navbar__brand {
@@ -344,4 +361,31 @@
     .navbar__desktop-only {
         display: none;
     }
+}
+@media (max-width:1024px) {
+    .container {
+        padding:0 32px;
+    }
+}
+
+@media (max-width:1024px) {
+    .navbar.container {
+        padding:0 32px;
+    }
+}
+
+@media (max-width:640px) {
+    .navbar.container {
+        padding:0 20px;
+    }
+}
+
+html,
+body {
+    overflow-x:hidden;
+    max-width:100%;
+}
+
+* {
+    box-sizing:border-box;
 }
