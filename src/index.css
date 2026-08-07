@@ -94,16 +94,22 @@ body {
 
 .home-job-more-card {
 
+    width: fit-content;
+    height: auto;
+
+    padding: 14px 24px;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 8px;
 
-    min-height: 180px; /* même hauteur que tes cartes */
+    justify-self: center;
+    align-self: center;
 
-    border-radius: 20px;
+    border-radius: 12px;
 
-    border: 2px solid #0b1d3a;
+    border: 1px solid #0b1d3a;
 
     background: white;
 
@@ -111,20 +117,16 @@ body {
 
     text-decoration: none;
 
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 700;
 
     transition: all .25s ease;
-
 }
 
 
 .home-job-more-card strong {
-
-    font-size: 1.3rem;
-
+    font-size: 1.1rem;
 }
-
 
 
 .home-job-more-card:hover {
@@ -133,12 +135,11 @@ body {
 
     color: white;
 
-    transform: translateY(-4px);
+    transform: translateY(-3px);
 
-    box-shadow: 0 15px 30px rgba(11,29,58,.18);
+    box-shadow: 0 10px 20px rgba(11,29,58,.15);
 
 }
-
 
 @media(max-width: 1000px){
 
