@@ -86,6 +86,85 @@ body {
     text-rendering: optimizeLegibility;
 }
 
+.home-jobs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+
+/* Carte voir plus */
+.home-job-more-card {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    min-height: 180px;
+
+    border-radius: 20px;
+
+    background: linear-gradient(
+            135deg,
+            #0b1d3a,
+            #14294d
+    );
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 1rem;
+    font-weight: 700;
+
+    transition: all .25s ease;
+
+}
+
+
+.home-job-more-card strong {
+
+    font-size: 1.4rem;
+
+}
+
+
+
+.home-job-more-card:hover {
+
+    transform: translateY(-5px);
+
+    box-shadow:
+            0 20px 35px rgba(11,29,58,.25);
+
+}
+
+
+
+
+@media(max-width: 1000px){
+
+    .home-jobs-grid {
+
+        grid-template-columns: repeat(2,1fr);
+
+    }
+
+}
+
+
+
+@media(max-width:700px){
+
+    .home-jobs-grid {
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
 .home-page * {
     box-sizing: border-box;
 }
@@ -94,6 +173,20 @@ body {
     text-decoration: none;
     color: inherit;
     display: block;
+}
+
+.home-job-card {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    cursor: pointer;
+}
+
+.home-job-card__footer {
+    margin-top: 15px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--gold);
 }
 
 /* Le conteneur occupe toute la largeur ; seul un padding fixe cadre le contenu */
