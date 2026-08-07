@@ -90,6 +90,12 @@ body {
     box-sizing: border-box;
 }
 
+.home-job-card {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
 /* Le conteneur occupe toute la largeur ; seul un padding fixe cadre le contenu */
 .home-page .home-container {
     width: 100%;
