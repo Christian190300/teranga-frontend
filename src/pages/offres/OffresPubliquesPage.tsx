@@ -262,11 +262,22 @@ export function OffresPubliquesPage() {
                                         )}
                                     </div>
 
-                                    {estCandidat && offre.statut === "PUBLIEE" && (
-                                        <button className="btn-gold offre-tile__postuler" onClick={(e) => handleClicPostulerDepuisTuile(e, offre.id)}>
-                                            Postuler
+                                    <div className="offre-tile__actions">
+                                        <button
+                                            className="btn-secondary offre-tile__voir-detail"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                ouvrirModal(offre.id);
+                                            }}
+                                        >
+                                            Voir détail
                                         </button>
-                                    )}
+                                        {estCandidat && offre.statut === "PUBLIEE" && (
+                                            <button className="btn-gold offre-tile__postuler" onClick={(e) => handleClicPostulerDepuisTuile(e, offre.id)}>
+                                                Postuler
+                                            </button>
+                                        )}
+                                    </div>
                                 </div>
                             );
                         })}

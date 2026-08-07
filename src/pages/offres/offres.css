@@ -369,6 +369,25 @@
     gap: 22px;
 }
 
+.offre-tile__actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 2px;
+}
+
+.offre-tile__voir-detail {
+    flex: 1;
+    padding: 10px 16px;
+    font-size: 0.84rem;
+    justify-content: center;
+}
+
+.offre-tile__postuler {
+    flex: 1;
+    width: auto;
+    margin-top: 0;
+}
+
 @media (max-width: 1400px) {
     .offres-grid {
         grid-template-columns: repeat(3, 1fr);
