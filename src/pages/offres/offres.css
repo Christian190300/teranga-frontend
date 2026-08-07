@@ -162,10 +162,13 @@
             repeating-linear-gradient(25deg, rgba(200, 149, 30, 0.07) 0px, rgba(200, 149, 30, 0.07) 1px, transparent 1px, transparent 13px);
 }
 
+/* Page publique des offres : élargie pour la grille 4 colonnes,
+   plafonnée à 1920px pour rester lisible sur très grands écrans */
 .offres-page {
-    max-width: var(--page-max-width);
+    max-width: 1920px;
+    width: 94%;
     margin: 0 auto;
-    padding: 48px var(--page-padding) 90px;;
+    padding: 48px 0 90px;
     font-family: var(--font-body);
     background: var(--bg-page);
 }
@@ -357,13 +360,19 @@
 }
 
 /* ============================================================
-   GRILLE PUBLIQUE
+   GRILLE PUBLIQUE — 4 colonnes en desktop large
    ============================================================ */
 
 .offres-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+}
+
+@media (max-width: 1400px) {
+    .offres-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 @media (max-width: 960px) {
@@ -381,11 +390,11 @@
 .offre-tile {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 14px;
     background: white;
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    padding: 24px;
+    padding: 20px;
     text-decoration: none;
     color: inherit;
     cursor: pointer;
@@ -612,9 +621,9 @@
 }
 
 .offre-tile__logo {
-    width: 44px;
-    height: 44px;
-    border-radius: 11px;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
     background: var(--offre-color-gradient, var(--bg-soft));
     color: white;
     display: flex;
@@ -622,7 +631,8 @@
     justify-content: center;
     font-family: var(--font-display);
     font-weight: 700;
-    font-size: 0.8rem;
+    font-size: 1.1rem;
+    line-height: 1;
     letter-spacing: 0.02em;
     flex-shrink: 0;
     object-fit: cover;
@@ -646,17 +656,17 @@
 
 .offre-tile__titre {
     font-family: var(--font-display);
-    font-size: 1.05rem;
+    font-size: 0.98rem;
     font-weight: 700;
     color: var(--navy-ink);
     margin: 0;
-    line-height: 1.38;
+    line-height: 1.36;
     letter-spacing: -0.01em;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    min-height: 2.76em;
+    min-height: 2.65em;
 }
 
 .offre-tile__lieu {
@@ -748,10 +758,13 @@
 /* ---------- Skeleton (chargement) ---------- */
 .offres-skeleton-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
 }
 
+@media (max-width: 1400px) {
+    .offres-skeleton-grid { grid-template-columns: repeat(3, 1fr); }
+}
 @media (max-width: 960px) {
     .offres-skeleton-grid { grid-template-columns: repeat(2, 1fr); }
 }
@@ -760,7 +773,7 @@
 }
 
 .offre-skeleton {
-    height: 232px;
+    height: 220px;
     border-radius: var(--radius-lg);
     border: 1px solid var(--border);
     background: linear-gradient(100deg, #f4f3ef 30%, #ffffff 50%, #f4f3ef 70%);
@@ -949,7 +962,8 @@
     justify-content: center;
     font-family: var(--font-display);
     font-weight: 700;
-    font-size: 1.05rem;
+    font-size: 1.3rem;
+    line-height: 1;
     margin-bottom: 20px;
     object-fit: cover;
     color: white;

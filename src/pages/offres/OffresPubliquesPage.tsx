@@ -16,7 +16,7 @@ import { getCouleurContrat } from "./offreColors";
 import "./offres.css";
 import { aDejaPostule } from "../../api/candidatureService";
 
-const TAILLE_PAGE = 9;
+const TAILLE_PAGE = 8;
 
 type EtapeCandidature = "idle" | "formulaire" | "succes";
 
@@ -241,7 +241,7 @@ export function OffresPubliquesPage() {
                                             className="offre-tile__logo"
                                         />
                                         <div className="offre-tile__entreprise">
-                                            <p className="offre-tile__nom-entreprise">{offre.nomEntreprise ?? "Entreprise"}</p>
+                                            <p className="offre-tile__nom-entreprise">{offre.nomEntreprise ?? "Entreprise inconnue"}</p>
                                         </div>
                                     </div>
 
@@ -320,7 +320,7 @@ export function OffresPubliquesPage() {
                                         nomEntreprise={modalOffre.nomEntreprise}
                                         className="offre-detail__logo"
                                     />
-                                    <p className="offre-detail__entreprise">{modalOffre.nomEntreprise ?? "Entreprise"}</p>
+                                    <p className="offre-detail__entreprise">{modalOffre.nomEntreprise ?? "Entreprise inconnue"}</p>
                                     <h1 className="offre-detail__titre">{modalOffre.titre}</h1>
                                     <p className="offre-detail__lieu">
                                         {[modalOffre.ville, modalOffre.region, modalOffre.pays].filter(Boolean).join(", ") || "Lieu non précisé"}
