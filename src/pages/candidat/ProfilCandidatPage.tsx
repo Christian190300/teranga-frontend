@@ -177,9 +177,6 @@ export function ProfilRecruteurPage() {
         return <div className="profil-recruteur-page__loading">Chargement du profil de votre entreprise...</div>;
     }
 
-    // @ts-ignore
-    // @ts-ignore
-    // @ts-ignore
     return (
         <div className="profil-recruteur-page">
             <div className="profil-recruteur-page__header">
