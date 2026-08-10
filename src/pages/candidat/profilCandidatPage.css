@@ -8,9 +8,10 @@
 }
 
 .profil-page {
-    max-width: var(--page-max-width, 1200px);
+    max-width: 1920px;
+    width: 94%;
     margin: 0 auto;
-    padding: 40px var(--page-padding, 32px) 80px;
+    padding: 40px 0 90px;
     font-family: 'Inter', -apple-system, sans-serif;
     display: grid;
     grid-template-columns: 220px 1fr;
