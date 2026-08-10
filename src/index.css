@@ -12,7 +12,6 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-
 html,
 body,
 #root {
@@ -48,7 +47,7 @@ body {
     }
 }
 
-/* Classe utilitaire réutilisable si tu crées une nouvelle page plus tard */
+/* Classe utilitaire réutilisable */
 .page-container {
     max-width: var(--page-max-width);
     margin: 0 auto;
@@ -259,39 +258,7 @@ body {
     background: var(--hp-gold);
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .job-pass {
-        transition: none;
-    }
-}
-
-
-.home-job-card__actions {
-    display: flex;
-    gap: var(--sp-1);
-    margin-top: 4px;
-}
-
-.home-job-card__actions .home-btn {
-    flex: 1;
-    justify-content: center;
-    padding: 10px 16px;
-    font-size: 0.85rem;
-    border-radius: 8px;
-}
-
-/* Variante sombre du bouton outline, pour usage sur fond blanc (cartes) */
-.home-btn--outline.home-btn--dark {
-    border-color: var(--hp-line);
-    color: var(--hp-navy);
-    background: white;
-}
-.home-btn--outline.home-btn--dark:hover {
-    border-color: var(--hp-navy);
-    background: var(--hp-navy-soft);
-}
-
-
+/* ---------- Scope Home Page ---------- */
 .home-page {
     --hp-navy: #14294d;
     --hp-navy-soft: #eaf0fb;
@@ -322,108 +289,11 @@ body {
     text-rendering: optimizeLegibility;
 }
 
-.home-jobs-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-}
-
-.home-job-more-card {
-
-    width: fit-content;
-    height: auto;
-
-    padding: 14px 24px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-
-    justify-self: center;
-    align-self: center;
-
-    border-radius: 12px;
-
-    border: 1px solid #0b1d3a;
-
-    background: white;
-
-    color: #0b1d3a;
-
-    text-decoration: none;
-
-    font-size: 0.9rem;
-    font-weight: 700;
-
-    transition: all .25s ease;
-}
-
-
-.home-job-more-card strong {
-    font-size: 1.1rem;
-}
-
-
-.home-job-more-card:hover {
-
-    background: #0b1d3a;
-
-    color: white;
-
-    transform: translateY(-3px);
-
-    box-shadow: 0 10px 20px rgba(11,29,58,.15);
-
-}
-
-@media(max-width: 1000px){
-
-    .home-jobs-grid {
-
-        grid-template-columns: repeat(2,1fr);
-
-    }
-
-}
-
-
-
-@media(max-width:700px){
-
-    .home-jobs-grid {
-
-        grid-template-columns:1fr;
-
-    }
-
-}
-
 .home-page * {
     box-sizing: border-box;
 }
 
-.home-job-card {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-}
-
-.home-job-card {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-    cursor: pointer;
-}
-
-.home-job-card__footer {
-    margin-top: 15px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--gold);
-}
-
-/* Le conteneur occupe toute la largeur ; seul un padding fixe cadre le contenu */
+/* Conteneur principal */
 .home-page .home-container {
     width: 100%;
     margin: 0;
@@ -475,6 +345,16 @@ body {
     background: rgba(255, 255, 255, 0.06);
 }
 
+.home-btn--outline.home-btn--dark {
+    border-color: var(--hp-line);
+    color: var(--hp-navy);
+    background: white;
+}
+.home-btn--outline.home-btn--dark:hover {
+    border-color: var(--hp-navy);
+    background: var(--hp-navy-soft);
+}
+
 .home-btn--text {
     padding: 0;
     border: none;
@@ -490,7 +370,7 @@ body {
     outline-offset: 3px;
 }
 
-/* ---------- Hero — carrousel photo plein écran ---------- */
+/* ---------- Hero ---------- */
 .home-hero-wrap {
     padding: 0;
 }
@@ -541,32 +421,21 @@ body {
     position: absolute;
     bottom: 10px;
     top: auto;
-
     z-index: 2;
-
     width: 44px;
     height: 44px;
     border-radius: 50%;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     background: rgba(255, 255, 255, 0.12);
     border: 1px solid rgba(255, 255, 255, 0.35);
-
     color: white;
     font-size: 1.3rem;
     line-height: 1;
-
     cursor: pointer;
-
     backdrop-filter: blur(6px);
-
-    transition:
-            background 0.25s ease,
-            border-color 0.25s ease,
-            transform 0.25s ease;
+    transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
 }
 
 .home-hero__arrow:hover {
@@ -611,12 +480,6 @@ body {
 
 .home-hero__text-block {
     animation: home-hero-text-in 0.5s ease both;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .home-hero__text-block {
-        animation: none;
-    }
 }
 
 @keyframes home-hero-text-in {
@@ -696,7 +559,7 @@ body {
     outline-offset: 2px;
 }
 
-/* ---------- Statistiques — panneau flottant qui chevauche le hero ---------- */
+/* ---------- Statistiques ---------- */
 .home-stats-section {
     position: relative;
     z-index: 2;
@@ -775,7 +638,7 @@ body {
     margin-top: 2px;
 }
 
-/* ---------- Section shell ---------- */
+/* ---------- Sections Generales ---------- */
 .home-section {
     padding: var(--sp-6) 0;
 }
@@ -815,7 +678,7 @@ body {
     margin-right: auto;
 }
 
-/* ---------- Job cards ---------- */
+/* ---------- Jobs Grid & Cards ---------- */
 .home-jobs-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -824,9 +687,10 @@ body {
 
 @media (max-width: 900px) {
     .home-jobs-grid {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(2, 1fr);
     }
 }
+
 @media (max-width: 620px) {
     .home-jobs-grid {
         grid-template-columns: 1fr;
@@ -843,6 +707,9 @@ body {
     gap: var(--sp-3);
     box-shadow: 0 2px 6px rgba(20, 41, 77, 0.04);
     transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
 }
 
 .home-job-card:hover {
@@ -873,19 +740,6 @@ body {
 }
 
 .home-job-card--gold .home-job-card__icon {
-    background: var(--hp-gold-soft);
-    color: var(--hp-gold-text);
-}
-
-.home-pill {
-    display: inline-flex;
-    align-items: center;
-    padding: 4px 12px;
-    border-radius: 999px;
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
     background: var(--hp-gold-soft);
     color: var(--hp-gold-text);
 }
@@ -931,6 +785,71 @@ body {
     flex-shrink: 0;
 }
 
+.home-job-card__actions {
+    display: flex;
+    gap: var(--sp-1);
+    margin-top: 4px;
+}
+
+.home-job-card__actions .home-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    border-radius: 8px;
+}
+
+.home-job-card__footer {
+    margin-top: 15px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--hp-gold);
+}
+
+.home-job-more-card {
+    width: fit-content;
+    height: auto;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    justify-self: center;
+    align-self: center;
+    border-radius: 12px;
+    border: 1px solid #0b1d3a;
+    background: white;
+    color: #0b1d3a;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 700;
+    transition: all 0.25s ease;
+}
+
+.home-job-more-card strong {
+    font-size: 1.1rem;
+}
+
+.home-job-more-card:hover {
+    background: #0b1d3a;
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(11, 29, 58, 0.15);
+}
+
+.home-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    background: var(--hp-gold-soft);
+    color: var(--hp-gold-text);
+}
+
 /* ---------- Why choose us ---------- */
 .home-section--cream {
     background: var(--hp-cream);
@@ -947,6 +866,7 @@ body {
         grid-template-columns: 1fr 1fr;
     }
 }
+
 @media (max-width: 560px) {
     .home-why-grid {
         grid-template-columns: 1fr;
@@ -1006,44 +926,7 @@ body {
     font-weight: 400;
 }
 
-/* ---------- Final CTA ---------- */
-.home-final {
-    background: var(--hp-navy);
-    padding: var(--sp-6) var(--sp-4);
-    text-align: center;
-    margin-bottom: 0;
-}
-
-.home-final__circle {
-    display: none;
-}
-
-.home-final h2 {
-    font-family: var(--hp-font);
-    font-weight: 800;
-    letter-spacing: -0.01em;
-    font-size: clamp(1.5rem, 2.4vw, 1.9rem);
-    color: white;
-    margin: 0 0 var(--sp-2);
-}
-
-.home-final p {
-    color: rgba(255, 255, 255, 0.66);
-    max-width: 46ch;
-    margin: 0 auto var(--sp-4);
-    line-height: 1.6;
-    font-family: var(--hp-font);
-    font-weight: 400;
-}
-
-.home-final__actions {
-    display: flex;
-    gap: var(--sp-2);
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-/* ---------- Bande CTA profils (ProfilesCTA) ---------- */
+/* ---------- Bande CTA profils ---------- */
 .home-cta-band {
     background: var(--hp-navy-soft);
     border: 1.5px solid var(--hp-line);
@@ -1088,10 +971,49 @@ body {
     border-color: var(--hp-navy);
     color: var(--hp-navy);
 }
+
 .home-cta-band .home-btn--outline:hover {
     background: rgba(20, 41, 77, 0.06);
 }
 
+/* ---------- Final CTA ---------- */
+.home-final {
+    background: var(--hp-navy);
+    padding: var(--sp-6) var(--sp-4);
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.home-final__circle {
+    display: none;
+}
+
+.home-final h2 {
+    font-family: var(--hp-font);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    font-size: clamp(1.5rem, 2.4vw, 1.9rem);
+    color: white;
+    margin: 0 0 var(--sp-2);
+}
+
+.home-final p {
+    color: rgba(255, 255, 255, 0.66);
+    max-width: 46ch;
+    margin: 0 auto var(--sp-4);
+    line-height: 1.6;
+    font-family: var(--hp-font);
+    font-weight: 400;
+}
+
+.home-final__actions {
+    display: flex;
+    gap: var(--sp-2);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* ---------- Page Transition ---------- */
 .page-transition {
     animation: page-slide-in 0.35s ease-out;
 }
@@ -1109,95 +1031,10 @@ body {
 
 /* ---------- Accessibilité ---------- */
 @media (prefers-reduced-motion: reduce) {
-    .home-page * {
+    .home-page *,
+    .job-pass,
+    .home-hero__text-block {
+        animation: none !important;
         transition: none !important;
     }
-}
-
-/* ============================================================
-   CORRECTION VISIBILITÉ DES CARTES D'OFFRES (.offre-tile)
-   ============================================================ */
-
-/* Fond de la carte */
-.offre-tile {
-    background-color: #ffffff !important;
-    border: 1px solid var(--hp-line, #e8e9ee) !important;
-    border-radius: 14px !important;
-    padding: 20px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: space-between !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
-}
-
-/* Titre de l'offre (ex: Environnementaliste, 15 Maçons) */
-.offre-tile__title,
-.offre-tile h3,
-.offre-tile h4 {
-    color: #0d1c38 !important; /* Couleur sombre bien visible */
-    font-weight: 700 !important;
-    font-size: 1.05rem !important;
-    margin-top: 8px !important;
-    margin-bottom: 4px !important;
-}
-
-/* Nom de l'entreprise */
-.offre-tile__company-name,
-.offre-tile__company {
-    color: #6b7280 !important; /* Muted grey */
-    font-size: 0.85rem !important;
-    font-weight: 600 !important;
-}
-
-/* Localisation et détails (ex: Dakar, Sénégal) */
-.offre-tile__location,
-.offre-tile__meta,
-.offre-tile p {
-    color: #374151 !important; /* Texte gris foncé visible */
-    font-size: 0.85rem !important;
-}
-
-/* Zone des boutons en bas */
-.offre-tile__footer,
-.offre-tile__actions {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    gap: 10px !important;
-    margin-top: 16px !important;
-    padding-top: 12px !important;
-    border-top: 1px solid #e5e7eb !important;
-}
-
-/* Bouton "Voir détail" */
-.offre-tile__btn-detail,
-.offre-tile__action--ghost {
-    color: #4b5563 !important;
-    font-weight: 600 !important;
-    font-size: 0.85rem !important;
-    text-decoration: none !important;
-    padding: 8px 12px !important;
-    border-radius: 8px !important;
-}
-
-.offre-tile__btn-detail:hover {
-    background-color: #f3f4f6 !important;
-    color: #111827 !important;
-}
-
-/* Bouton "Postuler" */
-.offre-tile__btn-postuler,
-.offre-tile__action--primary {
-    color: #0d1c38 !important;
-    font-weight: 700 !important;
-    font-size: 0.85rem !important;
-    text-decoration: none !important;
-    padding: 8px 14px !important;
-    border-radius: 8px !important;
-    background-color: #f3f4f6 !important;
-}
-
-.offre-tile__btn-postuler:hover {
-    background-color: #0d1c38 !important;
-    color: #ffffff !important;
 }
