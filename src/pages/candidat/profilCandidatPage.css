@@ -1,17 +1,17 @@
 /* ============================================================
-   PROFIL CANDIDAT — pleine largeur, cohérent avec le reste du site
+   PROFIL RECRUTEUR — pleine largeur, cohérent avec le reste du site
    ============================================================ */
 
-.profil-page,
-.profil-page * {
+.profil-recruteur-page,
+.profil-recruteur-page * {
     box-sizing: border-box;
 }
-.profil-content,
-.profil-card {
+.profil-recruteur-content,
+.profil-recruteur-card {
     width: 100%;
 }
 
-.profil-page {
+.profil-recruteur-page {
     max-width: 1920px;
     width: 94%;
     margin: 0 auto;
@@ -26,7 +26,7 @@
     align-items: start;
 }
 
-.profil-page__header {
+.profil-recruteur-page__header {
     grid-area: header;
     display: flex;
     align-items: flex-start;
@@ -35,7 +35,7 @@
     margin-bottom: 12px;
 }
 
-.profil-page__title {
+.profil-recruteur-page__title {
     font-size: 1.55rem;
     font-weight: 800;
     color: #14294d;
@@ -43,13 +43,13 @@
     letter-spacing: -0.01em;
 }
 
-.profil-page__subtitle {
+.profil-recruteur-page__subtitle {
     font-size: 0.9rem;
     color: #667085;
     margin: 0;
 }
 
-.profil-page__loading {
+.profil-recruteur-page__loading {
     text-align: center;
     padding: 80px 0;
     color: #667085;
@@ -57,7 +57,7 @@
 }
 
 /* ---------- Nav latérale ---------- */
-.profil-nav {
+.profil-recruteur-nav {
     grid-area: nav;
     position: sticky;
     top: 24px;
@@ -66,7 +66,7 @@
     gap: 4px;
 }
 
-.profil-nav a {
+.profil-recruteur-nav a {
     padding: 9px 12px;
     border-radius: 8px;
     font-size: 0.85rem;
@@ -76,25 +76,25 @@
     transition: background 0.15s ease, color 0.15s ease;
 }
 
-.profil-nav a:hover {
+.profil-recruteur-nav a:hover {
     background: #f7f8fb;
     color: #14294d;
 }
 
-.profil-content {
+.profil-recruteur-content {
     grid-area: content;
     min-width: 0;
 }
 
 @media (max-width: 900px) {
-    .profil-page {
+    .profil-recruteur-page {
         grid-template-columns: 1fr;
         grid-template-areas:
             "header"
             "nav"
             "content";
     }
-    .profil-nav {
+    .profil-recruteur-nav {
         position: static;
         flex-direction: row;
         overflow-x: auto;
@@ -103,86 +103,52 @@
         margin-bottom: 8px;
         border-bottom: 1px solid #e8e9ee;
     }
-    .profil-nav a {
+    .profil-recruteur-nav a {
         white-space: nowrap;
         flex-shrink: 0;
     }
 }
 
-/* ---------- Cards ---------- */
-.profil-card {
-    background: white;
-    border: 1px solid #e8e9ee;
-    border-radius: 14px;
-    padding: 28px 32px;
-    margin-bottom: 20px;
-    scroll-margin-top: 24px;
-}
-
-@media (max-width: 640px) {
-    .profil-card {
-        padding: 20px;
-    }
-}
-
-.profil-card__section-title {
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    color: #9aa1ac;
-    margin: 0 0 18px;
-}
-
-.profil-card__subtitle {
-    font-size: 0.88rem;
-    font-weight: 700;
-    color: #14294d;
-    margin: 0 0 12px;
-}
-
-.profil-card__subtitle:not(:first-child) {
-    margin-top: 26px;
-}
-
-/* ---------- Photo ---------- */
-.profil-avatar-row {
+/* ---------- Logo entreprise ---------- */
+.profil-recruteur-avatar-row {
     display: flex;
     align-items: center;
     gap: 22px;
 }
 
-.profil-avatar-wrap {
+.profil-recruteur-avatar-wrap {
     position: relative;
-    width: 92px;
-    height: 92px;
+    width: 88px;
+    height: 88px;
     flex-shrink: 0;
 }
 
-.profil-photo-preview {
-    width: 92px;
-    height: 92px;
-    border-radius: 50%;
-    object-fit: cover;
+.profil-recruteur-photo-preview {
+    width: 88px;
+    height: 88px;
+    border-radius: 12px;
+    object-fit: contain;
+    background: white;
     border: 2px solid #f0f1f4;
+    padding: 8px;
     display: block;
 }
 
-.profil-photo-placeholder {
-    width: 92px;
-    height: 92px;
-    border-radius: 50%;
+.profil-recruteur-photo-placeholder {
+    width: 88px;
+    height: 88px;
+    border-radius: 12px;
     background: #eaf0fb;
     color: #14294d;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 700;
-    font-size: 1.6rem;
+    font-size: 2rem;
+    line-height: 1;
     border: 2px solid #f0f1f4;
 }
 
-.profil-avatar-edit {
+.profil-recruteur-avatar-edit {
     position: absolute;
     bottom: -2px;
     right: -2px;
@@ -199,34 +165,33 @@
     transition: background 0.15s ease;
 }
 
-.profil-avatar-edit:hover {
+.profil-recruteur-avatar-edit:hover {
     background: #1e3a6b;
 }
 
-.profil-avatar-edit:has(input:disabled) {
+.profil-recruteur-avatar-edit:has(input:disabled) {
     opacity: 0.6;
     cursor: not-allowed;
 }
 
-.profil-avatar-edit svg {
+.profil-recruteur-avatar-edit svg {
     width: 15px;
     height: 15px;
 }
 
-.profil-avatar-info {
+.profil-recruteur-avatar-info {
     flex: 1;
     min-width: 0;
 }
 
-.profil-avatar-info__title {
+.profil-recruteur-avatar-info__title {
     font-size: 0.92rem;
     font-weight: 700;
     color: #14294d;
     margin: 0 0 4px;
 }
 
-/* ---------- Input fichier caché ---------- */
-.profil-file-input-hidden {
+.profil-recruteur-file-input-hidden {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -237,29 +202,54 @@
     border: 0;
 }
 
-.profil-upload-btn--disabled {
+.profil-recruteur-upload-btn--disabled {
     opacity: 0.55;
     cursor: not-allowed;
     pointer-events: none;
 }
 
-.profil-field__hint {
+.profil-recruteur-field__hint {
     font-size: 0.78rem;
     color: #9aa1ac;
     margin: 8px 0 0;
     line-height: 1.5;
 }
 
+/* ---------- Cards ---------- */
+.profil-recruteur-card {
+    background: white;
+    border: 1px solid #e8e9ee;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+    scroll-margin-top: 24px;
+}
+
+@media (max-width: 640px) {
+    .profil-recruteur-card {
+        padding: 20px;
+    }
+}
+
+.profil-recruteur-card__section-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: #9aa1ac;
+    margin: 0 0 18px;
+}
+
 /* ---------- Champs ---------- */
-.profil-field {
+.profil-recruteur-field {
     margin-bottom: 20px;
 }
 
-.profil-field:last-child {
+.profil-recruteur-field:last-child {
     margin-bottom: 0;
 }
 
-.profil-field label {
+.profil-recruteur-field label {
     display: block;
     font-size: 0.85rem;
     font-weight: 600;
@@ -267,11 +257,11 @@
     margin-bottom: 6px;
 }
 
-.profil-field input[type="text"],
-.profil-field input:not([type]),
-.profil-field input[type="number"],
-.profil-field select,
-.profil-field textarea {
+.profil-recruteur-field input[type="text"],
+.profil-recruteur-field input:not([type]),
+.profil-recruteur-field input[type="email"],
+.profil-recruteur-field select,
+.profil-recruteur-field textarea {
     width: 100%;
     padding: 11px 14px;
     border: 1px solid #e8e9ee;
@@ -284,58 +274,59 @@
     appearance: none;
 }
 
-.profil-field select {
+.profil-recruteur-field select {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239aa1ac' stroke-width='1.5' fill='none' fill-rule='evenodd'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 14px center;
     padding-right: 36px;
 }
 
-.profil-field textarea {
+.profil-recruteur-field textarea {
     resize: vertical;
-    min-height: 100px;
+    min-height: 110px;
+    line-height: 1.6;
 }
 
-.profil-field input:focus,
-.profil-field select:focus,
-.profil-field textarea:focus {
+.profil-recruteur-field input:focus,
+.profil-recruteur-field textarea:focus,
+.profil-recruteur-field select:focus {
     outline: none;
     border-color: #c8951e;
     background: white;
 }
 
-.profil-field-row {
+.profil-recruteur-field-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
 }
 
-.profil-field-row--3 {
+.profil-recruteur-field-row--3 {
     grid-template-columns: 1fr 1fr 1fr;
 }
 
 @media (max-width: 640px) {
-    .profil-field-row,
-    .profil-field-row--3 {
+    .profil-recruteur-field-row,
+    .profil-recruteur-field-row--3 {
         grid-template-columns: 1fr;
     }
 }
 
 /* ---------- Champ éditable (icônes ✓ / ✕) ---------- */
-.profil-field__editable {
+.profil-recruteur-field__editable {
     position: relative;
 }
 
-.profil-field__input--with-actions {
+.profil-recruteur-field__input--with-actions {
     padding-right: 68px !important;
 }
 
-.profil-field__editable textarea.profil-field__input--with-actions {
-    padding-right: 14px !important; /* pas d'icônes flottantes dans le texte */
+.profil-recruteur-field__editable textarea.profil-recruteur-field__input--with-actions {
+    padding-right: 14px !important;
     padding-bottom: 44px !important;
 }
 
-.profil-field__actions {
+.profil-recruteur-field__actions {
     position: absolute;
     right: 8px;
     top: 50%;
@@ -344,7 +335,7 @@
     gap: 4px;
 }
 
-.profil-field__actions--textarea {
+.profil-recruteur-field__actions--textarea {
     top: auto;
     bottom: 10px;
     right: 10px;
@@ -355,7 +346,7 @@
     box-shadow: 0 1px 4px rgba(20, 41, 77, 0.12);
 }
 
-.profil-field__icon-btn {
+.profil-recruteur-field__icon-btn {
     width: 26px;
     height: 26px;
     border-radius: 6px;
@@ -368,205 +359,76 @@
     transition: background 0.15s ease;
 }
 
-.profil-field__icon-btn svg {
+.profil-recruteur-field__icon-btn svg {
     width: 15px;
     height: 15px;
 }
 
-.profil-field__icon-btn--save {
+.profil-recruteur-field__icon-btn--save {
     color: #1a7f4b;
 }
-.profil-field__icon-btn--save:hover {
+.profil-recruteur-field__icon-btn--save:hover {
     background: #e6f4ea;
 }
 
-.profil-field__icon-btn--cancel {
+.profil-recruteur-field__icon-btn--cancel {
     color: #b3261e;
 }
-.profil-field__icon-btn--cancel:hover {
+.profil-recruteur-field__icon-btn--cancel:hover {
     background: #fdecea;
 }
 
-/* ---------- Toggles ---------- */
-.profil-toggle-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.profil-toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 9px;
-    padding: 10px 16px;
-    border-radius: 999px;
-    border: 1.5px solid #e8e9ee;
-    background: #f7f8fb;
-    font-size: 0.84rem;
-    font-weight: 600;
-    color: #667085;
-    cursor: pointer;
-    transition: all 0.15s ease;
-    user-select: none;
-}
-
-.profil-toggle input {
-    accent-color: #14294d;
-    width: 15px;
-    height: 15px;
-    margin: 0;
-}
-
-.profil-toggle--active {
-    background: #eaf0fb;
-    border-color: #cddcf5;
-    color: #14294d;
-}
-
-/* ---------- Documents ---------- */
-.profil-file-card {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 14px 16px;
-    background: #f7f8fb;
-    border: 1px solid #e8e9ee;
-    border-radius: 10px;
-    flex-wrap: wrap;
-}
-
-.profil-file-card__icon {
-    width: 38px;
-    height: 38px;
-    border-radius: 8px;
-    background: #eaf0fb;
-    color: #14294d;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.profil-file-card__icon svg {
-    width: 18px;
-    height: 18px;
-}
-
-.profil-file-card__info {
-    flex: 1;
-    min-width: 120px;
-}
-
-.profil-file-card__name {
-    font-size: 0.88rem;
-    font-weight: 600;
-    color: #14294d;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.profil-file-card__meta {
-    font-size: 0.76rem;
-    color: #9aa1ac;
-    margin-top: 1px;
-}
-
-.profil-file-card__actions {
-    display: flex;
-    gap: 8px;
-    flex-shrink: 0;
-}
-
-.profil-file-card__link {
-    display: inline-flex;
-    align-items: center;
-    padding: 8px 14px;
-    border-radius: 7px;
-    border: 1.5px solid #e8e9ee;
-    background: white;
-    color: #14294d;
-    font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
-    font-family: inherit;
-    transition: background 0.15s ease;
-    white-space: nowrap;
-}
-
-.profil-file-card__link:hover {
-    background: #eaf0fb;
-}
-
-.profil-empty-upload {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 10px;
-    padding: 28px 16px;
-    border: 1.5px dashed #e8e9ee;
-    border-radius: 10px;
-    background: #fafbfc;
-    text-align: center;
-}
-
-.profil-empty-upload__text {
-    font-size: 0.82rem;
-    color: #9aa1ac;
-}
-
-/* ---------- Meta ---------- */
-.profil-meta {
+/* ---------- Bloc infos (lecture seule) ---------- */
+.profil-recruteur-meta {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
 }
 
 @media (max-width: 560px) {
-    .profil-meta {
+    .profil-recruteur-meta {
         grid-template-columns: 1fr;
     }
 }
 
-.profil-meta__item {
+.profil-recruteur-meta__item {
     background: #f7f8fb;
     border-radius: 10px;
     padding: 14px 16px;
 }
 
-.profil-meta__label {
+.profil-recruteur-meta__label {
     font-size: 0.74rem;
     color: #9aa1ac;
     margin-bottom: 3px;
 }
 
-.profil-meta__value {
+.profil-recruteur-meta__value {
     font-size: 0.9rem;
     font-weight: 700;
     color: #14294d;
 }
 
 /* ---------- Messages ---------- */
-.profil-message {
+.profil-recruteur-message {
     padding: 12px 14px;
     border-radius: 8px;
     font-size: 0.86rem;
     margin: 10px 0 0;
 }
 
-.profil-message--error {
+.profil-recruteur-message--error {
     background: #fdecea;
     color: #b3261e;
     border: 1px solid #f2c1bd;
 }
 
-.profil-content > .profil-message--error {
+.profil-recruteur-content > .profil-recruteur-message--error {
     margin-bottom: 20px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .profil-page * {
+    .profil-recruteur-page * {
         transition: none !important;
     }
 }

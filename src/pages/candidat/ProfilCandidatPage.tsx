@@ -1,22 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import {
-    getMonProfilCandidat,
-    updateMonProfilCandidat,
-    uploaderPhotoCandidat,
-    uploaderCvCandidat,
-    uploaderLettreMotivation,
-    obtenirPhotoCandidatUrl,
-    telechargerCvCandidat,
-    telechargerLettreMotivation,
-    type ProfilCandidatDTO,
+    getMonProfilRecruteur,
+    updateMonProfilRecruteur,
+    uploaderLogoRecruteur,
+    obtenirLogoRecruteurUrl,
+    type ProfilRecruteurDTO,
 } from "../../api/profileService";
 import { useAuth } from "../../context/AuthContext";
 import { useAutoSave } from "../../hooks/useAutoSave";
 import { SaveStatusBadge } from "../../components/common/SaveStatusBadge";
-import { TagListEditor } from "../../components/common/TagListEditor";
 import { EditableField } from "../../components/common/EditableField";
 import { EditableTextarea } from "../../components/common/EditableTextarea";
-import "./profilCandidatPage.css";
+import "./profilRecruteurPage.css";
 
 function formatDate(iso: string | null): string {
     if (!iso) return "—";
@@ -37,22 +32,15 @@ function IconCamera() {
     );
 }
 
-function IconDocument() {
-    return (
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-                d="M7 3.5h7l4 4v12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-15a1 1 0 0 1 1-1Z"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinejoin="round"
-            />
-            <path d="M14 3.5v4h4" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
-        </svg>
-    );
-}
-
-const NIVEAUX_EXPERIENCE = ["Débutant", "Junior", "Intermédiaire", "Sénior", "Expert"];
-const DISPONIBILITES = ["Immédiate", "Sous 1 mois", "Sous 3 mois", "Non disponible"];
+const TAILLES_ENTREPRISE = ["1-10", "11-50", "51-200", "201-500", "500+"];
+const SECTEURS_ACTIVITE = [
+    "Agriculture", "Agroalimentaire", "Assurance", "Banque et Finance", "BTP / Construction",
+    "Commerce et Distribution", "Communication", "Conseil", "Éducation et Formation", "Énergie",
+    "Environnement", "Hôtellerie et Restauration", "Immobilier", "Industrie", "Informatique / IT",
+    "Logistique et Transport", "Marketing et Publicité", "Médias", "Mines", "ONG / Associations",
+    "Pêche", "Pharmaceutique", "Santé", "Sécurité", "Services", "Télécommunications",
+    "Textile", "Tourisme", "Administration publique", "Autre",
+];
 const PAYS = ["Sénégal"];
 
 const REGIONS = [
@@ -66,99 +54,74 @@ const VILLES = [
     "Kolda", "Ziguinchor", "Sédhiou", "Tambacounda", "Kédougou", "Matam", "Kaffrine",
 ];
 
-export function ProfilCandidatPage() {
+export function ProfilRecruteurPage() {
     const { refreshPhoto } = useAuth();
 
     const [loading, setLoading] = useState(true);
     const [loadError, setLoadError] = useState<string | null>(null);
 
-    const [telephone, setTelephone] = useState("");
-    const [adresse, setAdresse] = useState("");
-    const [sexe, setSexe] = useState("");
-    const [ville, setVille] = useState("");
-    const [region, setRegion] = useState("");
+    const [nomEntreprise, setNomEntreprise] = useState("");
+    const [secteurActivite, setSecteurActivite] = useState("");
+    const [tailleEntreprise, setTailleEntreprise] = useState("");
+    const [description, setDescription] = useState("");
+    const [siteWeb, setSiteWeb] = useState("");
+
+    const [nomContact, setNomContact] = useState("");
+    const [fonctionContact, setFonctionContact] = useState("");
+    const [emailProfessionnel, setEmailProfessionnel] = useState("");
+    const [telephoneEntreprise, setTelephoneEntreprise] = useState("");
+
     const [pays, setPays] = useState("");
-    const [mobilite, setMobilite] = useState(false);
-    const [teletravail, setTeletravail] = useState(false);
-
-    const [titreProfessionnel, setTitreProfessionnel] = useState("");
-    const [aPropos, setAPropos] = useState("");
-    const [niveauExperience, setNiveauExperience] = useState("");
-    const [anneesExperience, setAnneesExperience] = useState<number | "">("");
-    const [disponibilite, setDisponibilite] = useState("");
-
-    const [formations, setFormations] = useState<string[]>([]);
-    const [certifications, setCertifications] = useState<string[]>([]);
-    const [langues, setLangues] = useState<string[]>([]);
-    const [competences, setCompetences] = useState<string[]>([]);
+    const [region, setRegion] = useState("");
+    const [ville, setVille] = useState("");
+    const [adresse, setAdresse] = useState("");
 
     const [linkedin, setLinkedin] = useState("");
-    const [github, setGithub] = useState("");
-    const [portfolio, setPortfolio] = useState("");
+    const [facebook, setFacebook] = useState("");
+    const [twitter, setTwitter] = useState("");
 
-    const [photoUrl, setPhotoUrl] = useState<string | null>(null);
-    const [photoUploading, setPhotoUploading] = useState(false);
-    const [photoError, setPhotoError] = useState<string | null>(null);
-
-    const [cvPresent, setCvPresent] = useState(false);
-    const [cvOriginalFilename, setCvOriginalFilename] = useState<string | null>(null);
-    const [cvUploading, setCvUploading] = useState(false);
-    const [cvError, setCvError] = useState<string | null>(null);
-
-    const [lmPresente, setLmPresente] = useState(false);
-    const [lmOriginalFilename, setLmOriginalFilename] = useState<string | null>(null);
-    const [lmUploading, setLmUploading] = useState(false);
-    const [lmError, setLmError] = useState<string | null>(null);
+    const [logoUrl, setLogoUrl] = useState<string | null>(null);
+    const [logoUploading, setLogoUploading] = useState(false);
+    const [logoError, setLogoError] = useState<string | null>(null);
 
     const [dateCreation, setDateCreation] = useState<string | null>(null);
     const [dateMaj, setDateMaj] = useState<string | null>(null);
 
-    const photoInputRef = useRef<HTMLInputElement>(null);
-    const cvInputRef = useRef<HTMLInputElement>(null);
-    const lmInputRef = useRef<HTMLInputElement>(null);
+    const logoInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         async function charger() {
             try {
-                const data: ProfilCandidatDTO = await getMonProfilCandidat();
-                setTelephone(data.telephone ?? "");
-                setAdresse(data.adresse ?? "");
-                setSexe(data.sexe ?? "");
-                setVille(data.ville ?? "");
-                setRegion(data.region ?? "");
+                const data: ProfilRecruteurDTO = await getMonProfilRecruteur();
+                setNomEntreprise(data.nomEntreprise ?? "");
+                setSecteurActivite(data.secteurActivite ?? "");
+                setTailleEntreprise(data.tailleEntreprise ?? "");
+                setDescription(data.description ?? "");
+                setSiteWeb(data.siteWeb ?? "");
+
+                setNomContact(data.nomContact ?? "");
+                setFonctionContact(data.fonctionContact ?? "");
+                setEmailProfessionnel(data.emailProfessionnel ?? "");
+                setTelephoneEntreprise(data.telephoneEntreprise ?? "");
+
                 setPays(data.pays ?? "");
-                setMobilite(data.mobilite ?? false);
-                setTeletravail(data.teletravail ?? false);
-
-                setTitreProfessionnel(data.titreProfessionnel ?? "");
-                setAPropos(data.aPropos ?? "");
-                setNiveauExperience(data.niveauExperience ?? "");
-                setAnneesExperience(data.anneesExperience ?? "");
-                setDisponibilite(data.disponibilite ?? "");
-
-                setFormations(data.formations ?? []);
-                setCertifications(data.certifications ?? []);
-                setLangues(data.langues ?? []);
-                setCompetences(data.competences ?? []);
+                setRegion(data.region ?? "");
+                setVille(data.ville ?? "");
+                setAdresse(data.adresse ?? "");
 
                 setLinkedin(data.linkedin ?? "");
-                setGithub(data.github ?? "");
-                setPortfolio(data.portfolio ?? "");
-
-                setCvPresent(data.cvPresent);
-                setCvOriginalFilename(data.cvOriginalFilename);
-                setLmPresente(data.lettreMotivationPresente);
-                setLmOriginalFilename(data.lettreMotivationOriginalFilename);
+                setFacebook(data.facebook ?? "");
+                setTwitter(data.twitter ?? "");
 
                 setDateCreation(data.dateCreation);
                 setDateMaj(data.dateMaj);
 
-                if (data.photoPresente) {
-                    const url = await obtenirPhotoCandidatUrl();
-                    setPhotoUrl(url);
+                if (data.logoPresent) {
+                    const url = await obtenirLogoRecruteurUrl();
+                    setLogoUrl(url);
                 }
             } catch {
-                setLoadError("Impossible de charger votre profil pour le moment.");
+                setLoadError("Impossible de charger le profil de votre entreprise pour le moment.");
             } finally {
                 setLoading(false);
             }
@@ -168,180 +131,188 @@ export function ProfilCandidatPage() {
 
     useEffect(() => {
         return () => {
-            if (photoUrl) URL.revokeObjectURL(photoUrl);
+            if (logoUrl) URL.revokeObjectURL(logoUrl);
         };
-    }, [photoUrl]);
+    }, [logoUrl]);
 
     const saveStatus = useAutoSave(
         {
-            telephone, adresse, sexe, ville, region, pays, mobilite, teletravail,
-            titreProfessionnel, aPropos, niveauExperience, anneesExperience, disponibilite,
-            formations, certifications, langues, competences,
-            linkedin, github, portfolio,
+            nomEntreprise, secteurActivite, tailleEntreprise, description, siteWeb,
+            nomContact, fonctionContact, emailProfessionnel, telephoneEntreprise,
+            pays, region, ville, adresse,
+            linkedin, facebook, twitter,
         },
         async (value) => {
-            const updated = await updateMonProfilCandidat({
-                ...value,
-                anneesExperience: value.anneesExperience === "" ? undefined : Number(value.anneesExperience),
-            });
+            const updated = await updateMonProfilRecruteur(value);
             setDateMaj(updated.dateMaj);
         },
         900,
         !loading
     );
 
-    async function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
+    async function handleLogoChange(e: React.ChangeEvent<HTMLInputElement>) {
         const file = e.target.files?.[0];
         if (!file) return;
-        setPhotoError(null);
-        setPhotoUploading(true);
+
+        setLogoError(null);
+        setLogoUploading(true);
         try {
-            const updated = await uploaderPhotoCandidat(file);
+            const updated = await uploaderLogoRecruteur(file);
             setDateMaj(updated.dateMaj);
-            if (photoUrl) URL.revokeObjectURL(photoUrl);
-            const url = await obtenirPhotoCandidatUrl();
-            setPhotoUrl(url);
+
+            if (logoUrl) URL.revokeObjectURL(logoUrl);
+            const url = await obtenirLogoRecruteurUrl();
+            setLogoUrl(url);
+
             await refreshPhoto();
         } catch {
-            setPhotoError("Échec de l'envoi. Format accepté : JPEG, PNG, WebP (5 Mo max).");
+            setLogoError("Échec de l'envoi. Format accepté : JPEG, PNG, WebP (5 Mo max).");
         } finally {
-            setPhotoUploading(false);
-            if (photoInputRef.current) photoInputRef.current.value = "";
-        }
-    }
-
-    async function handleCvChange(e: React.ChangeEvent<HTMLInputElement>) {
-        const file = e.target.files?.[0];
-        if (!file) return;
-        setCvError(null);
-        setCvUploading(true);
-        try {
-            const updated = await uploaderCvCandidat(file);
-            setCvPresent(updated.cvPresent);
-            setCvOriginalFilename(updated.cvOriginalFilename);
-            setDateMaj(updated.dateMaj);
-        } catch {
-            setCvError("Échec de l'envoi. Le fichier doit être un PDF (5 Mo max).");
-        } finally {
-            setCvUploading(false);
-            if (cvInputRef.current) cvInputRef.current.value = "";
-        }
-    }
-
-    async function handleLmChange(e: React.ChangeEvent<HTMLInputElement>) {
-        const file = e.target.files?.[0];
-        if (!file) return;
-        setLmError(null);
-        setLmUploading(true);
-        try {
-            const updated = await uploaderLettreMotivation(file);
-            setLmPresente(updated.lettreMotivationPresente);
-            setLmOriginalFilename(updated.lettreMotivationOriginalFilename);
-            setDateMaj(updated.dateMaj);
-        } catch {
-            setLmError("Échec de l'envoi. Le fichier doit être un PDF (5 Mo max).");
-        } finally {
-            setLmUploading(false);
-            if (lmInputRef.current) lmInputRef.current.value = "";
-        }
-    }
-
-    async function handleCvDownload() {
-        try {
-            await telechargerCvCandidat(cvOriginalFilename ?? "cv.pdf");
-        } catch {
-            setCvError("Impossible de télécharger le CV pour le moment.");
-        }
-    }
-
-    async function handleLmDownload() {
-        try {
-            await telechargerLettreMotivation(lmOriginalFilename ?? "lettre-motivation.pdf");
-        } catch {
-            setLmError("Impossible de télécharger la lettre pour le moment.");
+            setLogoUploading(false);
+            if (logoInputRef.current) logoInputRef.current.value = "";
         }
     }
 
     if (loading) {
-        return <div className="profil-page__loading">Chargement de votre profil...</div>;
+        return <div className="profil-recruteur-page__loading">Chargement du profil de votre entreprise...</div>;
     }
 
+    // @ts-ignore
+    // @ts-ignore
+    // @ts-ignore
     return (
-        <div className="profil-page">
-            <div className="profil-page__header">
+        <div className="profil-recruteur-page">
+            <div className="profil-recruteur-page__header">
                 <div>
-                    <h1 className="profil-page__title">Mon profil candidat</h1>
-                    <p className="profil-page__subtitle">Cliquez sur un champ pour le modifier, ✓ pour enregistrer, ✕ pour annuler.</p>
+                    <h1 className="profil-recruteur-page__title">Mon entreprise</h1>
+                    <p className="profil-recruteur-page__subtitle">Cliquez sur un champ pour le modifier, ✓ pour enregistrer, ✕ pour annuler.</p>
                 </div>
                 <SaveStatusBadge status={saveStatus} />
             </div>
 
-            <nav className="profil-nav">
-                <a href="#photo">Photo</a>
-                <a href="#coordonnees">Coordonnées</a>
-                <a href="#pro">Infos pro</a>
-                <a href="#parcours">Parcours</a>
-                <a href="#competences">Compétences</a>
-                <a href="#documents">Documents</a>
+            <nav className="profil-recruteur-nav">
+                <a href="#logo">Logo & entreprise</a>
+                <a href="#contact">Contact</a>
+                <a href="#adresse">Adresse</a>
                 <a href="#reseaux">Réseaux</a>
             </nav>
 
-            <div className="profil-content">
-                {loadError && <div className="profil-message profil-message--error">{loadError}</div>}
+            <div className="profil-recruteur-content">
+                {loadError && <div className="profil-recruteur-message profil-recruteur-message--error">{loadError}</div>}
 
-                {/* Photo */}
-                <div className="profil-card" id="photo">
-                    <p className="profil-card__section-title">Photo de profil</p>
-                    <div className="profil-avatar-row">
-                        <div className="profil-avatar-wrap">
-                            {photoUrl ? (
-                                <img src={photoUrl} alt="Photo de profil" className="profil-photo-preview" />
+                {/* Logo + informations générales */}
+                <div className="profil-recruteur-card" id="logo">
+                    <p className="profil-recruteur-card__section-title">Logo & informations générales</p>
+                    <div className="profil-recruteur-avatar-row">
+                        <div className="profil-recruteur-avatar-wrap">
+                            {logoUrl ? (
+                                <img src={logoUrl} alt="Logo de l'entreprise" className="profil-recruteur-photo-preview" />
                             ) : (
-                                <div className="profil-photo-placeholder">?</div>
+                                <div className="profil-recruteur-photo-placeholder">🏢</div>
                             )}
-                            <label className={`profil-avatar-edit${photoUploading ? " profil-upload-btn--disabled" : ""}`}>
+                            <label className={`profil-recruteur-avatar-edit${logoUploading ? " profil-recruteur-upload-btn--disabled" : ""}`}>
                                 <input
-                                    ref={photoInputRef}
+                                    ref={logoInputRef}
                                     type="file"
                                     accept="image/jpeg,image/png,image/webp"
-                                    onChange={handlePhotoChange}
-                                    disabled={photoUploading}
-                                    className="profil-file-input-hidden"
+                                    onChange={handleLogoChange}
+                                    disabled={logoUploading}
+                                    className="profil-recruteur-file-input-hidden"
                                 />
                                 <IconCamera />
                             </label>
                         </div>
-                        <div className="profil-avatar-info">
-                            <p className="profil-avatar-info__title">
-                                {photoUploading ? "Envoi en cours..." : "Cliquez sur l'icône pour changer votre photo"}
+                        <div className="profil-recruteur-avatar-info">
+                            <p className="profil-recruteur-avatar-info__title">
+                                {logoUploading ? "Envoi en cours..." : "Cliquez sur l'icône pour changer le logo"}
                             </p>
-                            <p className="profil-field__hint" style={{ margin: 0 }}>
+                            <p className="profil-recruteur-field__hint" style={{ margin: 0 }}>
                                 JPEG, PNG ou WebP — 5 Mo maximum.
                             </p>
-                            {photoError && <p className="profil-message profil-message--error">{photoError}</p>}
+                            {logoError && <p className="profil-recruteur-message profil-recruteur-message--error">{logoError}</p>}
                         </div>
                     </div>
-                </div>
 
-                {/* Coordonnées */}
-                <div className="profil-card" id="coordonnees">
-                    <p className="profil-card__section-title">Coordonnées</p>
-                    <div className="profil-field-row">
-                        <EditableField id="telephone" label="Téléphone" value={telephone} onSave={setTelephone} placeholder="+221 77 123 45 67" />
-                        <div className="profil-field">
-                            <label htmlFor="sexe">Sexe</label>
-                            <select id="sexe" value={sexe} onChange={(e) => setSexe(e.target.value)}>
+                    <div style={{ marginTop: 24 }}>
+                        <EditableField
+                            id="nomEntreprise"
+                            label="Nom de l'entreprise"
+                            value={nomEntreprise}
+                            onSave={setNomEntreprise}
+                            placeholder="Nom de votre entreprise"
+                        />
+                    </div>
+
+                    <div className="profil-recruteur-field-row">
+                        <div className="profil-recruteur-field">
+                            <label htmlFor="secteurActivite">Secteur d'activité</label>
+                            <select id="secteurActivite" value={secteurActivite} onChange={(e) => setSecteurActivite(e.target.value)}>
+                                <option value="">Sélectionnez un secteur</option>
+                                {SECTEURS_ACTIVITE.map((secteur) => (
+                                    <option key={secteur} value={secteur}>{secteur}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="profil-recruteur-field">
+                            <label htmlFor="tailleEntreprise">Taille de l'entreprise</label>
+                            <select id="tailleEntreprise" value={tailleEntreprise} onChange={(e) => setTailleEntreprise(e.target.value)}>
                                 <option value="">Non précisé</option>
-                                <option value="HOMME">Homme</option>
-                                <option value="FEMME">Femme</option>
+                                {TAILLES_ENTREPRISE.map((t) => (
+                                    <option key={t} value={t}>{t} employés</option>
+                                ))}
                             </select>
                         </div>
                     </div>
 
-                    <EditableField id="adresse" label="Adresse" value={adresse} onSave={setAdresse} placeholder="Rue, quartier..." />
+                    <EditableField id="siteWeb" label="Site web" value={siteWeb} onSave={setSiteWeb} placeholder="https://..." />
 
-                    <div className="profil-field-row profil-field-row--3">
-                        <div className="profil-field">
+                    <EditableTextarea
+                        id="description"
+                        label="Description de l'entreprise"
+                        value={description}
+                        onSave={setDescription}
+                        placeholder="Présentez votre entreprise en quelques lignes..."
+                        rows={5}
+                    />
+                </div>
+
+                {/* Contact */}
+                <div className="profil-recruteur-card" id="contact">
+                    <p className="profil-recruteur-card__section-title">Contact recruteur</p>
+                    <div className="profil-recruteur-field-row">
+                        <EditableField id="nomContact" label="Nom du recruteur" value={nomContact} onSave={setNomContact} placeholder="Prénom Nom" />
+                        <EditableField
+                            id="fonctionContact"
+                            label="Fonction"
+                            value={fonctionContact}
+                            onSave={setFonctionContact}
+                            placeholder="Responsable RH"
+                        />
+                    </div>
+                    <div className="profil-recruteur-field-row">
+                        <EditableField
+                            id="emailProfessionnel"
+                            label="Email professionnel"
+                            value={emailProfessionnel}
+                            onSave={setEmailProfessionnel}
+                            placeholder="contact@entreprise.sn"
+                        />
+                        <EditableField
+                            id="telephoneEntreprise"
+                            label="Téléphone"
+                            value={telephoneEntreprise}
+                            onSave={setTelephoneEntreprise}
+                            placeholder="+221 33 xxx xx xx"
+                        />
+                    </div>
+                </div>
+
+                {/* Adresse */}
+                <div className="profil-recruteur-card" id="adresse">
+                    <p className="profil-recruteur-card__section-title">Adresse</p>
+                    <EditableField id="adresse" label="Adresse" value={adresse} onSave={setAdresse} placeholder="Rue, quartier..." />
+                    <div className="profil-recruteur-field-row profil-recruteur-field-row--3">
+                        <div className="profil-recruteur-field">
                             <label htmlFor="ville">Ville</label>
                             <select id="ville" value={ville} onChange={(e) => setVille(e.target.value)}>
                                 <option value="">Sélectionnez une ville</option>
@@ -350,7 +321,7 @@ export function ProfilCandidatPage() {
                                 ))}
                             </select>
                         </div>
-                        <div className="profil-field">
+                        <div className="profil-recruteur-field">
                             <label htmlFor="region">Région</label>
                             <select id="region" value={region} onChange={(e) => setRegion(e.target.value)}>
                                 <option value="">Sélectionnez une région</option>
@@ -359,7 +330,7 @@ export function ProfilCandidatPage() {
                                 ))}
                             </select>
                         </div>
-                        <div className="profil-field">
+                        <div className="profil-recruteur-field">
                             <label htmlFor="pays">Pays</label>
                             <select id="pays" value={pays} onChange={(e) => setPays(e.target.value)}>
                                 <option value="">Sélectionnez un pays</option>
@@ -369,188 +340,35 @@ export function ProfilCandidatPage() {
                             </select>
                         </div>
                     </div>
-
-                    <div className="profil-toggle-row">
-                        <label className={`profil-toggle${mobilite ? " profil-toggle--active" : ""}`}>
-                            <input type="checkbox" checked={mobilite} onChange={(e) => setMobilite(e.target.checked)} />
-                            Mobilité géographique
-                        </label>
-                        <label className={`profil-toggle${teletravail ? " profil-toggle--active" : ""}`}>
-                            <input type="checkbox" checked={teletravail} onChange={(e) => setTeletravail(e.target.checked)} />
-                            Ouvert au télétravail
-                        </label>
-                    </div>
                 </div>
 
-                {/* Infos professionnelles */}
-                <div className="profil-card" id="pro">
-                    <p className="profil-card__section-title">Informations professionnelles</p>
-                    <EditableField
-                        id="titreProfessionnel"
-                        label="Titre professionnel"
-                        value={titreProfessionnel}
-                        onSave={setTitreProfessionnel}
-                        placeholder="Développeur Full Stack Java/Angular"
-                    />
-                    <EditableTextarea
-                        id="aPropos"
-                        label="À propos"
-                        value={aPropos}
-                        onSave={setAPropos}
-                        placeholder="Présentez-vous en quelques lignes..."
-                        rows={5}
-                    />
-                    <div className="profil-field-row profil-field-row--3">
-                        <div className="profil-field">
-                            <label htmlFor="niveauExperience">Niveau d'expérience</label>
-                            <select id="niveauExperience" value={niveauExperience} onChange={(e) => setNiveauExperience(e.target.value)}>
-                                <option value="">Non précisé</option>
-                                {NIVEAUX_EXPERIENCE.map((n) => (
-                                    <option key={n} value={n}>{n}</option>
-                                ))}
-                            </select>
-                        </div>
+                {/* Réseaux sociaux */}
+                <div className="profil-recruteur-card" id="reseaux">
+                    <p className="profil-recruteur-card__section-title">Réseaux sociaux</p>
+                    <div className="profil-recruteur-field-row profil-recruteur-field-row--3">
                         <EditableField
-                            id="anneesExperience"
-                            label="Années d'expérience"
-                            type="number"
-                            value={anneesExperience === "" ? "" : String(anneesExperience)}
-                            onSave={(v) => setAnneesExperience(v === "" ? "" : Number(v))}
+                            id="linkedin"
+                            label="LinkedIn"
+                            value={linkedin}
+                            onSave={setLinkedin}
+                            placeholder="https://linkedin.com/company/..."
                         />
-                        <div className="profil-field">
-                            <label htmlFor="disponibilite">Disponibilité</label>
-                            <select id="disponibilite" value={disponibilite} onChange={(e) => setDisponibilite(e.target.value)}>
-                                <option value="">Non précisé</option>
-                                {DISPONIBILITES.map((d) => (
-                                    <option key={d} value={d}>{d}</option>
-                                ))}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Parcours */}
-                <div className="profil-card" id="parcours">
-                    <p className="profil-card__section-title">Parcours</p>
-                    <p className="profil-card__subtitle">Formations</p>
-                    <TagListEditor
-                        values={formations}
-                        onChange={setFormations}
-                        placeholder="Ex : Licence Informatique - UCAD (2022), puis Entrée"
-                        emptyLabel="Aucune formation ajoutée pour l'instant."
-                    />
-                    <p className="profil-card__subtitle">Certifications</p>
-                    <TagListEditor
-                        values={certifications}
-                        onChange={setCertifications}
-                        placeholder="Ex : AWS Certified Cloud Practitioner (2024), puis Entrée"
-                        emptyLabel="Aucune certification ajoutée pour l'instant."
-                    />
-                </div>
-
-                {/* Compétences / Langues */}
-                <div className="profil-card" id="competences">
-                    <p className="profil-card__section-title">Compétences & langues</p>
-                    <p className="profil-card__subtitle">Compétences</p>
-                    <TagListEditor
-                        values={competences}
-                        onChange={setCompetences}
-                        placeholder="Tapez une compétence puis Entrée (ex : Java, Spring Boot)"
-                        emptyLabel="Aucune compétence ajoutée pour l'instant."
-                    />
-                    <p className="profil-card__subtitle">Langues</p>
-                    <TagListEditor
-                        values={langues}
-                        onChange={setLangues}
-                        placeholder="Ex : Français - Courant, puis Entrée"
-                        emptyLabel="Aucune langue ajoutée pour l'instant."
-                    />
-                </div>
-
-                {/* Documents */}
-                <div className="profil-card" id="documents">
-                    <p className="profil-card__section-title">Documents</p>
-
-                    <p className="profil-card__subtitle">CV</p>
-                    <div className="profil-field">
-                        {cvPresent && !cvUploading ? (
-                            <div className="profil-file-card">
-                                <div className="profil-file-card__icon"><IconDocument /></div>
-                                <div className="profil-file-card__info">
-                                    <div className="profil-file-card__name">{cvOriginalFilename ?? "cv.pdf"}</div>
-                                    <div className="profil-file-card__meta">PDF</div>
-                                </div>
-                                <div className="profil-file-card__actions">
-                                    <button type="button" className="profil-file-card__link" onClick={handleCvDownload}>Voir</button>
-                                    <label className="profil-file-card__link">
-                                        <input ref={cvInputRef} type="file" accept="application/pdf" onChange={handleCvChange} className="profil-file-input-hidden" />
-                                        Remplacer
-                                    </label>
-                                </div>
-                            </div>
-                        ) : (
-                            <label className={`profil-empty-upload${cvUploading ? " profil-upload-btn--disabled" : ""}`} style={{ display: "flex", cursor: "pointer" }}>
-                                <input ref={cvInputRef} type="file" accept="application/pdf" onChange={handleCvChange} disabled={cvUploading} className="profil-file-input-hidden" />
-                                <IconDocument />
-                                <span className="profil-empty-upload__text">
-                                    {cvUploading ? "Envoi en cours..." : "Cliquez pour ajouter votre CV (PDF, 5 Mo max)"}
-                                </span>
-                            </label>
-                        )}
-                        {cvError && <p className="profil-message profil-message--error">{cvError}</p>}
-                    </div>
-
-                    <p className="profil-card__subtitle">Lettre de motivation</p>
-                    <div className="profil-field">
-                        {lmPresente && !lmUploading ? (
-                            <div className="profil-file-card">
-                                <div className="profil-file-card__icon"><IconDocument /></div>
-                                <div className="profil-file-card__info">
-                                    <div className="profil-file-card__name">{lmOriginalFilename ?? "lettre-motivation.pdf"}</div>
-                                    <div className="profil-file-card__meta">PDF</div>
-                                </div>
-                                <div className="profil-file-card__actions">
-                                    <button type="button" className="profil-file-card__link" onClick={handleLmDownload}>Voir</button>
-                                    <label className="profil-file-card__link">
-                                        <input ref={lmInputRef} type="file" accept="application/pdf" onChange={handleLmChange} className="profil-file-input-hidden" />
-                                        Remplacer
-                                    </label>
-                                </div>
-                            </div>
-                        ) : (
-                            <label className={`profil-empty-upload${lmUploading ? " profil-upload-btn--disabled" : ""}`} style={{ display: "flex", cursor: "pointer" }}>
-                                <input ref={lmInputRef} type="file" accept="application/pdf" onChange={handleLmChange} disabled={lmUploading} className="profil-file-input-hidden" />
-                                <IconDocument />
-                                <span className="profil-empty-upload__text">
-                                    {lmUploading ? "Envoi en cours..." : "Cliquez pour ajouter votre lettre (PDF, 5 Mo max)"}
-                                </span>
-                            </label>
-                        )}
-                        {lmError && <p className="profil-message profil-message--error">{lmError}</p>}
-                    </div>
-                </div>
-
-                {/* Réseaux */}
-                <div className="profil-card" id="reseaux">
-                    <p className="profil-card__section-title">Réseaux</p>
-                    <div className="profil-field-row profil-field-row--3">
-                        <EditableField id="linkedin" label="LinkedIn" value={linkedin} onSave={setLinkedin} placeholder="https://linkedin.com/in/..." />
-                        <EditableField id="github" label="GitHub" value={github} onSave={setGithub} placeholder="https://github.com/..." />
-                        <EditableField id="portfolio" label="Portfolio" value={portfolio} onSave={setPortfolio} placeholder="https://..." />
+                        <EditableField id="facebook" label="Facebook" value={facebook} onSave={setFacebook} placeholder="https://facebook.com/..." />
+                        <EditableField id="twitter" label="X (Twitter)" value={twitter} onSave={setTwitter} placeholder="https://x.com/..." />
                     </div>
                 </div>
 
                 {/* Meta */}
-                <div className="profil-card">
-                    <p className="profil-card__section-title">Informations</p>
-                    <div className="profil-meta">
-                        <div className="profil-meta__item">
-                            <div className="profil-meta__label">Membre depuis</div>
-                            <div className="profil-meta__value">{formatDate(dateCreation)}</div>
+                <div className="profil-recruteur-card">
+                    <p className="profil-recruteur-card__section-title">Informations</p>
+                    <div className="profil-recruteur-meta">
+                        <div className="profil-recruteur-meta__item">
+                            <div className="profil-recruteur-meta__label">Compte créé le</div>
+                            <div className="profil-recruteur-meta__value">{formatDate(dateCreation)}</div>
                         </div>
-                        <div className="profil-meta__item">
-                            <div className="profil-meta__label">Dernière mise à jour</div>
-                            <div className="profil-meta__value">{formatDate(dateMaj)}</div>
+                        <div className="profil-recruteur-meta__item">
+                            <div className="profil-recruteur-meta__label">Dernière mise à jour</div>
+                            <div className="profil-recruteur-meta__value">{formatDate(dateMaj)}</div>
                         </div>
                     </div>
                 </div>
