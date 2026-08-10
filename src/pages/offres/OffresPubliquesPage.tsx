@@ -8,10 +8,14 @@ import {
 } from "../../api/offreService";
 import { useAuth } from "../../context/AuthContext";
 import { LogoEntreprise } from "../../components/common/LogoEntreprise";
+import { CandidatureFormulaire } from "../candidat/CandidatureFormulaire";
+import { aDejaPostule } from "../../api/candidatureService";
 import { getCouleurContrat } from "./offreColors";
 import "./offres.css";
 
 const TAILLE_PAGE = 8;
+
+type EtapeCandidature = "idle" | "formulaire" | "succes";
 
 function formatSalaire(offre: OffreDTO): string | null {
     if (!offre.salaireVisible || (!offre.salaireMin && !offre.salaireMax)) return null;
@@ -36,6 +40,10 @@ export function OffresPubliquesPage() {
     const [secteurs, setSecteurs] = useState<string[]>([]);
     const [secteurSelectionne, setSecteurSelectionne] = useState("");
 
+    // --- Candidature inline par offre ---
+    const [etapesCandidature, setEtapesCandidature] = useState<Record<number, EtapeCandidature>>({});
+    const [dejaPostuleMap, setDejaPostuleMap] = useState<Record<number, boolean>>({});
+
     const estCandidat = currentUser?.role === "CANDIDAT";
     const filtresActifs = rechercheAppliquee !== "" || secteurSelectionne !== "";
 
@@ -55,6 +63,7 @@ export function OffresPubliquesPage() {
                 });
                 setOffres(data.content);
                 setTotalPages(data.totalPages);
+                setEtapesCandidature({});
             } catch {
                 setError("Impossible de charger les offres pour le moment.");
             } finally {
@@ -84,6 +93,28 @@ export function OffresPubliquesPage() {
 
     function ouvrirDetail(id: number) {
         navigate(`/offres/${id}`);
+    }
+
+    async function handleClicPostuler(e: React.MouseEvent, offreId: number) {
+        e.stopPropagation();
+
+        if (dejaPostuleMap[offreId] === undefined) {
+            try {
+                const deja = await aDejaPostule(offreId);
+                setDejaPostuleMap((prev) => ({ ...prev, [offreId]: deja }));
+                if (deja) return;
+            } catch {
+                // en cas d'échec de vérification, on laisse quand même postuler
+            }
+        } else if (dejaPostuleMap[offreId]) {
+            return;
+        }
+
+        setEtapesCandidature((prev) => ({ ...prev, [offreId]: "formulaire" }));
+    }
+
+    function fermerFormulaire(offreId: number) {
+        setEtapesCandidature((prev) => ({ ...prev, [offreId]: "idle" }));
     }
 
     return (
@@ -162,11 +193,12 @@ export function OffresPubliquesPage() {
                             const couleur = getCouleurContrat(offre.typeContrat);
                             const lieu = [offre.ville, offre.pays].filter(Boolean).join(", ");
                             const salaire = formatSalaire(offre);
+                            const etape = etapesCandidature[offre.id] ?? "idle";
+                            const dejaPostule = dejaPostuleMap[offre.id] ?? false;
+
                             return (
                                 <div
                                     key={offre.id}
-                                    role="button"
-                                    tabIndex={0}
                                     className="offre-tile"
                                     style={
                                         {
@@ -174,60 +206,85 @@ export function OffresPubliquesPage() {
                                             "--offre-color-soft": couleur.bg,
                                         } as React.CSSProperties
                                     }
-                                    onClick={() => ouvrirDetail(offre.id)}
-                                    onKeyDown={(e) => e.key === "Enter" && ouvrirDetail(offre.id)}
                                 >
-                                    <div className="offre-tile__top">
-                                        <LogoEntreprise
-                                            recruteurId={offre.recruteurId}
-                                            logoPresent={offre.logoPresent}
-                                            nomEntreprise={offre.nomEntreprise}
-                                            className="offre-tile__logo"
-                                        />
-                                        <div className="offre-tile__entreprise">
-                                            <p className="offre-tile__nom-entreprise">{offre.nomEntreprise || "Entreprise inconnue"}</p>
+                                    <div
+                                        role="button"
+                                        tabIndex={0}
+                                        className="offre-tile__clickzone"
+                                        onClick={() => ouvrirDetail(offre.id)}
+                                        onKeyDown={(e) => e.key === "Enter" && ouvrirDetail(offre.id)}
+                                    >
+                                        <div className="offre-tile__top">
+                                            <LogoEntreprise
+                                                recruteurId={offre.recruteurId}
+                                                logoPresent={offre.logoPresent}
+                                                nomEntreprise={offre.nomEntreprise}
+                                                className="offre-tile__logo"
+                                            />
+                                            <div className="offre-tile__entreprise">
+                                                <p className="offre-tile__nom-entreprise">{offre.nomEntreprise || "Entreprise inconnue"}</p>
+                                            </div>
+                                        </div>
+
+                                        <p className="offre-tile__titre">{offre.titre}</p>
+                                        <p className="offre-tile__lieu">{lieu || "Lieu non précisé"}</p>
+
+                                        <div className="offre-tile__tags">
+                                            <span className="offre-tile__tag">{LABELS_TYPE_CONTRAT[offre.typeContrat]}</span>
+                                            {offre.teletravail && <span className="offre-tile__tag offre-tile__tag--gold">Télétravail</span>}
+                                            {offre.hybride && <span className="offre-tile__tag offre-tile__tag--gold">Hybride</span>}
+                                        </div>
+
+                                        <div className="offre-tile__footer">
+                                            {salaire ? (
+                                                <span className="offre-tile__salaire">{salaire}</span>
+                                            ) : (
+                                                <span className="offre-tile__salaire-vide">Salaire non communiqué</span>
+                                            )}
                                         </div>
                                     </div>
 
-                                    <p className="offre-tile__titre">{offre.titre}</p>
-                                    <p className="offre-tile__lieu">{lieu || "Lieu non précisé"}</p>
-
-                                    <div className="offre-tile__tags">
-                                        <span className="offre-tile__tag">{LABELS_TYPE_CONTRAT[offre.typeContrat]}</span>
-                                        {offre.teletravail && <span className="offre-tile__tag offre-tile__tag--gold">Télétravail</span>}
-                                        {offre.hybride && <span className="offre-tile__tag offre-tile__tag--gold">Hybride</span>}
-                                    </div>
-
-                                    <div className="offre-tile__footer">
-                                        {salaire ? (
-                                            <span className="offre-tile__salaire">{salaire}</span>
-                                        ) : (
-                                            <span className="offre-tile__salaire-vide">Salaire non communiqué</span>
-                                        )}
-                                    </div>
-
-                                    <div className="offre-tile__actions">
-                                        <button
-                                            className="btn-secondary offre-tile__voir-detail"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                ouvrirDetail(offre.id);
-                                            }}
-                                        >
-                                            Voir détail
-                                        </button>
-                                        {estCandidat && offre.statut === "PUBLIEE" && (
+                                    {etape !== "formulaire" && (
+                                        <div className="offre-tile__actions">
                                             <button
-                                                className="btn-gold offre-tile__postuler"
+                                                className="btn-secondary offre-tile__voir-detail"
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     ouvrirDetail(offre.id);
                                                 }}
                                             >
-                                                Postuler
+                                                Voir détail
                                             </button>
-                                        )}
-                                    </div>
+                                            {estCandidat && offre.statut === "PUBLIEE" && etape !== "succes" && (
+                                                <button
+                                                    className="btn-gold offre-tile__postuler"
+                                                    onClick={(e) => handleClicPostuler(e, offre.id)}
+                                                    disabled={dejaPostule}
+                                                >
+                                                    {dejaPostule ? "Candidature envoyée" : "Postuler"}
+                                                </button>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {etape === "formulaire" && (
+                                        <div className="offre-tile__candidature" onClick={(e) => e.stopPropagation()}>
+                                            <CandidatureFormulaire
+                                                offreId={offre.id}
+                                                onAnnuler={() => fermerFormulaire(offre.id)}
+                                                onSucces={() => {
+                                                    setEtapesCandidature((prev) => ({ ...prev, [offre.id]: "succes" }));
+                                                    setDejaPostuleMap((prev) => ({ ...prev, [offre.id]: true }));
+                                                }}
+                                            />
+                                        </div>
+                                    )}
+
+                                    {etape === "succes" && (
+                                        <div className="candidature-form__success" onClick={(e) => e.stopPropagation()}>
+                                            ✓ Candidature envoyée
+                                        </div>
+                                    )}
                                 </div>
                             );
                         })}
