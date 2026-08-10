@@ -9,6 +9,8 @@ import {
 import { useAuth } from "../../context/AuthContext";
 import { useAutoSave } from "../../hooks/useAutoSave";
 import { SaveStatusBadge } from "../../components/common/SaveStatusBadge";
+import { EditableField } from "../../components/common/EditableField";
+import { EditableTextarea } from "../../components/common/EditableTextarea";
 import "./profilRecruteurPage.css";
 
 function formatDate(iso: string | null): string {
@@ -180,208 +182,191 @@ export function ProfilRecruteurPage() {
             <div className="profil-recruteur-page__header">
                 <div>
                     <h1 className="profil-recruteur-page__title">Mon entreprise</h1>
-                    <p className="profil-recruteur-page__subtitle">Vos modifications sont enregistrées automatiquement.</p>
+                    <p className="profil-recruteur-page__subtitle">Cliquez sur un champ pour le modifier, ✓ pour enregistrer, ✕ pour annuler.</p>
                 </div>
                 <SaveStatusBadge status={saveStatus} />
             </div>
 
-            {loadError && <div className="profil-recruteur-message profil-recruteur-message--error">{loadError}</div>}
+            <nav className="profil-recruteur-nav">
+                <a href="#logo">Logo & entreprise</a>
+                <a href="#contact">Contact</a>
+                <a href="#adresse">Adresse</a>
+                <a href="#reseaux">Réseaux</a>
+            </nav>
 
-            {/* Logo + informations générales */}
-            <div className="profil-recruteur-card">
-                <p className="profil-recruteur-card__section-title">Logo & informations générales</p>
-                <div className="profil-recruteur-avatar-row">
-                    <div className="profil-recruteur-avatar-wrap">
-                        {logoUrl ? (
-                            <img src={logoUrl} alt="Logo de l'entreprise" className="profil-recruteur-photo-preview" />
-                        ) : (
-                            <div className="profil-recruteur-photo-placeholder">?</div>
-                        )}
-                        <label className={`profil-recruteur-avatar-edit${logoUploading ? " profil-recruteur-upload-btn--disabled" : ""}`}>
-                            <input
-                                ref={logoInputRef}
-                                type="file"
-                                accept="image/jpeg,image/png,image/webp"
-                                onChange={handleLogoChange}
-                                disabled={logoUploading}
-                                className="profil-recruteur-file-input-hidden"
-                            />
-                            <IconCamera />
-                        </label>
+            <div className="profil-recruteur-content">
+                {loadError && <div className="profil-recruteur-message profil-recruteur-message--error">{loadError}</div>}
+
+                {/* Logo + informations générales */}
+                <div className="profil-recruteur-card" id="logo">
+                    <p className="profil-recruteur-card__section-title">Logo & informations générales</p>
+                    <div className="profil-recruteur-avatar-row">
+                        <div className="profil-recruteur-avatar-wrap">
+                            {logoUrl ? (
+                                <img src={logoUrl} alt="Logo de l'entreprise" className="profil-recruteur-photo-preview" />
+                            ) : (
+                                <div className="profil-recruteur-photo-placeholder">🏢</div>
+                            )}
+                            <label className={`profil-recruteur-avatar-edit${logoUploading ? " profil-recruteur-upload-btn--disabled" : ""}`}>
+                                <input
+                                    ref={logoInputRef}
+                                    type="file"
+                                    accept="image/jpeg,image/png,image/webp"
+                                    onChange={handleLogoChange}
+                                    disabled={logoUploading}
+                                    className="profil-recruteur-file-input-hidden"
+                                />
+                                <IconCamera />
+                            </label>
+                        </div>
+                        <div className="profil-recruteur-avatar-info">
+                            <p className="profil-recruteur-avatar-info__title">
+                                {logoUploading ? "Envoi en cours..." : "Cliquez sur l'icône pour changer le logo"}
+                            </p>
+                            <p className="profil-recruteur-field__hint" style={{ margin: 0 }}>
+                                JPEG, PNG ou WebP — 5 Mo maximum.
+                            </p>
+                            {logoError && <p className="profil-recruteur-message profil-recruteur-message--error">{logoError}</p>}
+                        </div>
                     </div>
-                    <div className="profil-recruteur-avatar-info">
-                        <p className="profil-recruteur-avatar-info__title">
-                            {logoUploading ? "Envoi en cours..." : "Cliquez sur l'icône pour changer le logo"}
-                        </p>
-                        <p className="profil-recruteur-field__hint" style={{ margin: 0 }}>
-                            JPEG, PNG ou WebP — 5 Mo maximum.
-                        </p>
-                        {logoError && <p className="profil-recruteur-message profil-recruteur-message--error">{logoError}</p>}
+
+                    <div style={{ marginTop: 24 }}>
+                        <EditableField
+                            id="nomEntreprise"
+                            label="Nom de l'entreprise"
+                            value={nomEntreprise}
+                            onSave={setNomEntreprise}
+                            placeholder="Nom de votre entreprise"
+                        />
                     </div>
-                </div>
 
-                <div className="profil-recruteur-field" style={{ marginTop: 24 }}>
-                    <label htmlFor="nomEntreprise">Nom de l'entreprise</label>
-                    <input id="nomEntreprise" value={nomEntreprise} onChange={(e) => setNomEntreprise(e.target.value)} />
-                </div>
-
-                <div className="profil-recruteur-field-row">
-                    <div className="profil-recruteur-field">
-                        <label htmlFor="secteurActivite">Secteur d'activité</label>
-                        <select id="secteurActivite" value={secteurActivite} onChange={(e) => setSecteurActivite(e.target.value)}>
-                            <option value="">Sélectionnez un secteur</option>
-                            {SECTEURS_ACTIVITE.map((secteur) => (
-                                <option key={secteur} value={secteur}>{secteur}</option>
-                            ))}
-                        </select>
+                    <div className="profil-recruteur-field-row">
+                        <div className="profil-recruteur-field">
+                            <label htmlFor="secteurActivite">Secteur d'activité</label>
+                            <select id="secteurActivite" value={secteurActivite} onChange={(e) => setSecteurActivite(e.target.value)}>
+                                <option value="">Sélectionnez un secteur</option>
+                                {SECTEURS_ACTIVITE.map((secteur) => (
+                                    <option key={secteur} value={secteur}>{secteur}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="profil-recruteur-field">
+                            <label htmlFor="tailleEntreprise">Taille de l'entreprise</label>
+                            <select id="tailleEntreprise" value={tailleEntreprise} onChange={(e) => setTailleEntreprise(e.target.value)}>
+                                <option value="">Non précisé</option>
+                                {TAILLES_ENTREPRISE.map((t) => (
+                                    <option key={t} value={t}>{t} employés</option>
+                                ))}
+                            </select>
+                        </div>
                     </div>
-                    <div className="profil-recruteur-field">
-                        <label htmlFor="tailleEntreprise">Taille de l'entreprise</label>
-                        <select id="tailleEntreprise" value={tailleEntreprise} onChange={(e) => setTailleEntreprise(e.target.value)}>
-                            <option value="">Non précisé</option>
-                            {TAILLES_ENTREPRISE.map((t) => (
-                                <option key={t} value={t}>{t} employés</option>
-                            ))}
-                        </select>
-                    </div>
-                </div>
 
-                <div className="profil-recruteur-field">
-                    <label htmlFor="siteWeb">Site web</label>
-                    <input id="siteWeb" value={siteWeb} onChange={(e) => setSiteWeb(e.target.value)} placeholder="https://..." />
-                </div>
+                    <EditableField id="siteWeb" label="Site web" value={siteWeb} onSave={setSiteWeb} placeholder="https://..." />
 
-                <div className="profil-recruteur-field">
-                    <label htmlFor="description">Description de l'entreprise</label>
-                    <textarea
+                    <EditableTextarea
                         id="description"
-                        rows={5}
+                        label="Description de l'entreprise"
                         value={description}
-                        onChange={(e) => setDescription(e.target.value)}
+                        onSave={setDescription}
                         placeholder="Présentez votre entreprise en quelques lignes..."
+                        rows={5}
                     />
                 </div>
-            </div>
 
-            {/* Contact */}
-            <div className="profil-recruteur-card">
-                <p className="profil-recruteur-card__section-title">Contact recruteur</p>
-                <div className="profil-recruteur-field-row">
-                    <div className="profil-recruteur-field">
-                        <label htmlFor="nomContact">Nom du recruteur</label>
-                        <input id="nomContact" value={nomContact} onChange={(e) => setNomContact(e.target.value)} placeholder="Prénom Nom" />
-                    </div>
-                    <div className="profil-recruteur-field">
-                        <label htmlFor="fonctionContact">Fonction</label>
-                        <input
+                {/* Contact */}
+                <div className="profil-recruteur-card" id="contact">
+                    <p className="profil-recruteur-card__section-title">Contact recruteur</p>
+                    <div className="profil-recruteur-field-row">
+                        <EditableField id="nomContact" label="Nom du recruteur" value={nomContact} onSave={setNomContact} placeholder="Prénom Nom" />
+                        <EditableField
                             id="fonctionContact"
+                            label="Fonction"
                             value={fonctionContact}
-                            onChange={(e) => setFonctionContact(e.target.value)}
+                            onSave={setFonctionContact}
                             placeholder="Responsable RH"
                         />
                     </div>
-                </div>
-                <div className="profil-recruteur-field-row">
-                    <div className="profil-recruteur-field">
-                        <label htmlFor="emailProfessionnel">Email professionnel</label>
-                        <input
+                    <div className="profil-recruteur-field-row">
+                        <EditableField
                             id="emailProfessionnel"
-                            type="email"
+                            label="Email professionnel"
                             value={emailProfessionnel}
-                            onChange={(e) => setEmailProfessionnel(e.target.value)}
+                            onSave={setEmailProfessionnel}
                             placeholder="contact@entreprise.sn"
                         />
-                    </div>
-                    <div className="profil-recruteur-field">
-                        <label htmlFor="telephoneEntreprise">Téléphone</label>
-                        <input
+                        <EditableField
                             id="telephoneEntreprise"
+                            label="Téléphone"
                             value={telephoneEntreprise}
-                            onChange={(e) => setTelephoneEntreprise(e.target.value)}
+                            onSave={setTelephoneEntreprise}
                             placeholder="+221 33 xxx xx xx"
                         />
                     </div>
                 </div>
-            </div>
 
-            {/* Adresse */}
-            <div className="profil-recruteur-card">
-                <p className="profil-recruteur-card__section-title">Adresse</p>
-                <div className="profil-recruteur-field">
-                    <label htmlFor="adresse">Adresse</label>
-                    <input id="adresse" value={adresse} onChange={(e) => setAdresse(e.target.value)} placeholder="Rue, quartier..." />
-                </div>
-                <div className="profil-recruteur-field-row profil-recruteur-field-row--3">
-                    <div className="profil-recruteur-field">
-                        <label htmlFor="ville">Ville</label>
-                        <select id="ville" value={ville} onChange={(e) => setVille(e.target.value)}>
-                            <option value="">Sélectionnez une ville</option>
-                            {VILLES.map((v) => (
-                                <option key={v} value={v}>{v}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="profil-recruteur-field">
-                        <label htmlFor="region">Région</label>
-                        <select id="region" value={region} onChange={(e) => setRegion(e.target.value)}>
-                            <option value="">Sélectionnez une région</option>
-                            {REGIONS.map((r) => (
-                                <option key={r} value={r}>{r}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="profil-recruteur-field">
-                        <label htmlFor="pays">Pays</label>
-                        <select id="pays" value={pays} onChange={(e) => setPays(e.target.value)}>
-                            <option value="">Sélectionnez un pays</option>
-                            {PAYS.map((p) => (
-                                <option key={p} value={p}>{p}</option>
-                            ))}
-                        </select>
+                {/* Adresse */}
+                <div className="profil-recruteur-card" id="adresse">
+                    <p className="profil-recruteur-card__section-title">Adresse</p>
+                    <EditableField id="adresse" label="Adresse" value={adresse} onSave={setAdresse} placeholder="Rue, quartier..." />
+                    <div className="profil-recruteur-field-row profil-recruteur-field-row--3">
+                        <div className="profil-recruteur-field">
+                            <label htmlFor="ville">Ville</label>
+                            <select id="ville" value={ville} onChange={(e) => setVille(e.target.value)}>
+                                <option value="">Sélectionnez une ville</option>
+                                {VILLES.map((v) => (
+                                    <option key={v} value={v}>{v}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="profil-recruteur-field">
+                            <label htmlFor="region">Région</label>
+                            <select id="region" value={region} onChange={(e) => setRegion(e.target.value)}>
+                                <option value="">Sélectionnez une région</option>
+                                {REGIONS.map((r) => (
+                                    <option key={r} value={r}>{r}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="profil-recruteur-field">
+                            <label htmlFor="pays">Pays</label>
+                            <select id="pays" value={pays} onChange={(e) => setPays(e.target.value)}>
+                                <option value="">Sélectionnez un pays</option>
+                                {PAYS.map((p) => (
+                                    <option key={p} value={p}>{p}</option>
+                                ))}
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            {/* Réseaux sociaux */}
-            <div className="profil-recruteur-card">
-                <p className="profil-recruteur-card__section-title">Réseaux sociaux</p>
-                <div className="profil-recruteur-field-row profil-recruteur-field-row--3">
-                    <div className="profil-recruteur-field">
-                        <label htmlFor="linkedin">LinkedIn</label>
-                        <input
+                {/* Réseaux sociaux */}
+                <div className="profil-recruteur-card" id="reseaux">
+                    <p className="profil-recruteur-card__section-title">Réseaux sociaux</p>
+                    <div className="profil-recruteur-field-row profil-recruteur-field-row--3">
+                        <EditableField
                             id="linkedin"
+                            label="LinkedIn"
                             value={linkedin}
-                            onChange={(e) => setLinkedin(e.target.value)}
+                            onSave={setLinkedin}
                             placeholder="https://linkedin.com/company/..."
                         />
-                    </div>
-                    <div className="profil-recruteur-field">
-                        <label htmlFor="facebook">Facebook</label>
-                        <input
-                            id="facebook"
-                            value={facebook}
-                            onChange={(e) => setFacebook(e.target.value)}
-                            placeholder="https://facebook.com/..."
-                        />
-                    </div>
-                    <div className="profil-recruteur-field">
-                        <label htmlFor="twitter">X (Twitter)</label>
-                        <input id="twitter" value={twitter} onChange={(e) => setTwitter(e.target.value)} placeholder="https://x.com/..." />
+                        <EditableField id="facebook" label="Facebook" value={facebook} onSave={setFacebook} placeholder="https://facebook.com/..." />
+                        <EditableField id="twitter" label="X (Twitter)" value={twitter} onSave={setTwitter} placeholder="https://x.com/..." />
                     </div>
                 </div>
-            </div>
 
-            {/* Meta */}
-            <div className="profil-recruteur-card">
-                <p className="profil-recruteur-card__section-title">Informations</p>
-                <div className="profil-recruteur-meta">
-                    <div className="profil-recruteur-meta__item">
-                        <div className="profil-recruteur-meta__label">Compte créé le</div>
-                        <div className="profil-recruteur-meta__value">{formatDate(dateCreation)}</div>
-                    </div>
-                    <div className="profil-recruteur-meta__item">
-                        <div className="profil-recruteur-meta__label">Dernière mise à jour</div>
-                        <div className="profil-recruteur-meta__value">{formatDate(dateMaj)}</div>
+                {/* Meta */}
+                <div className="profil-recruteur-card">
+                    <p className="profil-recruteur-card__section-title">Informations</p>
+                    <div className="profil-recruteur-meta">
+                        <div className="profil-recruteur-meta__item">
+                            <div className="profil-recruteur-meta__label">Compte créé le</div>
+                            <div className="profil-recruteur-meta__value">{formatDate(dateCreation)}</div>
+                        </div>
+                        <div className="profil-recruteur-meta__item">
+                            <div className="profil-recruteur-meta__label">Dernière mise à jour</div>
+                            <div className="profil-recruteur-meta__value">{formatDate(dateMaj)}</div>
+                        </div>
                     </div>
                 </div>
             </div>

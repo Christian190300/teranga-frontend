@@ -1,17 +1,112 @@
 /* ============================================================
-   PROFIL RECRUTEUR — design propre, navy/or, cohérent avec le reste du site
+   PROFIL RECRUTEUR — pleine largeur, cohérent avec le reste du site
    ============================================================ */
 
 .profil-recruteur-page,
 .profil-recruteur-page * {
     box-sizing: border-box;
 }
+.profil-recruteur-content,
+.profil-recruteur-card {
+    width: 100%;
+}
 
 .profil-recruteur-page {
-    max-width: 720px;
+    max-width: 1920px;
+    width: 94%;
     margin: 0 auto;
-    padding: 48px 24px 80px;
+    padding: 40px 0 90px;
     font-family: 'Inter', -apple-system, sans-serif;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    grid-template-areas:
+        "header header"
+        "nav content";
+    gap: 8px 32px;
+    align-items: start;
+}
+
+.profil-recruteur-page__header {
+    grid-area: header;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.profil-recruteur-page__title {
+    font-size: 1.55rem;
+    font-weight: 800;
+    color: #14294d;
+    margin: 0 0 4px;
+    letter-spacing: -0.01em;
+}
+
+.profil-recruteur-page__subtitle {
+    font-size: 0.9rem;
+    color: #667085;
+    margin: 0;
+}
+
+.profil-recruteur-page__loading {
+    text-align: center;
+    padding: 80px 0;
+    color: #667085;
+    font-size: 0.92rem;
+}
+
+/* ---------- Nav latérale ---------- */
+.profil-recruteur-nav {
+    grid-area: nav;
+    position: sticky;
+    top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.profil-recruteur-nav a {
+    padding: 9px 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #667085;
+    text-decoration: none;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.profil-recruteur-nav a:hover {
+    background: #f7f8fb;
+    color: #14294d;
+}
+
+.profil-recruteur-content {
+    grid-area: content;
+    min-width: 0;
+}
+
+@media (max-width: 900px) {
+    .profil-recruteur-page {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "header"
+            "nav"
+            "content";
+    }
+    .profil-recruteur-nav {
+        position: static;
+        flex-direction: row;
+        overflow-x: auto;
+        gap: 8px;
+        padding-bottom: 8px;
+        margin-bottom: 8px;
+        border-bottom: 1px solid #e8e9ee;
+    }
+    .profil-recruteur-nav a {
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
 }
 
 /* ---------- Logo entreprise ---------- */
@@ -48,8 +143,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 700;
-    font-size: 1.6rem;
+    font-size: 2rem;
+    line-height: 1;
     border: 2px solid #f0f1f4;
 }
 
@@ -72,6 +167,11 @@
 
 .profil-recruteur-avatar-edit:hover {
     background: #1e3a6b;
+}
+
+.profil-recruteur-avatar-edit:has(input:disabled) {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 .profil-recruteur-avatar-edit svg {
@@ -115,36 +215,6 @@
     line-height: 1.5;
 }
 
-/* ---------- Header ---------- */
-.profil-recruteur-page__header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 28px;
-}
-
-.profil-recruteur-page__title {
-    font-size: 1.55rem;
-    font-weight: 800;
-    color: #14294d;
-    margin: 0 0 4px;
-    letter-spacing: -0.01em;
-}
-
-.profil-recruteur-page__subtitle {
-    font-size: 0.9rem;
-    color: #667085;
-    margin: 0;
-}
-
-.profil-recruteur-page__loading {
-    text-align: center;
-    padding: 80px 0;
-    color: #667085;
-    font-size: 0.92rem;
-}
-
 /* ---------- Cards ---------- */
 .profil-recruteur-card {
     background: white;
@@ -152,6 +222,13 @@
     border-radius: 14px;
     padding: 28px 32px;
     margin-bottom: 20px;
+    scroll-margin-top: 24px;
+}
+
+@media (max-width: 640px) {
+    .profil-recruteur-card {
+        padding: 20px;
+    }
 }
 
 .profil-recruteur-card__section-title {
@@ -163,13 +240,7 @@
     margin: 0 0 18px;
 }
 
-.profil-recruteur-card__section-title:not(:first-child) {
-    margin-top: 32px;
-    padding-top: 28px;
-    border-top: 1px solid #f0f1f4;
-}
-
-/* ---------- Fields ---------- */
+/* ---------- Champs ---------- */
 .profil-recruteur-field {
     margin-bottom: 20px;
 }
@@ -186,9 +257,11 @@
     margin-bottom: 6px;
 }
 
-.profil-recruteur-field input,
-.profil-recruteur-field textarea,
-.profil-recruteur-field select {
+.profil-recruteur-field input[type="text"],
+.profil-recruteur-field input:not([type]),
+.profil-recruteur-field input[type="email"],
+.profil-recruteur-field select,
+.profil-recruteur-field textarea {
     width: 100%;
     padding: 11px 14px;
     border: 1px solid #e8e9ee;
@@ -198,6 +271,20 @@
     background: #f7f8fb;
     color: #14294d;
     transition: border-color 0.15s ease, background 0.15s ease;
+    appearance: none;
+}
+
+.profil-recruteur-field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239aa1ac' stroke-width='1.5' fill='none' fill-rule='evenodd'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+}
+
+.profil-recruteur-field textarea {
+    resize: vertical;
+    min-height: 110px;
+    line-height: 1.6;
 }
 
 .profil-recruteur-field input:focus,
@@ -206,12 +293,6 @@
     outline: none;
     border-color: #c8951e;
     background: white;
-}
-
-.profil-recruteur-field textarea {
-    resize: vertical;
-    min-height: 110px;
-    line-height: 1.6;
 }
 
 .profil-recruteur-field-row {
@@ -224,11 +305,77 @@
     grid-template-columns: 1fr 1fr 1fr;
 }
 
-@media (max-width: 560px) {
+@media (max-width: 640px) {
     .profil-recruteur-field-row,
     .profil-recruteur-field-row--3 {
         grid-template-columns: 1fr;
     }
+}
+
+/* ---------- Champ éditable (icônes ✓ / ✕) ---------- */
+.profil-recruteur-field__editable {
+    position: relative;
+}
+
+.profil-recruteur-field__input--with-actions {
+    padding-right: 68px !important;
+}
+
+.profil-recruteur-field__editable textarea.profil-recruteur-field__input--with-actions {
+    padding-right: 14px !important;
+    padding-bottom: 44px !important;
+}
+
+.profil-recruteur-field__actions {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 4px;
+}
+
+.profil-recruteur-field__actions--textarea {
+    top: auto;
+    bottom: 10px;
+    right: 10px;
+    transform: none;
+    background: white;
+    border-radius: 8px;
+    padding: 2px;
+    box-shadow: 0 1px 4px rgba(20, 41, 77, 0.12);
+}
+
+.profil-recruteur-field__icon-btn {
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.profil-recruteur-field__icon-btn svg {
+    width: 15px;
+    height: 15px;
+}
+
+.profil-recruteur-field__icon-btn--save {
+    color: #1a7f4b;
+}
+.profil-recruteur-field__icon-btn--save:hover {
+    background: #e6f4ea;
+}
+
+.profil-recruteur-field__icon-btn--cancel {
+    color: #b3261e;
+}
+.profil-recruteur-field__icon-btn--cancel:hover {
+    background: #fdecea;
 }
 
 /* ---------- Bloc infos (lecture seule) ---------- */
@@ -276,6 +423,12 @@
     border: 1px solid #f2c1bd;
 }
 
-.profil-recruteur-page > .profil-recruteur-message--error {
+.profil-recruteur-content > .profil-recruteur-message--error {
     margin-bottom: 20px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .profil-recruteur-page * {
+        transition: none !important;
+    }
 }
