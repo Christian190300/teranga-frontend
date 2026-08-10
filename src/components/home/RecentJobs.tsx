@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { IconCoin, IconMapPin } from "./icons";
 import { LogoEntreprise } from "../common/LogoEntreprise";
+import { getCouleurContrat } from "../../pages/offres/offreColors";
 
 import {
     LABELS_TYPE_CONTRAT,
@@ -18,7 +19,6 @@ export function RecentJobs() {
         async function charger() {
             try {
                 const resultat = await listerOffresPubliques(0, 5);
-
                 const offres = [...(resultat.content ?? [])]
                     .sort(
                         (a, b) =>
@@ -26,7 +26,6 @@ export function RecentJobs() {
                             new Date(a.datePublication ?? 0).getTime()
                     )
                     .slice(0, 5);
-
                 setJobs(offres);
             } catch (error) {
                 console.error("Erreur lors du chargement des offres :", error);
@@ -34,7 +33,6 @@ export function RecentJobs() {
                 setLoading(false);
             }
         }
-
         charger();
     }, []);
 
@@ -62,48 +60,61 @@ export function RecentJobs() {
                     <p>Aucune offre disponible actuellement.</p>
                 ) : (
                     <>
-                        {jobs.map((job) => (
-                            <div key={job.id} className="home-job-card">
-                                <div className="home-job-card__top">
-                                    <LogoEntreprise
-                                        recruteurId={job.recruteurId}
-                                        logoPresent={job.logoPresent}
-                                        nomEntreprise={job.nomEntreprise}
-                                        className="home-job-card__icon"
-                                    />
+                        {jobs.map((job) => {
+                            const couleur = getCouleurContrat(job.typeContrat);
+                            return (
+                                <article
+                                    key={job.id}
+                                    className="job-badge"
+                                    style={
+                                        {
+                                            "--job-color": couleur.bar,
+                                            "--job-color-soft": couleur.bg,
+                                        } as React.CSSProperties
+                                    }
+                                >
+                                    <div className="job-badge__stripe" />
 
-                                    <span className="home-pill">{LABELS_TYPE_CONTRAT[job.typeContrat]}</span>
-                                </div>
+                                    <div className="job-badge__head">
+                                        <LogoEntreprise
+                                            recruteurId={job.recruteurId}
+                                            logoPresent={job.logoPresent}
+                                            nomEntreprise={job.nomEntreprise}
+                                            className="job-badge__logo"
+                                        />
+                                        <span className="job-badge__pill">{LABELS_TYPE_CONTRAT[job.typeContrat]}</span>
+                                    </div>
 
-                                <div>
-                                    <h3>{job.titre}</h3>
-                                    <p className="home-job-card__company">{job.nomEntreprise ?? "Entreprise"}</p>
-                                </div>
+                                    <div className="job-badge__body">
+                                        <h3>{job.titre}</h3>
+                                        <p className="job-badge__company">{job.nomEntreprise ?? "Entreprise"}</p>
+                                    </div>
 
-                                <div className="home-job-card__meta">
-                                    <span>
-                                        <IconMapPin />
-                                        {job.ville ?? job.region ?? job.pays ?? "Non précisé"}
-                                    </span>
+                                    <div className="job-badge__meta">
+                                        <span>
+                                            <IconMapPin />
+                                            {job.ville ?? job.region ?? job.pays ?? "Non précisé"}
+                                        </span>
+                                        <span className="job-badge__meta-sep">•</span>
+                                        <span>
+                                            <IconCoin />
+                                            {job.salaireVisible
+                                                ? `${job.salaireMin ?? "-"} - ${job.salaireMax ?? "-"} ${job.devise ?? ""}`
+                                                : "Salaire non communiqué"}
+                                        </span>
+                                    </div>
 
-                                    <span>
-                                        <IconCoin />
-                                        {job.salaireVisible
-                                            ? `${job.salaireMin ?? "-"} - ${job.salaireMax ?? "-"} ${job.devise ?? ""}`
-                                            : "Salaire non communiqué"}
-                                    </span>
-                                </div>
-
-                                <div className="home-job-card__actions">
-                                    <Link to={`/offres/${job.id}`} className="home-btn home-btn--outline home-btn--dark">
-                                        Voir détail
-                                    </Link>
-                                    <button className="home-btn home-btn--gold" onClick={handlePostuler}>
-                                        Postuler
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
+                                    <div className="job-badge__actions">
+                                        <Link to={`/offres/${job.id}`} className="job-badge__btn job-badge__btn--ghost">
+                                            Voir détail
+                                        </Link>
+                                        <button className="job-badge__btn job-badge__btn--gold" onClick={handlePostuler}>
+                                            Postuler
+                                        </button>
+                                    </div>
+                                </article>
+                            );
+                        })}
 
                         <Link to="/offres" className="home-job-more-card">
                             <span>Voir plus d'offres</span>

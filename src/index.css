@@ -55,6 +55,160 @@ body {
     padding: 0 var(--page-padding);
 }
 
+/* ---------- Job badge (carte-offre façon badge professionnel) ---------- */
+.job-badge {
+    position: relative;
+    background: white;
+    border: 1.5px solid var(--hp-line);
+    border-radius: 14px;
+    padding: 28px var(--sp-4) var(--sp-4);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow: visible;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.job-badge:hover {
+    border-color: var(--job-color, var(--hp-navy));
+    box-shadow: 0 12px 28px rgba(20, 41, 77, 0.1);
+    transform: translateY(-3px);
+}
+
+.job-badge__stripe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    border-radius: 14px 14px 0 0;
+    background: var(--job-color, var(--hp-gold));
+}
+
+.job-badge__head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-top: -20px;
+}
+
+.job-badge__logo {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: white;
+    border: 3px solid white;
+    box-shadow: 0 0 0 1.5px var(--hp-line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    object-fit: cover;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+
+.job-badge__pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    background: var(--job-color-soft, var(--hp-gold-soft));
+    color: var(--job-color, var(--hp-gold-text));
+    margin-bottom: 4px;
+}
+
+.job-badge__body h3 {
+    font-family: var(--hp-font);
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--hp-navy);
+    margin: 0 0 4px;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+}
+
+.job-badge__company {
+    color: var(--hp-muted);
+    font-size: 0.86rem;
+    margin: 0;
+    font-weight: 400;
+}
+
+.job-badge__meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 0.82rem;
+    color: var(--hp-muted);
+    padding-top: 10px;
+    border-top: 1.5px solid var(--hp-line);
+}
+
+.job-badge__meta span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.job-badge__meta svg {
+    color: var(--hp-muted-light);
+    flex-shrink: 0;
+}
+
+.job-badge__meta-sep {
+    color: var(--hp-muted-light);
+}
+
+.job-badge__actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.job-badge__btn {
+    flex: 1;
+    text-align: center;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1.5px solid transparent;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.job-badge__btn--ghost {
+    background: white;
+    border-color: var(--hp-line);
+    color: var(--hp-navy);
+}
+.job-badge__btn--ghost:hover {
+    border-color: var(--hp-navy);
+    background: var(--hp-navy-soft);
+}
+
+.job-badge__btn--gold {
+    background: var(--hp-gold-light);
+    color: var(--hp-navy-deep);
+}
+.job-badge__btn--gold:hover {
+    background: var(--hp-gold);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .job-badge {
+        transition: none;
+    }
+}
+
+
 .home-job-card__actions {
     display: flex;
     gap: var(--sp-1);
