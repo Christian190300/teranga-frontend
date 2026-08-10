@@ -7,6 +7,7 @@ import {
     LABELS_NIVEAU_ETUDE,
     type OffreDTO,
 } from "../../api/offreService";
+import { LogoEntreprise } from "../../components/common/LogoEntreprise";
 import { postulerOffre, aDejaPostule } from "../../api/candidatureService";
 import { useAuth } from "../../context/AuthContext";
 import { getCouleurContrat } from "../offres/offreColors";
@@ -22,11 +23,6 @@ function formatSalaire(offre: OffreDTO): string | null {
 function formatDate(iso: string | null): string {
     if (!iso) return "—";
     return new Date(iso).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
-}
-
-function initiales(nom: string | null): string {
-    if (!nom) return "?";
-    return nom.slice(0, 2).toUpperCase();
 }
 
 function estExpiree(offre: OffreDTO): boolean {
@@ -118,7 +114,12 @@ export function OffreDetailPage() {
             <div className="offre-detail__header">
                 <div className="offre-detail__top-row">
                     <div>
-                        <div className="offre-detail__logo">{initiales(offre.nomEntreprise)}</div>
+                        <LogoEntreprise
+                            recruteurId={offre.recruteurId}
+                            logoPresent={offre.logoPresent}
+                            nomEntreprise={offre.nomEntreprise}
+                            className="offre-detail__logo"
+                        />
                         <p className="offre-detail__entreprise">{offre.nomEntreprise ?? "Entreprise"}</p>
                         <h1 className="offre-detail__titre">{offre.titre}</h1>
                         <p className="offre-detail__lieu">{lieu || "Lieu non précisé"}</p>
