@@ -1,23 +1,36 @@
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import {
     listerOffresPubliques,
     listerSecteursDisponibles,
     LABELS_TYPE_CONTRAT,
+    LABELS_NIVEAU_EXPERIENCE,
     type OffreDTO,
 } from "../../api/offreService";
 import { useAuth } from "../../context/AuthContext";
 import { LogoEntreprise } from "../../components/common/LogoEntreprise";
+import { IconCoin, IconMapPin } from "../../components/home/icons";
 import { getCouleurContrat } from "./offreColors";
 import "./offres.css";
 
 const TAILLE_PAGE = 8;
 
-function formatSalaire(offre: OffreDTO): string | null {
-    if (!offre.salaireVisible || (!offre.salaireMin && !offre.salaireMax)) return null;
-    const devise = offre.devise ?? "FCFA";
-    if (offre.salaireMin && offre.salaireMax) return `${offre.salaireMin.toLocaleString()} - ${offre.salaireMax.toLocaleString()} ${devise}`;
-    return `${(offre.salaireMin ?? offre.salaireMax)?.toLocaleString()} ${devise}`;
+function joursDepuisPublication(iso: string | null): number | null {
+    if (!iso) return null;
+    const diffMs = Date.now() - new Date(iso).getTime();
+    return Math.floor(diffMs / 86400000);
+}
+
+function formatAnciennete(jours: number | null): string {
+    if (jours === null) return "";
+    if (jours <= 0) return "Publiée aujourd'hui";
+    if (jours === 1) return "Publiée hier";
+    return `Publiée il y a ${jours} j`;
+}
+
+function formatSalaire(offre: OffreDTO): string {
+    if (!offre.salaireVisible) return "Salaire non communiqué";
+    return `${offre.salaireMin ?? "-"} - ${offre.salaireMax ?? "-"} ${offre.devise ?? ""}`;
 }
 
 export function OffresPubliquesPage() {
@@ -82,12 +95,13 @@ export function OffresPubliquesPage() {
         setPage(0);
     }
 
-    function ouvrirDetail(id: number) {
-        navigate(`/offres/${id}`);
-    }
-
-    function ouvrirDetailAvecCandidature(e: React.MouseEvent, id: number) {
+    function handlePostuler(e: React.MouseEvent, id: number) {
+        e.preventDefault();
         e.stopPropagation();
+        if (!estCandidat) {
+            navigate("/connexion");
+            return;
+        }
         navigate(`/offres/${id}`, { state: { ouvrirCandidature: true } });
     }
 
@@ -162,75 +176,90 @@ export function OffresPubliquesPage() {
                 </div>
             ) : (
                 <>
-                    <div className="offres-grid">
+                    <div className="home-jobs-grid offres-jobs-grid">
                         {offres.map((offre) => {
                             const couleur = getCouleurContrat(offre.typeContrat);
-                            const lieu = [offre.ville, offre.pays].filter(Boolean).join(", ");
-                            const salaire = formatSalaire(offre);
+                            const jours = joursDepuisPublication(offre.datePublication);
+                            const estRecente = jours !== null && jours <= 2;
+                            const lieu = [offre.ville, offre.region, offre.pays].filter(Boolean).join(", ") || "Non précisé";
+                            const competences = (offre.competences ?? []).slice(0, 3);
+
                             return (
-                                <div
+                                <article
                                     key={offre.id}
-                                    role="button"
-                                    tabIndex={0}
-                                    className="offre-tile"
-                                    style={
-                                        {
-                                            "--offre-color": couleur.bar,
-                                            "--offre-color-soft": couleur.bg,
-                                        } as React.CSSProperties
-                                    }
-                                    onClick={() => ouvrirDetail(offre.id)}
-                                    onKeyDown={(e) => e.key === "Enter" && ouvrirDetail(offre.id)}
+                                    className="job-pass"
+                                    style={{ "--job-color": couleur.bar } as React.CSSProperties}
+                                    onClick={() => navigate(`/offres/${offre.id}`)}
                                 >
-                                    <div className="offre-tile__top">
+                                    {estRecente && <span className="job-pass__new">Nouveau</span>}
+
+                                    <div className="job-pass__top">
                                         <LogoEntreprise
                                             recruteurId={offre.recruteurId}
                                             logoPresent={offre.logoPresent}
                                             nomEntreprise={offre.nomEntreprise}
-                                            className="offre-tile__logo"
+                                            className="job-pass__logo"
                                         />
-                                        <div className="offre-tile__entreprise">
-                                            <p className="offre-tile__nom-entreprise">{offre.nomEntreprise || "Entreprise inconnue"}</p>
+                                        <div className="job-pass__id">
+                                            <p className="job-pass__eyebrow">
+                                                {offre.secteurActivite ?? "Secteur non précisé"}
+                                                {jours !== null && <> · {formatAnciennete(jours)}</>}
+                                            </p>
+                                            <h3>{offre.titre}</h3>
+                                            <p className="job-pass__company">{offre.nomEntreprise ?? "Entreprise"}</p>
                                         </div>
                                     </div>
 
-                                    <p className="offre-tile__titre">{offre.titre}</p>
-                                    <p className="offre-tile__lieu">{lieu || "Lieu non précisé"}</p>
-
-                                    <div className="offre-tile__tags">
-                                        <span className="offre-tile__tag">{LABELS_TYPE_CONTRAT[offre.typeContrat]}</span>
-                                        {offre.teletravail && <span className="offre-tile__tag offre-tile__tag--gold">Télétravail</span>}
-                                        {offre.hybride && <span className="offre-tile__tag offre-tile__tag--gold">Hybride</span>}
-                                    </div>
-
-                                    <div className="offre-tile__footer">
-                                        {salaire ? (
-                                            <span className="offre-tile__salaire">{salaire}</span>
-                                        ) : (
-                                            <span className="offre-tile__salaire-vide">Salaire non communiqué</span>
+                                    <div className="job-pass__tags">
+                                        <span className="job-pass__tag job-pass__tag--solid">
+                                            {LABELS_TYPE_CONTRAT[offre.typeContrat]}
+                                        </span>
+                                        {offre.teletravail && <span className="job-pass__tag">Télétravail</span>}
+                                        {offre.hybride && <span className="job-pass__tag">Hybride</span>}
+                                        {offre.niveauExperience && (
+                                            <span className="job-pass__tag">{LABELS_NIVEAU_EXPERIENCE[offre.niveauExperience]}</span>
                                         )}
                                     </div>
 
-                                    <div className="offre-tile__actions">
-                                        <button
-                                            className="btn-secondary offre-tile__voir-detail"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                ouvrirDetail(offre.id);
-                                            }}
+                                    {competences.length > 0 && (
+                                        <div className="job-pass__skills">
+                                            {competences.map((c) => (
+                                                <span className="job-pass__skill" key={c}>
+                                                    {c}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    <div className="job-pass__footer">
+                                        <span className="job-pass__meta">
+                                            <IconMapPin />
+                                            {lieu}
+                                        </span>
+                                        <span className="job-pass__meta job-pass__meta--salaire">
+                                            <IconCoin />
+                                            {formatSalaire(offre)}
+                                        </span>
+                                    </div>
+
+                                    <div className="job-pass__actions">
+                                        <Link
+                                            to={`/offres/${offre.id}`}
+                                            className="job-pass__btn job-pass__btn--ghost"
+                                            onClick={(e) => e.stopPropagation()}
                                         >
                                             Voir détail
-                                        </button>
-                                        {estCandidat && offre.statut === "PUBLIEE" && (
+                                        </Link>
+                                        {offre.statut === "PUBLIEE" && (
                                             <button
-                                                className="btn-gold offre-tile__postuler"
-                                                onClick={(e) => ouvrirDetailAvecCandidature(e, offre.id)}
+                                                className="job-pass__btn job-pass__btn--gold"
+                                                onClick={(e) => handlePostuler(e, offre.id)}
                                             >
                                                 Postuler
                                             </button>
                                         )}
                                     </div>
-                                </div>
+                                </article>
                             );
                         })}
                     </div>
