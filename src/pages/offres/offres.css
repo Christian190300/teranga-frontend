@@ -1,30 +1,39 @@
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap');
 
+/* ============================================================
+   1. VARIABLES & SYSTEME DE DESIGN
+   ============================================================ */
 :root {
     --navy: #0b1d3a;
     --navy-light: #14294d;
     --navy-lighter: #24427a;
     --navy-ink: #071122;
     --navy-mist: #5a6684;
+
     --gold: #c8951e;
     --gold-light: #e0b352;
     --gold-deep: #9c7115;
     --gold-soft: #fbf3e2;
+
     --bg-page: #f4f8fc;
     --bg-soft: #f8f7f4;
     --border: #e7e4dc;
     --text-muted: #6f7488;
     --text-body: #263252;
+
     --radius-lg: 20px;
     --radius-md: 14px;
     --radius-sm: 9px;
+
     --shadow-card: 0 1px 2px rgba(11, 29, 58, 0.05);
     --shadow-card-hover: 0 20px 40px -12px rgba(11, 29, 58, 0.18);
     --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
     --font-display: 'Sora', 'Inter', -apple-system, sans-serif;
     --font-body: 'Inter', -apple-system, sans-serif;
 }
 
+/* Reset Box Sizing */
 .offres-page,
 .offres-page *,
 .offre-detail,
@@ -34,6 +43,89 @@
     box-sizing: border-box;
 }
 
+/* Texture signature (bandeaux) */
+.offre-weave {
+    background-image:
+            repeating-linear-gradient(115deg, rgba(255, 255, 255, 0.05) 0px, rgba(255, 255, 255, 0.05) 1px, transparent 1px, transparent 13px),
+            repeating-linear-gradient(25deg, rgba(200, 149, 30, 0.07) 0px, rgba(200, 149, 30, 0.07) 1px, transparent 1px, transparent 13px);
+}
+
+/* ============================================================
+   2. CONTENEUR DE PAGE & EN-TÊTE
+   ============================================================ */
+.offres-page {
+    max-width: 1920px;
+    width: 94%;
+    margin: 0 auto;
+    padding: 48px 0 90px;
+    font-family: var(--font-body);
+    background: var(--bg-page);
+}
+
+.offres-page__header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 40px;
+    padding-bottom: 26px;
+    border-bottom: 1px solid var(--border);
+}
+
+.offres-page__title {
+    font-family: var(--font-display);
+    font-size: 1.9rem;
+    font-weight: 800;
+    color: var(--navy-ink);
+    margin: 0 0 8px;
+    letter-spacing: -0.02em;
+}
+
+.offres-page__subtitle {
+    font-size: 0.94rem;
+    color: var(--navy-mist);
+    margin: 0;
+}
+
+/* États de chargement & vide */
+.offres-page__loading,
+.offres-page__empty {
+    text-align: center;
+    padding: 90px 0 40px;
+    color: var(--text-muted);
+    font-size: 0.92rem;
+}
+
+.offres-page__empty-icon {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    border: 1.5px dashed #c9cede;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.offres-page__empty-icon::before {
+    content: "";
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 1.5px solid #c9cede;
+}
+
+.offres-page__empty-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--navy-light);
+    font-size: 1rem;
+    margin: 0 0 6px;
+}
+
+/* ============================================================
+   3. FILTRES DE RECHERCHE
+   ============================================================ */
 .offres-filtres {
     display: flex;
     flex-wrap: wrap;
@@ -45,24 +137,6 @@
     padding: 14px 18px;
     margin-bottom: 32px;
     box-shadow: var(--shadow-card);
-}
-
-.offre-tile__clickzone {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    cursor: pointer;
-}
-
-.offre-tile__candidature {
-    margin-top: 16px;
-    padding-top: 16px;
-    border-top: 1px dashed var(--border);
-    cursor: default;
-}
-
-.offre-tile__candidature .candidature-form {
-    padding: 18px;
 }
 
 .offres-filtres__search {
@@ -156,128 +230,14 @@
         flex-direction: column;
         align-items: stretch;
     }
-
     .offres-filtres__actions {
         justify-content: flex-end;
     }
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .offres-page *,
-    .offre-detail *,
-    .offre-modal * {
-        animation-duration: 0.001ms !important;
-        transition-duration: 0.001ms !important;
-    }
-}
-
-/* ------------------------------------------------------------
-   Texture signature — tissage discret, réservé aux bandeaux
-   ------------------------------------------------------------ */
-.offre-weave {
-    background-image:
-            repeating-linear-gradient(115deg, rgba(255, 255, 255, 0.05) 0px, rgba(255, 255, 255, 0.05) 1px, transparent 1px, transparent 13px),
-            repeating-linear-gradient(25deg, rgba(200, 149, 30, 0.07) 0px, rgba(200, 149, 30, 0.07) 1px, transparent 1px, transparent 13px);
-}
-
-/* Page publique des offres : élargie pour la grille 4 colonnes,
-   plafonnée à 1920px pour rester lisible sur très grands écrans */
-.offres-page {
-    max-width: 1920px;
-    width: 94%;
-    margin: 0 auto;
-    padding: 48px 0 90px;
-    font-family: var(--font-body);
-    background: var(--bg-page);
-}
-
-.offres-page__header {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 40px;
-    padding-bottom: 26px;
-    border-bottom: 1px solid var(--border);
-}
-
-.offres-page__title {
-    font-family: var(--font-display);
-    font-size: 1.9rem;
-    font-weight: 800;
-    color: var(--navy-ink);
-    margin: 0 0 8px;
-    letter-spacing: -0.02em;
-}
-
-.offres-page__subtitle {
-    font-size: 0.94rem;
-    color: var(--navy-mist);
-    margin: 0;
-}
-
-.offres-page__loading,
-.offres-page__empty {
-    text-align: center;
-    padding: 90px 0 40px;
-    color: var(--text-muted);
-    font-size: 0.92rem;
-}
-
-.offres-page__empty-icon {
-    width: 56px;
-    height: 56px;
-    margin: 0 auto 18px;
-    border-radius: 50%;
-    border: 1.5px dashed #c9cede;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.offre-field__requis {
-    font-size: 0.68rem;
-    font-weight: 700;
-    color: var(--gold-deep);
-    background: var(--gold-soft);
-    padding: 2px 8px;
-    border-radius: 999px;
-    margin-left: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-}
-
-.offre-field__ok {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: #1e7e34;
-    margin-left: 8px;
-}
-
-.offre-field input[type="file"] {
-    padding: 9px 12px;
-    background: white;
-    cursor: pointer;
-}
-
-
-.offres-page__empty-icon::before {
-    content: "";
-    width: 18px;
-    height: 18px;
-    border-radius: 4px;
-    border: 1.5px solid #c9cede;
-}
-
-.offres-page__empty-title {
-    font-family: var(--font-display);
-    font-weight: 700;
-    color: var(--navy-light);
-    font-size: 1rem;
-    margin: 0 0 6px;
-}
-
-/* ---------- Boutons ---------- */
+/* ============================================================
+   4. BOUTONS & BADGES DE STATUT
+   ============================================================ */
 .btn-primary {
     display: inline-flex;
     align-items: center;
@@ -307,17 +267,13 @@
     padding: 13px 30px;
     border: none;
     border-radius: var(--radius-sm);
-
     background: #1d4830;
     color: #ffffff;
-
     font-size: 0.9rem;
     font-weight: 700;
     letter-spacing: 0.01em;
-
     cursor: pointer;
     transition: all 0.25s ease;
-
     white-space: nowrap;
     box-shadow: 0 8px 20px rgba(29, 72, 48, 0.25);
 }
@@ -377,52 +333,34 @@
     cursor: not-allowed;
 }
 
-/* ============================================================
-   GRILLE PUBLIQUE — 4 colonnes en desktop large
-   ============================================================ */
+/* Badges de statut des offres */
+.statut-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 999px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    letter-spacing: 0.01em;
+}
 
+.statut-badge--brouillon { background: #eef0f4; color: var(--text-muted); }
+.statut-badge--publiee   { background: #e5f3ea; color: #1e7e34; }
+.statut-badge--fermee    { background: #fbe9e7; color: #b3261e; }
+.statut-badge--expiree   { background: var(--gold-soft); color: #8a6212; }
+
+/* ============================================================
+   5. GRILLE ET CARTES D'OFFRE (Vue Publique)
+   ============================================================ */
 .offres-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 22px;
 }
 
-.offre-tile__actions {
-    display: flex;
-    gap: 8px;
-    margin-top: 2px;
-}
-
-.offre-tile__voir-detail {
-    flex: 1;
-    padding: 10px 16px;
-    font-size: 0.84rem;
-    justify-content: center;
-}
-
-.offre-tile__postuler {
-    flex: 1;
-    width: auto;
-    margin-top: 0;
-}
-
-@media (max-width: 1400px) {
-    .offres-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-@media (max-width: 960px) {
-    .offres-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 640px) {
-    .offres-grid {
-        grid-template-columns: 1fr;
-    }
-}
+@media (max-width: 1400px) { .offres-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 960px)  { .offres-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px)  { .offres-grid { grid-template-columns: 1fr; } }
 
 .offre-tile {
     display: flex;
@@ -441,189 +379,6 @@
     transition: box-shadow 0.28s var(--ease), border-color 0.28s var(--ease), transform 0.28s var(--ease);
     position: relative;
     animation: offreFadeIn 0.5s var(--ease) both;
-}
-
-/* ============================================================
-   FORMULAIRE DE CANDIDATURE — habillage complet
-   ============================================================ */
-
-.candidature-form {
-    background: var(--bg-soft);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 24px 26px;
-    animation: offreFadeIn 0.3s var(--ease) both;
-}
-
-.candidature-form__hint {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    line-height: 1.6;
-    margin: 0 0 20px;
-    padding-bottom: 18px;
-    border-bottom: 1px dashed var(--border);
-}
-
-/* Regroupement visuel des champs profil, distinct du reste du form */
-.candidature-form__champs {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    margin-bottom: 22px;
-}
-
-.candidature-form .offre-field {
-    margin-bottom: 0;
-}
-
-.candidature-form .offre-field label {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 6px;
-    font-size: 0.82rem;
-    font-weight: 600;
-    color: var(--navy);
-    margin-bottom: 7px;
-}
-
-.candidature-form .offre-field input,
-.candidature-form .offre-field select,
-.candidature-form .offre-field textarea {
-    background: white;
-}
-
-.candidature-form .offre-field input:disabled,
-.candidature-form .offre-field select:disabled,
-.candidature-form .offre-field textarea:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-/* Séparateur avant la section fichiers */
-.candidature-form__fichiers {
-    padding-top: 18px;
-    margin-top: 4px;
-    border-top: 1px dashed var(--border);
-}
-
-.candidature-form__fichiers-titre {
-    font-family: var(--font-display);
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin: 0 0 14px;
-}
-
-/* Zone de dépôt de fichier, plus visuelle qu'un simple <input type="file"> nu */
-.candidature-form__file {
-    position: relative;
-    border: 1.5px dashed var(--border);
-    border-radius: var(--radius-sm);
-    background: white;
-    padding: 14px 16px;
-    transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
-}
-
-.candidature-form__file:hover {
-    border-color: var(--gold-light);
-    background: var(--gold-soft);
-}
-
-.candidature-form__file--obligatoire {
-    border-color: var(--gold);
-}
-
-.candidature-form__file input[type="file"] {
-    width: 100%;
-    font-size: 0.82rem;
-    color: var(--navy);
-    cursor: pointer;
-}
-
-.candidature-form__file input[type="file"]::file-selector-button {
-    padding: 7px 14px;
-    margin-right: 12px;
-    border: none;
-    border-radius: 7px;
-    background: var(--navy);
-    color: white;
-    font-size: 0.78rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.15s var(--ease);
-}
-
-.candidature-form__file input[type="file"]::file-selector-button:hover {
-    background: var(--navy-lighter);
-}
-
-/* Message pour le recruteur */
-.candidature-form__message {
-    margin-top: 22px;
-    padding-top: 18px;
-    border-top: 1px dashed var(--border);
-}
-
-.candidature-form textarea {
-    width: 100%;
-    min-height: 100px;
-}
-
-/* Bandeau d'erreur / succès */
-.candidature-form .offre-message--error {
-    margin: 18px 0 0;
-}
-
-.candidature-form__success {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: #e5f3ea;
-    color: #1e7e34;
-    border: 1px solid #b7ddc2;
-    padding: 16px 18px;
-    border-radius: var(--radius-md);
-    font-size: 0.92rem;
-    font-weight: 600;
-    animation: offreFadeIn 0.3s var(--ease) both;
-}
-
-.candidature-form__actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 22px;
-    padding-top: 18px;
-    border-top: 1px solid var(--border);
-}
-
-@media (max-width: 560px) {
-    .candidature-form {
-        padding: 18px;
-    }
-
-    .candidature-form__actions {
-        flex-direction: column-reverse;
-    }
-
-    .candidature-form__actions button {
-        width: 100%;
-    }
-}
-
-.offres-grid .offre-tile:nth-child(2) { animation-delay: 0.04s; }
-.offres-grid .offre-tile:nth-child(3) { animation-delay: 0.08s; }
-.offres-grid .offre-tile:nth-child(4) { animation-delay: 0.12s; }
-.offres-grid .offre-tile:nth-child(5) { animation-delay: 0.16s; }
-.offres-grid .offre-tile:nth-child(6) { animation-delay: 0.2s; }
-.offres-grid .offre-tile:nth-child(n+7) { animation-delay: 0.24s; }
-
-@keyframes offreFadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
 }
 
 .offre-tile::before {
@@ -785,79 +540,321 @@
     transform: translateX(0);
 }
 
+.offre-tile__clickzone {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    cursor: pointer;
+}
+
+.offre-tile__actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 2px;
+}
+
+.offre-tile__voir-detail {
+    flex: 1;
+    padding: 10px 16px;
+    font-size: 0.84rem;
+    justify-content: center;
+}
+
 .offre-tile__postuler {
+    flex: 1;
     width: 100%;
     margin-top: 2px;
     padding: 10px 20px;
     font-size: 0.84rem;
 }
 
-/* ---------- Skeleton (chargement) ---------- */
-.offres-skeleton-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 22px;
-}
+/* Stagger des animations de la grille */
+.offres-grid .offre-tile:nth-child(2) { animation-delay: 0.04s; }
+.offres-grid .offre-tile:nth-child(3) { animation-delay: 0.08s; }
+.offres-grid .offre-tile:nth-child(4) { animation-delay: 0.12s; }
+.offres-grid .offre-tile:nth-child(5) { animation-delay: 0.16s; }
+.offres-grid .offre-tile:nth-child(6) { animation-delay: 0.2s; }
+.offres-grid .offre-tile:nth-child(n+7) { animation-delay: 0.24s; }
 
-@media (max-width: 1400px) {
-    .offres-skeleton-grid { grid-template-columns: repeat(3, 1fr); }
-}
-@media (max-width: 960px) {
-    .offres-skeleton-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 640px) {
-    .offres-skeleton-grid { grid-template-columns: 1fr; }
-}
-
-.offre-skeleton {
-    height: 220px;
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--border);
-    background: linear-gradient(100deg, #f4f3ef 30%, #ffffff 50%, #f4f3ef 70%);
-    background-size: 220% 100%;
-    animation: skeletonShimmer 1.4s ease-in-out infinite;
-}
-
-@keyframes skeletonShimmer {
-    0% { background-position: 120% 0; }
-    100% { background-position: -20% 0; }
-}
-
-/* ---------- Statut badge ---------- */
-.statut-badge {
-    font-size: 0.7rem;
-    font-weight: 700;
-    padding: 5px 12px;
-    border-radius: 999px;
-    white-space: nowrap;
-    flex-shrink: 0;
-    letter-spacing: 0.01em;
-}
-
-.statut-badge--brouillon {
-    background: #eef0f4;
-    color: var(--text-muted);
-}
-
-.statut-badge--publiee {
-    background: #e5f3ea;
-    color: #1e7e34;
-}
-
-.statut-badge--fermee {
-    background: #fbe9e7;
-    color: #b3261e;
-}
-
-.statut-badge--expiree {
-    background: var(--gold-soft);
-    color: #8a6212;
+@keyframes offreFadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* ============================================================
-   VUE LISTE "MES OFFRES" (recruteur)
+   6. FORMULAIRES DE SAISIE & CANDIDATURE
    ============================================================ */
+.offre-field {
+    margin-bottom: 20px;
+}
 
+.offre-field:last-child {
+    margin-bottom: 0;
+}
+
+.offre-field label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 6px;
+}
+
+.offre-field input,
+.offre-field select,
+.offre-field textarea {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: 0.92rem;
+    background: var(--bg-soft);
+    color: var(--navy);
+    transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
+}
+
+.offre-field textarea {
+    resize: vertical;
+    min-height: 90px;
+}
+
+.offre-field input:focus,
+.offre-field select:focus,
+.offre-field textarea:focus {
+    outline: none;
+    border-color: var(--gold);
+    background: white;
+}
+
+.offre-field input[type="file"] {
+    padding: 9px 12px;
+    background: white;
+    cursor: pointer;
+}
+
+.offre-field__requis {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--gold-deep);
+    background: var(--gold-soft);
+    padding: 2px 8px;
+    border-radius: 999px;
+    margin-left: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.offre-field__ok {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #1e7e34;
+    margin-left: 8px;
+}
+
+.offre-field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.offre-field-row--3 {
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+@media (max-width: 640px) {
+    .offre-field-row,
+    .offre-field-row--3 {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Bloc complet du Formulaire de Candidature */
+.offre-tile__candidature {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--border);
+    cursor: default;
+}
+
+.offre-tile__candidature .candidature-form {
+    padding: 18px;
+}
+
+.candidature-form {
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 24px 26px;
+    animation: offreFadeIn 0.3s var(--ease) both;
+}
+
+.candidature-form__hint {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin: 0 0 20px;
+    padding-bottom: 18px;
+    border-bottom: 1px dashed var(--border);
+}
+
+.candidature-form__champs {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.candidature-form .offre-field {
+    margin-bottom: 0;
+}
+
+.candidature-form .offre-field label {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 7px;
+}
+
+.candidature-form .offre-field input,
+.candidature-form .offre-field select,
+.candidature-form .offre-field textarea {
+    background: white;
+}
+
+.candidature-form .offre-field input:disabled,
+.candidature-form .offre-field select:disabled,
+.candidature-form .offre-field textarea:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.candidature-form__fichiers {
+    padding-top: 18px;
+    margin-top: 4px;
+    border-top: 1px dashed var(--border);
+}
+
+.candidature-form__fichiers-titre {
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 0 0 14px;
+}
+
+.candidature-form__file {
+    position: relative;
+    border: 1.5px dashed var(--border);
+    border-radius: var(--radius-sm);
+    background: white;
+    padding: 14px 16px;
+    transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
+}
+
+.candidature-form__file:hover {
+    border-color: var(--gold-light);
+    background: var(--gold-soft);
+}
+
+.candidature-form__file--obligatoire {
+    border-color: var(--gold);
+}
+
+.candidature-form__file input[type="file"] {
+    width: 100%;
+    font-size: 0.82rem;
+    color: var(--navy);
+    cursor: pointer;
+}
+
+.candidature-form__file input[type="file"]::file-selector-button {
+    padding: 7px 14px;
+    margin-right: 12px;
+    border: none;
+    border-radius: 7px;
+    background: var(--navy);
+    color: white;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s var(--ease);
+}
+
+.candidature-form__file input[type="file"]::file-selector-button:hover {
+    background: var(--navy-lighter);
+}
+
+.candidature-form__message {
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px dashed var(--border);
+}
+
+.candidature-form textarea {
+    width: 100%;
+    min-height: 100px;
+}
+
+.candidature-form .offre-message--error {
+    margin: 18px 0 0;
+}
+
+.candidature-form__success {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #e5f3ea;
+    color: #1e7e34;
+    border: 1px solid #b7ddc2;
+    padding: 16px 18px;
+    border-radius: var(--radius-md);
+    font-size: 0.92rem;
+    font-weight: 600;
+    animation: offreFadeIn 0.3s var(--ease) both;
+}
+
+.candidature-form__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+}
+
+@media (max-width: 560px) {
+    .candidature-form {
+        padding: 18px;
+    }
+    .candidature-form__actions {
+        flex-direction: column-reverse;
+    }
+    .candidature-form__actions button {
+        width: 100%;
+    }
+}
+
+/* Messages d'erreur globaux */
+.offre-message--error {
+    background: #fbe9e7;
+    color: #b3261e;
+    border: 1px solid #f2c1bd;
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 0.86rem;
+    margin-bottom: 20px;
+}
+
+/* ============================================================
+   7. VUE RECRUTEUR & GESTION (Mes Offres / Création)
+   ============================================================ */
 .offre-card {
     background: white;
     border: 1px solid var(--border);
@@ -920,7 +917,34 @@
     border-top: 1px solid var(--bg-soft);
 }
 
-/* ---------- Pagination ---------- */
+/* Formulaire de création / édition recruteur */
+.offre-form-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 28px 32px;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow-card);
+}
+
+.offre-form-card__section-title {
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 0 0 18px;
+}
+
+.offre-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+/* Pagination */
 .offres-pagination {
     display: flex;
     justify-content: center;
@@ -937,9 +961,8 @@
 }
 
 /* ============================================================
-   PAGE DÉTAIL AUTONOME (/offres/:id)
+   8. PAGE DÉTAIL DEDIEE (/offres/:id)
    ============================================================ */
-
 .offre-detail {
     max-width: 800px;
     margin: 0 auto;
@@ -1173,20 +1196,9 @@
     color: var(--text-muted);
 }
 
-.offre-message--error {
-    background: #fbe9e7;
-    color: #b3261e;
-    border: 1px solid #f2c1bd;
-    padding: 12px 14px;
-    border-radius: var(--radius-sm);
-    font-size: 0.86rem;
-    margin-bottom: 20px;
-}
-
 /* ============================================================
-   MODALE DE DÉTAIL
+   9. MODALE DE DÉTAIL
    ============================================================ */
-
 .offre-modal-overlay {
     position: fixed;
     inset: 0;
@@ -1201,13 +1213,8 @@
 }
 
 @keyframes modalOverlayIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 .offre-modal {
@@ -1216,14 +1223,10 @@
     width: 100%;
     max-width: 700px;
     max-height: 90vh;
-
     display: flex;
     flex-direction: column;
-
     overflow: hidden;
-
     position: relative;
-
     box-shadow: 0 30px 70px rgba(7, 17, 34, 0.35);
     animation: modalIn 0.24s var(--ease);
 }
@@ -1233,7 +1236,6 @@
         opacity: 0;
         transform: translateY(14px) scale(0.98);
     }
-
     to {
         opacity: 1;
         transform: translateY(0) scale(1);
@@ -1251,7 +1253,6 @@
     color: white;
     position: relative;
     overflow: hidden;
-
     flex-shrink: 0;
 }
 
@@ -1285,7 +1286,7 @@
     align-items: center;
     justify-content: center;
     font-size: 18px;
-    transition: .2s;
+    transition: 0.2s;
     z-index: 10;
 }
 
@@ -1298,7 +1299,6 @@
     flex: 1;
     overflow-y: auto;
     min-height: 0;
-
     padding: 30px 34px;
 }
 
@@ -1319,17 +1319,13 @@
 
 .offre-modal__footer {
     flex-shrink: 0;
-
     background: white;
     border-top: 1px solid var(--border);
-
     padding: 18px 34px;
-
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-
     box-shadow: 0 -8px 20px rgba(0,0,0,.06);
 }
 
@@ -1341,96 +1337,33 @@
 }
 
 /* ============================================================
-   FORMULAIRE OFFRE (recruteur)
+   10. SKELETONS & ACCESSIBILITÉ
    ============================================================ */
-
-.offre-form-card {
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 28px 32px;
-    margin-bottom: 18px;
-    box-shadow: var(--shadow-card);
-}
-
-.offre-form-card__section-title {
-    font-family: var(--font-display);
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin: 0 0 18px;
-}
-
-.offre-field {
-    margin-bottom: 20px;
-}
-
-.offre-field:last-child {
-    margin-bottom: 0;
-}
-
-.offre-field label {
-    display: block;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--navy);
-    margin-bottom: 6px;
-}
-
-.offre-field input,
-.offre-field select,
-.offre-field textarea {
-    width: 100%;
-    padding: 11px 14px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    font-family: inherit;
-    font-size: 0.92rem;
-    background: var(--bg-soft);
-    color: var(--navy);
-    transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
-}
-
-.offre-field textarea {
-    resize: vertical;
-    min-height: 90px;
-}
-
-.offre-field input:focus,
-.offre-field select:focus,
-.offre-field textarea:focus {
-    outline: none;
-    border-color: var(--gold);
-    background: white;
-}
-
-.offre-field-row {
+.offres-skeleton-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
 }
 
-.offre-field-row--3 {
-    grid-template-columns: 1fr 1fr 1fr;
+@media (max-width: 1400px) { .offres-skeleton-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 960px)  { .offres-skeleton-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px)  { .offres-skeleton-grid { grid-template-columns: 1fr; } }
+
+.offre-skeleton {
+    height: 220px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    background: linear-gradient(100deg, #f4f3ef 30%, #ffffff 50%, #f4f3ef 70%);
+    background-size: 220% 100%;
+    animation: skeletonShimmer 1.4s ease-in-out infinite;
 }
 
-@media (max-width: 640px) {
-    .offre-field-row,
-    .offre-field-row--3 {
-        grid-template-columns: 1fr;
-    }
+@keyframes skeletonShimmer {
+    0%   { background-position: 120% 0; }
+    100% { background-position: -20% 0; }
 }
 
-.offre-form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 8px;
-}
-
-/* ---------- Focus visible (accessibilité) ---------- */
+/* Accessibility Focus Ring */
 .offre-tile:focus-visible,
 .btn-gold:focus-visible,
 .btn-secondary:focus-visible,
@@ -1440,3 +1373,12 @@
     outline-offset: 2px;
 }
 
+/* Animation reduite pour les utilisateurs sensibles */
+@media (prefers-reduced-motion: reduce) {
+    .offres-page *,
+    .offre-detail *,
+    .offre-modal * {
+        animation-duration: 0.001ms !important;
+        transition-duration: 0.001ms !important;
+    }
+}
