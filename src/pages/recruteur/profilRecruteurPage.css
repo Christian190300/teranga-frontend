@@ -2,12 +2,12 @@
    PROFIL RECRUTEUR — design propre, navy/or, cohérent avec le reste du site
    ============================================================ */
 
-.profil-page,
-.profil-page * {
+.profil-recruteur-page,
+.profil-recruteur-page * {
     box-sizing: border-box;
 }
 
-.profil-page {
+.profil-recruteur-page {
     max-width: 720px;
     margin: 0 auto;
     padding: 48px 24px 80px;
@@ -15,24 +15,31 @@
 }
 
 /* ---------- Logo entreprise ---------- */
-.profil-photo-row {
+.profil-recruteur-avatar-row {
     display: flex;
     align-items: center;
     gap: 22px;
 }
 
-.profil-photo-preview {
+.profil-recruteur-avatar-wrap {
+    position: relative;
+    width: 88px;
+    height: 88px;
+    flex-shrink: 0;
+}
+
+.profil-recruteur-photo-preview {
     width: 88px;
     height: 88px;
     border-radius: 12px;
     object-fit: contain;
     background: white;
     border: 2px solid #f0f1f4;
-    flex-shrink: 0;
     padding: 8px;
+    display: block;
 }
 
-.profil-photo-placeholder {
+.profil-recruteur-photo-placeholder {
     width: 88px;
     height: 88px;
     border-radius: 12px;
@@ -43,16 +50,48 @@
     justify-content: center;
     font-weight: 700;
     font-size: 1.6rem;
-    flex-shrink: 0;
     border: 2px solid #f0f1f4;
 }
 
-.profil-photo-field {
+.profil-recruteur-avatar-edit {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #14294d;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid white;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.profil-recruteur-avatar-edit:hover {
+    background: #1e3a6b;
+}
+
+.profil-recruteur-avatar-edit svg {
+    width: 15px;
+    height: 15px;
+}
+
+.profil-recruteur-avatar-info {
     flex: 1;
     min-width: 0;
 }
 
-.profil-file-input-hidden {
+.profil-recruteur-avatar-info__title {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #14294d;
+    margin: 0 0 4px;
+}
+
+.profil-recruteur-file-input-hidden {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -63,35 +102,21 @@
     border: 0;
 }
 
-.profil-upload-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 20px;
-    border-radius: 8px;
-    border: 1.5px solid #e8e9ee;
-    background: white;
-    color: #14294d;
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.15s ease, border-color 0.15s ease;
-    font-family: inherit;
-}
-
-.profil-upload-btn:hover {
-    background: #eaf0fb;
-    border-color: #eaf0fb;
-}
-
-.profil-upload-btn:disabled {
+.profil-recruteur-upload-btn--disabled {
     opacity: 0.55;
     cursor: not-allowed;
+    pointer-events: none;
 }
 
+.profil-recruteur-field__hint {
+    font-size: 0.78rem;
+    color: #9aa1ac;
+    margin: 8px 0 0;
+    line-height: 1.5;
+}
 
 /* ---------- Header ---------- */
-.profil-page__header {
+.profil-recruteur-page__header {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -99,7 +124,7 @@
     margin-bottom: 28px;
 }
 
-.profil-page__title {
+.profil-recruteur-page__title {
     font-size: 1.55rem;
     font-weight: 800;
     color: #14294d;
@@ -107,13 +132,13 @@
     letter-spacing: -0.01em;
 }
 
-.profil-page__subtitle {
+.profil-recruteur-page__subtitle {
     font-size: 0.9rem;
     color: #667085;
     margin: 0;
 }
 
-.profil-page__loading {
+.profil-recruteur-page__loading {
     text-align: center;
     padding: 80px 0;
     color: #667085;
@@ -121,7 +146,7 @@
 }
 
 /* ---------- Cards ---------- */
-.profil-card {
+.profil-recruteur-card {
     background: white;
     border: 1px solid #e8e9ee;
     border-radius: 14px;
@@ -129,7 +154,7 @@
     margin-bottom: 20px;
 }
 
-.profil-card__section-title {
+.profil-recruteur-card__section-title {
     font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.07em;
@@ -138,22 +163,22 @@
     margin: 0 0 18px;
 }
 
-.profil-card__section-title:not(:first-child) {
+.profil-recruteur-card__section-title:not(:first-child) {
     margin-top: 32px;
     padding-top: 28px;
     border-top: 1px solid #f0f1f4;
 }
 
 /* ---------- Fields ---------- */
-.profil-field {
+.profil-recruteur-field {
     margin-bottom: 20px;
 }
 
-.profil-field:last-child {
+.profil-recruteur-field:last-child {
     margin-bottom: 0;
 }
 
-.profil-field label {
+.profil-recruteur-field label {
     display: block;
     font-size: 0.85rem;
     font-weight: 600;
@@ -161,90 +186,96 @@
     margin-bottom: 6px;
 }
 
-.profil-field input,
-.profil-field textarea,
-.profil-field select {
+.profil-recruteur-field input,
+.profil-recruteur-field textarea,
+.profil-recruteur-field select {
     width: 100%;
     padding: 11px 14px;
     border: 1px solid #e8e9ee;
     border-radius: 8px;
     font-family: inherit;
-    font-size: 0.92rem;
+    font-size: 16px; /* >= 16px : empêche le zoom auto sur iOS Safari au focus */
     background: #f7f8fb;
     color: #14294d;
     transition: border-color 0.15s ease, background 0.15s ease;
 }
 
-.profil-field input:focus,
-.profil-field textarea:focus {
+.profil-recruteur-field input:focus,
+.profil-recruteur-field textarea:focus,
+.profil-recruteur-field select:focus {
     outline: none;
     border-color: #c8951e;
     background: white;
 }
 
-.profil-field textarea {
+.profil-recruteur-field textarea {
     resize: vertical;
     min-height: 110px;
     line-height: 1.6;
 }
 
-.profil-field-row {
+.profil-recruteur-field-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
 }
 
+.profil-recruteur-field-row--3 {
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
 @media (max-width: 560px) {
-    .profil-field-row {
+    .profil-recruteur-field-row,
+    .profil-recruteur-field-row--3 {
         grid-template-columns: 1fr;
     }
 }
 
 /* ---------- Bloc infos (lecture seule) ---------- */
-.profil-meta {
+.profil-recruteur-meta {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
 }
 
 @media (max-width: 560px) {
-    .profil-meta {
+    .profil-recruteur-meta {
         grid-template-columns: 1fr;
     }
 }
 
-.profil-meta__item {
+.profil-recruteur-meta__item {
     background: #f7f8fb;
     border-radius: 10px;
     padding: 14px 16px;
 }
 
-.profil-meta__label {
+.profil-recruteur-meta__label {
     font-size: 0.74rem;
     color: #9aa1ac;
     margin-bottom: 3px;
 }
 
-.profil-meta__value {
+.profil-recruteur-meta__value {
     font-size: 0.9rem;
     font-weight: 700;
     color: #14294d;
 }
 
 /* ---------- Messages ---------- */
-.profil-message {
+.profil-recruteur-message {
     padding: 12px 14px;
     border-radius: 8px;
     font-size: 0.86rem;
     margin: 10px 0 0;
 }
 
-.profil-message--error {
+.profil-recruteur-message--error {
     background: #fdecea;
     color: #b3261e;
     border: 1px solid #f2c1bd;
 }
 
-.profil-page > .profil-message--error {
+.profil-recruteur-page > .profil-recruteur-message--error {
     margin-bottom: 20px;
 }

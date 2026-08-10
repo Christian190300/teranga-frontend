@@ -32,78 +32,24 @@ function IconCamera() {
 
 const TAILLES_ENTREPRISE = ["1-10", "11-50", "51-200", "201-500", "500+"];
 const SECTEURS_ACTIVITE = [
-    "Agriculture",
-    "Agroalimentaire",
-    "Assurance",
-    "Banque et Finance",
-    "BTP / Construction",
-    "Commerce et Distribution",
-    "Communication",
-    "Conseil",
-    "Éducation et Formation",
-    "Énergie",
-    "Environnement",
-    "Hôtellerie et Restauration",
-    "Immobilier",
-    "Industrie",
-    "Informatique / IT",
-    "Logistique et Transport",
-    "Marketing et Publicité",
-    "Médias",
-    "Mines",
-    "ONG / Associations",
-    "Pêche",
-    "Pharmaceutique",
-    "Santé",
-    "Sécurité",
-    "Services",
-    "Télécommunications",
-    "Textile",
-    "Tourisme",
-    "Administration publique",
-    "Autre"
+    "Agriculture", "Agroalimentaire", "Assurance", "Banque et Finance", "BTP / Construction",
+    "Commerce et Distribution", "Communication", "Conseil", "Éducation et Formation", "Énergie",
+    "Environnement", "Hôtellerie et Restauration", "Immobilier", "Industrie", "Informatique / IT",
+    "Logistique et Transport", "Marketing et Publicité", "Médias", "Mines", "ONG / Associations",
+    "Pêche", "Pharmaceutique", "Santé", "Sécurité", "Services", "Télécommunications",
+    "Textile", "Tourisme", "Administration publique", "Autre",
 ];
 const PAYS = ["Sénégal"];
 
 const REGIONS = [
-    "Dakar",
-    "Diourbel",
-    "Fatick",
-    "Kaffrine",
-    "Kaolack",
-    "Kédougou",
-    "Kolda",
-    "Louga",
-    "Matam",
-    "Saint-Louis",
-    "Sédhiou",
-    "Tambacounda",
-    "Thiès",
-    "Ziguinchor"
+    "Dakar", "Diourbel", "Fatick", "Kaffrine", "Kaolack", "Kédougou", "Kolda",
+    "Louga", "Matam", "Saint-Louis", "Sédhiou", "Tambacounda", "Thiès", "Ziguinchor",
 ];
 
 const VILLES = [
-    "Dakar",
-    "Pikine",
-    "Guédiawaye",
-    "Rufisque",
-    "Thiès",
-    "Mbour",
-    "Tivaouane",
-    "Saint-Louis",
-    "Richard-Toll",
-    "Kaolack",
-    "Fatick",
-    "Diourbel",
-    "Touba",
-    "Louga",
-    "Kolda",
-    "Ziguinchor",
-    "Sédhiou",
-    "Tambacounda",
-    "Kédougou",
-    "Matam",
-    "Kaffrine"
+    "Dakar", "Pikine", "Guédiawaye", "Rufisque", "Thiès", "Mbour", "Tivaouane",
+    "Saint-Louis", "Richard-Toll", "Kaolack", "Fatick", "Diourbel", "Touba", "Louga",
+    "Kolda", "Ziguinchor", "Sédhiou", "Tambacounda", "Kédougou", "Matam", "Kaffrine",
 ];
 
 export function ProfilRecruteurPage() {
@@ -112,31 +58,26 @@ export function ProfilRecruteurPage() {
     const [loading, setLoading] = useState(true);
     const [loadError, setLoadError] = useState<string | null>(null);
 
-    // Entreprise
     const [nomEntreprise, setNomEntreprise] = useState("");
     const [secteurActivite, setSecteurActivite] = useState("");
     const [tailleEntreprise, setTailleEntreprise] = useState("");
     const [description, setDescription] = useState("");
     const [siteWeb, setSiteWeb] = useState("");
 
-    // Contact
     const [nomContact, setNomContact] = useState("");
     const [fonctionContact, setFonctionContact] = useState("");
     const [emailProfessionnel, setEmailProfessionnel] = useState("");
     const [telephoneEntreprise, setTelephoneEntreprise] = useState("");
 
-    // Adresse
     const [pays, setPays] = useState("");
     const [region, setRegion] = useState("");
     const [ville, setVille] = useState("");
     const [adresse, setAdresse] = useState("");
 
-    // Réseaux
     const [linkedin, setLinkedin] = useState("");
     const [facebook, setFacebook] = useState("");
     const [twitter, setTwitter] = useState("");
 
-    // Logo
     const [logoUrl, setLogoUrl] = useState<string | null>(null);
     const [logoUploading, setLogoUploading] = useState(false);
     const [logoError, setLogoError] = useState<string | null>(null);
@@ -194,22 +135,10 @@ export function ProfilRecruteurPage() {
 
     const saveStatus = useAutoSave(
         {
-            nomEntreprise,
-            secteurActivite,
-            tailleEntreprise,
-            description,
-            siteWeb,
-            nomContact,
-            fonctionContact,
-            emailProfessionnel,
-            telephoneEntreprise,
-            pays,
-            region,
-            ville,
-            adresse,
-            linkedin,
-            facebook,
-            twitter,
+            nomEntreprise, secteurActivite, tailleEntreprise, description, siteWeb,
+            nomContact, fonctionContact, emailProfessionnel, telephoneEntreprise,
+            pays, region, ville, adresse,
+            linkedin, facebook, twitter,
         },
         async (value) => {
             const updated = await updateMonProfilRecruteur(value);
@@ -243,95 +172,86 @@ export function ProfilRecruteurPage() {
     }
 
     if (loading) {
-        return <div className="profil-page__loading">Chargement du profil de votre entreprise...</div>;
+        return <div className="profil-recruteur-page__loading">Chargement du profil de votre entreprise...</div>;
     }
 
     return (
-        <div className="profil-page">
-            <div className="profil-page__header">
+        <div className="profil-recruteur-page">
+            <div className="profil-recruteur-page__header">
                 <div>
-                    <h1 className="profil-page__title">Mon entreprise</h1>
-                    <p className="profil-page__subtitle">Vos modifications sont enregistrées automatiquement.</p>
+                    <h1 className="profil-recruteur-page__title">Mon entreprise</h1>
+                    <p className="profil-recruteur-page__subtitle">Vos modifications sont enregistrées automatiquement.</p>
                 </div>
                 <SaveStatusBadge status={saveStatus} />
             </div>
 
-            {loadError && <div className="profil-message profil-message--error">{loadError}</div>}
+            {loadError && <div className="profil-recruteur-message profil-recruteur-message--error">{loadError}</div>}
 
             {/* Logo + informations générales */}
-            <div className="profil-card">
-                <p className="profil-card__section-title">Logo & informations générales</p>
-                <div className="profil-avatar-row">
-                    <div className="profil-avatar-wrap">
+            <div className="profil-recruteur-card">
+                <p className="profil-recruteur-card__section-title">Logo & informations générales</p>
+                <div className="profil-recruteur-avatar-row">
+                    <div className="profil-recruteur-avatar-wrap">
                         {logoUrl ? (
-                            <img src={logoUrl} alt="Logo de l'entreprise" className="profil-photo-preview" />
+                            <img src={logoUrl} alt="Logo de l'entreprise" className="profil-recruteur-photo-preview" />
                         ) : (
-                            <div className="profil-photo-placeholder">?</div>
+                            <div className="profil-recruteur-photo-placeholder">?</div>
                         )}
-                        <label className={`profil-avatar-edit${logoUploading ? " profil-upload-btn--disabled" : ""}`}>
+                        <label className={`profil-recruteur-avatar-edit${logoUploading ? " profil-recruteur-upload-btn--disabled" : ""}`}>
                             <input
                                 ref={logoInputRef}
                                 type="file"
                                 accept="image/jpeg,image/png,image/webp"
                                 onChange={handleLogoChange}
                                 disabled={logoUploading}
-                                className="profil-file-input-hidden"
+                                className="profil-recruteur-file-input-hidden"
                             />
                             <IconCamera />
                         </label>
                     </div>
-                    <div className="profil-avatar-info">
-                        <p className="profil-avatar-info__title">
+                    <div className="profil-recruteur-avatar-info">
+                        <p className="profil-recruteur-avatar-info__title">
                             {logoUploading ? "Envoi en cours..." : "Cliquez sur l'icône pour changer le logo"}
                         </p>
-                        <p className="profil-field__hint" style={{ margin: 0 }}>
+                        <p className="profil-recruteur-field__hint" style={{ margin: 0 }}>
                             JPEG, PNG ou WebP — 5 Mo maximum.
                         </p>
-                        {logoError && <p className="profil-message profil-message--error">{logoError}</p>}
+                        {logoError && <p className="profil-recruteur-message profil-recruteur-message--error">{logoError}</p>}
                     </div>
                 </div>
 
-                <div className="profil-field" style={{ marginTop: 24 }}>
+                <div className="profil-recruteur-field" style={{ marginTop: 24 }}>
                     <label htmlFor="nomEntreprise">Nom de l'entreprise</label>
                     <input id="nomEntreprise" value={nomEntreprise} onChange={(e) => setNomEntreprise(e.target.value)} />
                 </div>
 
-                <div className="profil-field-row">
-                    <div className="profil-field">
+                <div className="profil-recruteur-field-row">
+                    <div className="profil-recruteur-field">
                         <label htmlFor="secteurActivite">Secteur d'activité</label>
-                        <select
-                            id="secteurActivite"
-                            value={secteurActivite}
-                            onChange={(e) => setSecteurActivite(e.target.value)}
-                        >
+                        <select id="secteurActivite" value={secteurActivite} onChange={(e) => setSecteurActivite(e.target.value)}>
                             <option value="">Sélectionnez un secteur</option>
-
                             {SECTEURS_ACTIVITE.map((secteur) => (
-                                <option key={secteur} value={secteur}>
-                                    {secteur}
-                                </option>
+                                <option key={secteur} value={secteur}>{secteur}</option>
                             ))}
                         </select>
                     </div>
-                    <div className="profil-field">
+                    <div className="profil-recruteur-field">
                         <label htmlFor="tailleEntreprise">Taille de l'entreprise</label>
                         <select id="tailleEntreprise" value={tailleEntreprise} onChange={(e) => setTailleEntreprise(e.target.value)}>
                             <option value="">Non précisé</option>
                             {TAILLES_ENTREPRISE.map((t) => (
-                                <option key={t} value={t}>
-                                    {t} employés
-                                </option>
+                                <option key={t} value={t}>{t} employés</option>
                             ))}
                         </select>
                     </div>
                 </div>
 
-                <div className="profil-field">
+                <div className="profil-recruteur-field">
                     <label htmlFor="siteWeb">Site web</label>
                     <input id="siteWeb" value={siteWeb} onChange={(e) => setSiteWeb(e.target.value)} placeholder="https://..." />
                 </div>
 
-                <div className="profil-field">
+                <div className="profil-recruteur-field">
                     <label htmlFor="description">Description de l'entreprise</label>
                     <textarea
                         id="description"
@@ -344,14 +264,14 @@ export function ProfilRecruteurPage() {
             </div>
 
             {/* Contact */}
-            <div className="profil-card">
-                <p className="profil-card__section-title">Contact recruteur</p>
-                <div className="profil-field-row">
-                    <div className="profil-field">
+            <div className="profil-recruteur-card">
+                <p className="profil-recruteur-card__section-title">Contact recruteur</p>
+                <div className="profil-recruteur-field-row">
+                    <div className="profil-recruteur-field">
                         <label htmlFor="nomContact">Nom du recruteur</label>
                         <input id="nomContact" value={nomContact} onChange={(e) => setNomContact(e.target.value)} placeholder="Prénom Nom" />
                     </div>
-                    <div className="profil-field">
+                    <div className="profil-recruteur-field">
                         <label htmlFor="fonctionContact">Fonction</label>
                         <input
                             id="fonctionContact"
@@ -361,18 +281,18 @@ export function ProfilRecruteurPage() {
                         />
                     </div>
                 </div>
-                <div className="profil-field-row">
-                    <div className="profil-field">
-                        <label htmlFor="telephoneEntreprise">Email professionnel</label>
+                <div className="profil-recruteur-field-row">
+                    <div className="profil-recruteur-field">
+                        <label htmlFor="emailProfessionnel">Email professionnel</label>
                         <input
-                            id="telephoneEntreprise"
+                            id="emailProfessionnel"
                             type="email"
                             value={emailProfessionnel}
                             onChange={(e) => setEmailProfessionnel(e.target.value)}
                             placeholder="contact@entreprise.sn"
                         />
                     </div>
-                    <div className="profil-field">
+                    <div className="profil-recruteur-field">
                         <label htmlFor="telephoneEntreprise">Téléphone</label>
                         <input
                             id="telephoneEntreprise"
@@ -385,55 +305,37 @@ export function ProfilRecruteurPage() {
             </div>
 
             {/* Adresse */}
-            <div className="profil-card">
-                <p className="profil-card__section-title">Adresse</p>
-                <div className="profil-field">
+            <div className="profil-recruteur-card">
+                <p className="profil-recruteur-card__section-title">Adresse</p>
+                <div className="profil-recruteur-field">
                     <label htmlFor="adresse">Adresse</label>
                     <input id="adresse" value={adresse} onChange={(e) => setAdresse(e.target.value)} placeholder="Rue, quartier..." />
                 </div>
-                <div className="profil-field-row profil-field-row--3">
-                    <div className="profil-field">
+                <div className="profil-recruteur-field-row profil-recruteur-field-row--3">
+                    <div className="profil-recruteur-field">
                         <label htmlFor="ville">Ville</label>
-                        <select
-                            id="ville"
-                            value={ville}
-                            onChange={(e) => setVille(e.target.value)}
-                        >
+                        <select id="ville" value={ville} onChange={(e) => setVille(e.target.value)}>
                             <option value="">Sélectionnez une ville</option>
                             {VILLES.map((v) => (
-                                <option key={v} value={v}>
-                                    {v}
-                                </option>
+                                <option key={v} value={v}>{v}</option>
                             ))}
                         </select>
                     </div>
-                    <div className="profil-field">
+                    <div className="profil-recruteur-field">
                         <label htmlFor="region">Région</label>
-                        <select
-                            id="region"
-                            value={region}
-                            onChange={(e) => setRegion(e.target.value)}
-                        >
+                        <select id="region" value={region} onChange={(e) => setRegion(e.target.value)}>
                             <option value="">Sélectionnez une région</option>
                             {REGIONS.map((r) => (
-                                <option key={r} value={r}>
-                                    {r}
-                                </option>
+                                <option key={r} value={r}>{r}</option>
                             ))}
                         </select>
                     </div>
-                    <div className="profil-field">
+                    <div className="profil-recruteur-field">
                         <label htmlFor="pays">Pays</label>
-                        <select
-                            id="pays"
-                            value={pays}
-                            onChange={(e) => setPays(e.target.value)}
-                        >
+                        <select id="pays" value={pays} onChange={(e) => setPays(e.target.value)}>
                             <option value="">Sélectionnez un pays</option>
                             {PAYS.map((p) => (
-                                <option key={p} value={p}>
-                                    {p}
-                                </option>
+                                <option key={p} value={p}>{p}</option>
                             ))}
                         </select>
                     </div>
@@ -441,10 +343,10 @@ export function ProfilRecruteurPage() {
             </div>
 
             {/* Réseaux sociaux */}
-            <div className="profil-card">
-                <p className="profil-card__section-title">Réseaux sociaux</p>
-                <div className="profil-field-row profil-field-row--3">
-                    <div className="profil-field">
+            <div className="profil-recruteur-card">
+                <p className="profil-recruteur-card__section-title">Réseaux sociaux</p>
+                <div className="profil-recruteur-field-row profil-recruteur-field-row--3">
+                    <div className="profil-recruteur-field">
                         <label htmlFor="linkedin">LinkedIn</label>
                         <input
                             id="linkedin"
@@ -453,7 +355,7 @@ export function ProfilRecruteurPage() {
                             placeholder="https://linkedin.com/company/..."
                         />
                     </div>
-                    <div className="profil-field">
+                    <div className="profil-recruteur-field">
                         <label htmlFor="facebook">Facebook</label>
                         <input
                             id="facebook"
@@ -462,7 +364,7 @@ export function ProfilRecruteurPage() {
                             placeholder="https://facebook.com/..."
                         />
                     </div>
-                    <div className="profil-field">
+                    <div className="profil-recruteur-field">
                         <label htmlFor="twitter">X (Twitter)</label>
                         <input id="twitter" value={twitter} onChange={(e) => setTwitter(e.target.value)} placeholder="https://x.com/..." />
                     </div>
@@ -470,16 +372,16 @@ export function ProfilRecruteurPage() {
             </div>
 
             {/* Meta */}
-            <div className="profil-card">
-                <p className="profil-card__section-title">Informations</p>
-                <div className="profil-meta">
-                    <div className="profil-meta__item">
-                        <div className="profil-meta__label">Compte créé le</div>
-                        <div className="profil-meta__value">{formatDate(dateCreation)}</div>
+            <div className="profil-recruteur-card">
+                <p className="profil-recruteur-card__section-title">Informations</p>
+                <div className="profil-recruteur-meta">
+                    <div className="profil-recruteur-meta__item">
+                        <div className="profil-recruteur-meta__label">Compte créé le</div>
+                        <div className="profil-recruteur-meta__value">{formatDate(dateCreation)}</div>
                     </div>
-                    <div className="profil-meta__item">
-                        <div className="profil-meta__label">Dernière mise à jour</div>
-                        <div className="profil-meta__value">{formatDate(dateMaj)}</div>
+                    <div className="profil-recruteur-meta__item">
+                        <div className="profil-recruteur-meta__label">Dernière mise à jour</div>
+                        <div className="profil-recruteur-meta__value">{formatDate(dateMaj)}</div>
                     </div>
                 </div>
             </div>
