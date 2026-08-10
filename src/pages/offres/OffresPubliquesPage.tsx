@@ -9,7 +9,7 @@ import {
 import { useAuth } from "../../context/AuthContext";
 import { LogoEntreprise } from "../../components/common/LogoEntreprise";
 import { getCouleurContrat } from "./offreColors";
-import "./offres.css";
+import "./offres/offres.css";
 
 const TAILLE_PAGE = 8;
 
