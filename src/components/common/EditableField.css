@@ -1,0 +1,48 @@
+.profil-field__editable {
+    position: relative;
+}
+
+.profil-field__actions {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 4px;
+}
+
+.profil-field__editable input {
+    padding-right: 68px;
+}
+
+.profil-field__icon-btn {
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.profil-field__icon-btn svg {
+    width: 15px;
+    height: 15px;
+}
+
+.profil-field__icon-btn--save {
+    color: #1a7f4b;
+}
+.profil-field__icon-btn--save:hover {
+    background: #e6f4ea;
+}
+
+.profil-field__icon-btn--cancel {
+    color: #b3261e;
+}
+.profil-field__icon-btn--cancel:hover {
+    background: #fdecea;
+}
