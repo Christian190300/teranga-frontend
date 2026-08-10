@@ -1,22 +1,44 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { LogoEntreprise } from "../../components/common/LogoEntreprise";
+import { IconCoin, IconMapPin } from "../../components/home/icons"; // Ajuste le chemin selon ton projet
+import { getCouleurContrat } from "./offreColors";
+import { useAuth } from "../../context/AuthContext";
 import {
     listerOffresPubliques,
     listerSecteursDisponibles,
     LABELS_TYPE_CONTRAT,
+    LABELS_NIVEAU_EXPERIENCE,
     type OffreDTO,
 } from "../../api/offreService";
-import { useAuth } from "../../context/AuthContext";
-import { LogoEntreprise } from "../../components/common/LogoEntreprise";
-import { getCouleurContrat } from "./offreColors";
 import "./offres.css";
 
 const TAILLE_PAGE = 8;
 
-function formatSalaire(offre: OffreDTO): string | null {
-    if (!offre.salaireVisible || (!offre.salaireMin && !offre.salaireMax)) return null;
+function joursDepuisPublication(iso: string | null): number | null {
+    if (!iso) return null;
+    const timestamp = new Date(iso).getTime();
+    if (isNaN(timestamp)) return null;
+
+    const diffMs = Date.now() - timestamp;
+    return Math.floor(diffMs / 86400000);
+}
+
+function formatAnciennete(jours: number | null): string {
+    if (jours === null) return "";
+    if (jours <= 0) return "Publiée aujourd'hui";
+    if (jours === 1) return "Publiée hier";
+    return `Publiée il y a ${jours} j`;
+}
+
+function formatSalaire(offre: OffreDTO): string {
+    if (!offre.salaireVisible || (!offre.salaireMin && !offre.salaireMax)) {
+        return "Salaire non communiqué";
+    }
     const devise = offre.devise ?? "FCFA";
-    if (offre.salaireMin && offre.salaireMax) return `${offre.salaireMin.toLocaleString()} - ${offre.salaireMax.toLocaleString()} ${devise}`;
+    if (offre.salaireMin && offre.salaireMax) {
+        return `${offre.salaireMin.toLocaleString()} - ${offre.salaireMax.toLocaleString()} ${devise}`;
+    }
     return `${(offre.salaireMin ?? offre.salaireMax)?.toLocaleString()} ${devise}`;
 }
 
@@ -24,6 +46,7 @@ export function OffresPubliquesPage() {
     const { currentUser } = useAuth();
     const navigate = useNavigate();
 
+    // --- États des données ---
     const [offres, setOffres] = useState<OffreDTO[]>([]);
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
@@ -39,23 +62,27 @@ export function OffresPubliquesPage() {
     const estCandidat = currentUser?.role === "CANDIDAT";
     const filtresActifs = rechercheAppliquee !== "" || secteurSelectionne !== "";
 
+    // Chargement initial des secteurs
     useEffect(() => {
         listerSecteursDisponibles()
             .then(setSecteurs)
             .catch(() => setSecteurs([]));
     }, []);
 
+    // Chargement des offres
     useEffect(() => {
         async function charger() {
             setLoading(true);
+            setError(null);
             try {
                 const data = await listerOffresPubliques(page, TAILLE_PAGE, {
                     recherche: rechercheAppliquee,
                     secteurActivite: secteurSelectionne,
                 });
-                setOffres(data.content);
-                setTotalPages(data.totalPages);
-            } catch {
+                setOffres(data.content ?? []);
+                setTotalPages(data.totalPages ?? 0);
+            } catch (err) {
+                console.error("Erreur chargement offres :", err);
                 setError("Impossible de charger les offres pour le moment.");
             } finally {
                 setLoading(false);
@@ -64,6 +91,7 @@ export function OffresPubliquesPage() {
         charger();
     }, [page, rechercheAppliquee, secteurSelectionne]);
 
+    // Handlers filtres
     function lancerRecherche(e: React.FormEvent) {
         e.preventDefault();
         setPage(0);
@@ -82,29 +110,44 @@ export function OffresPubliquesPage() {
         setPage(0);
     }
 
-    function ouvrirDetail(id: number) {
-        navigate(`/offres/${id}`);
-    }
-
-    function ouvrirDetailAvecCandidature(e: React.MouseEvent, id: number) {
+    function handlePostuler(e: React.MouseEvent, jobId: number | string) {
+        e.preventDefault();
         e.stopPropagation();
-        navigate(`/offres/${id}`, { state: { ouvrirCandidature: true } });
+        if (currentUser) {
+            navigate(`/offres/${jobId}`, { state: { ouvrirCandidature: true } });
+        } else {
+            navigate(`/connexion?redirect=/offres/${jobId}`);
+        }
     }
 
     return (
-        <div className="offres-page">
+        <div className="offres-page home-container">
+            {/* EN-TÊTE DE LA PAGE */}
             <div className="offres-page__header">
                 <div>
                     <h1 className="offres-page__title">Offres d'emploi</h1>
-                    <p className="offres-page__subtitle">Découvrez les opportunités disponibles au Sénégal.</p>
+                    <p className="offres-page__subtitle">
+                        Découvrez les opportunités disponibles au Sénégal.
+                    </p>
                 </div>
             </div>
 
+            {/* BARRE DE FILTRES */}
             <form className="offres-filtres" onSubmit={lancerRecherche}>
                 <div className="offres-filtres__search">
-                    <svg className="offres-filtres__search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg
+                        className="offres-filtres__search-icon"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
                         <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" />
-                        <path d="M20 20L16.65 16.65" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                        <path
+                            d="M20 20L16.65 16.65"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                        />
                     </svg>
                     <input
                         type="text"
@@ -128,8 +171,19 @@ export function OffresPubliquesPage() {
                             </option>
                         ))}
                     </select>
-                    <svg className="offres-filtres__select-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                    <svg
+                        className="offres-filtres__select-arrow"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            d="M6 9L12 15L18 9"
+                            stroke="currentColor"
+                            strokeWidth="2.2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        />
                     </svg>
                 </div>
 
@@ -138,112 +192,156 @@ export function OffresPubliquesPage() {
                         Rechercher
                     </button>
                     {filtresActifs && (
-                        <button type="button" className="btn-secondary" onClick={reinitialiserFiltres}>
+                        <button
+                            type="button"
+                            className="btn-secondary"
+                            onClick={reinitialiserFiltres}
+                        >
                             Réinitialiser
                         </button>
                     )}
                 </div>
             </form>
 
+            {/* GESTION DES ERREURS */}
             {error && <div className="offre-message--error">{error}</div>}
 
+            {/* GRILLE / SKELETON / ETAT VIDE */}
             {loading ? (
-                <div className="offres-skeleton-grid">
+                <div className="home-jobs-grid">
                     {Array.from({ length: TAILLE_PAGE }).map((_, i) => (
-                        <div key={i} className="offre-skeleton" />
+                        <div key={i} className="job-pass job-pass--skeleton" aria-hidden="true">
+                            <div className="skeleton-line skeleton-line--title" />
+                            <div className="skeleton-line skeleton-line--text" />
+                        </div>
                     ))}
                 </div>
             ) : offres.length === 0 ? (
-                <div className="offres-page__empty">
-                    <div className="offres-page__empty-icon" />
-                    <p className="offres-page__empty-title">
-                        {filtresActifs ? "Aucune offre ne correspond à votre recherche." : "Aucune offre disponible pour le moment."}
+                <div className="home-jobs-empty">
+                    <p>
+                        {filtresActifs
+                            ? "Aucune offre ne correspond à votre recherche."
+                            : "Aucune offre disponible pour le moment."}
                     </p>
                 </div>
             ) : (
                 <>
-                    <div className="offres-grid">
-                        {offres.map((offre) => {
-                            const couleur = getCouleurContrat(offre.typeContrat);
-                            const lieu = [offre.ville, offre.pays].filter(Boolean).join(", ");
-                            const salaire = formatSalaire(offre);
+                    <div className="home-jobs-grid">
+                        {offres.map((job) => {
+                            const couleur = getCouleurContrat(job.typeContrat);
+                            const jours = joursDepuisPublication(job.datePublication);
+                            const estRecente = jours !== null && jours <= 2;
+                            const lieu =
+                                [job.ville, job.region, job.pays].filter(Boolean).join(", ") ||
+                                "Non précisé";
+                            const competences = (job.competences ?? []).slice(0, 3);
+
                             return (
-                                <div
-                                    key={offre.id}
-                                    role="button"
-                                    tabIndex={0}
-                                    className="offre-tile"
+                                <article
+                                    key={job.id}
+                                    className="job-pass"
                                     style={
                                         {
-                                            "--offre-color": couleur.bar,
-                                            "--offre-color-soft": couleur.bg,
+                                            "--job-color": couleur?.bar ?? "var(--navy)",
                                         } as React.CSSProperties
                                     }
-                                    onClick={() => ouvrirDetail(offre.id)}
-                                    onKeyDown={(e) => e.key === "Enter" && ouvrirDetail(offre.id)}
                                 >
-                                    <div className="offre-tile__top">
+                                    {estRecente && <span className="job-pass__new">Nouveau</span>}
+
+                                    <div className="job-pass__top">
                                         <LogoEntreprise
-                                            recruteurId={offre.recruteurId}
-                                            logoPresent={offre.logoPresent}
-                                            nomEntreprise={offre.nomEntreprise}
-                                            className="offre-tile__logo"
+                                            recruteurId={job.recruteurId}
+                                            logoPresent={job.logoPresent}
+                                            nomEntreprise={job.nomEntreprise}
+                                            className="job-pass__logo"
                                         />
-                                        <div className="offre-tile__entreprise">
-                                            <p className="offre-tile__nom-entreprise">{offre.nomEntreprise || "Entreprise inconnue"}</p>
+                                        <div className="job-pass__id">
+                                            <p className="job-pass__eyebrow">
+                                                {job.secteurActivite ?? "Secteur non précisé"}
+                                                {jours !== null && <> · {formatAnciennete(jours)}</>}
+                                            </p>
+                                            <h3>{job.titre}</h3>
+                                            <p className="job-pass__company">
+                                                {job.nomEntreprise ?? "Entreprise"}
+                                            </p>
                                         </div>
                                     </div>
 
-                                    <p className="offre-tile__titre">{offre.titre}</p>
-                                    <p className="offre-tile__lieu">{lieu || "Lieu non précisé"}</p>
-
-                                    <div className="offre-tile__tags">
-                                        <span className="offre-tile__tag">{LABELS_TYPE_CONTRAT[offre.typeContrat]}</span>
-                                        {offre.teletravail && <span className="offre-tile__tag offre-tile__tag--gold">Télétravail</span>}
-                                        {offre.hybride && <span className="offre-tile__tag offre-tile__tag--gold">Hybride</span>}
-                                    </div>
-
-                                    <div className="offre-tile__footer">
-                                        {salaire ? (
-                                            <span className="offre-tile__salaire">{salaire}</span>
-                                        ) : (
-                                            <span className="offre-tile__salaire-vide">Salaire non communiqué</span>
+                                    <div className="job-pass__tags">
+                                        <span className="job-pass__tag job-pass__tag--solid">
+                                            {LABELS_TYPE_CONTRAT[job.typeContrat] ?? job.typeContrat}
+                                        </span>
+                                        {job.teletravail && <span className="job-pass__tag">Télétravail</span>}
+                                        {job.hybride && <span className="job-pass__tag">Hybride</span>}
+                                        {job.niveauExperience && (
+                                            <span className="job-pass__tag">
+                                                {LABELS_NIVEAU_EXPERIENCE[job.niveauExperience] ?? job.niveauExperience}
+                                            </span>
                                         )}
                                     </div>
 
-                                    <div className="offre-tile__actions">
-                                        <button
-                                            className="btn-secondary offre-tile__voir-detail"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                ouvrirDetail(offre.id);
-                                            }}
+                                    {competences.length > 0 && (
+                                        <div className="job-pass__skills">
+                                            {competences.map((c) => (
+                                                <span className="job-pass__skill" key={c}>
+                                                    {c}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    <div className="job-pass__footer">
+                                        <span className="job-pass__meta">
+                                            <IconMapPin />
+                                            {lieu}
+                                        </span>
+                                        <span className="job-pass__meta job-pass__meta--salaire">
+                                            <IconCoin />
+                                            {formatSalaire(job)}
+                                        </span>
+                                    </div>
+
+                                    <div className="job-pass__actions">
+                                        <Link
+                                            to={`/offres/${job.id}`}
+                                            className="job-pass__btn job-pass__btn--ghost"
                                         >
                                             Voir détail
-                                        </button>
-                                        {estCandidat && offre.statut === "PUBLIEE" && (
+                                        </Link>
+                                        {(!currentUser || estCandidat) && (
                                             <button
-                                                className="btn-gold offre-tile__postuler"
-                                                onClick={(e) => ouvrirDetailAvecCandidature(e, offre.id)}
+                                                className="job-pass__btn job-pass__btn--gold"
+                                                onClick={(e) => handlePostuler(e, job.id)}
                                             >
                                                 Postuler
                                             </button>
                                         )}
                                     </div>
-                                </div>
+                                </article>
                             );
                         })}
                     </div>
 
+                    {/* PAGINATION */}
                     {totalPages > 1 && (
-                        <div className="offres-pagination">
-                            <button className="btn-secondary" disabled={page === 0} onClick={() => setPage((p) => p - 1)}>
+                        <div className="offres-pagination" style={{ marginTop: "2rem" }}>
+                            <button
+                                type="button"
+                                className="btn-secondary"
+                                disabled={page === 0}
+                                onClick={() => setPage((p) => p - 1)}
+                            >
                                 Précédent
                             </button>
                             <span className="offres-pagination__info">
                                 Page {page + 1} / {totalPages}
                             </span>
-                            <button className="btn-secondary" disabled={page + 1 >= totalPages} onClick={() => setPage((p) => p + 1)}>
+                            <button
+                                type="button"
+                                className="btn-secondary"
+                                disabled={page + 1 >= totalPages}
+                                onClick={() => setPage((p) => p + 1)}
+                            >
                                 Suivant
                             </button>
                         </div>
@@ -253,3 +351,5 @@ export function OffresPubliquesPage() {
         </div>
     );
 }
+
+export default OffresPubliquesPage;
