@@ -8,10 +8,13 @@ import {
     type OffreDTO,
 } from "../../api/offreService";
 import { LogoEntreprise } from "../../components/common/LogoEntreprise";
-import { postulerOffre, aDejaPostule } from "../../api/candidatureService";
+import { CandidatureFormulaire } from "../candidat/CandidatureFormulaire";
+import { aDejaPostule } from "../../api/candidatureService";
 import { useAuth } from "../../context/AuthContext";
 import { getCouleurContrat } from "../offres/offreColors";
 import "./offres.css";
+
+type EtapeCandidature = "idle" | "formulaire" | "succes";
 
 function formatSalaire(offre: OffreDTO): string | null {
     if (!offre.salaireVisible || (!offre.salaireMin && !offre.salaireMax)) return null;
@@ -38,9 +41,8 @@ export function OffreDetailPage() {
     const [offre, setOffre] = useState<OffreDTO | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [postulationEnvoyee, setPostulationEnvoyee] = useState(false);
-    const [postulationEnCours, setPostulationEnCours] = useState(false);
-    const [postulationErreur, setPostulationErreur] = useState<string | null>(null);
+    const [dejaPostule, setDejaPostule] = useState(false);
+    const [etapeCandidature, setEtapeCandidature] = useState<EtapeCandidature>("idle");
 
     useEffect(() => {
         async function charger() {
@@ -51,7 +53,7 @@ export function OffreDetailPage() {
 
                 if (currentUser?.role === "CANDIDAT") {
                     const deja = await aDejaPostule(Number(id));
-                    setPostulationEnvoyee(deja);
+                    setDejaPostule(deja);
                 }
             } catch {
                 setError("Cette offre est introuvable ou n'est plus disponible.");
@@ -70,18 +72,8 @@ export function OffreDetailPage() {
         }
     }
 
-    async function handlePostuler() {
-        if (!offre) return;
-        setPostulationErreur(null);
-        setPostulationEnCours(true);
-        try {
-            await postulerOffre(offre.id);
-            setPostulationEnvoyee(true);
-        } catch {
-            setPostulationErreur("Impossible d'envoyer votre candidature. Vérifiez que votre CV est bien renseigné dans votre profil.");
-        } finally {
-            setPostulationEnCours(false);
-        }
+    function ouvrirFormulaire() {
+        setEtapeCandidature("formulaire");
     }
 
     if (loading) {
@@ -120,7 +112,7 @@ export function OffreDetailPage() {
                             nomEntreprise={offre.nomEntreprise}
                             className="offre-detail__logo"
                         />
-                        <p className="offre-detail__entreprise">{offre.nomEntreprise ?? "Entreprise"}</p>
+                        <p className="offre-detail__entreprise">{offre.nomEntreprise || "Entreprise inconnue"}</p>
                         <h1 className="offre-detail__titre">{offre.titre}</h1>
                         <p className="offre-detail__lieu">{lieu || "Lieu non précisé"}</p>
                     </div>
@@ -142,6 +134,30 @@ export function OffreDetailPage() {
                     )}
                 </div>
             </div>
+
+            {estCandidat && etapeCandidature !== "idle" && (
+                <div className="offre-detail__section">
+                    {etapeCandidature === "formulaire" && (
+                        <>
+                            <p className="offre-detail__section-title">Votre candidature</p>
+                            <CandidatureFormulaire
+                                offreId={offre.id}
+                                onAnnuler={() => setEtapeCandidature("idle")}
+                                onSucces={() => {
+                                    setEtapeCandidature("succes");
+                                    setDejaPostule(true);
+                                }}
+                            />
+                        </>
+                    )}
+
+                    {etapeCandidature === "succes" && (
+                        <div className="candidature-form__success">
+                            ✓ Votre candidature a bien été envoyée. Vous pouvez suivre son statut dans « Mes candidatures ».
+                        </div>
+                    )}
+                </div>
+            )}
 
             {offre.description && (
                 <div className="offre-detail__section">
@@ -281,37 +297,18 @@ export function OffreDetailPage() {
                 </div>
             </div>
 
-            {estCandidat && offre.statut === "PUBLIEE" && (
+            {estCandidat && offre.statut === "PUBLIEE" && etapeCandidature === "idle" && (
                 <div className="offre-detail__cta">
                     <div>
                         <div className="offre-detail__fact-value" style={{ marginBottom: 2 }}>
                             {salaire ?? "Salaire non communiqué"}
                         </div>
                         <div className="offre-detail__cta-info">
-                            {expiree
-                                ? "Cette offre a expiré"
-                                : postulationEnvoyee
-                                    ? "Candidature envoyée ✓"
-                                    : "Postulez en un clic"}
+                            {expiree ? "Cette offre a expiré" : dejaPostule ? "Candidature envoyée ✓" : "Postulez en un clic"}
                         </div>
-                        {postulationErreur && (
-                            <div className="offre-detail__cta-info" style={{ color: "#b3261e", marginTop: 4 }}>
-                                {postulationErreur}
-                            </div>
-                        )}
                     </div>
-                    <button
-                        className="btn-gold"
-                        onClick={handlePostuler}
-                        disabled={expiree || postulationEnCours || postulationEnvoyee}
-                    >
-                        {expiree
-                            ? "Offre expirée"
-                            : postulationEnCours
-                                ? "Envoi..."
-                                : postulationEnvoyee
-                                    ? "Candidature envoyée"
-                                    : "Postuler"}
+                    <button className="btn-gold" onClick={ouvrirFormulaire} disabled={expiree || dejaPostule}>
+                        {expiree ? "Offre expirée" : dejaPostule ? "Candidature envoyée" : "Postuler"}
                     </button>
                 </div>
             )}
