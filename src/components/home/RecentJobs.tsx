@@ -13,7 +13,10 @@ import {
 
 function joursDepuisPublication(iso: string | null): number | null {
     if (!iso) return null;
-    const diffMs = Date.now() - new Date(iso).getTime();
+    const timestamp = new Date(iso).getTime();
+    if (isNaN(timestamp)) return null;
+
+    const diffMs = Date.now() - timestamp;
     return Math.floor(diffMs / 86400000);
 }
 
@@ -28,32 +31,38 @@ export function RecentJobs() {
     const navigate = useNavigate();
     const [jobs, setJobs] = useState<OffreDTO[]>([]);
     const [loading, setLoading] = useState(true);
+    const [hasError, setHasError] = useState(false);
+
+    const chargerOffres = async () => {
+        setLoading(true);
+        setHasError(false);
+        try {
+            const resultat = await listerOffresPubliques(0, 5);
+            const offres = [...(resultat.content ?? [])]
+                .sort(
+                    (a, b) =>
+                        new Date(b.datePublication ?? 0).getTime() -
+                        new Date(a.datePublication ?? 0).getTime()
+                )
+                .slice(0, 5);
+            setJobs(offres);
+        } catch (error) {
+            console.error("Erreur lors du chargement des offres :", error);
+            setHasError(true);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        async function charger() {
-            try {
-                const resultat = await listerOffresPubliques(0, 5);
-                const offres = [...(resultat.content ?? [])]
-                    .sort(
-                        (a, b) =>
-                            new Date(b.datePublication ?? 0).getTime() -
-                            new Date(a.datePublication ?? 0).getTime()
-                    )
-                    .slice(0, 5);
-                setJobs(offres);
-            } catch (error) {
-                console.error("Erreur lors du chargement des offres :", error);
-            } finally {
-                setLoading(false);
-            }
-        }
-        charger();
+        chargerOffres();
     }, []);
 
-    function handlePostuler(e: React.MouseEvent) {
+    function handlePostuler(e: React.MouseEvent, jobId: number | string) {
         e.preventDefault();
         e.stopPropagation();
-        navigate("/connexion");
+        // Redirige vers la connexion en conservant l'intention d'action
+        navigate(`/connexion?redirect=/offres/${jobId}`);
     }
 
     return (
@@ -69,16 +78,31 @@ export function RecentJobs() {
 
             <div className="home-jobs-grid">
                 {loading ? (
-                    <p>Chargement des offres...</p>
+                    // Skeleton UI placeholders
+                    Array.from({ length: 3 }).map((_, i) => (
+                        <div key={i} className="job-pass job-pass--skeleton" aria-hidden="true">
+                            <div className="skeleton-line skeleton-line--title" />
+                            <div className="skeleton-line skeleton-line--text" />
+                        </div>
+                    ))
+                ) : hasError ? (
+                    <div className="home-jobs-error">
+                        <p>Impossible de charger les offres pour le moment.</p>
+                        <button onClick={chargerOffres} className="btn-retry">
+                            Réessayer
+                        </button>
+                    </div>
                 ) : jobs.length === 0 ? (
-                    <p>Aucune offre disponible actuellement.</p>
+                    <p className="home-jobs-empty">Aucune offre disponible actuellement.</p>
                 ) : (
                     <>
                         {jobs.map((job) => {
                             const couleur = getCouleurContrat(job.typeContrat);
                             const jours = joursDepuisPublication(job.datePublication);
                             const estRecente = jours !== null && jours <= 2;
-                            const lieu = [job.ville, job.region, job.pays].filter(Boolean).join(", ") || "Non précisé";
+                            const lieu =
+                                [job.ville, job.region, job.pays].filter(Boolean).join(", ") ||
+                                "Non précisé";
                             const competences = (job.competences ?? []).slice(0, 3);
 
                             return (
@@ -102,18 +126,22 @@ export function RecentJobs() {
                                                 {jours !== null && <> · {formatAnciennete(jours)}</>}
                                             </p>
                                             <h3>{job.titre}</h3>
-                                            <p className="job-pass__company">{job.nomEntreprise ?? "Entreprise"}</p>
+                                            <p className="job-pass__company">
+                                                {job.nomEntreprise ?? "Entreprise"}
+                                            </p>
                                         </div>
                                     </div>
 
                                     <div className="job-pass__tags">
                                         <span className="job-pass__tag job-pass__tag--solid">
-                                            {LABELS_TYPE_CONTRAT[job.typeContrat]}
+                                            {LABELS_TYPE_CONTRAT[job.typeContrat] ?? job.typeContrat}
                                         </span>
                                         {job.teletravail && <span className="job-pass__tag">Télétravail</span>}
                                         {job.hybride && <span className="job-pass__tag">Hybride</span>}
                                         {job.niveauExperience && (
-                                            <span className="job-pass__tag">{LABELS_NIVEAU_EXPERIENCE[job.niveauExperience]}</span>
+                                            <span className="job-pass__tag">
+                                                {LABELS_NIVEAU_EXPERIENCE[job.niveauExperience]}
+                                            </span>
                                         )}
                                     </div>
 
@@ -144,7 +172,10 @@ export function RecentJobs() {
                                         <Link to={`/offres/${job.id}`} className="job-pass__btn job-pass__btn--ghost">
                                             Voir détail
                                         </Link>
-                                        <button className="job-pass__btn job-pass__btn--gold" onClick={handlePostuler}>
+                                        <button
+                                            className="job-pass__btn job-pass__btn--gold"
+                                            onClick={(e) => handlePostuler(e, job.id)}
+                                        >
                                             Postuler
                                         </button>
                                     </div>
@@ -154,7 +185,7 @@ export function RecentJobs() {
 
                         <Link to="/offres" className="home-job-more-card">
                             <span>Voir plus d'offres</span>
-                            <strong>→</strong>
+                            <strong aria-hidden="true">→</strong>
                         </Link>
                     </>
                 )}
