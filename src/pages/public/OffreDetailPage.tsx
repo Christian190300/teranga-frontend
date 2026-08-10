@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
     obtenirOffre,
     LABELS_TYPE_CONTRAT,
@@ -37,12 +37,15 @@ export function OffreDetailPage() {
     const { id } = useParams<{ id: string }>();
     const { currentUser } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
 
     const [offre, setOffre] = useState<OffreDTO | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [dejaPostule, setDejaPostule] = useState(false);
     const [etapeCandidature, setEtapeCandidature] = useState<EtapeCandidature>("idle");
+
+    const demandeOuvertureAuto = (location.state as { ouvrirCandidature?: boolean } | null)?.ouvrirCandidature ?? false;
 
     useEffect(() => {
         async function charger() {
@@ -54,6 +57,9 @@ export function OffreDetailPage() {
                 if (currentUser?.role === "CANDIDAT") {
                     const deja = await aDejaPostule(Number(id));
                     setDejaPostule(deja);
+                    if (demandeOuvertureAuto && !deja) {
+                        setEtapeCandidature("formulaire");
+                    }
                 }
             } catch {
                 setError("Cette offre est introuvable ou n'est plus disponible.");
@@ -62,6 +68,7 @@ export function OffreDetailPage() {
             }
         }
         charger();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id, currentUser?.role]);
 
     function retour() {
