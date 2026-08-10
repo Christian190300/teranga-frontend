@@ -55,6 +55,31 @@ body {
     padding: 0 var(--page-padding);
 }
 
+.home-job-card__actions {
+    display: flex;
+    gap: var(--sp-1);
+    margin-top: 4px;
+}
+
+.home-job-card__actions .home-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    border-radius: 8px;
+}
+
+/* Variante sombre du bouton outline, pour usage sur fond blanc (cartes) */
+.home-btn--outline.home-btn--dark {
+    border-color: var(--hp-line);
+    color: var(--hp-navy);
+    background: white;
+}
+.home-btn--outline.home-btn--dark:hover {
+    border-color: var(--hp-navy);
+    background: var(--hp-navy-soft);
+}
+
 
 .home-page {
     --hp-navy: #14294d;
@@ -631,6 +656,9 @@ body {
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    overflow: hidden;
+    object-fit: cover;
+    font-size: 1.3rem;
 }
 
 .home-job-card--gold .home-job-card__icon {
