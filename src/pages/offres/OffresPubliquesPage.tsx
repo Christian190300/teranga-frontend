@@ -11,7 +11,7 @@ import {
     LABELS_NIVEAU_EXPERIENCE,
     type OffreDTO,
 } from "../../api/offreService";
-import "./offres.css";
+import "./offres.css"
 
 const TAILLE_PAGE = 8;
 
