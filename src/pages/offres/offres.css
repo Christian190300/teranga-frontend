@@ -145,6 +145,320 @@
     height: 14px;
 }
 
+/* ============================================================
+   OFFRES PUBLIQUES PAGE — Talent Sénégal
+   Style dédié intégrant le système de design globale (.home-*)
+   ============================================================ */
+
+/* En-tête / Hero des offres */
+.offres-hero {
+    padding: var(--sp-6) 0 var(--sp-5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+}
+
+.offres-hero__content {
+    max-width: 680px;
+    margin-bottom: var(--sp-4);
+}
+
+.offres-hero__title {
+    font-family: var(--hp-font);
+    font-size: clamp(2rem, 3.8vw, 3rem);
+    font-weight: 800;
+    line-height: 1.2;
+    color: var(--hp-navy);
+    letter-spacing: -0.02em;
+    margin: var(--sp-2) 0 var(--sp-2);
+}
+
+.offres-hero__title span {
+    color: var(--hp-gold-text);
+}
+
+.offres-hero__subtitle {
+    font-size: 1.05rem;
+    color: var(--hp-muted);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ---------- Barre de Recherche & Filtres (Floating Card) ---------- */
+.offres-filterbar {
+    width: 100%;
+    max-width: 960px;
+    background: white;
+    border-radius: 16px;
+    padding: 10px 14px;
+    border: 1.5px solid var(--hp-line);
+    box-shadow: 0 12px 32px -8px rgba(20, 41, 77, 0.12);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.offres-filterbar__group {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+}
+
+.offres-filterbar__icon {
+    width: 20px;
+    height: 20px;
+    color: var(--hp-muted-light);
+    position: absolute;
+    left: 14px;
+    pointer-events: none;
+}
+
+.offres-filterbar__input {
+    width: 100%;
+    height: 48px;
+    padding: 0 14px 0 44px;
+    border: none;
+    background: transparent;
+    font-family: var(--hp-font);
+    font-size: 0.95rem;
+    color: var(--hp-navy);
+    outline: none;
+}
+
+.offres-filterbar__input::placeholder {
+    color: var(--hp-muted-light);
+}
+
+.offres-filterbar__divider {
+    width: 1px;
+    height: 32px;
+    background-color: var(--hp-line);
+    flex-shrink: 0;
+}
+
+.offres-filterbar__select {
+    width: 100%;
+    height: 48px;
+    padding: 0 36px 0 14px;
+    border: none;
+    background: transparent;
+    font-family: var(--hp-font);
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--hp-navy);
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.offres-filterbar__arrow {
+    width: 18px;
+    height: 18px;
+    color: var(--hp-muted-light);
+    position: absolute;
+    right: 12px;
+    pointer-events: none;
+}
+
+.offres-filterbar__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.offres-filterbar__actions .home-btn {
+    height: 48px;
+    padding: 0 24px;
+    border-radius: 10px;
+}
+
+/* Responsivité de la barre de filtres */
+@media (max-width: 840px) {
+    .offres-filterbar {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 16px;
+        gap: 12px;
+    }
+
+    .offres-filterbar__divider {
+        display: none;
+    }
+
+    .offres-filterbar__group {
+        background: var(--hp-navy-soft);
+        border-radius: 10px;
+    }
+
+    .offres-filterbar__actions {
+        flex-direction: column;
+    }
+
+    .offres-filterbar__actions .home-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ---------- Alertes & Messages ---------- */
+.offres-alert {
+    padding: var(--sp-3) var(--sp-4);
+    border-radius: 12px;
+    margin-bottom: var(--sp-4);
+    font-size: 0.92rem;
+    font-weight: 500;
+}
+
+.offres-alert--error {
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #991b1b;
+}
+
+/* ---------- Section Grille d'offres ---------- */
+.offres-section {
+    padding-bottom: var(--sp-7);
+}
+
+/* ---------- État vide (Empty state) ---------- */
+.offres-empty {
+    text-align: center;
+    padding: var(--sp-6) var(--sp-4);
+    background: white;
+    border-radius: 16px;
+    border: 1.5px dashed var(--hp-line);
+    max-width: 560px;
+    margin: 0 auto;
+}
+
+.offres-empty__icon {
+    font-size: 2.8rem;
+    margin-bottom: var(--sp-2);
+}
+
+.offres-empty h3 {
+    font-family: var(--hp-font);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--hp-navy);
+    margin: 0 0 8px;
+}
+
+.offres-empty p {
+    color: var(--hp-muted);
+    font-size: 0.94rem;
+    line-height: 1.6;
+    margin: 0 0 var(--sp-4);
+}
+
+/* ---------- Skeletons de chargement ---------- */
+.job-pass--skeleton {
+    background: white;
+    min-height: 240px;
+    border: 1.5px solid var(--hp-line);
+    cursor: default;
+    box-shadow: none;
+}
+
+.job-pass--skeleton::before {
+    display: none;
+}
+
+.skeleton-box,
+.skeleton-line {
+    background: linear-gradient(90deg, #f0f3f8 25%, #e2e8f0 50%, #f0f3f8 75%);
+    background-size: 200% 100%;
+    animation: skeleton-wave 1.5s infinite;
+    border-radius: 6px;
+}
+
+.skeleton-box--logo {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    flex-shrink: 0;
+}
+
+.skeleton-box--content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.skeleton-line--short {
+    height: 12px;
+    width: 40%;
+}
+
+.skeleton-line--title {
+    height: 20px;
+    width: 85%;
+}
+
+.skeleton-line--sub {
+    height: 14px;
+    width: 60%;
+}
+
+.skeleton-line--tags {
+    height: 24px;
+    width: 100%;
+    margin-top: 12px;
+}
+
+.skeleton-line--footer {
+    height: 18px;
+    width: 100%;
+    margin-top: auto;
+}
+
+@keyframes skeleton-wave {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* ---------- Pagination ---------- */
+.offres-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sp-3);
+    margin-top: var(--sp-6);
+}
+
+.offres-pagination__info {
+    font-size: 0.92rem;
+    color: var(--hp-navy);
+    font-family: var(--hp-font);
+}
+
+.offres-pagination__info strong {
+    font-weight: 700;
+}
+
+@media (max-width: 520px) {
+    .offres-pagination {
+        flex-direction: column;
+        gap: var(--sp-2);
+    }
+    .offres-pagination .home-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
 .offres-filtres__actions {
     display: flex;
     gap: 8px;
