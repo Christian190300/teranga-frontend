@@ -6,9 +6,23 @@ import { getCouleurContrat } from "../../pages/offres/offreColors";
 
 import {
     LABELS_TYPE_CONTRAT,
+    LABELS_NIVEAU_EXPERIENCE,
     type OffreDTO,
     listerOffresPubliques,
 } from "../../api/offreService";
+
+function joursDepuisPublication(iso: string | null): number | null {
+    if (!iso) return null;
+    const diffMs = Date.now() - new Date(iso).getTime();
+    return Math.floor(diffMs / 86400000);
+}
+
+function formatAnciennete(jours: number | null): string {
+    if (jours === null) return "";
+    if (jours <= 0) return "Publiée aujourd'hui";
+    if (jours === 1) return "Publiée hier";
+    return `Publiée il y a ${jours} j`;
+}
 
 export function RecentJobs() {
     const navigate = useNavigate();
@@ -62,41 +76,63 @@ export function RecentJobs() {
                     <>
                         {jobs.map((job) => {
                             const couleur = getCouleurContrat(job.typeContrat);
+                            const jours = joursDepuisPublication(job.datePublication);
+                            const estRecente = jours !== null && jours <= 2;
+                            const lieu = [job.ville, job.region, job.pays].filter(Boolean).join(", ") || "Non précisé";
+                            const competences = (job.competences ?? []).slice(0, 3);
+
                             return (
                                 <article
                                     key={job.id}
-                                    className="job-badge"
-                                    style={
-                                        {
-                                            "--job-color": couleur.bar,
-                                            "--job-color-soft": couleur.bg,
-                                        } as React.CSSProperties
-                                    }
+                                    className="job-pass"
+                                    style={{ "--job-color": couleur.bar } as React.CSSProperties}
                                 >
-                                    <div className="job-badge__stripe" />
+                                    {estRecente && <span className="job-pass__new">Nouveau</span>}
 
-                                    <div className="job-badge__head">
+                                    <div className="job-pass__top">
                                         <LogoEntreprise
                                             recruteurId={job.recruteurId}
                                             logoPresent={job.logoPresent}
                                             nomEntreprise={job.nomEntreprise}
-                                            className="job-badge__logo"
+                                            className="job-pass__logo"
                                         />
-                                        <span className="job-badge__pill">{LABELS_TYPE_CONTRAT[job.typeContrat]}</span>
+                                        <div className="job-pass__id">
+                                            <p className="job-pass__eyebrow">
+                                                {job.secteurActivite ?? "Secteur non précisé"}
+                                                {jours !== null && <> · {formatAnciennete(jours)}</>}
+                                            </p>
+                                            <h3>{job.titre}</h3>
+                                            <p className="job-pass__company">{job.nomEntreprise ?? "Entreprise"}</p>
+                                        </div>
                                     </div>
 
-                                    <div className="job-badge__body">
-                                        <h3>{job.titre}</h3>
-                                        <p className="job-badge__company">{job.nomEntreprise ?? "Entreprise"}</p>
-                                    </div>
-
-                                    <div className="job-badge__meta">
-                                        <span>
-                                            <IconMapPin />
-                                            {job.ville ?? job.region ?? job.pays ?? "Non précisé"}
+                                    <div className="job-pass__tags">
+                                        <span className="job-pass__tag job-pass__tag--solid">
+                                            {LABELS_TYPE_CONTRAT[job.typeContrat]}
                                         </span>
-                                        <span className="job-badge__meta-sep">•</span>
-                                        <span>
+                                        {job.teletravail && <span className="job-pass__tag">Télétravail</span>}
+                                        {job.hybride && <span className="job-pass__tag">Hybride</span>}
+                                        {job.niveauExperience && (
+                                            <span className="job-pass__tag">{LABELS_NIVEAU_EXPERIENCE[job.niveauExperience]}</span>
+                                        )}
+                                    </div>
+
+                                    {competences.length > 0 && (
+                                        <div className="job-pass__skills">
+                                            {competences.map((c) => (
+                                                <span className="job-pass__skill" key={c}>
+                                                    {c}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    <div className="job-pass__footer">
+                                        <span className="job-pass__meta">
+                                            <IconMapPin />
+                                            {lieu}
+                                        </span>
+                                        <span className="job-pass__meta job-pass__meta--salaire">
                                             <IconCoin />
                                             {job.salaireVisible
                                                 ? `${job.salaireMin ?? "-"} - ${job.salaireMax ?? "-"} ${job.devise ?? ""}`
@@ -104,11 +140,11 @@ export function RecentJobs() {
                                         </span>
                                     </div>
 
-                                    <div className="job-badge__actions">
-                                        <Link to={`/offres/${job.id}`} className="job-badge__btn job-badge__btn--ghost">
+                                    <div className="job-pass__actions">
+                                        <Link to={`/offres/${job.id}`} className="job-pass__btn job-pass__btn--ghost">
                                             Voir détail
                                         </Link>
-                                        <button className="job-badge__btn job-badge__btn--gold" onClick={handlePostuler}>
+                                        <button className="job-pass__btn job-pass__btn--gold" onClick={handlePostuler}>
                                             Postuler
                                         </button>
                                     </div>

@@ -55,50 +55,63 @@ body {
     padding: 0 var(--page-padding);
 }
 
-/* ---------- Job badge (carte-offre façon badge professionnel) ---------- */
-.job-badge {
+/* ---------- Job pass (carte-offre foncée, dense en infos) ---------- */
+.job-pass {
     position: relative;
-    background: white;
-    border: 1.5px solid var(--hp-line);
-    border-radius: 14px;
-    padding: 28px var(--sp-4) var(--sp-4);
+    background: linear-gradient(155deg, var(--hp-navy) 0%, var(--hp-navy-deep) 100%);
+    border-radius: 16px;
+    padding: var(--sp-4);
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    overflow: visible;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+    gap: 14px;
+    overflow: hidden;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.job-badge:hover {
-    border-color: var(--job-color, var(--hp-navy));
-    box-shadow: 0 12px 28px rgba(20, 41, 77, 0.1);
-    transform: translateY(-3px);
-}
-
-.job-badge__stripe {
+.job-pass::before {
+    content: "";
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 6px;
-    border-radius: 14px 14px 0 0;
-    background: var(--job-color, var(--hp-gold));
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.5px;
+    background: linear-gradient(155deg, var(--job-color, var(--hp-gold)) 0%, transparent 45%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
 }
 
-.job-badge__head {
+.job-pass:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 32px rgba(13, 28, 56, 0.35);
+}
+
+.job-pass__new {
+    position: absolute;
+    top: 14px;
+    right: -34px;
+    transform: rotate(40deg);
+    background: var(--hp-gold-light);
+    color: var(--hp-navy-deep);
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 4px 40px;
+}
+
+.job-pass__top {
     display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    margin-top: -20px;
+    align-items: flex-start;
+    gap: 12px;
 }
 
-.job-badge__logo {
-    width: 44px;
-    height: 44px;
+.job-pass__logo {
+    width: 46px;
+    height: 46px;
     border-radius: 12px;
-    background: white;
-    border: 3px solid white;
-    box-shadow: 0 0 0 1.5px var(--hp-line);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -108,74 +121,118 @@ body {
     flex-shrink: 0;
 }
 
-.job-badge__pill {
-    display: inline-flex;
-    align-items: center;
-    padding: 4px 12px;
-    border-radius: 999px;
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
-    background: var(--job-color-soft, var(--hp-gold-soft));
-    color: var(--job-color, var(--hp-gold-text));
-    margin-bottom: 4px;
+.job-pass__id {
+    min-width: 0;
 }
 
-.job-badge__body h3 {
+.job-pass__eyebrow {
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0 0 4px;
+    letter-spacing: 0.01em;
+}
+
+.job-pass__id h3 {
     font-family: var(--hp-font);
     font-weight: 700;
     font-size: 1.05rem;
-    color: var(--hp-navy);
-    margin: 0 0 4px;
-    letter-spacing: -0.01em;
+    color: white;
+    margin: 0 0 2px;
     line-height: 1.3;
+    letter-spacing: -0.01em;
 }
 
-.job-badge__company {
-    color: var(--hp-muted);
-    font-size: 0.86rem;
+.job-pass__company {
+    color: rgba(255, 255, 255, 0.62);
+    font-size: 0.85rem;
     margin: 0;
-    font-weight: 400;
 }
 
-.job-badge__meta {
+.job-pass__tags {
     display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.job-pass__tag {
+    display: inline-flex;
     align-items: center;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.job-pass__tag--solid {
+    background: var(--job-color, var(--hp-gold));
+    color: white;
+    border-color: transparent;
+    font-weight: 700;
+}
+
+.job-pass__skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.job-pass__skill {
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.55);
+    padding: 3px 0;
+}
+
+.job-pass__skill:not(:last-child)::after {
+    content: "·";
+    margin-left: 6px;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.job-pass__footer {
+    display: flex;
+    justify-content: space-between;
     flex-wrap: wrap;
     gap: 8px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
     font-size: 0.82rem;
-    color: var(--hp-muted);
-    padding-top: 10px;
-    border-top: 1.5px solid var(--hp-line);
+    color: rgba(255, 255, 255, 0.65);
 }
 
-.job-badge__meta span {
+.job-pass__meta {
     display: flex;
     align-items: center;
     gap: 6px;
 }
 
-.job-badge__meta svg {
-    color: var(--hp-muted-light);
+.job-pass__meta svg {
+    color: rgba(255, 255, 255, 0.4);
     flex-shrink: 0;
 }
 
-.job-badge__meta-sep {
-    color: var(--hp-muted-light);
+.job-pass__meta--salaire {
+    color: var(--hp-gold-light);
+    font-weight: 600;
 }
 
-.job-badge__actions {
+.job-pass__meta--salaire svg {
+    color: var(--hp-gold-light);
+}
+
+.job-pass__actions {
     display: flex;
     gap: 8px;
-    margin-top: 4px;
+    margin-top: 2px;
 }
 
-.job-badge__btn {
+.job-pass__btn {
     flex: 1;
     text-align: center;
     padding: 10px 14px;
-    border-radius: 8px;
+    border-radius: 9px;
     font-size: 0.85rem;
     font-weight: 600;
     text-decoration: none;
@@ -184,26 +241,26 @@ body {
     transition: background 0.15s ease, border-color 0.15s ease;
 }
 
-.job-badge__btn--ghost {
-    background: white;
-    border-color: var(--hp-line);
-    color: var(--hp-navy);
+.job-pass__btn--ghost {
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.2);
+    color: white;
 }
-.job-badge__btn--ghost:hover {
-    border-color: var(--hp-navy);
-    background: var(--hp-navy-soft);
+.job-pass__btn--ghost:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.06);
 }
 
-.job-badge__btn--gold {
+.job-pass__btn--gold {
     background: var(--hp-gold-light);
     color: var(--hp-navy-deep);
 }
-.job-badge__btn--gold:hover {
+.job-pass__btn--gold:hover {
     background: var(--hp-gold);
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .job-badge {
+    .job-pass {
         transition: none;
     }
 }
