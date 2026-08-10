@@ -34,6 +34,50 @@
     box-sizing: border-box;
 }
 
+/* Correctif temporaire anti-collision — texte forcé lisible sur fond blanc */
+.home-jobs-grid .job-pass,
+.home-jobs-grid .job-pass * {
+    animation: none !important;
+    transform: none !important;
+}
+
+.home-jobs-grid .job-pass {
+    background: white !important;
+    opacity: 1 !important;
+}
+
+.home-jobs-grid .job-pass__id h3,
+.home-jobs-grid .job-pass__eyebrow,
+.home-jobs-grid .job-pass__company,
+.home-jobs-grid .job-pass__meta,
+.home-jobs-grid .job-pass__skill,
+.home-jobs-grid .job-pass__tag {
+    opacity: 1 !important;
+}
+
+.home-jobs-grid .job-pass__id h3 {
+    color: var(--navy-ink) !important;
+}
+
+.home-jobs-grid .job-pass__eyebrow,
+.home-jobs-grid .job-pass__company,
+.home-jobs-grid .job-pass__meta {
+    color: var(--text-muted) !important;
+}
+
+.home-jobs-grid .job-pass__new {
+    position: absolute !important;
+    top: 14px !important;
+    right: 14px !important;
+    left: auto !important;
+    transform: none !important;
+    rotate: 0deg !important;
+}
+
+.home-jobs-grid .job-pass__btn--ghost {
+    color: var(--navy) !important;
+}
+
 .offres-filtres {
     display: flex;
     flex-wrap: wrap;
