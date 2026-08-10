@@ -55,22 +55,6 @@ body {
     padding: 0 var(--page-padding);
 }
 
-.job-pass {
-    position: relative;
-}
-
-.job-pass__btn--ghost::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-}
-
-.job-pass__actions button {
-    position: relative;
-    z-index: 2; /* Pour que le bouton postuler reste au-dessus */
-}
-
 /* ---------- Job pass (carte-offre foncée, dense en infos) ---------- */
 .job-pass {
     position: relative;

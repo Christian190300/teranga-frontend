@@ -1,30 +1,45 @@
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap');
 
+/* ============================================================
+   VARIABLE SYSTEM (Design System Pur & Moderne)
+   ============================================================ */
 :root {
-    --navy: #0b1d3a;
-    --navy-light: #14294d;
-    --navy-lighter: #24427a;
-    --navy-ink: #071122;
-    --navy-mist: #5a6684;
-    --gold: #c8951e;
-    --gold-light: #e0b352;
-    --gold-deep: #9c7115;
-    --gold-soft: #fbf3e2;
-    --bg-page: #f4f8fc;
-    --bg-soft: #f8f7f4;
-    --border: #e7e4dc;
-    --text-muted: #6f7488;
-    --text-body: #263252;
-    --radius-lg: 20px;
-    --radius-md: 14px;
-    --radius-sm: 9px;
-    --shadow-card: 0 1px 2px rgba(11, 29, 58, 0.05);
-    --shadow-card-hover: 0 20px 40px -12px rgba(11, 29, 58, 0.18);
-    --ease: cubic-bezier(0.22, 1, 0.36, 1);
-    --font-display: 'Sora', 'Inter', -apple-system, sans-serif;
-    --font-body: 'Inter', -apple-system, sans-serif;
+    /* Palette Principale */
+    --navy-dark: #0f172a;
+    --navy-brand: #1e293b;
+    --navy-light: #334155;
+    --slate-muted: #64748b;
+    --slate-light: #94a3b8;
+
+    /* Accents & Statuts */
+    --gold-brand: #d97706;
+    --gold-bg: #fffbeb;
+    --green-brand: #16a34a;
+    --green-bg: #f0fdf4;
+    --blue-brand: #2563eb;
+    --blue-bg: #eff6ff;
+
+    /* Surfaces & Structuration */
+    --bg-page: #f8fafc;
+    --bg-card: #ffffff;
+    --bg-input: #f1f5f9;
+    --border-color: #e2e8f0;
+    --border-hover: #cbd5e1;
+
+    /* Typographie */
+    --font-display: 'Sora', system-ui, sans-serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+
+    /* Effets */
+    --radius-lg: 16px;
+    --radius-md: 10px;
+    --radius-sm: 6px;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+    --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* Reset & Sizing */
 .offres-page,
 .offres-page *,
 .offre-detail,
@@ -34,1490 +49,229 @@
     box-sizing: border-box;
 }
 
+/* ============================================================
+   PAGE CONTAINER & LAYOUT
+   ============================================================ */
+.offres-page {
+    max-width: 1400px;
+    width: 92%;
+    margin: 0 auto;
+    padding: 40px 0 80px;
+    font-family: var(--font-body);
+    background-color: var(--bg-page);
+    color: var(--navy-dark);
+}
+
+.offres-page__header {
+    margin-bottom: 28px;
+}
+
+.offres-page__title {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--navy-dark);
+    margin: 0 0 6px;
+    letter-spacing: -0.02em;
+}
+
+.offres-page__subtitle {
+    font-size: 0.95rem;
+    color: var(--slate-muted);
+    margin: 0;
+}
+
+/* ============================================================
+   BARRE DE FILTRES
+   ============================================================ */
 .offres-filtres {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 14px;
-    background: white;
-    border: 1px solid var(--border);
+    gap: 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
-    padding: 14px 18px;
+    padding: 12px 16px;
     margin-bottom: 32px;
-    box-shadow: var(--shadow-card);
-}
-
-.offre-tile__clickzone {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    cursor: pointer;
-}
-
-.offre-tile__candidature {
-    margin-top: 16px;
-    padding-top: 16px;
-    border-top: 1px dashed var(--border);
-    cursor: default;
-}
-
-.offre-tile__candidature .candidature-form {
-    padding: 18px;
+    box-shadow: var(--shadow-sm);
 }
 
 .offres-filtres__search {
     position: relative;
     flex: 2;
     min-width: 240px;
-    display: flex;
-    align-items: center;
 }
 
 .offres-filtres__search-icon {
     position: absolute;
     left: 14px;
-    width: 17px;
-    height: 17px;
-    color: var(--navy-mist);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: var(--slate-light);
     pointer-events: none;
 }
 
 .offres-filtres__search-input {
     width: 100%;
-    padding: 12px 14px 12px 40px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    background: var(--bg-soft);
+    padding: 10px 14px 10px 40px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-input);
     font-family: var(--font-body);
-    font-size: 0.9rem;
-    color: var(--navy-ink);
-    transition: border-color 0.18s var(--ease), background 0.18s var(--ease), box-shadow 0.18s var(--ease);
-}
-
-.offres-filtres__search-input::placeholder {
-    color: var(--navy-mist);
+    font-size: 0.88rem;
+    color: var(--navy-dark);
+    transition: var(--transition);
 }
 
 .offres-filtres__search-input:focus {
     outline: none;
-    border-color: var(--gold);
-    background: white;
-    box-shadow: 0 0 0 3px var(--gold-soft);
+    border-color: var(--navy-brand);
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(30, 41, 59, 0.08);
 }
 
 .offres-filtres__select-wrap {
     position: relative;
     flex: 1;
-    min-width: 200px;
+    min-width: 180px;
 }
 
 .offres-filtres__select {
     width: 100%;
     appearance: none;
-    -webkit-appearance: none;
-    padding: 12px 40px 12px 16px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    background: var(--bg-soft);
+    padding: 10px 36px 10px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-input);
     font-family: var(--font-body);
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--navy);
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--navy-dark);
     cursor: pointer;
-    transition: border-color 0.18s var(--ease), background 0.18s var(--ease), box-shadow 0.18s var(--ease);
+    transition: var(--transition);
 }
 
 .offres-filtres__select:focus {
     outline: none;
-    border-color: var(--gold);
-    background: white;
-    box-shadow: 0 0 0 3px var(--gold-soft);
+    border-color: var(--navy-brand);
+    background: #ffffff;
 }
 
 .offres-filtres__select-arrow {
     position: absolute;
-    right: 14px;
+    right: 12px;
     top: 50%;
     transform: translateY(-50%);
     pointer-events: none;
-    color: var(--gold-deep);
+    color: var(--slate-muted);
     width: 14px;
     height: 14px;
 }
 
-.offres-filtres__actions {
-    display: flex;
-    gap: 8px;
-    flex-shrink: 0;
-}
-
-@media (max-width: 720px) {
-    .offres-filtres {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .offres-filtres__actions {
-        justify-content: flex-end;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .offres-page *,
-    .offre-detail *,
-    .offre-modal * {
-        animation-duration: 0.001ms !important;
-        transition-duration: 0.001ms !important;
-    }
-}
-
-/* ------------------------------------------------------------
-   Texture signature — tissage discret, réservé aux bandeaux
-   ------------------------------------------------------------ */
-.offre-weave {
-    background-image:
-            repeating-linear-gradient(115deg, rgba(255, 255, 255, 0.05) 0px, rgba(255, 255, 255, 0.05) 1px, transparent 1px, transparent 13px),
-            repeating-linear-gradient(25deg, rgba(200, 149, 30, 0.07) 0px, rgba(200, 149, 30, 0.07) 1px, transparent 1px, transparent 13px);
-}
-
-/* Page publique des offres : élargie pour la grille 4 colonnes,
-   plafonnée à 1920px pour rester lisible sur très grands écrans */
-.offres-page {
-    max-width: 1920px;
-    width: 94%;
-    margin: 0 auto;
-    padding: 48px 0 90px;
-    font-family: var(--font-body);
-    background: var(--bg-page);
-}
-
-.offres-page__header {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 40px;
-    padding-bottom: 26px;
-    border-bottom: 1px solid var(--border);
-}
-
-.offres-page__title {
-    font-family: var(--font-display);
-    font-size: 1.9rem;
-    font-weight: 800;
-    color: var(--navy-ink);
-    margin: 0 0 8px;
-    letter-spacing: -0.02em;
-}
-
-.offres-page__subtitle {
-    font-size: 0.94rem;
-    color: var(--navy-mist);
-    margin: 0;
-}
-
-.offres-page__loading,
-.offres-page__empty {
-    text-align: center;
-    padding: 90px 0 40px;
-    color: var(--text-muted);
-    font-size: 0.92rem;
-}
-
-.offres-page__empty-icon {
-    width: 56px;
-    height: 56px;
-    margin: 0 auto 18px;
-    border-radius: 50%;
-    border: 1.5px dashed #c9cede;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.offre-field__requis {
-    font-size: 0.68rem;
-    font-weight: 700;
-    color: var(--gold-deep);
-    background: var(--gold-soft);
-    padding: 2px 8px;
-    border-radius: 999px;
-    margin-left: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-}
-
-.offre-field__ok {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: #1e7e34;
-    margin-left: 8px;
-}
-
-.offre-field input[type="file"] {
-    padding: 9px 12px;
-    background: white;
-    cursor: pointer;
-}
-
-
-.offres-page__empty-icon::before {
-    content: "";
-    width: 18px;
-    height: 18px;
-    border-radius: 4px;
-    border: 1.5px solid #c9cede;
-}
-
-.offres-page__empty-title {
-    font-family: var(--font-display);
-    font-weight: 700;
-    color: var(--navy-light);
-    font-size: 1rem;
-    margin: 0 0 6px;
-}
-
-/* ---------- Boutons ---------- */
-.btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 11px 22px;
-    border-radius: var(--radius-sm);
-    border: none;
-    background: var(--navy);
-    color: white;
-    font-size: 0.86rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.18s var(--ease);
-    text-decoration: none;
-    white-space: nowrap;
-}
-
-.btn-primary:hover {
-    background: var(--navy-lighter);
-}
-
-.btn-gold {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 13px 30px;
-    border: none;
-    border-radius: var(--radius-sm);
-
-    background: #1d4830;
-    color: #ffffff;
-
-    font-size: 0.9rem;
-    font-weight: 700;
-    letter-spacing: 0.01em;
-
-    cursor: pointer;
-    transition: all 0.25s ease;
-
-    white-space: nowrap;
-    box-shadow: 0 8px 20px rgba(29, 72, 48, 0.25);
-}
-
-.btn-gold:hover {
-    background: #25603f;
-    transform: translateY(-2px);
-    box-shadow: 0 12px 24px rgba(29, 72, 48, 0.35);
-}
-
-.btn-gold:active {
-    transform: scale(0.98);
-}
-
-.btn-gold:disabled {
-    background: #a7b5ad;
-    color: #ffffff;
-    cursor: not-allowed;
-    box-shadow: none;
-    transform: none;
-}
-
-.btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 9px 16px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: white;
-    color: var(--navy);
-    font-size: 0.82rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.15s var(--ease), border-color 0.15s var(--ease);
-    text-decoration: none;
-}
-
-.btn-secondary:hover {
-    background: var(--bg-soft);
-    border-color: #d5d1c4;
-}
-
-.btn-danger {
-    color: #b3261e;
-    border-color: #f2c1bd;
-}
-
-.btn-danger:hover {
-    background: #fdecea;
-    border-color: #e8a39c;
-}
-
-.btn-secondary:disabled,
-.btn-primary:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
 /* ============================================================
-   GRILLE PUBLIQUE — 4 colonnes en desktop large
+   GRILLE DES OFFRES (4 Colonnes Clean)
    ============================================================ */
-
 .offres-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 22px;
+    gap: 20px;
 }
 
-.offre-tile__actions {
-    display: flex;
-    gap: 8px;
-    margin-top: 2px;
-}
-
-.offre-tile__voir-detail {
-    flex: 1;
-    padding: 10px 16px;
-    font-size: 0.84rem;
-    justify-content: center;
-}
-
-.offre-tile__postuler {
-    flex: 1;
-    width: auto;
-    margin-top: 0;
-}
-
-@media (max-width: 1400px) {
-    .offres-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-@media (max-width: 960px) {
-    .offres-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 640px) {
-    .offres-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-.offre-tile {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 20px;
-    text-decoration: none;
-    color: inherit;
-    cursor: pointer;
-    text-align: left;
-    width: 100%;
-    box-shadow: var(--shadow-card);
-    transition: box-shadow 0.28s var(--ease), border-color 0.28s var(--ease), transform 0.28s var(--ease);
-    position: relative;
-    animation: offreFadeIn 0.5s var(--ease) both;
-}
+@media (max-width: 1280px) { .offres-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 900px)  { .offres-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px)  { .offres-grid { grid-template-columns: 1fr; } }
 
 /* ============================================================
-   FORMULAIRE DE CANDIDATURE — habillage complet
+   CARTE JOB PASS (Refonte intégrale)
    ============================================================ */
-
-.candidature-form {
-    background: var(--bg-soft);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 24px 26px;
-    animation: offreFadeIn 0.3s var(--ease) both;
-}
-
-.candidature-form__hint {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    line-height: 1.6;
-    margin: 0 0 20px;
-    padding-bottom: 18px;
-    border-bottom: 1px dashed var(--border);
-}
-
-/* Regroupement visuel des champs profil, distinct du reste du form */
-.candidature-form__champs {
+.job-pass,
+.offre-tile {
+    position: relative;
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    margin-bottom: 22px;
-}
-
-.candidature-form .offre-field {
-    margin-bottom: 0;
-}
-
-.candidature-form .offre-field label {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 6px;
-    font-size: 0.82rem;
-    font-weight: 600;
-    color: var(--navy);
-    margin-bottom: 7px;
-}
-
-.candidature-form .offre-field input,
-.candidature-form .offre-field select,
-.candidature-form .offre-field textarea {
-    background: white;
-}
-
-.candidature-form .offre-field input:disabled,
-.candidature-form .offre-field select:disabled,
-.candidature-form .offre-field textarea:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-/* Séparateur avant la section fichiers */
-.candidature-form__fichiers {
-    padding-top: 18px;
-    margin-top: 4px;
-    border-top: 1px dashed var(--border);
-}
-
-.candidature-form__fichiers-titre {
-    font-family: var(--font-display);
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin: 0 0 14px;
-}
-
-/* Zone de dépôt de fichier, plus visuelle qu'un simple <input type="file"> nu */
-.candidature-form__file {
-    position: relative;
-    border: 1.5px dashed var(--border);
-    border-radius: var(--radius-sm);
-    background: white;
-    padding: 14px 16px;
-    transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
-}
-
-.candidature-form__file:hover {
-    border-color: var(--gold-light);
-    background: var(--gold-soft);
-}
-
-.candidature-form__file--obligatoire {
-    border-color: var(--gold);
-}
-
-.candidature-form__file input[type="file"] {
-    width: 100%;
-    font-size: 0.82rem;
-    color: var(--navy);
-    cursor: pointer;
-}
-
-.candidature-form__file input[type="file"]::file-selector-button {
-    padding: 7px 14px;
-    margin-right: 12px;
-    border: none;
-    border-radius: 7px;
-    background: var(--navy);
-    color: white;
-    font-size: 0.78rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.15s var(--ease);
-}
-
-.candidature-form__file input[type="file"]::file-selector-button:hover {
-    background: var(--navy-lighter);
-}
-
-/* Message pour le recruteur */
-.candidature-form__message {
-    margin-top: 22px;
-    padding-top: 18px;
-    border-top: 1px dashed var(--border);
-}
-
-.candidature-form textarea {
-    width: 100%;
-    min-height: 100px;
-}
-
-/* Bandeau d'erreur / succès */
-.candidature-form .offre-message--error {
-    margin: 18px 0 0;
-}
-
-.candidature-form__success {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: #e5f3ea;
-    color: #1e7e34;
-    border: 1px solid #b7ddc2;
-    padding: 16px 18px;
-    border-radius: var(--radius-md);
-    font-size: 0.92rem;
-    font-weight: 600;
-    animation: offreFadeIn 0.3s var(--ease) both;
-}
-
-.candidature-form__actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 22px;
-    padding-top: 18px;
-    border-top: 1px solid var(--border);
-}
-
-@media (max-width: 560px) {
-    .candidature-form {
-        padding: 18px;
-    }
-
-    .candidature-form__actions {
-        flex-direction: column-reverse;
-    }
-
-    .candidature-form__actions button {
-        width: 100%;
-    }
-}
-
-.offres-grid .offre-tile:nth-child(2) { animation-delay: 0.04s; }
-.offres-grid .offre-tile:nth-child(3) { animation-delay: 0.08s; }
-.offres-grid .offre-tile:nth-child(4) { animation-delay: 0.12s; }
-.offres-grid .offre-tile:nth-child(5) { animation-delay: 0.16s; }
-.offres-grid .offre-tile:nth-child(6) { animation-delay: 0.2s; }
-.offres-grid .offre-tile:nth-child(n+7) { animation-delay: 0.24s; }
-
-@keyframes offreFadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.offre-tile::before {
-    content: "";
-    position: absolute;
-    inset: 0;
+    justify-content: space-between;
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
-    padding: 1px;
-    background: linear-gradient(140deg, var(--offre-color, var(--navy)) 0%, transparent 35%);
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    opacity: 0;
-    transition: opacity 0.28s var(--ease);
-    pointer-events: none;
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    overflow: hidden;
+    height: 100%;
 }
 
+.job-pass:hover,
 .offre-tile:hover {
-    box-shadow: 0 22px 40px -16px var(--offre-color, var(--navy)), var(--shadow-card-hover);
-    border-color: transparent;
-    transform: translateY(-4px);
+    transform: translateY(-3px);
+    border-color: var(--border-hover);
+    box-shadow: var(--shadow-md);
 }
 
-.offre-tile:hover::before {
-    opacity: 0.55;
+/* Badge NOUVEAU (Inline & Discret) */
+.job-pass__new,
+.job-pass__n {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--gold-brand) !important;
+    background: var(--gold-bg);
+    padding: 3px 8px;
+    border-radius: 999px;
+    border: 1px solid rgba(217, 119, 6, 0.2);
 }
 
+/* En-tête de la carte */
+.job-pass__top,
 .offre-tile__top {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 12px;
+    margin-bottom: 12px;
 }
 
+.job-pass__logo,
 .offre-tile__logo {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    background: var(--offre-color-gradient, var(--bg-soft));
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 1.1rem;
-    line-height: 1;
-    letter-spacing: 0.02em;
-    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-md);
+    background: var(--bg-input);
     object-fit: cover;
+    flex-shrink: 0;
+    border: 1px solid var(--border-color);
 }
 
+.job-pass__id,
 .offre-tile__entreprise {
+    flex: 1;
     min-width: 0;
 }
 
+.job-pass__eyebrow,
 .offre-tile__nom-entreprise {
-    font-size: 0.74rem;
-    font-weight: 700;
-    color: var(--navy-mist);
-    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--slate-muted) !important;
+    margin: 0 0 2px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
 }
 
+/* Titre du poste */
+.job-pass__id h3,
 .offre-tile__titre {
     font-family: var(--font-display);
     font-size: 0.98rem;
     font-weight: 700;
-    color: var(--navy-ink);
-    margin: 0;
-    line-height: 1.36;
-    letter-spacing: -0.01em;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    min-height: 2.65em;
-}
-
-.offre-tile__lieu {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    margin: -8px 0 0;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.offre-tile__lieu::before {
-    content: "";
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: var(--offre-color, var(--gold));
-    flex-shrink: 0;
-}
-
-.offre-tile__tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-}
-
-.offre-tile__tag {
-    font-size: 0.71rem;
-    font-weight: 600;
-    padding: 5px 11px;
-    border-radius: 999px;
-    background: var(--offre-color-soft, var(--bg-soft));
-    color: var(--offre-color, var(--navy-light));
-    border: 1px solid transparent;
-}
-
-.offre-tile__tag--gold {
-    background: var(--gold-soft);
-    color: #8a6212;
-}
-
-.offre-tile__footer {
-    margin-top: auto;
-    padding-top: 15px;
-    border-top: 1px solid var(--bg-soft);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-}
-
-.offre-tile__salaire {
-    font-size: 0.87rem;
-    font-weight: 700;
-    color: var(--navy-ink);
-    margin: 0;
-}
-
-.offre-tile__salaire-vide {
-    font-size: 0.78rem;
-    color: var(--text-muted);
-    margin: 0;
-}
-
-.offre-tile__voir {
-    font-size: 0.78rem;
-    font-weight: 700;
-    color: var(--offre-color, var(--navy));
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    opacity: 0;
-    transform: translateX(-4px);
-    transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
-}
-
-.offre-tile:hover .offre-tile__voir {
-    opacity: 1;
-    transform: translateX(0);
-}
-
-.offre-tile__postuler {
-    width: 100%;
-    margin-top: 2px;
-    padding: 10px 20px;
-    font-size: 0.84rem;
-}
-
-/* ---------- Skeleton (chargement) ---------- */
-.offres-skeleton-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 22px;
-}
-
-@media (max-width: 1400px) {
-    .offres-skeleton-grid { grid-template-columns: repeat(3, 1fr); }
-}
-@media (max-width: 960px) {
-    .offres-skeleton-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 640px) {
-    .offres-skeleton-grid { grid-template-columns: 1fr; }
-}
-
-.offre-skeleton {
-    height: 220px;
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--border);
-    background: linear-gradient(100deg, #f4f3ef 30%, #ffffff 50%, #f4f3ef 70%);
-    background-size: 220% 100%;
-    animation: skeletonShimmer 1.4s ease-in-out infinite;
-}
-
-@keyframes skeletonShimmer {
-    0% { background-position: 120% 0; }
-    100% { background-position: -20% 0; }
-}
-
-/* ---------- Statut badge ---------- */
-.statut-badge {
-    font-size: 0.7rem;
-    font-weight: 700;
-    padding: 5px 12px;
-    border-radius: 999px;
-    white-space: nowrap;
-    flex-shrink: 0;
-    letter-spacing: 0.01em;
-}
-
-.statut-badge--brouillon {
-    background: #eef0f4;
-    color: var(--text-muted);
-}
-
-.statut-badge--publiee {
-    background: #e5f3ea;
-    color: #1e7e34;
-}
-
-.statut-badge--fermee {
-    background: #fbe9e7;
-    color: #b3261e;
-}
-
-.statut-badge--expiree {
-    background: var(--gold-soft);
-    color: #8a6212;
-}
-
-/* ============================================================
-   VUE LISTE "MES OFFRES" (recruteur)
-   ============================================================ */
-
-.offre-card {
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 22px 26px;
-    margin-bottom: 14px;
-    box-shadow: var(--shadow-card);
-    transition: box-shadow 0.2s var(--ease);
-}
-
-.offre-card:hover {
-    box-shadow: var(--shadow-card-hover);
-}
-
-.offre-card__top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 16px;
-    margin-bottom: 10px;
-}
-
-.offre-card__titre {
-    font-family: var(--font-display);
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: var(--navy-ink);
-    margin: 0 0 4px;
-}
-
-.offre-card__entreprise {
-    font-size: 0.86rem;
-    color: var(--text-muted);
-    margin: 0;
-}
-
-.offre-card__meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin: 12px 0;
-}
-
-.offre-card__meta-item {
-    font-size: 0.77rem;
-    font-weight: 600;
-    color: var(--navy-light);
-    background: var(--bg-soft);
-    border: 1px solid var(--border);
-    padding: 5px 11px;
-    border-radius: 999px;
-}
-
-.offre-card__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 14px;
-    padding-top: 14px;
-    border-top: 1px solid var(--bg-soft);
-}
-
-/* ---------- Pagination ---------- */
-.offres-pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 18px;
-    margin-top: 40px;
-}
-
-.offres-pagination__info {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-}
-
-/* ============================================================
-   PAGE DÉTAIL AUTONOME (/offres/:id)
-   ============================================================ */
-
-.offre-detail {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 40px 24px 100px;
-    font-family: var(--font-body);
-}
-
-.offre-detail__back {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: var(--text-muted);
-    font-size: 0.85rem;
-    font-weight: 500;
-    text-decoration: none;
-    margin-bottom: 24px;
-    transition: color 0.15s var(--ease);
-}
-
-.offre-detail__back:hover {
-    color: var(--navy);
-}
-
-.offre-detail__header {
-    background: linear-gradient(150deg, var(--navy-ink) 0%, var(--navy-lighter) 100%);
-    border-radius: var(--radius-lg);
-    padding: 40px 38px 34px;
-    color: white;
-    margin-bottom: 24px;
-    position: relative;
-    overflow: hidden;
-}
-
-.offre-detail__header::after {
-    content: "";
-    position: absolute;
-    top: -50%;
-    right: -8%;
-    width: 320px;
-    height: 320px;
-    background: radial-gradient(circle, rgba(200, 149, 30, 0.2) 0%, transparent 70%);
-    pointer-events: none;
-}
-
-.offre-detail__top-row {
-    position: relative;
-}
-
-.offre-detail__logo {
-    width: 54px;
-    height: 54px;
-    border-radius: 13px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 1.3rem;
-    line-height: 1;
-    margin-bottom: 20px;
-    object-fit: cover;
-    color: white;
-    position: relative;
-}
-
-.offre-detail__entreprise {
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: var(--gold-light);
-    margin: 0 0 9px;
-    position: relative;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-}
-
-.offre-detail__titre {
-    font-family: var(--font-display);
-    font-size: 1.65rem;
-    font-weight: 800;
-    margin: 0 0 12px;
-    letter-spacing: -0.02em;
-    position: relative;
-    line-height: 1.28;
-}
-
-.offre-detail__lieu {
-    font-size: 0.88rem;
-    color: rgba(255, 255, 255, 0.72);
-    margin: 0;
-    position: relative;
-}
-
-.offre-detail__tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 22px;
-    position: relative;
-}
-
-.offre-detail__tag {
-    font-size: 0.78rem;
-    font-weight: 600;
-    padding: 6px 14px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    color: white;
-}
-
-.offre-detail__tag--gold {
-    background: var(--gold);
-    border-color: var(--gold);
-    color: var(--navy-ink);
-}
-
-.offre-detail__section {
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 28px 30px;
-    margin-bottom: 16px;
-    box-shadow: var(--shadow-card);
-}
-
-.offre-detail__section-title {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    font-family: var(--font-display);
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin: 0 0 17px;
-}
-
-.offre-detail__section-title::before {
-    content: "";
-    width: 4px;
-    height: 15px;
-    border-radius: 2px;
-    background: var(--section-color, var(--gold));
-    flex-shrink: 0;
-}
-
-.offre-detail__text {
-    font-size: 0.94rem;
-    color: var(--text-body);
-    line-height: 1.75;
-    white-space: pre-line;
-    margin: 0;
-}
-
-.offre-detail__list {
-    margin: 0;
-    padding-left: 20px;
-    font-size: 0.9rem;
-    color: var(--text-body);
-    line-height: 1.9;
-}
-
-.offre-detail__chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.offre-detail__chip {
-    font-size: 0.8rem;
-    font-weight: 600;
-    padding: 6px 13px;
-    border-radius: 999px;
-    background: var(--chip-bg, var(--bg-soft));
-    color: var(--chip-text, var(--navy-light));
-    border: 1px solid var(--chip-border, transparent);
-}
-
-.offre-detail__facts {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-}
-
-@media (max-width: 560px) {
-    .offre-detail__facts {
-        grid-template-columns: 1fr;
-    }
-}
-
-.offre-detail__fact-label {
-    font-size: 0.73rem;
-    color: var(--text-muted);
-    margin-bottom: 4px;
-    font-weight: 500;
-}
-
-.offre-detail__fact-value {
-    font-family: var(--font-display);
-    font-size: 0.92rem;
-    font-weight: 700;
-    color: var(--navy-ink);
-}
-
-.offre-detail__cta {
-    position: sticky;
-    bottom: 24px;
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 20px 26px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    box-shadow: 0 18px 40px rgba(11, 29, 58, 0.16);
-}
-
-.offre-detail__cta-info {
-    font-size: 0.82rem;
-    color: var(--text-muted);
-}
-
-.offre-detail__loading,
-.offre-detail__error {
-    text-align: center;
-    padding: 110px 0;
-    color: var(--text-muted);
-}
-
-.offre-message--error {
-    background: #fbe9e7;
-    color: #b3261e;
-    border: 1px solid #f2c1bd;
-    padding: 12px 14px;
-    border-radius: var(--radius-sm);
-    font-size: 0.86rem;
-    margin-bottom: 20px;
-}
-
-/* ============================================================
-   MODALE DE DÉTAIL
-   ============================================================ */
-
-.offre-modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(7, 17, 34, 0.55);
-    backdrop-filter: blur(3px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-    z-index: 1000;
-    animation: modalOverlayIn 0.2s var(--ease);
-}
-
-@keyframes modalOverlayIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
-
-.offre-modal {
-    background: white;
-    border-radius: 20px;
-    width: 100%;
-    max-width: 700px;
-    max-height: 90vh;
-
-    display: flex;
-    flex-direction: column;
-
-    overflow: hidden;
-
-    position: relative;
-
-    box-shadow: 0 30px 70px rgba(7, 17, 34, 0.35);
-    animation: modalIn 0.24s var(--ease);
-}
-
-@keyframes modalIn {
-    from {
-        opacity: 0;
-        transform: translateY(14px) scale(0.98);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-.offre-modal__header {
-    background: linear-gradient(
-            150deg,
-            var(--navy-ink) 0%,
-            var(--contrat-color, var(--navy-lighter)) 140%
-    );
-    border-radius: 20px 20px 0 0;
-    padding: 34px;
-    color: white;
-    position: relative;
-    overflow: hidden;
-
-    flex-shrink: 0;
-}
-
-.offre-modal__header::after {
-    content: "";
-    position: absolute;
-    top: -50%;
-    right: -8%;
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(
-            circle,
-            var(--contrat-color-soft, rgba(200,149,30,.3)) 0%,
-            transparent 70%
-    );
-    pointer-events: none;
-}
-
-.offre-modal__close {
-    position: absolute;
-    top: 18px;
-    right: 18px;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 1px solid rgba(255,255,255,.25);
-    background: rgba(255,255,255,.12);
-    color: white;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    transition: .2s;
-    z-index: 10;
-}
-
-.offre-modal__close:hover {
-    background: rgba(255,255,255,.22);
-    transform: rotate(90deg);
-}
-
-.offre-modal__body {
-    flex: 1;
-    overflow-y: auto;
-    min-height: 0;
-
-    padding: 30px 34px;
-}
-
-.offre-modal__body .offre-detail__section {
-    border: none;
-    border-bottom: 1px solid var(--bg-soft);
-    border-radius: 0;
-    box-shadow: none;
-    margin-bottom: 24px;
-    padding: 0 0 24px;
-}
-
-.offre-modal__body .offre-detail__section:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
-}
-
-.offre-modal__footer {
-    flex-shrink: 0;
-
-    background: white;
-    border-top: 1px solid var(--border);
-
-    padding: 18px 34px;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-
-    box-shadow: 0 -8px 20px rgba(0,0,0,.06);
-}
-
-.offre-modal__loading,
-.offre-modal__empty {
-    padding: 110px 24px;
-    text-align: center;
-    color: var(--text-muted);
-}
-
-/* ============================================================
-   FORMULAIRE OFFRE (recruteur)
-   ============================================================ */
-
-.offre-form-card {
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 28px 32px;
-    margin-bottom: 18px;
-    box-shadow: var(--shadow-card);
-}
-
-.offre-form-card__section-title {
-    font-family: var(--font-display);
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin: 0 0 18px;
-}
-
-.offre-field {
-    margin-bottom: 20px;
-}
-
-.offre-field:last-child {
-    margin-bottom: 0;
-}
-
-.offre-field label {
-    display: block;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--navy);
-    margin-bottom: 6px;
-}
-
-.offre-field input,
-.offre-field select,
-.offre-field textarea {
-    width: 100%;
-    padding: 11px 14px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    font-family: inherit;
-    font-size: 0.92rem;
-    background: var(--bg-soft);
-    color: var(--navy);
-    transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
-}
-
-.offre-field textarea {
-    resize: vertical;
-    min-height: 90px;
-}
-
-.offre-field input:focus,
-.offre-field select:focus,
-.offre-field textarea:focus {
-    outline: none;
-    border-color: var(--gold);
-    background: white;
-}
-
-.offre-field-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-}
-
-.offre-field-row--3 {
-    grid-template-columns: 1fr 1fr 1fr;
-}
-
-@media (max-width: 640px) {
-    .offre-field-row,
-    .offre-field-row--3 {
-        grid-template-columns: 1fr;
-    }
-}
-
-.offre-form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 8px;
-}
-
-/* ---------- Focus visible (accessibilité) ---------- */
-.offre-tile:focus-visible,
-.btn-gold:focus-visible,
-.btn-secondary:focus-visible,
-.btn-primary:focus-visible,
-.offre-modal__close:focus-visible {
-    outline: 2px solid var(--gold);
-    outline-offset: 2px;
-}
-
-/* ============================================================
-   FIX : STYLE "JOB PASS" - Couleurs des textes explicites
-   ============================================================ */
-
-.job-pass {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background: #ffffff !important;
-    border: 1px solid var(--border, #e7e4dc);
-    border-radius: var(--radius-lg, 20px);
-    padding: 22px;
-    box-shadow: var(--shadow-card, 0 1px 2px rgba(11, 29, 58, 0.05));
-    transition: box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1), transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
-    border-top: 4px solid var(--job-color, #0b1d3a);
-    overflow: hidden;
-    color: #263252 !important; /* Force la couleur par défaut dans la carte */
-}
-
-.job-pass:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 40px -12px rgba(11, 29, 58, 0.18);
-}
-
-/* Badge NOUVEAU */
-.job-pass__new {
-    position: absolute;
-    top: 12px;
-    right: 14px;
-    background: #fbf3e2;
-    color: #9c7115 !important;
-    font-size: 0.68rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    padding: 3px 9px;
-    border-radius: 999px;
-    letter-spacing: 0.04em;
-}
-
-/* En-tête de la carte */
-.job-pass__top {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    margin-bottom: 16px;
-}
-
-.job-pass__logo {
-    width: 46px;
-    height: 46px;
-    border-radius: 12px;
-    object-fit: cover;
-    flex-shrink: 0;
-    background: #f8f7f4;
-}
-
-.job-pass__id {
-    min-width: 0;
-}
-
-.job-pass__eyebrow {
-    font-size: 0.72rem;
-    font-weight: 600;
-    color: #5a6684 !important; /* Gris-bleu bien lisible */
-    margin: 0 0 4px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-/* TITRE DU POSTE (Le problème principal) */
-.job-pass__id h3 {
-    font-family: 'Sora', 'Inter', sans-serif;
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: #071122 !important; /* Bleu nuit très sombre */
-    margin: 0 0 4px;
+    color: var(--navy-dark) !important;
+    margin: 0 0 8px;
     line-height: 1.35;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -1525,125 +279,238 @@
     overflow: hidden;
 }
 
-/* NOM DE L'ENTREPRISE */
-.job-pass__company {
-    font-size: 0.82rem;
-    font-weight: 600;
-    color: #14294d !important;
-    margin: 0;
-}
-
-/* TAGS (CDI, CDD, Télétravail...) */
-.job-pass__tags {
+/* Badges Type de Contrat (CDD/CDI) */
+.job-pass__tags,
+.offre-tile__tags {
     display: flex;
-    flex-wrap: wrap;
+    align-items: center;
     gap: 6px;
     margin-bottom: 14px;
 }
 
-.job-pass__tag {
-    font-size: 0.72rem;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 999px;
-    background: #f8f7f4;
-    color: #14294d !important;
-    border: 1px solid #e7e4dc;
-}
-
-.job-pass__tag--solid {
-    background: #0b1d3a;
-    color: #ffffff !important;
-    border-color: #0b1d3a;
-}
-
-/* COMPÉTENCES */
-.job-pass__skills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 16px;
-    padding-top: 10px;
-    border-top: 1px dashed #e7e4dc;
-}
-
-.job-pass__skill {
+.job-pass__tag,
+.offre-tile__tag {
     font-size: 0.7rem;
-    font-weight: 500;
+    font-weight: 700;
     padding: 3px 8px;
-    border-radius: 6px;
-    background: #f8f7f4;
-    color: #5a6684 !important;
+    border-radius: var(--radius-sm);
+    text-transform: uppercase;
 }
 
-/* PIED DE CARTE (Lieu & Salaire) */
-.job-pass__footer {
+/* Styles dynamique des contrats */
+.job-pass__tag--cdd,
+.statut-badge--cdd {
+    background: var(--green-bg);
+    color: var(--green-brand) !important;
+    border: 1px solid rgba(22, 163, 74, 0.2);
+}
+
+.job-pass__tag--cdi,
+.statut-badge--cdi {
+    background: var(--blue-bg);
+    color: var(--blue-brand) !important;
+    border: 1px solid rgba(37, 99, 235, 0.2);
+}
+
+/* Infos : Localisation et Salaire */
+.job-pass__footer,
+.offre-tile__footer {
+    padding-top: 12px;
+    border-top: 1px dashed var(--border-color);
+    margin-top: auto;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    padding-top: 14px;
-    border-top: 1px solid #e7e4dc;
+    gap: 6px;
     margin-bottom: 16px;
 }
 
-.job-pass__meta {
+.job-pass__meta,
+.offre-tile__lieu,
+.offre-tile__salaire {
     display: flex;
     align-items: center;
     gap: 6px;
     font-size: 0.8rem;
-    color: #5a6684 !important;
-}
-
-.job-pass__meta svg {
-    width: 15px;
-    height: 15px;
-    color: #5a6684;
-    flex-shrink: 0;
+    color: var(--slate-muted) !important;
 }
 
 .job-pass__meta--salaire {
     font-weight: 600;
-    color: #071122 !important;
+    color: var(--navy-dark) !important;
 }
 
-/* BOUTONS D'ACTION */
-.job-pass__actions {
+/* Actions Bottom (Boutons alignés) */
+.job-pass__actions,
+.offre-tile__actions {
     display: flex;
-    gap: 10px;
+    align-items: center;
+    gap: 8px;
 }
 
-.job-pass__btn {
+/* ============================================================
+   SYSTEME DE BOUTONS UNIFIÉ
+   ============================================================ */
+.btn-primary,
+.job-pass__btn--gold {
     flex: 1;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 10px 14px;
-    font-size: 0.84rem;
-    font-weight: 600;
-    border-radius: 9px;
-    text-decoration: none;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.job-pass__btn--ghost {
-    background: #f8f7f4;
-    color: #0b1d3a !important;
-    border: 1px solid #e7e4dc;
-}
-
-.job-pass__btn--ghost:hover {
-    background: #e7e4dc;
-}
-
-.job-pass__btn--gold {
-    background: #1d4830;
+    padding: 9px 14px;
+    border-radius: var(--radius-md);
+    background: var(--navy-brand);
     color: #ffffff !important;
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 600;
     border: none;
-    box-shadow: 0 4px 12px rgba(29, 72, 48, 0.2);
+    cursor: pointer;
+    text-decoration: none;
+    transition: var(--transition);
 }
 
+.btn-primary:hover,
 .job-pass__btn--gold:hover {
-    background: #25603f;
-    transform: translateY(-1px);
+    background: var(--navy-dark);
+}
+
+.btn-secondary,
+.job-pass__btn--ghost {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 14px;
+    border-radius: var(--radius-md);
+    background: var(--bg-input);
+    color: var(--navy-light) !important;
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 600;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.btn-secondary:hover,
+.job-pass__btn--ghost:hover {
+    background: #e2e8f0;
+    color: var(--navy-dark) !important;
+}
+
+/* ============================================================
+   MODALES ET DÉTAILS D'OFFRE
+   ============================================================ */
+.offre-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 1000;
+}
+
+.offre-modal {
+    background: #ffffff;
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 680px;
+    max-height: 88vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.offre-modal__header {
+    background: var(--navy-dark);
+    padding: 24px;
+    color: #ffffff;
+    position: relative;
+}
+
+.offre-modal__close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.offre-modal__close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.offre-modal__body {
+    padding: 24px;
+    overflow-y: auto;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--navy-light);
+}
+
+.offre-modal__footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border-color);
+    background: var(--bg-page);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* ============================================================
+   FORMULAIRES & CHAMPS DE CANDIDATURE
+   ============================================================ */
+.candidature-form {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+}
+
+.offre-field {
+    margin-bottom: 16px;
+}
+
+.offre-field label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--navy-dark);
+    margin-bottom: 6px;
+}
+
+.offre-field input,
+.offre-field select,
+.offre-field textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    background: var(--bg-input);
+    color: var(--navy-dark);
+    transition: var(--transition);
+}
+
+.offre-field input:focus,
+.offre-field select:focus,
+.offre-field textarea:focus {
+    outline: none;
+    border-color: var(--navy-brand);
+    background: #ffffff;
 }
