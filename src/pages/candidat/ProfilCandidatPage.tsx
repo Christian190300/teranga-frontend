@@ -16,6 +16,7 @@ import { SaveStatusBadge } from "../../components/common/SaveStatusBadge";
 import { TagListEditor } from "../../components/common/TagListEditor";
 import { EditableField } from "../../components/common/EditableField";
 import { EditableTextarea } from "../../components/common/EditableTextarea";
+import { EditableSelect } from "../../components/common/EditableSelect";
 import "./profilCandidatPage.css";
 
 function formatDate(iso: string | null): string {
@@ -65,6 +66,13 @@ const VILLES = [
     "Saint-Louis", "Richard-Toll", "Kaolack", "Fatick", "Diourbel", "Touba", "Louga",
     "Kolda", "Ziguinchor", "Sédhiou", "Tambacounda", "Kédougou", "Matam", "Kaffrine",
 ];
+
+const SEXE_OPTIONS = [
+    { value: "HOMME", label: "Homme" },
+    { value: "FEMME", label: "Femme" },
+];
+
+const asOptions = (values: string[]) => values.map((v) => ({ value: v, label: v }));
 
 export function ProfilCandidatPage() {
     const { refreshPhoto } = useAuth();
@@ -328,46 +336,43 @@ export function ProfilCandidatPage() {
                     <p className="profil-card__section-title">Coordonnées</p>
                     <div className="profil-field-row">
                         <EditableField id="telephone" label="Téléphone" value={telephone} onSave={setTelephone} placeholder="+221 77 123 45 67" />
-                        <div className="profil-field">
-                            <label htmlFor="sexe">Sexe</label>
-                            <select id="sexe" value={sexe} onChange={(e) => setSexe(e.target.value)}>
-                                <option value="">Non précisé</option>
-                                <option value="HOMME">Homme</option>
-                                <option value="FEMME">Femme</option>
-                            </select>
-                        </div>
+                        <EditableSelect
+                            id="sexe"
+                            label="Sexe"
+                            value={sexe}
+                            onSave={setSexe}
+                            options={SEXE_OPTIONS}
+                            emptyLabel="Non précisé"
+                        />
                     </div>
 
                     <EditableField id="adresse" label="Adresse" value={adresse} onSave={setAdresse} placeholder="Rue, quartier..." />
 
                     <div className="profil-field-row profil-field-row--3">
-                        <div className="profil-field">
-                            <label htmlFor="ville">Ville</label>
-                            <select id="ville" value={ville} onChange={(e) => setVille(e.target.value)}>
-                                <option value="">Sélectionnez une ville</option>
-                                {VILLES.map((v) => (
-                                    <option key={v} value={v}>{v}</option>
-                                ))}
-                            </select>
-                        </div>
-                        <div className="profil-field">
-                            <label htmlFor="region">Région</label>
-                            <select id="region" value={region} onChange={(e) => setRegion(e.target.value)}>
-                                <option value="">Sélectionnez une région</option>
-                                {REGIONS.map((r) => (
-                                    <option key={r} value={r}>{r}</option>
-                                ))}
-                            </select>
-                        </div>
-                        <div className="profil-field">
-                            <label htmlFor="pays">Pays</label>
-                            <select id="pays" value={pays} onChange={(e) => setPays(e.target.value)}>
-                                <option value="">Sélectionnez un pays</option>
-                                {PAYS.map((p) => (
-                                    <option key={p} value={p}>{p}</option>
-                                ))}
-                            </select>
-                        </div>
+                        <EditableSelect
+                            id="ville"
+                            label="Ville"
+                            value={ville}
+                            onSave={setVille}
+                            options={asOptions(VILLES)}
+                            emptyLabel="Sélectionnez une ville"
+                        />
+                        <EditableSelect
+                            id="region"
+                            label="Région"
+                            value={region}
+                            onSave={setRegion}
+                            options={asOptions(REGIONS)}
+                            emptyLabel="Sélectionnez une région"
+                        />
+                        <EditableSelect
+                            id="pays"
+                            label="Pays"
+                            value={pays}
+                            onSave={setPays}
+                            options={asOptions(PAYS)}
+                            emptyLabel="Sélectionnez un pays"
+                        />
                     </div>
 
                     <div className="profil-toggle-row">
@@ -401,15 +406,14 @@ export function ProfilCandidatPage() {
                         rows={5}
                     />
                     <div className="profil-field-row profil-field-row--3">
-                        <div className="profil-field">
-                            <label htmlFor="niveauExperience">Niveau d'expérience</label>
-                            <select id="niveauExperience" value={niveauExperience} onChange={(e) => setNiveauExperience(e.target.value)}>
-                                <option value="">Non précisé</option>
-                                {NIVEAUX_EXPERIENCE.map((n) => (
-                                    <option key={n} value={n}>{n}</option>
-                                ))}
-                            </select>
-                        </div>
+                        <EditableSelect
+                            id="niveauExperience"
+                            label="Niveau d'expérience"
+                            value={niveauExperience}
+                            onSave={setNiveauExperience}
+                            options={asOptions(NIVEAUX_EXPERIENCE)}
+                            emptyLabel="Non précisé"
+                        />
                         <EditableField
                             id="anneesExperience"
                             label="Années d'expérience"
@@ -417,15 +421,14 @@ export function ProfilCandidatPage() {
                             value={anneesExperience === "" ? "" : String(anneesExperience)}
                             onSave={(v) => setAnneesExperience(v === "" ? "" : Number(v))}
                         />
-                        <div className="profil-field">
-                            <label htmlFor="disponibilite">Disponibilité</label>
-                            <select id="disponibilite" value={disponibilite} onChange={(e) => setDisponibilite(e.target.value)}>
-                                <option value="">Non précisé</option>
-                                {DISPONIBILITES.map((d) => (
-                                    <option key={d} value={d}>{d}</option>
-                                ))}
-                            </select>
-                        </div>
+                        <EditableSelect
+                            id="disponibilite"
+                            label="Disponibilité"
+                            value={disponibilite}
+                            onSave={setDisponibilite}
+                            options={asOptions(DISPONIBILITES)}
+                            emptyLabel="Non précisé"
+                        />
                     </div>
                 </div>
 
