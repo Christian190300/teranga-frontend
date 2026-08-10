@@ -8,18 +8,10 @@
 }
 
 .profil-recruteur-page {
-    max-width: 1920px;
-    width: 94%;
+    max-width: 720px;
     margin: 0 auto;
-    padding: 40px 0 90px;
+    padding: 48px 24px 80px;
     font-family: 'Inter', -apple-system, sans-serif;
-    display: grid;
-    grid-template-columns: 220px 1fr;
-    grid-template-areas:
-        "header header"
-        "nav content";
-    gap: 8px 32px;
-    align-items: start;
 }
 
 /* ---------- Logo entreprise ---------- */
