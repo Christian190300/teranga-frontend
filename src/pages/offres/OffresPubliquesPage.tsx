@@ -42,6 +42,13 @@ function formatSalaire(offre: OffreDTO): string {
     return `${(offre.salaireMin ?? offre.salaireMax)?.toLocaleString()} ${devise}`;
 }
 
+/** Nettoie le HTML/Markdown de la description pour afficher un texte brut sur 1 ligne */
+function stripHtml(html?: string): string {
+    if (!html) return "";
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    return doc.body.textContent || "";
+}
+
 export function OffresPubliquesPage() {
     const { currentUser } = useAuth();
     const navigate = useNavigate();
@@ -93,8 +100,7 @@ export function OffresPubliquesPage() {
         charger();
     }, [page, rechercheAppliquee, secteurSelectionne]);
 
-    // Remonte en haut de page à chaque changement de page (pagination), puisque
-    // ScrollToTop (global) ne réagit qu'aux changements de route, pas de state ici.
+    // Remonte en haut de page à chaque changement de page (pagination)
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: "smooth" });
     }, [page]);
@@ -259,6 +265,7 @@ export function OffresPubliquesPage() {
                                         [job.ville, job.region, job.pays].filter(Boolean).join(", ") ||
                                         "Sénégal";
                                     const competences = (job.competences ?? []).slice(0, 3);
+                                    const descriptionPropre = stripHtml(job.description);
 
                                     return (
                                         <article
@@ -290,6 +297,13 @@ export function OffresPubliquesPage() {
                                                     </p>
                                                 </div>
                                             </div>
+
+                                            {/* UNE SEULE LIGNE DE DESCRIPTION */}
+                                            {descriptionPropre && (
+                                                <p className="job-pass__description">
+                                                    {descriptionPropre}
+                                                </p>
+                                            )}
 
                                             <div className="job-pass__tags">
                                                 <span className="job-pass__tag job-pass__tag--solid">

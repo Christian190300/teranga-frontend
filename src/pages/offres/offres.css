@@ -556,6 +556,15 @@
     font-weight: 600;
 }
 
+.job-pass__tags .job-pass__tag {
+    background-color: var(--job-color, #0b1d3a);
+    color: #ffffff !important;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
 /* --- Compétences --- */
 .job-pass__skills {
     display: flex;
@@ -696,6 +705,23 @@
         justify-content: center;
     }
 }
+
+/* 1. Écriture en blanc pour le type de contrat principal */
+.job-pass__tag--solid {
+    color: #ffffff !important;
+    background-color: var(--job-color, #0b1d3a) !important;
+}
+
+/* 2. Style de la description limitée à exactement UNE seule ligne */
+.job-pass__description {
+    font-size: 0.82rem;
+    color: #64748b;
+    margin: 8px 0 12px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 
 /* ---------- Alertes & Messages ---------- */
 .offres-alert {
