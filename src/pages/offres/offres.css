@@ -147,7 +147,7 @@
 
 
 /* ============================================================
-   HERO — bandeau plein largeur, style "job board" premium
+   HERO — bandeau plein largeur, fond blanc, texte sombre
    ============================================================ */
 
 .offres-hero {
@@ -156,8 +156,9 @@
     padding: 4px;
     margin-bottom: 40px;
     overflow: hidden;
-    background: linear-gradient(135deg, var(--navy-ink) 0%, var(--navy) 55%, var(--navy-lighter) 100%);
-    box-shadow: 0 24px 50px -20px rgba(7, 17, 34, 0.5);
+    background: #ffffff;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-card);
 }
 
 .offres-hero::before {
@@ -165,8 +166,8 @@
     position: absolute;
     inset: 0;
     background-image:
-            repeating-linear-gradient(115deg, rgba(255, 255, 255, 0.04) 0px, rgba(255, 255, 255, 0.04) 1px, transparent 1px, transparent 14px),
-            repeating-linear-gradient(25deg, rgba(200, 149, 30, 0.08) 0px, rgba(200, 149, 30, 0.08) 1px, transparent 1px, transparent 14px);
+            repeating-linear-gradient(115deg, rgba(11, 29, 58, 0.025) 0px, rgba(11, 29, 58, 0.025) 1px, transparent 1px, transparent 14px),
+            repeating-linear-gradient(25deg, rgba(200, 149, 30, 0.06) 0px, rgba(200, 149, 30, 0.06) 1px, transparent 1px, transparent 14px);
     pointer-events: none;
 }
 
@@ -177,7 +178,7 @@
     right: -6%;
     width: 420px;
     height: 420px;
-    background: radial-gradient(circle, rgba(200, 149, 30, 0.28) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(200, 149, 30, 0.10) 0%, transparent 70%);
     pointer-events: none;
 }
 
@@ -192,17 +193,17 @@
     font-size: clamp(1.5rem, 2.6vw, 2.2rem);
     font-weight: 800;
     line-height: 1.28;
-    color: white;
+    color: var(--navy-ink);
     letter-spacing: -0.01em;
     margin: 0 auto 26px;
     max-width: 720px;
 }
 
 .offres-hero__count {
-    color: var(--gold-light);
+    color: var(--gold-deep);
 }
 
-/* ---------- Barre de filtres — pilules blanches sur fond navy ---------- */
+/* ---------- Barre de filtres — pilules sur fond blanc ---------- */
 .offres-filterbar {
     display: flex;
     flex-wrap: wrap;
@@ -218,9 +219,15 @@
     align-items: center;
     flex: 1 1 240px;
     min-width: 200px;
-    background: white;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
     border-radius: 999px;
-    box-shadow: 0 6px 16px -6px rgba(7, 17, 34, 0.35);
+    transition: border-color 0.18s var(--ease), background 0.18s var(--ease);
+}
+
+.offres-filterbar__pill:focus-within {
+    border-color: var(--gold);
+    background: white;
 }
 
 .offres-filterbar__icon {
@@ -292,7 +299,7 @@
     justify-content: center;
     cursor: pointer;
     transition: background 0.2s var(--ease), transform 0.2s var(--ease);
-    box-shadow: 0 8px 18px -4px rgba(200, 149, 30, 0.5);
+    box-shadow: 0 8px 18px -4px rgba(200, 149, 30, 0.4);
 }
 
 .offres-filterbar__submit svg {
@@ -313,7 +320,7 @@
     flex-shrink: 0;
     background: transparent;
     border: none;
-    color: rgba(255, 255, 255, 0.75);
+    color: var(--text-muted);
     font-size: 0.82rem;
     font-weight: 600;
     text-decoration: underline;
@@ -324,7 +331,7 @@
 }
 
 .offres-filterbar__reset:hover {
-    color: white;
+    color: var(--navy-ink);
 }
 
 /* Responsivité */
@@ -1676,14 +1683,18 @@
     color: var(--navy);
 }
 
+/* ---------- Header détail — fond blanc, texte sombre, titre en navy ---------- */
 .offre-detail__header {
-    background: linear-gradient(150deg, var(--navy-ink) 0%, var(--navy-lighter) 100%);
+    background: #ffffff;
+    border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     padding: 40px 38px 34px;
-    color: white;
+    color: var(--text-body);
     margin-bottom: 24px;
     position: relative;
     overflow: hidden;
+    box-shadow: var(--shadow-card);
+    border-top: 4px solid var(--offre-color, var(--gold));
 }
 
 .offre-detail__header::after {
@@ -1693,7 +1704,7 @@
     right: -8%;
     width: 320px;
     height: 320px;
-    background: radial-gradient(circle, rgba(200, 149, 30, 0.2) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(200, 149, 30, 0.08) 0%, transparent 70%);
     pointer-events: none;
 }
 
@@ -1705,8 +1716,8 @@
     width: 54px;
     height: 54px;
     border-radius: 13px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1716,14 +1727,14 @@
     line-height: 1;
     margin-bottom: 20px;
     object-fit: cover;
-    color: white;
+    color: var(--navy);
     position: relative;
 }
 
 .offre-detail__entreprise {
     font-size: 0.82rem;
     font-weight: 700;
-    color: var(--gold-light);
+    color: var(--gold-deep);
     margin: 0 0 9px;
     position: relative;
     text-transform: uppercase;
@@ -1734,6 +1745,7 @@
     font-family: var(--font-display);
     font-size: 1.65rem;
     font-weight: 800;
+    color: var(--navy-ink);
     margin: 0 0 12px;
     letter-spacing: -0.02em;
     position: relative;
@@ -1742,7 +1754,7 @@
 
 .offre-detail__lieu {
     font-size: 0.88rem;
-    color: rgba(255, 255, 255, 0.72);
+    color: var(--text-muted);
     margin: 0;
     position: relative;
 }
@@ -1760,9 +1772,9 @@
     font-weight: 600;
     padding: 6px 14px;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    color: white;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    color: var(--text-body);
 }
 
 .offre-detail__tag--gold {
@@ -1953,15 +1965,14 @@
     }
 }
 
+/* ---------- Header modale — fond blanc, texte sombre, liseré coloré selon contrat ---------- */
 .offre-modal__header {
-    background: linear-gradient(
-            150deg,
-            var(--navy-ink) 0%,
-            var(--contrat-color, var(--navy-lighter)) 140%
-    );
+    background: #ffffff;
+    border-bottom: 1px solid var(--border);
+    border-top: 4px solid var(--contrat-color, var(--gold));
     border-radius: 20px 20px 0 0;
     padding: 34px;
-    color: white;
+    color: var(--text-body);
     position: relative;
     overflow: hidden;
 
@@ -1977,7 +1988,7 @@
     height: 300px;
     background: radial-gradient(
             circle,
-            var(--contrat-color-soft, rgba(200,149,30,.3)) 0%,
+            var(--contrat-color-soft, rgba(200,149,30,.12)) 0%,
             transparent 70%
     );
     pointer-events: none;
@@ -1990,9 +2001,9 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    border: 1px solid rgba(255,255,255,.25);
-    background: rgba(255,255,255,.12);
-    color: white;
+    border: 1px solid var(--border);
+    background: var(--bg-soft);
+    color: var(--navy);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -2003,7 +2014,7 @@
 }
 
 .offre-modal__close:hover {
-    background: rgba(255,255,255,.22);
+    background: #eef0f4;
     transform: rotate(90deg);
 }
 
