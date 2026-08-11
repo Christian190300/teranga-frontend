@@ -247,7 +247,7 @@ export function Navbar() {
                             <IconLogin />
                             Connexion
                         </Link>
-                        <Link to="/inscription" className="btn btn--primary">
+                        <Link to="/inscription" className="btn btn--ghost">
                             <IconUserPlus />
                             Inscription
                         </Link>
@@ -360,7 +360,7 @@ export function Navbar() {
                                 <IconLogin />
                                 Connexion
                             </Link>
-                            <Link to="/inscription" className="btn btn--primary">
+                            <Link to="/inscription" className="btn btn--ghost">
                                 <IconUserPlus />
                                 Inscription
                             </Link>
