@@ -193,7 +193,7 @@
     height: 46px;
     border: none;
     border-radius: 10px;
-    background: #0522e1;
+    background: rgb(6, 27, 60);
     color: white;
     cursor: pointer;
     align-items: center;
@@ -220,6 +220,44 @@
 
 .sidebar__link--home svg {
     color: #c58e0b;
+}
+
+/* ============================================================
+   BARRES DU HAMBURGER (manquant)
+   ============================================================ */
+.sidebar__hamburger-bar {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: white;
+    border-radius: 2px;
+    transition: transform 0.25s ease, opacity 0.2s ease;
+}
+
+.sidebar__hamburger-bar + .sidebar__hamburger-bar {
+    margin-top: 5px;
+}
+
+/* Animation en croix (X) quand le menu est ouvert */
+.sidebar__hamburger-bar.open:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.sidebar__hamburger-bar.open:nth-child(2) {
+    opacity: 0;
+}
+
+.sidebar__hamburger-bar.open:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ============================================================
+   ÉVITE QUE LE HAMBURGER RECOUVRE LE LOGO QUAND LA SIDEBAR EST OUVERTE
+   ============================================================ */
+@media (max-width: 900px) {
+    .sidebar--open .sidebar__brand {
+        margin-top: 46px;
+    }
 }
 
 /* ============================================================
