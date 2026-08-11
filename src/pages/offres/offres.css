@@ -184,6 +184,7 @@
 .offres-hero__inner {
     position: relative;
     padding: 44px 40px 40px;
+    text-align: center;
 }
 
 .offres-hero__title {
@@ -193,7 +194,7 @@
     line-height: 1.28;
     color: white;
     letter-spacing: -0.01em;
-    margin: 0 0 26px;
+    margin: 0 auto 26px;
     max-width: 720px;
 }
 
@@ -207,6 +208,8 @@
     flex-wrap: wrap;
     align-items: center;
     gap: 12px;
+    max-width: 780px;
+    margin: 0 auto;
 }
 
 .offres-filterbar__pill {
