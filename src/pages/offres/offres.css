@@ -145,6 +145,218 @@
     height: 14px;
 }
 
+
+/* ============================================================
+   HERO — bandeau plein largeur, style "job board" premium
+   ============================================================ */
+
+.offres-hero {
+    position: relative;
+    border-radius: 28px;
+    padding: 4px;
+    margin-bottom: 40px;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--navy-ink) 0%, var(--navy) 55%, var(--navy-lighter) 100%);
+    box-shadow: 0 24px 50px -20px rgba(7, 17, 34, 0.5);
+}
+
+.offres-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+            repeating-linear-gradient(115deg, rgba(255, 255, 255, 0.04) 0px, rgba(255, 255, 255, 0.04) 1px, transparent 1px, transparent 14px),
+            repeating-linear-gradient(25deg, rgba(200, 149, 30, 0.08) 0px, rgba(200, 149, 30, 0.08) 1px, transparent 1px, transparent 14px);
+    pointer-events: none;
+}
+
+.offres-hero::after {
+    content: "";
+    position: absolute;
+    top: -30%;
+    right: -6%;
+    width: 420px;
+    height: 420px;
+    background: radial-gradient(circle, rgba(200, 149, 30, 0.28) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.offres-hero__inner {
+    position: relative;
+    padding: 44px 40px 40px;
+}
+
+.offres-hero__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 2.6vw, 2.2rem);
+    font-weight: 800;
+    line-height: 1.28;
+    color: white;
+    letter-spacing: -0.01em;
+    margin: 0 0 26px;
+    max-width: 720px;
+}
+
+.offres-hero__count {
+    color: var(--gold-light);
+}
+
+/* ---------- Barre de filtres — pilules blanches sur fond navy ---------- */
+.offres-filterbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+}
+
+.offres-filterbar__pill {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 1 1 240px;
+    min-width: 200px;
+    background: white;
+    border-radius: 999px;
+    box-shadow: 0 6px 16px -6px rgba(7, 17, 34, 0.35);
+}
+
+.offres-filterbar__icon {
+    width: 18px;
+    height: 18px;
+    color: var(--navy-mist);
+    position: absolute;
+    left: 18px;
+    pointer-events: none;
+}
+
+.offres-filterbar__pill-input {
+    width: 100%;
+    height: 50px;
+    padding: 0 18px 0 46px;
+    border: none;
+    background: transparent;
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: 0.94rem;
+    color: var(--navy-ink);
+    outline: none;
+}
+
+.offres-filterbar__pill-input::placeholder {
+    color: var(--navy-mist);
+}
+
+.offres-filterbar__pill--select {
+    flex: 1 1 220px;
+}
+
+.offres-filterbar__pill-select {
+    width: 100%;
+    height: 50px;
+    padding: 0 40px 0 20px;
+    border: none;
+    background: transparent;
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--navy-ink);
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.offres-filterbar__pill-arrow {
+    width: 15px;
+    height: 15px;
+    color: var(--gold-deep);
+    position: absolute;
+    right: 18px;
+    pointer-events: none;
+}
+
+.offres-filterbar__submit {
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    background: var(--gold);
+    color: var(--navy-ink);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s var(--ease), transform 0.2s var(--ease);
+    box-shadow: 0 8px 18px -4px rgba(200, 149, 30, 0.5);
+}
+
+.offres-filterbar__submit svg {
+    width: 20px;
+    height: 20px;
+}
+
+.offres-filterbar__submit:hover {
+    background: var(--gold-light);
+    transform: scale(1.06);
+}
+
+.offres-filterbar__submit:active {
+    transform: scale(0.96);
+}
+
+.offres-filterbar__reset {
+    flex-shrink: 0;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+    padding: 6px 4px;
+    transition: color 0.15s var(--ease);
+}
+
+.offres-filterbar__reset:hover {
+    color: white;
+}
+
+/* Responsivité */
+@media (max-width: 840px) {
+    .offres-hero__inner {
+        padding: 32px 22px 30px;
+    }
+
+    .offres-filterbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .offres-filterbar__pill,
+    .offres-filterbar__pill--select {
+        flex: 1 1 auto;
+    }
+
+    .offres-filterbar__submit {
+        width: 100%;
+        border-radius: 999px;
+        gap: 8px;
+    }
+
+    .offres-filterbar__submit::after {
+        content: "Rechercher";
+        font-size: 0.88rem;
+        font-weight: 700;
+    }
+
+    .offres-filterbar__reset {
+        text-align: center;
+    }
+}
+
 /* ============================================================
    OFFRES PUBLIQUES PAGE — Talent Sénégal
    Style dédié intégrant le système de design globale (.home-*)
