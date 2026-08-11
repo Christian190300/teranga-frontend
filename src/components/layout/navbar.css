@@ -510,6 +510,166 @@ HAMBURGER MOBILE
     transform:rotate(-45deg);
 }
 
+/* ============================================================
+MENUS DÉROULANTS VISITEURS (Candidat / Recruteur) — desktop
+============================================================ */
+
+.navbar__visitor-menus {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-right: 6px;
+}
+
+.navbar__visitor-dropdown {
+    position: relative;
+}
+
+.navbar__visitor-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: none;
+    background: transparent;
+
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #475569;
+
+    cursor: pointer;
+    transition: color .15s, background .15s;
+    white-space: nowrap;
+}
+
+.navbar__visitor-trigger:hover {
+    color: #14294d;
+    background: #eaf0fb;
+}
+
+.navbar__visitor-trigger--open {
+    color: #14294d;
+    background: #eaf0fb;
+}
+
+.navbar__visitor-chevron {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    transition: transform .2s;
+}
+
+.navbar__visitor-trigger--open .navbar__visitor-chevron {
+    transform: rotate(180deg);
+}
+
+.navbar__visitor-panel {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+
+    min-width: 240px;
+
+    background: white;
+    border: 1px solid #e8e9ee;
+    border-radius: 12px;
+
+    box-shadow: 0 15px 35px rgba(0, 0, 0, .15);
+
+    padding: 8px;
+
+    z-index: 1500;
+
+    animation: dropdown .2s ease;
+}
+
+.navbar__visitor-panel-link {
+    display: flex;
+    align-items: center;
+
+    padding: 11px 12px;
+    border-radius: 8px;
+
+    color: #14294d;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+
+    text-decoration: none;
+    white-space: nowrap;
+
+    transition: background .15s;
+}
+
+.navbar__visitor-panel-link:hover {
+    background: #f1f5f9;
+}
+
+/* ============================================================
+MENUS DÉROULANTS VISITEURS — mobile
+============================================================ */
+
+.navbar__mobile-visitor-menus {
+    display: flex;
+    flex-direction: column;
+    padding: 4px 20px 8px;
+}
+
+.navbar__mobile-visitor-group {
+    border-bottom: 1px solid #f0f1f4;
+}
+
+.navbar__mobile-visitor-trigger {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 14px 4px;
+
+    background: none;
+    border: none;
+
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #14294d;
+
+    cursor: pointer;
+}
+
+.navbar__mobile-visitor-trigger .navbar__visitor-chevron {
+    color: #6b7280;
+}
+
+.navbar__mobile-visitor-trigger--open .navbar__visitor-chevron {
+    transform: rotate(180deg);
+}
+
+.navbar__mobile-visitor-sublinks {
+    display: flex;
+    flex-direction: column;
+    padding: 0 0 12px 12px;
+}
+
+.navbar__mobile-visitor-sublink {
+    padding: 11px 4px;
+
+    color: #475569;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+
+    text-decoration: none;
+}
+
+.navbar__mobile-visitor-sublink:hover {
+    color: #14294d;
+}
 
 
 /* ============================================================

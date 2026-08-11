@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { ProfileMenu } from "./ProfileMenu";
@@ -24,6 +24,28 @@ const recruteurLinks: NavLinkItem[] = [
     { to: "/recruteur/entreprise", label: "Mon entreprise" },
 ];
 
+// Menus visiteurs (visibles uniquement quand l'utilisateur n'est pas connecté),
+// affichés juste avant les liens Connexion / Inscription.
+const visiteurCandidatLinks: NavLinkItem[] = [
+    { to: "/offres", label: "Offres d'emploi" },
+    { to: "/formations", label: "Formations" },
+    { to: "/inscription?role=candidat", label: "Créer un compte candidat" },
+];
+
+const visiteurRecruteurLinks: NavLinkItem[] = [
+    { to: "/inscription?role=recruteur", label: "Publier une offre" },
+    { to: "/a-propos", label: "Pourquoi Talent Sénégal" },
+    { to: "/inscription?role=recruteur", label: "Créer un compte recruteur" },
+];
+
+function IconChevron() {
+    return (
+        <svg className="navbar__visitor-chevron" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+    );
+}
+
 function IconHamburger({ ouvert }: { ouvert: boolean }) {
     return (
         <span className={`navbar__burger${ouvert ? " navbar__burger--open" : ""}`} aria-hidden="true">
@@ -34,11 +56,55 @@ function IconHamburger({ ouvert }: { ouvert: boolean }) {
     );
 }
 
+interface VisitorDropdownProps {
+    label: string;
+    links: NavLinkItem[];
+    id: string;
+    activeMenu: string | null;
+    setActiveMenu: (id: string | null) => void;
+}
+
+function VisitorDropdown({ label, links, id, activeMenu, setActiveMenu }: VisitorDropdownProps) {
+    const estOuvert = activeMenu === id;
+
+    return (
+        <div className="navbar__visitor-dropdown">
+            <button
+                type="button"
+                className={`navbar__visitor-trigger${estOuvert ? " navbar__visitor-trigger--open" : ""}`}
+                onClick={() => setActiveMenu(estOuvert ? null : id)}
+                aria-expanded={estOuvert}
+                aria-haspopup="true"
+            >
+                {label}
+                <IconChevron />
+            </button>
+            {estOuvert && (
+                <div className="navbar__visitor-panel">
+                    {links.map((link) => (
+                        <Link
+                            key={link.label}
+                            to={link.to}
+                            className="navbar__visitor-panel-link"
+                            onClick={() => setActiveMenu(null)}
+                        >
+                            {link.label}
+                        </Link>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+}
+
 export function Navbar() {
     const { isAuthenticated, currentUser, logout } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const [menuOuvert, setMenuOuvert] = useState(false);
+    const [activeVisitorMenu, setActiveVisitorMenu] = useState<string | null>(null);
+    const [mobileVisitorMenu, setMobileVisitorMenu] = useState<string | null>(null);
+    const visitorMenusRef = useRef<HTMLDivElement>(null);
 
     const espaceLinks: NavLinkItem[] =
         currentUser?.role === "RECRUTEUR" ? recruteurLinks : currentUser?.role === "CANDIDAT" ? candidatLinks : [];
@@ -46,6 +112,8 @@ export function Navbar() {
     // Ferme le menu mobile à chaque changement de page.
     useEffect(() => {
         setMenuOuvert(false);
+        setActiveVisitorMenu(null);
+        setMobileVisitorMenu(null);
     }, [location.pathname]);
 
     // Empêche le scroll de fond quand le menu mobile est ouvert.
@@ -55,6 +123,27 @@ export function Navbar() {
             document.body.style.overflow = "";
         };
     }, [menuOuvert]);
+
+    // Ferme les menus déroulants visiteurs au clic en dehors, ou avec Échap.
+    useEffect(() => {
+        if (!activeVisitorMenu) return;
+
+        function handleClickDehors(e: MouseEvent) {
+            if (visitorMenusRef.current && !visitorMenusRef.current.contains(e.target as Node)) {
+                setActiveVisitorMenu(null);
+            }
+        }
+        function handleEscape(e: KeyboardEvent) {
+            if (e.key === "Escape") setActiveVisitorMenu(null);
+        }
+
+        document.addEventListener("mousedown", handleClickDehors);
+        document.addEventListener("keydown", handleEscape);
+        return () => {
+            document.removeEventListener("mousedown", handleClickDehors);
+            document.removeEventListener("keydown", handleEscape);
+        };
+    }, [activeVisitorMenu]);
 
     async function handleDeconnexion() {
         setMenuOuvert(false);
@@ -90,6 +179,22 @@ export function Navbar() {
                     </div>
                 ) : (
                     <div className="navbar__auth-links navbar__desktop-only">
+                        <div className="navbar__visitor-menus" ref={visitorMenusRef}>
+                            <VisitorDropdown
+                                id="candidat"
+                                label="Candidat"
+                                links={visiteurCandidatLinks}
+                                activeMenu={activeVisitorMenu}
+                                setActiveMenu={setActiveVisitorMenu}
+                            />
+                            <VisitorDropdown
+                                id="recruteur"
+                                label="Recruteur"
+                                links={visiteurRecruteurLinks}
+                                activeMenu={activeVisitorMenu}
+                                setActiveMenu={setActiveVisitorMenu}
+                            />
+                        </div>
                         <Link to="/connexion" className="btn btn--ghost">
                             Connexion
                         </Link>
@@ -131,6 +236,52 @@ export function Navbar() {
                             </NavLink>
                         ))}
                     </nav>
+                )}
+
+                {!isAuthenticated && (
+                    <div className="navbar__mobile-visitor-menus">
+                        <div className="navbar__mobile-visitor-group">
+                            <button
+                                type="button"
+                                className={`navbar__mobile-visitor-trigger${mobileVisitorMenu === "candidat" ? " navbar__mobile-visitor-trigger--open" : ""}`}
+                                onClick={() => setMobileVisitorMenu((v) => (v === "candidat" ? null : "candidat"))}
+                                aria-expanded={mobileVisitorMenu === "candidat"}
+                            >
+                                Candidat
+                                <IconChevron />
+                            </button>
+                            {mobileVisitorMenu === "candidat" && (
+                                <div className="navbar__mobile-visitor-sublinks">
+                                    {visiteurCandidatLinks.map((link) => (
+                                        <Link key={link.label} to={link.to} className="navbar__mobile-visitor-sublink">
+                                            {link.label}
+                                        </Link>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="navbar__mobile-visitor-group">
+                            <button
+                                type="button"
+                                className={`navbar__mobile-visitor-trigger${mobileVisitorMenu === "recruteur" ? " navbar__mobile-visitor-trigger--open" : ""}`}
+                                onClick={() => setMobileVisitorMenu((v) => (v === "recruteur" ? null : "recruteur"))}
+                                aria-expanded={mobileVisitorMenu === "recruteur"}
+                            >
+                                Recruteur
+                                <IconChevron />
+                            </button>
+                            {mobileVisitorMenu === "recruteur" && (
+                                <div className="navbar__mobile-visitor-sublinks">
+                                    {visiteurRecruteurLinks.map((link) => (
+                                        <Link key={link.label} to={link.to} className="navbar__mobile-visitor-sublink">
+                                            {link.label}
+                                        </Link>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 )}
 
                 <div className="navbar__mobile-actions">
