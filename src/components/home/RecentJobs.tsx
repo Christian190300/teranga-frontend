@@ -27,6 +27,18 @@ function formatAnciennete(jours: number | null): string {
     return `Publiée il y a ${jours} j`;
 }
 
+/** Extraire et nettoyer la description avec fallback (description -> profilRecherche -> missions) */
+function extraireTexteDescription(job: OffreDTO): string {
+    const sourceTexte =
+        job.description ||
+        job.profilRecherche ||
+        (job.missions && job.missions.length > 0 ? job.missions[0] : "");
+
+    if (!sourceTexte) return "";
+
+    return sourceTexte.replace(/<[^>]*>?/gm, "").trim();
+}
+
 export function RecentJobs() {
     const navigate = useNavigate();
     const [jobs, setJobs] = useState<OffreDTO[]>([]);
@@ -104,12 +116,13 @@ export function RecentJobs() {
                                 [job.ville, job.region, job.pays].filter(Boolean).join(", ") ||
                                 "Non précisé";
                             const competences = (job.competences ?? []).slice(0, 3);
+                            const descriptionPropre = extraireTexteDescription(job);
 
                             return (
                                 <article
                                     key={job.id}
                                     className="job-pass"
-                                    style={{ "--job-color": couleur.bar } as React.CSSProperties}
+                                    style={{ "--job-color": couleur?.bar ?? "#0b1d3a" } as React.CSSProperties}
                                 >
                                     {estRecente && <span className="job-pass__new">Nouveau</span>}
 
@@ -132,8 +145,25 @@ export function RecentJobs() {
                                         </div>
                                     </div>
 
+                                    {/* EXTRAIT DE DESCRIPTION SUR 1 LIGNE */}
+                                    {descriptionPropre ? (
+                                        <p className="job-pass__description">
+                                            {descriptionPropre}
+                                        </p>
+                                    ) : (
+                                        <p className="job-pass__description job-pass__description--empty">
+                                            Aucune description disponible.
+                                        </p>
+                                    )}
+
                                     <div className="job-pass__tags">
-                                        <span className="job-pass__tag job-pass__tag--solid">
+                                        <span
+                                            className="job-pass__tag job-pass__tag--solid"
+                                            style={{
+                                                backgroundColor: couleur?.bar ?? "#0b1d3a",
+                                                color: "#ffffff",
+                                            }}
+                                        >
                                             {LABELS_TYPE_CONTRAT[job.typeContrat] ?? job.typeContrat}
                                         </span>
                                         {job.teletravail && <span className="job-pass__tag">Télétravail</span>}
@@ -164,16 +194,21 @@ export function RecentJobs() {
                                             <IconCoin />
                                             {job.salaireVisible
                                                 ? `${job.salaireMin ?? "-"} - ${job.salaireMax ?? "-"} ${job.devise ?? ""}`
-                                                : "Salaire non communiqué"}
+                                                : "Sur demande"}
                                         </span>
                                     </div>
 
                                     <div className="job-pass__actions">
-                                        <Link to={`/offres/${job.id}`} className="job-pass__btn job-pass__btn--ghost">
+                                        <Link
+                                            to={`/offres/${job.id}`}
+                                            className="job-pass__btn job-pass__btn--ghost"
+                                            style={{ border: "1px solid #cbd5e1" }}
+                                        >
                                             Voir détail
                                         </Link>
                                         <button
                                             className="job-pass__btn job-pass__btn--gold"
+                                            style={{ border: "1px solid #c59b27" }}
                                             onClick={(e) => handlePostuler(e, job.id)}
                                         >
                                             Postuler

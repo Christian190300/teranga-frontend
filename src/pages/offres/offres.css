@@ -712,6 +712,15 @@
     background-color: var(--job-color, #0b1d3a) !important;
 }
 
+/* Style des bordures de boutons */
+.job-pass__btn--ghost {
+    border: 1px solid #cbd5e1 !important;
+}
+
+.job-pass__btn--gold {
+    border: 1px solid #c59b27 !important;
+}
+
 /* 2. Style de la description limitée à exactement UNE seule ligne */
 .job-pass__description {
     font-size: 0.82rem;
