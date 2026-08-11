@@ -93,8 +93,6 @@ export function OffresPubliquesPage() {
         charger();
     }, [page, rechercheAppliquee, secteurSelectionne]);
 
-    // Remonte en haut de page à chaque changement de page (pagination), puisque
-    // ScrollToTop (global) ne réagit qu'aux changements de route, pas de state ici.
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: "smooth" });
     }, [page]);
@@ -139,9 +137,9 @@ export function OffresPubliquesPage() {
     return (
         <main className="home-page page-transition">
             <div className="home-container">
-                {/* HERO BANNER & EN-TÊTE */}
-                <br/>
+                <br />
 
+                {/* HERO BANNER & EN-TÊTE */}
                 <section className="offres-hero">
                     <div className="offres-hero__inner">
                         <h1 className="offres-hero__title">
@@ -158,7 +156,7 @@ export function OffresPubliquesPage() {
                                 </svg>
                                 <input
                                     type="text"
-                                    placeholder="Mots-clés"
+                                    placeholder="Intitulé de poste, mots-clés..."
                                     value={rechercheInput}
                                     onChange={(e) => setRechercheInput(e.target.value)}
                                     className="offres-filterbar__pill-input"
@@ -216,12 +214,11 @@ export function OffresPubliquesPage() {
                         <div className="home-jobs-grid">
                             {Array.from({ length: TAILLE_PAGE }).map((_, i) => (
                                 <div key={i} className="job-pass job-pass--skeleton" aria-hidden="true">
-                                    <div className="job-pass__top">
+                                    <div className="job-pass__header">
                                         <div className="skeleton-box skeleton-box--logo" />
                                         <div className="skeleton-box--content">
                                             <div className="skeleton-line skeleton-line--short" />
                                             <div className="skeleton-line skeleton-line--title" />
-                                            <div className="skeleton-line skeleton-line--sub" />
                                         </div>
                                     </div>
                                     <div className="skeleton-line skeleton-line--tags" />
@@ -266,76 +263,90 @@ export function OffresPubliquesPage() {
                                             className="job-pass"
                                             style={
                                                 {
-                                                    "--job-color": couleur?.bar ?? "var(--hp-gold)",
+                                                    "--job-bar-color": couleur?.bar ?? "#0b1d3a",
                                                 } as React.CSSProperties
                                             }
                                         >
-                                            {estRecente && <span className="job-pass__new">Nouveau</span>}
-
-                                            <div className="job-pass__top">
+                                            {/* EN-TÊTE CARTE */}
+                                            <div className="job-pass__header">
                                                 <LogoEntreprise
                                                     recruteurId={job.recruteurId}
                                                     logoPresent={job.logoPresent}
                                                     nomEntreprise={job.nomEntreprise}
                                                     className="job-pass__logo"
                                                 />
-                                                <div className="job-pass__id">
-                                                    <p className="job-pass__eyebrow">
-                                                        {job.secteurActivite ?? "Général"}
-                                                        {jours !== null && <> · {formatAnciennete(jours)}</>}
-                                                    </p>
-                                                    <h3>{job.titre}</h3>
-                                                    <p className="job-pass__company">
+                                                <div className="job-pass__company-info">
+                                                    <span className="job-pass__company-name">
                                                         {job.nomEntreprise ?? "Entreprise confidentielle"}
-                                                    </p>
+                                                    </span>
+                                                    <span className="job-pass__sector">
+                                                        {job.secteurActivite ?? "Général"}
+                                                    </span>
                                                 </div>
+                                                {estRecente && <span className="job-pass__badge-new">Nouveau</span>}
                                             </div>
 
-                                            <div className="job-pass__tags">
-                                                <span className="job-pass__tag job-pass__tag--solid">
-                                                    {LABELS_TYPE_CONTRAT[job.typeContrat] ?? job.typeContrat}
-                                                </span>
-                                                {job.teletravail && <span className="job-pass__tag">Télétravail</span>}
-                                                {job.hybride && <span className="job-pass__tag">Hybride</span>}
-                                                {job.niveauExperience && (
-                                                    <span className="job-pass__tag">
-                                                        {LABELS_NIVEAU_EXPERIENCE[job.niveauExperience] ?? job.niveauExperience}
+                                            {/* TITRE & PRIX/SALAIRE */}
+                                            <div className="job-pass__body">
+                                                <h3 className="job-pass__title">
+                                                    <Link to={`/offres/${job.id}`}>{job.titre}</Link>
+                                                </h3>
+
+                                                {/* ÉLÉMENTS DE MÉTADONNÉES */}
+                                                <div className="job-pass__meta-row">
+                                                    <span className="job-pass__meta-item">
+                                                        <IconMapPin />
+                                                        {lieu}
                                                     </span>
+                                                    <span className="job-pass__meta-item job-pass__meta-item--salary">
+                                                        <IconCoin />
+                                                        {formatSalaire(job)}
+                                                    </span>
+                                                    {jours !== null && (
+                                                        <span className="job-pass__meta-item job-pass__meta-item--date">
+                                                            {formatAnciennete(jours)}
+                                                        </span>
+                                                    )}
+                                                </div>
+
+                                                {/* BADGES & CONTRATS */}
+                                                <div className="job-pass__tags">
+                                                    <span className="job-pass__tag job-pass__tag--contract">
+                                                        {LABELS_TYPE_CONTRAT[job.typeContrat] ?? job.typeContrat}
+                                                    </span>
+                                                    {job.teletravail && <span className="job-pass__tag">Télétravail</span>}
+                                                    {job.hybride && <span className="job-pass__tag">Hybride</span>}
+                                                    {job.niveauExperience && (
+                                                        <span className="job-pass__tag">
+                                                            {LABELS_NIVEAU_EXPERIENCE[job.niveauExperience] ?? job.niveauExperience}
+                                                        </span>
+                                                    )}
+                                                </div>
+
+                                                {/* COMPÉTENCES */}
+                                                {competences.length > 0 && (
+                                                    <div className="job-pass__skills">
+                                                        {competences.map((c) => (
+                                                            <span className="job-pass__skill-pill" key={c}>
+                                                                {c}
+                                                            </span>
+                                                        ))}
+                                                    </div>
                                                 )}
                                             </div>
 
-                                            {competences.length > 0 && (
-                                                <div className="job-pass__skills">
-                                                    {competences.map((c) => (
-                                                        <span className="job-pass__skill" key={c}>
-                                                            {c}
-                                                        </span>
-                                                    ))}
-                                                </div>
-                                            )}
-
+                                            {/* BOUTONS D'ACTION */}
                                             <div className="job-pass__footer">
-                                                <span className="job-pass__meta">
-                                                    <IconMapPin />
-                                                    {lieu}
-                                                </span>
-                                                <span className="job-pass__meta job-pass__meta--salaire">
-                                                    <IconCoin />
-                                                    {formatSalaire(job)}
-                                                </span>
-                                            </div>
-
-                                            <div className="job-pass__actions">
                                                 <Link
                                                     to={`/offres/${job.id}`}
-                                                    className="job-pass__btn job-pass__btn--ghost"
+                                                    className="job-pass__btn job-pass__btn--secondary"
                                                 >
-                                                    Voir détail
+                                                    Détails
                                                 </Link>
                                                 {(!currentUser || estCandidat) && (
                                                     <button
                                                         type="button"
-                                                        className="job-pass__btn job-pass__btn--gold"
+                                                        className="job-pass__btn job-pass__btn--primary"
                                                         onClick={(e) => handlePostuler(e, job.id)}
                                                     >
                                                         Postuler
@@ -347,7 +358,7 @@ export function OffresPubliquesPage() {
                                 })}
                             </div>
 
-                            {/* PAGINATION ELEGANTE */}
+                            {/* PAGINATION */}
                             {totalPages > 1 && (
                                 <nav className="offres-pagination" aria-label="Navigation des pages">
                                     <button
