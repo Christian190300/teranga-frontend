@@ -76,9 +76,11 @@ export function Sidebar() {
                 aria-label="Ouvrir le menu"
                 aria-expanded={isOpen}
             >
-                <span className={`sidebar__hamburger-bar ${isOpen ? "open" : ""}`} />
-                <span className={`sidebar__hamburger-bar ${isOpen ? "open" : ""}`} />
-                <span className={`sidebar__hamburger-bar ${isOpen ? "open" : ""}`} />
+                <span className="sidebar__hamburger-icon">
+                    <span className={`sidebar__hamburger-bar ${isOpen ? "open" : ""}`} />
+                    <span className={`sidebar__hamburger-bar ${isOpen ? "open" : ""}`} />
+                    <span className={`sidebar__hamburger-bar ${isOpen ? "open" : ""}`} />
+                </span>
             </button>
 
             {isOpen && <div className="sidebar__overlay" onClick={() => setIsOpen(false)} />}
