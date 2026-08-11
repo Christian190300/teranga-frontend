@@ -676,20 +676,6 @@
     margin-bottom: var(--sp-4);
 }
 
-.offres-hero__title {
-    font-family: var(--hp-font);
-    font-size: clamp(2rem, 3.8vw, 3rem);
-    font-weight: 800;
-    line-height: 1.2;
-    color: var(--hp-navy);
-    letter-spacing: -0.02em;
-    margin: var(--sp-2) 0 var(--sp-2);
-}
-
-.offres-hero__title span {
-    color: var(--hp-gold-text);
-}
-
 .offres-hero__subtitle {
     font-size: 1.05rem;
     color: var(--hp-muted);
