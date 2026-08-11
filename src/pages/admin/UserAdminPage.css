@@ -401,3 +401,100 @@
     color: var(--ap-navy);
     background: transparent;
 }
+/* ============================================================
+   RESPONSIVE MOBILE — table transformée en cartes empilées
+   ============================================================ */
+@media (max-width: 768px) {
+    .admin-table-wrap {
+        border: none;
+        background: transparent;
+        box-shadow: none;
+        overflow: visible;
+    }
+
+    .admin-table thead {
+        display: none;
+    }
+
+    .admin-table,
+    .admin-table tbody,
+    .admin-table tr,
+    .admin-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .admin-table tbody tr {
+        background: white;
+        border: 1.5px solid var(--ap-line);
+        border-radius: 12px;
+        margin-bottom: 12px;
+        padding: 14px 16px;
+        box-shadow: 0 2px 6px rgba(20, 41, 77, 0.04);
+    }
+
+    .admin-table tbody tr:hover {
+        background: white;
+    }
+
+    .admin-table tbody td {
+        border-bottom: 1px dashed var(--ap-line);
+        padding: 10px 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    .admin-table tbody td:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .admin-table tbody td:empty {
+        display: none;
+    }
+
+    /* Étiquette générée avant chaque valeur, via l'attribut data-label posé en JSX */
+    .admin-table tbody td[data-label]::before {
+        content: attr(data-label);
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--ap-muted);
+        flex-shrink: 0;
+    }
+
+    .admin-table__user {
+        justify-content: flex-end;
+    }
+
+    .admin-select {
+        max-width: 160px;
+    }
+
+    .admin-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .admin-search,
+    .admin-input {
+        width: 100%;
+    }
+
+    .admin-toolbar__count {
+        text-align: right;
+    }
+
+    .admin-page__head {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .admin-btn--primary {
+        width: 100%;
+        justify-content: center;
+    }
+}

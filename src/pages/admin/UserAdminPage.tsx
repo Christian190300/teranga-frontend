@@ -159,7 +159,7 @@ export function UserAdminPage() {
                         ) : (
                             utilisateurs.map((u) => (
                                 <tr key={u.id}>
-                                    <td>
+                                    <td data-label="Utilisateur">
                                         <div className="admin-table__user">
                                             <div className="admin-table__avatar">{initiales(u.firstName, u.lastName)}</div>
                                             <div>
@@ -170,8 +170,8 @@ export function UserAdminPage() {
                                             </div>
                                         </div>
                                     </td>
-                                    <td>{u.email}</td>
-                                    <td>
+                                    <td data-label="Email">{u.email}</td>
+                                    <td data-label="Rôle">
                                         <select
                                             className="admin-select"
                                             value={u.roles.find((r) => r.startsWith("ROLE_")) ?? ""}
@@ -184,7 +184,7 @@ export function UserAdminPage() {
                                             ))}
                                         </select>
                                     </td>
-                                    <td>
+                                    <td data-label="Statut">
                                         <button
                                             className={`admin-status ${u.enabled ? "is-active" : "is-inactive"}`}
                                             onClick={() => handleToggleActivation(u)}
