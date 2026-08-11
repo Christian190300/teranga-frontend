@@ -38,6 +38,7 @@ export function NotificationsBell() {
     const [notifications, setNotifications] = useState<NotificationAdminDTO[]>([]);
     const [chargement, setChargement] = useState(false);
     const [position, setPosition] = useState<PositionDropdown | null>(null);
+    const [estMobile, setEstMobile] = useState(false);
 
     const wrapRef = useRef<HTMLDivElement>(null);
     const boutonRef = useRef<HTMLButtonElement>(null);
@@ -57,6 +58,15 @@ export function NotificationsBell() {
         const interval = setInterval(rafraichirCompteur, INTERVALLE_POLLING_MS);
         return () => clearInterval(interval);
     }, [rafraichirCompteur]);
+
+    useEffect(() => {
+        function checkMobile() {
+            setEstMobile(window.innerWidth <= SEUIL_MOBILE);
+        }
+        checkMobile();
+        window.addEventListener("resize", checkMobile);
+        return () => window.removeEventListener("resize", checkMobile);
+    }, []);
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -129,53 +139,56 @@ export function NotificationsBell() {
         }
     }
 
-    const estMobile = typeof window !== "undefined" && window.innerWidth <= SEUIL_MOBILE;
-
     const dropdown = ouvert && (
-        <div
-            className="notif-bell__dropdown"
-            style={
-                !estMobile && position
-                    ? { top: `${position.top}px`, right: `${position.right}px` }
-                    : undefined
-            }
-        >
-            <div className="notif-bell__head">
-                <span className="notif-bell__title">Notifications</span>
-                {count > 0 && (
-                    <button className="notif-bell__mark-all" onClick={handleMarquerToutesLues}>
-                        Tout marquer comme lu
-                    </button>
-                )}
-            </div>
-
-            <div className="notif-bell__list">
-                {chargement ? (
-                    <div className="notif-bell__empty">Chargement...</div>
-                ) : notifications.length === 0 ? (
-                    <div className="notif-bell__empty">Aucune notification pour le moment.</div>
-                ) : (
-                    notifications.map((n) => (
-                        <button
-                            key={n.id}
-                            className={`notif-item${n.lu ? "" : " notif-item--non-lue"}`}
-                            onClick={() => !n.lu && handleMarquerLue(n.id)}
-                        >
-                            <span className="notif-item__dot" style={{ background: couleurNotification(n.type) }} />
-                            <span className="notif-item__body">
-                                <span className="notif-item__type">{LABELS_TYPE_NOTIFICATION[n.type]}</span>
-                                <span className="notif-item__message">{n.message}</span>
-                                <span className="notif-item__date">{formatRelatif(n.dateCreation)}</span>
-                            </span>
+        <>
+            {estMobile && <div className="notif-bell__backdrop" onClick={() => setOuvert(false)} />}
+            <div
+                className="notif-bell__dropdown"
+                style={
+                    position
+                        ? estMobile
+                            ? { top: `${position.top}px` }
+                            : { top: `${position.top}px`, right: `${position.right}px` }
+                        : undefined
+                }
+            >
+                <div className="notif-bell__head">
+                    <span className="notif-bell__title">Notifications</span>
+                    {count > 0 && (
+                        <button className="notif-bell__mark-all" onClick={handleMarquerToutesLues}>
+                            Tout marquer comme lu
                         </button>
-                    ))
-                )}
-            </div>
+                    )}
+                </div>
 
-            <Link to="/admin/notifications" className="notif-bell__footer" onClick={() => setOuvert(false)}>
-                Voir toutes les notifications
-            </Link>
-        </div>
+                <div className="notif-bell__list">
+                    {chargement ? (
+                        <div className="notif-bell__empty">Chargement...</div>
+                    ) : notifications.length === 0 ? (
+                        <div className="notif-bell__empty">Aucune notification pour le moment.</div>
+                    ) : (
+                        notifications.map((n) => (
+                            <button
+                                key={n.id}
+                                className={`notif-item${n.lu ? "" : " notif-item--non-lue"}`}
+                                onClick={() => !n.lu && handleMarquerLue(n.id)}
+                            >
+                                <span className="notif-item__dot" style={{ background: couleurNotification(n.type) }} />
+                                <span className="notif-item__body">
+                                    <span className="notif-item__type">{LABELS_TYPE_NOTIFICATION[n.type]}</span>
+                                    <span className="notif-item__message">{n.message}</span>
+                                    <span className="notif-item__date">{formatRelatif(n.dateCreation)}</span>
+                                </span>
+                            </button>
+                        ))
+                    )}
+                </div>
+
+                <Link to="/admin/notifications" className="notif-bell__footer" onClick={() => setOuvert(false)}>
+                    Voir toutes les notifications
+                </Link>
+            </div>
+        </>
     );
 
     return (
