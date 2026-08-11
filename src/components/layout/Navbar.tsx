@@ -38,10 +38,51 @@ const visiteurRecruteurLinks: NavLinkItem[] = [
     { to: "/inscription?role=recruteur", label: "Créer un compte recruteur" },
 ];
 
+/* ---------- Icônes (SVG inline, même style que le reste du projet) ---------- */
+
 function IconChevron() {
     return (
         <svg className="navbar__visitor-chevron" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+    );
+}
+
+function IconUser() {
+    return (
+        <svg className="navbar__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="2" />
+            <path d="M4 20c0-4 3.5-6 8-6s8 2 8 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+    );
+}
+
+function IconBriefcase() {
+    return (
+        <svg className="navbar__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="7" width="18" height="13" rx="2" stroke="currentColor" strokeWidth="2" />
+            <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor" strokeWidth="2" />
+            <path d="M3 12h18" stroke="currentColor" strokeWidth="2" />
+        </svg>
+    );
+}
+
+function IconLogin() {
+    return (
+        <svg className="navbar__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M15 8l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M19 12H9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+    );
+}
+
+function IconUserPlus() {
+    return (
+        <svg className="navbar__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="9" cy="8" r="4" stroke="currentColor" strokeWidth="2" />
+            <path d="M2 20c0-4 3-6 7-6s7 2 7 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            <path d="M19 8v6M16 11h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
         </svg>
     );
 }
@@ -58,13 +99,14 @@ function IconHamburger({ ouvert }: { ouvert: boolean }) {
 
 interface VisitorDropdownProps {
     label: string;
+    icon: React.ReactNode;
     links: NavLinkItem[];
     id: string;
     activeMenu: string | null;
     setActiveMenu: (id: string | null) => void;
 }
 
-function VisitorDropdown({ label, links, id, activeMenu, setActiveMenu }: VisitorDropdownProps) {
+function VisitorDropdown({ label, icon, links, id, activeMenu, setActiveMenu }: VisitorDropdownProps) {
     const estOuvert = activeMenu === id;
 
     return (
@@ -76,6 +118,7 @@ function VisitorDropdown({ label, links, id, activeMenu, setActiveMenu }: Visito
                 aria-expanded={estOuvert}
                 aria-haspopup="true"
             >
+                {icon}
                 {label}
                 <IconChevron />
             </button>
@@ -183,6 +226,7 @@ export function Navbar() {
                             <VisitorDropdown
                                 id="candidat"
                                 label="Candidat"
+                                icon={<IconUser />}
                                 links={visiteurCandidatLinks}
                                 activeMenu={activeVisitorMenu}
                                 setActiveMenu={setActiveVisitorMenu}
@@ -190,15 +234,21 @@ export function Navbar() {
                             <VisitorDropdown
                                 id="recruteur"
                                 label="Recruteur"
+                                icon={<IconBriefcase />}
                                 links={visiteurRecruteurLinks}
                                 activeMenu={activeVisitorMenu}
                                 setActiveMenu={setActiveVisitorMenu}
                             />
                         </div>
+
+                        <span className="navbar__auth-divider" aria-hidden="true" />
+
                         <Link to="/connexion" className="btn btn--ghost">
+                            <IconLogin />
                             Connexion
                         </Link>
-                        <Link to="/inscription" className="btn btn--ghost">
+                        <Link to="/inscription" className="btn btn--primary">
+                            <IconUserPlus />
                             Inscription
                         </Link>
                     </div>
@@ -247,7 +297,10 @@ export function Navbar() {
                                 onClick={() => setMobileVisitorMenu((v) => (v === "candidat" ? null : "candidat"))}
                                 aria-expanded={mobileVisitorMenu === "candidat"}
                             >
-                                Candidat
+                                <span className="navbar__mobile-visitor-label">
+                                    <IconUser />
+                                    Candidat
+                                </span>
                                 <IconChevron />
                             </button>
                             {mobileVisitorMenu === "candidat" && (
@@ -268,7 +321,10 @@ export function Navbar() {
                                 onClick={() => setMobileVisitorMenu((v) => (v === "recruteur" ? null : "recruteur"))}
                                 aria-expanded={mobileVisitorMenu === "recruteur"}
                             >
-                                Recruteur
+                                <span className="navbar__mobile-visitor-label">
+                                    <IconBriefcase />
+                                    Recruteur
+                                </span>
                                 <IconChevron />
                             </button>
                             {mobileVisitorMenu === "recruteur" && (
@@ -291,6 +347,7 @@ export function Navbar() {
                                 to={currentUser?.role === "RECRUTEUR" ? "/recruteur/entreprise" : "/candidat/profil"}
                                 className="btn btn--ghost"
                             >
+                                <IconUser />
                                 Mon profil
                             </Link>
                             <button type="button" className="btn btn--ghost" onClick={handleDeconnexion}>
@@ -300,9 +357,11 @@ export function Navbar() {
                     ) : (
                         <>
                             <Link to="/connexion" className="btn btn--ghost">
+                                <IconLogin />
                                 Connexion
                             </Link>
-                            <Link to="/inscription" className="btn btn--ghost">
+                            <Link to="/inscription" className="btn btn--primary">
+                                <IconUserPlus />
                                 Inscription
                             </Link>
                         </>
