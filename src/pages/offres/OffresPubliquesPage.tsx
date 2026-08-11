@@ -50,6 +50,7 @@ export function OffresPubliquesPage() {
     const [offres, setOffres] = useState<OffreDTO[]>([]);
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
+    const [totalElements, setTotalElements] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -81,6 +82,7 @@ export function OffresPubliquesPage() {
                 });
                 setOffres(data.content ?? []);
                 setTotalPages(data.totalPages ?? 0);
+                setTotalElements(data.totalElements ?? data.content?.length ?? 0);
             } catch (err) {
                 console.error("Erreur chargement offres :", err);
                 setError("Impossible de charger les offres d'emploi pour le moment.");
@@ -125,67 +127,64 @@ export function OffresPubliquesPage() {
             <div className="home-container">
                 {/* HERO BANNER & EN-TÊTE */}
                 <section className="offres-hero">
-                    <div className="offres-hero__content">
-                        <span className="home-pill">Opportunités au Sénégal</span>
+                    <div className="offres-hero__inner">
                         <h1 className="offres-hero__title">
-                            Trouvez le poste qui propulse votre <span>carrière</span>.
+                            Trouvez votre futur job parmi{" "}
+                            <span className="offres-hero__count">{totalElements.toLocaleString("fr-FR")}</span>{" "}
+                            postes ouverts
                         </h1>
-                        <p className="offres-hero__subtitle">
-                            Accédez aux meilleures offres recrutant à Dakar et dans toutes les régions du Sénégal.
-                        </p>
-                    </div>
 
-                    {/* BARRE DE FILTRES RECONFIGURÉE */}
-                    <form className="offres-filterbar" onSubmit={lancerRecherche}>
-                        <div className="offres-filterbar__group">
-                            <svg className="offres-filterbar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <circle cx="11" cy="11" r="7" strokeWidth="2" />
-                                <path d="M20 20L16.65 16.65" strokeWidth="2" strokeLinecap="round" />
-                            </svg>
-                            <input
-                                type="text"
-                                placeholder="Intitulé de poste, ville, compétence..."
-                                value={rechercheInput}
-                                onChange={(e) => setRechercheInput(e.target.value)}
-                                className="offres-filterbar__input"
-                            />
-                        </div>
+                        <form className="offres-filterbar" onSubmit={lancerRecherche}>
+                            <div className="offres-filterbar__pill">
+                                <svg className="offres-filterbar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <circle cx="11" cy="11" r="7" strokeWidth="2" />
+                                    <path d="M20 20L16.65 16.65" strokeWidth="2" strokeLinecap="round" />
+                                </svg>
+                                <input
+                                    type="text"
+                                    placeholder="Mots-clés"
+                                    value={rechercheInput}
+                                    onChange={(e) => setRechercheInput(e.target.value)}
+                                    className="offres-filterbar__pill-input"
+                                />
+                            </div>
 
-                        <div className="offres-filterbar__divider" />
+                            <div className="offres-filterbar__pill offres-filterbar__pill--select">
+                                <select
+                                    value={secteurSelectionne}
+                                    onChange={handleChangerSecteur}
+                                    className="offres-filterbar__pill-select"
+                                >
+                                    <option value="">Tous les secteurs</option>
+                                    {secteurs.map((s) => (
+                                        <option key={s} value={s}>
+                                            {s}
+                                        </option>
+                                    ))}
+                                </select>
+                                <svg className="offres-filterbar__pill-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M6 9L12 15L18 9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                            </div>
 
-                        <div className="offres-filterbar__group">
-                            <select
-                                value={secteurSelectionne}
-                                onChange={handleChangerSecteur}
-                                className="offres-filterbar__select"
-                            >
-                                <option value="">Tous les secteurs d'activité</option>
-                                {secteurs.map((s) => (
-                                    <option key={s} value={s}>
-                                        {s}
-                                    </option>
-                                ))}
-                            </select>
-                            <svg className="offres-filterbar__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <path d="M6 9L12 15L18 9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                        </div>
-
-                        <div className="offres-filterbar__actions">
-                            <button type="submit" className="home-btn home-btn--gold">
-                                Rechercher
+                            <button type="submit" className="offres-filterbar__submit" aria-label="Rechercher">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <circle cx="11" cy="11" r="7" strokeWidth="2.2" />
+                                    <path d="M20 20L16.65 16.65" strokeWidth="2.2" strokeLinecap="round" />
+                                </svg>
                             </button>
+
                             {filtresActifs && (
                                 <button
                                     type="button"
-                                    className="home-btn home-btn--outline home-btn--dark"
+                                    className="offres-filterbar__reset"
                                     onClick={reinitialiserFiltres}
                                 >
-                                    Effacer
+                                    Effacer les filtres
                                 </button>
                             )}
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </section>
 
                 {/* GESTION DES ERREURS */}
