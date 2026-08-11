@@ -163,3 +163,36 @@
 .notif-bell__footer:hover {
     background: #eef1f7;
 }
+
+/* ============================================================
+   RESPONSIVE MOBILE — dropdown plein écran sous la topbar
+   ============================================================ */
+@media (max-width: 640px) {
+    .notif-bell__dropdown {
+        position: fixed;
+        width: 360px;
+        max-width: 90vw;
+        background: white;
+        border: 1px solid #e6e8ee;
+        border-radius: 14px;
+        box-shadow: 0 16px 40px rgba(11, 29, 58, 0.16);
+        z-index: 2000;
+        overflow: hidden;
+    }
+
+    .notif-bell__list {
+        max-height: none;
+        flex: 1;
+        overflow-y: auto;
+    }
+
+    .notif-item__body {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .notif-item__message {
+        overflow-wrap: break-word;
+        word-break: break-word;
+    }
+}
