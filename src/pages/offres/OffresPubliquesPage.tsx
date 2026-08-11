@@ -93,6 +93,12 @@ export function OffresPubliquesPage() {
         charger();
     }, [page, rechercheAppliquee, secteurSelectionne]);
 
+    // Remonte en haut de page à chaque changement de page (pagination), puisque
+    // ScrollToTop (global) ne réagit qu'aux changements de route, pas de state ici.
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }, [page]);
+
     // Handlers
     function lancerRecherche(e: React.FormEvent) {
         e.preventDefault();
@@ -120,6 +126,14 @@ export function OffresPubliquesPage() {
         } else {
             navigate(`/connexion?redirect=/offres/${jobId}`);
         }
+    }
+
+    function allerPagePrecedente() {
+        setPage((p) => p - 1);
+    }
+
+    function allerPageSuivante() {
+        setPage((p) => p + 1);
     }
 
     return (
@@ -338,7 +352,7 @@ export function OffresPubliquesPage() {
                                         type="button"
                                         className="home-btn home-btn--outline home-btn--dark"
                                         disabled={page === 0}
-                                        onClick={() => setPage((p) => p - 1)}
+                                        onClick={allerPagePrecedente}
                                     >
                                         ← Précédent
                                     </button>
@@ -349,7 +363,7 @@ export function OffresPubliquesPage() {
                                         type="button"
                                         className="home-btn home-btn--outline home-btn--dark"
                                         disabled={page + 1 >= totalPages}
-                                        onClick={() => setPage((p) => p + 1)}
+                                        onClick={allerPageSuivante}
                                     >
                                         Suivant →
                                     </button>
