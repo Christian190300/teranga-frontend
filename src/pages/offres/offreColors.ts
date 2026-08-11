@@ -12,11 +12,11 @@ interface ContratColor {
 
 const COULEURS: Record<TypeContrat, ContratColor> = {
     CDI: {
-        bg: "#eaf0fb",
-        text: "#14294d",
-        bar: "#14294d",
-        shadow: "rgba(20, 41, 77, 0.22)",
-        gradient: "linear-gradient(135deg, #14294d 0%, #2c4a85 100%)",
+        bg: "#FCE7F3",
+        text: "#9D174D",
+        bar: "#DB2777",
+        shadow: "rgba(219, 39, 119, 0.26)",
+        gradient: "linear-gradient(135deg, #9D174D 0%, #EC4899 100%)",
     },
     CDD: {
         bg: "#e6f4ea",
