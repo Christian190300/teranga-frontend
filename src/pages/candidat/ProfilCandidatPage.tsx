@@ -284,56 +284,57 @@ export function ProfilCandidatPage() {
                 <SaveStatusBadge status={saveStatus} />
             </div>
 
-            <nav className="profil-nav">
-                <a href="#photo">Photo</a>
-                <a href="#coordonnees">Coordonnées</a>
-                <a href="#pro">Infos pro</a>
-                <a href="#parcours">Parcours</a>
-                <a href="#competences">Compétences</a>
-                <a href="#documents">Documents</a>
-                <a href="#reseaux">Réseaux</a>
-            </nav>
+            <div className="profil-sidebar">
+                <div className="profil-sidebar-card">
+                    <div className="profil-avatar-wrap profil-sidebar-avatar">
+                        {photoUrl ? (
+                            <img src={photoUrl} alt="Photo de profil" className="profil-sidebar-avatar__img" />
+                        ) : (
+                            <div className="profil-sidebar-avatar__placeholder">?</div>
+                        )}
+                        <label className={`profil-sidebar-avatar-edit${photoUploading ? " profil-upload-btn--disabled" : ""}`}>
+                            <input
+                                ref={photoInputRef}
+                                type="file"
+                                accept="image/jpeg,image/png,image/webp"
+                                onChange={handlePhotoChange}
+                                disabled={photoUploading}
+                                className="profil-file-input-hidden"
+                            />
+                            <IconCamera />
+                        </label>
+                    </div>
+
+                    <p className="profil-sidebar-name">{titreProfessionnel || "Candidat"}</p>
+                    <p className="profil-sidebar-role">
+                        {photoUploading ? "Envoi en cours..." : "JPEG, PNG ou WebP — 5 Mo max"}
+                    </p>
+                    {photoError && <p className="profil-message profil-message--error">{photoError}</p>}
+                </div>
+
+                <div className="profil-sidebar-card">
+                    <nav className="profil-nav">
+                        <a href="#coordonnees">Coordonnées</a>
+                        <a href="#pro">Infos pro</a>
+                        <a href="#parcours">Parcours</a>
+                        <a href="#competences">Compétences</a>
+                        <a href="#documents">Documents</a>
+                        <a href="#reseaux">Réseaux</a>
+                    </nav>
+                </div>
+            </div>
 
             <div className="profil-content">
                 {loadError && <div className="profil-message profil-message--error">{loadError}</div>}
 
-                {/* Photo */}
-                <div className="profil-card" id="photo">
-                    <p className="profil-card__section-title">Photo de profil</p>
-                    <div className="profil-avatar-row">
-                        <div className="profil-avatar-wrap">
-                            {photoUrl ? (
-                                <img src={photoUrl} alt="Photo de profil" className="profil-photo-preview" />
-                            ) : (
-                                <div className="profil-photo-placeholder">?</div>
-                            )}
-                            <label className={`profil-avatar-edit${photoUploading ? " profil-upload-btn--disabled" : ""}`}>
-                                <input
-                                    ref={photoInputRef}
-                                    type="file"
-                                    accept="image/jpeg,image/png,image/webp"
-                                    onChange={handlePhotoChange}
-                                    disabled={photoUploading}
-                                    className="profil-file-input-hidden"
-                                />
-                                <IconCamera />
-                            </label>
-                        </div>
-                        <div className="profil-avatar-info">
-                            <p className="profil-avatar-info__title">
-                                {photoUploading ? "Envoi en cours..." : "Cliquez sur l'icône pour changer votre photo"}
-                            </p>
-                            <p className="profil-field__hint" style={{ margin: 0 }}>
-                                JPEG, PNG ou WebP — 5 Mo maximum.
-                            </p>
-                            {photoError && <p className="profil-message profil-message--error">{photoError}</p>}
-                        </div>
-                    </div>
-                </div>
-
                 {/* Coordonnées */}
                 <div className="profil-card" id="coordonnees">
-                    <p className="profil-card__section-title">Coordonnées</p>
+                    <div className="profil-card__header">
+                        <div className="profil-card__icon profil-card__icon--blue">
+                            <IconCamera />
+                        </div>
+                        <p className="profil-card__section-title">Coordonnées</p>
+                    </div>
                     <div className="profil-field-row">
                         <EditableField id="telephone" label="Téléphone" value={telephone} onSave={setTelephone} placeholder="+221 77 123 45 67" />
                         <EditableSelect
@@ -389,7 +390,12 @@ export function ProfilCandidatPage() {
 
                 {/* Infos professionnelles */}
                 <div className="profil-card" id="pro">
-                    <p className="profil-card__section-title">Informations professionnelles</p>
+                    <div className="profil-card__header">
+                        <div className="profil-card__icon profil-card__icon--violet">
+                            <IconDocument />
+                        </div>
+                        <p className="profil-card__section-title">Informations professionnelles</p>
+                    </div>
                     <EditableField
                         id="titreProfessionnel"
                         label="Titre professionnel"
@@ -434,7 +440,12 @@ export function ProfilCandidatPage() {
 
                 {/* Parcours */}
                 <div className="profil-card" id="parcours">
-                    <p className="profil-card__section-title">Parcours</p>
+                    <div className="profil-card__header">
+                        <div className="profil-card__icon profil-card__icon--green">
+                            <IconDocument />
+                        </div>
+                        <p className="profil-card__section-title">Parcours</p>
+                    </div>
                     <p className="profil-card__subtitle">Formations</p>
                     <TagListEditor
                         values={formations}
@@ -453,7 +464,12 @@ export function ProfilCandidatPage() {
 
                 {/* Compétences / Langues */}
                 <div className="profil-card" id="competences">
-                    <p className="profil-card__section-title">Compétences & langues</p>
+                    <div className="profil-card__header">
+                        <div className="profil-card__icon profil-card__icon--orange">
+                            <IconDocument />
+                        </div>
+                        <p className="profil-card__section-title">Compétences & langues</p>
+                    </div>
                     <p className="profil-card__subtitle">Compétences</p>
                     <TagListEditor
                         values={competences}
@@ -472,7 +488,12 @@ export function ProfilCandidatPage() {
 
                 {/* Documents */}
                 <div className="profil-card" id="documents">
-                    <p className="profil-card__section-title">Documents</p>
+                    <div className="profil-card__header">
+                        <div className="profil-card__icon profil-card__icon--gold">
+                            <IconDocument />
+                        </div>
+                        <p className="profil-card__section-title">Documents</p>
+                    </div>
 
                     <p className="profil-card__subtitle">CV</p>
                     <div className="profil-field">
@@ -535,7 +556,12 @@ export function ProfilCandidatPage() {
 
                 {/* Réseaux */}
                 <div className="profil-card" id="reseaux">
-                    <p className="profil-card__section-title">Réseaux</p>
+                    <div className="profil-card__header">
+                        <div className="profil-card__icon profil-card__icon--pink">
+                            <IconDocument />
+                        </div>
+                        <p className="profil-card__section-title">Réseaux</p>
+                    </div>
                     <div className="profil-field-row profil-field-row--3">
                         <EditableField id="linkedin" label="LinkedIn" value={linkedin} onSave={setLinkedin} placeholder="https://linkedin.com/in/..." />
                         <EditableField id="github" label="GitHub" value={github} onSave={setGithub} placeholder="https://github.com/..." />
@@ -545,7 +571,12 @@ export function ProfilCandidatPage() {
 
                 {/* Meta */}
                 <div className="profil-card">
-                    <p className="profil-card__section-title">Informations</p>
+                    <div className="profil-card__header">
+                        <div className="profil-card__icon profil-card__icon--blue">
+                            <IconDocument />
+                        </div>
+                        <p className="profil-card__section-title">Informations du compte</p>
+                    </div>
                     <div className="profil-meta">
                         <div className="profil-meta__item">
                             <div className="profil-meta__label">Membre depuis</div>

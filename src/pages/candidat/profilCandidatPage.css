@@ -1,5 +1,5 @@
 /* ============================================================
-   PROFIL CANDIDAT — design système propre et cohérent
+   PROFIL CANDIDAT — design dashboard, carte profil + cartes contenu
    ============================================================ */
 
 :root {
@@ -7,6 +7,7 @@
     --pc-navy-soft: #1e3a6b;
     --pc-gold: #c8951e;
     --pc-gold-soft: #e8b84b;
+    --pc-bg-page: #f4f6fa;
     --pc-bg-muted: #f7f8fb;
     --pc-bg-tint: #eaf0fb;
     --pc-border: #e5e7ee;
@@ -17,8 +18,8 @@
     --pc-success-bg: #e6f4ea;
     --pc-danger: #b3261e;
     --pc-danger-bg: #fdecea;
-    --pc-radius-lg: 16px;
-    --pc-radius-md: 10px;
+    --pc-radius-lg: 18px;
+    --pc-radius-md: 12px;
     --pc-radius-sm: 8px;
     --pc-shadow-card: 0 1px 2px rgba(20, 41, 77, 0.04), 0 1px 12px rgba(20, 41, 77, 0.03);
     --pc-shadow-float: 0 4px 16px rgba(20, 41, 77, 0.10);
@@ -28,24 +29,31 @@
 .profil-page * {
     box-sizing: border-box;
 }
-.profil-content,
-.profil-card {
-    width: 100%;
-}
 
 .profil-page {
-    max-width: 1920px;
+    max-width: 1280px;
     width: 94%;
     margin: 0 auto;
     padding: 40px 0 90px;
     font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--pc-bg-page);
     display: grid;
-    grid-template-columns: 224px 1fr;
+    grid-template-columns: 280px 1fr;
     grid-template-areas:
         "header header"
-        "nav content";
-    gap: 6px 32px;
+        "sidebar content";
+    gap: 20px 24px;
     align-items: start;
+}
+
+@media (max-width: 900px) {
+    .profil-page {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "header"
+            "sidebar"
+            "content";
+    }
 }
 
 /* ---------- Header ---------- */
@@ -55,13 +63,10 @@
     align-items: flex-start;
     justify-content: space-between;
     gap: 16px;
-    margin-bottom: 20px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid var(--pc-border-soft);
 }
 
 .profil-page__title {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     font-weight: 800;
     color: var(--pc-navy);
     margin: 0 0 4px;
@@ -69,7 +74,7 @@
 }
 
 .profil-page__subtitle {
-    font-size: 0.88rem;
+    font-size: 0.86rem;
     color: var(--pc-text-muted);
     margin: 0;
 }
@@ -81,24 +86,158 @@
     font-size: 0.92rem;
 }
 
-/* ---------- Nav latérale ---------- */
-.profil-nav {
-    grid-area: nav;
+/* ---------- Carte profil (sidebar gauche) ---------- */
+.profil-sidebar {
+    grid-area: sidebar;
     position: sticky;
     top: 24px;
     display: flex;
     flex-direction: column;
-    gap: 2px;
-    padding: 6px;
+    gap: 16px;
+}
+
+.profil-sidebar-card {
     background: white;
     border: 1px solid var(--pc-border-soft);
-    border-radius: var(--pc-radius-md);
-    height: fit-content;
+    border-radius: var(--pc-radius-lg);
+    box-shadow: var(--pc-shadow-card);
+    padding: 28px 24px;
+    text-align: center;
+}
+
+.profil-sidebar-avatar {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.profil-sidebar-avatar__img {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    border: 2px solid var(--pc-border-soft);
+}
+
+.profil-sidebar-avatar__placeholder {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    background: linear-gradient(150deg, var(--pc-navy) 0%, var(--pc-navy-soft) 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1.7rem;
+}
+
+.profil-sidebar-avatar-edit {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--pc-navy);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid white;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.profil-sidebar-avatar-edit:hover {
+    background: var(--pc-navy-soft);
+    transform: scale(1.06);
+}
+
+.profil-sidebar-avatar-edit:has(input:disabled) {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.profil-sidebar-avatar-edit svg {
+    width: 14px;
+    height: 14px;
+}
+
+.profil-sidebar-name {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--pc-navy);
+    margin: 0 0 3px;
+}
+
+.profil-sidebar-role {
+    font-size: 0.84rem;
+    color: var(--pc-text-muted);
+    margin: 0 0 20px;
+    word-break: break-word;
+}
+
+.profil-sidebar-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.profil-sidebar-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 16px;
+    border-radius: 10px;
+    font-size: 0.86rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    text-decoration: none;
+    transition: all 0.15s ease;
+}
+
+.profil-sidebar-btn--primary {
+    background: var(--pc-navy);
+    color: white;
+}
+
+.profil-sidebar-btn--primary:hover {
+    background: var(--pc-navy-soft);
+}
+
+.profil-sidebar-btn--ghost {
+    background: white;
+    color: var(--pc-danger);
+    border-color: #f2c1bd;
+}
+
+.profil-sidebar-btn--ghost:hover {
+    background: var(--pc-danger-bg);
+}
+
+/* ---------- Nav sections (dans la carte sidebar) ---------- */
+.profil-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 6px;
 }
 
 .profil-nav a {
+    display: flex;
+    align-items: center;
     padding: 10px 12px;
-    border-radius: 7px;
+    border-radius: 8px;
     font-size: 0.85rem;
     font-weight: 600;
     color: var(--pc-text-muted);
@@ -111,60 +250,82 @@
     color: var(--pc-navy);
 }
 
-.profil-nav a:active {
-    background: var(--pc-bg-tint);
-}
-
-.profil-content {
-    grid-area: content;
-    min-width: 0;
-}
-
 @media (max-width: 900px) {
-    .profil-page {
-        grid-template-columns: 1fr;
-        grid-template-areas:
-            "header"
-            "nav"
-            "content";
-    }
-    .profil-nav {
+    .profil-sidebar {
         position: static;
+    }
+
+    .profil-sidebar-card:last-child .profil-nav {
         flex-direction: row;
         overflow-x: auto;
         gap: 4px;
-        padding: 6px;
     }
+
     .profil-nav a {
         white-space: nowrap;
         flex-shrink: 0;
     }
 }
 
-/* ---------- Cards ---------- */
+.profil-content {
+    grid-area: content;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* ---------- Cards de contenu ---------- */
 .profil-card {
     background: white;
     border: 1px solid var(--pc-border-soft);
     border-radius: var(--pc-radius-lg);
     box-shadow: var(--pc-shadow-card);
-    padding: 30px 32px;
-    margin-bottom: 18px;
+    padding: 26px 28px;
     scroll-margin-top: 24px;
 }
 
 @media (max-width: 640px) {
     .profil-card {
-        padding: 22px 20px;
+        padding: 20px 18px;
     }
 }
 
+.profil-card__header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+.profil-card__icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.profil-card__icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+.profil-card__icon--violet { background: #f1e9fb; color: #7c4fd6; }
+.profil-card__icon--blue   { background: #e6f0fd; color: #2f6fe0; }
+.profil-card__icon--green  { background: #e6f7ec; color: var(--pc-success); }
+.profil-card__icon--orange { background: #fdece0; color: #d9722c; }
+.profil-card__icon--gold   { background: #fbf0d9; color: var(--pc-gold); }
+.profil-card__icon--pink   { background: #fde6ef; color: #d64f8a; }
+
 .profil-card__section-title {
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--pc-text-faint);
-    margin: 0 0 20px;
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--pc-navy);
+    margin: 0;
+    letter-spacing: -0.01em;
 }
 
 .profil-card__subtitle {
@@ -178,88 +339,6 @@
     margin-top: 28px;
     padding-top: 24px;
     border-top: 1px solid var(--pc-border-soft);
-}
-
-/* ---------- Photo ---------- */
-.profil-avatar-row {
-    display: flex;
-    align-items: center;
-    gap: 22px;
-}
-
-.profil-avatar-wrap {
-    position: relative;
-    width: 92px;
-    height: 92px;
-    flex-shrink: 0;
-}
-
-.profil-photo-preview {
-    width: 92px;
-    height: 92px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid var(--pc-border-soft);
-    display: block;
-}
-
-.profil-photo-placeholder {
-    width: 92px;
-    height: 92px;
-    border-radius: 50%;
-    background: var(--pc-bg-tint);
-    color: var(--pc-navy);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 1.6rem;
-    border: 2px solid var(--pc-border-soft);
-}
-
-.profil-avatar-edit {
-    position: absolute;
-    bottom: -2px;
-    right: -2px;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: var(--pc-navy);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 3px solid white;
-    cursor: pointer;
-    transition: background 0.15s ease, transform 0.15s ease;
-}
-
-.profil-avatar-edit:hover {
-    background: var(--pc-navy-soft);
-    transform: scale(1.05);
-}
-
-.profil-avatar-edit:has(input:disabled) {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-}
-
-.profil-avatar-edit svg {
-    width: 15px;
-    height: 15px;
-}
-
-.profil-avatar-info {
-    flex: 1;
-    min-width: 0;
-}
-
-.profil-avatar-info__title {
-    font-size: 0.92rem;
-    font-weight: 700;
-    color: var(--pc-navy);
-    margin: 0 0 4px;
 }
 
 /* ---------- Input fichier caché ---------- */
@@ -314,7 +393,7 @@
     border: 1.5px solid var(--pc-border);
     border-radius: var(--pc-radius-sm);
     font-family: inherit;
-    font-size: 16px; /* >= 16px : empêche le zoom auto sur iOS Safari au focus */
+    font-size: 16px;
     background: var(--pc-bg-muted);
     color: var(--pc-navy);
     transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
@@ -377,7 +456,7 @@
     }
 }
 
-/* ---------- Champ éditable (icônes ✓ / ✕) : input, textarea, select ---------- */
+/* ---------- Champ éditable (icônes ✓ / ✕) ---------- */
 .profil-field__editable {
     position: relative;
 }
@@ -387,7 +466,7 @@
 }
 
 .profil-field__editable textarea.profil-field__input--with-actions {
-    padding-right: 14px !important; /* pas d'icônes flottantes dans le texte */
+    padding-right: 14px !important;
     padding-bottom: 46px !important;
 }
 
@@ -618,7 +697,7 @@
     color: var(--pc-navy);
 }
 
-/* ---------- Tags (formations, certifications, compétences, langues) ---------- */
+/* ---------- Tags ---------- */
 .profil-tags {
     display: flex;
     flex-wrap: wrap;
@@ -685,7 +764,7 @@
 }
 
 .profil-content > .profil-message--error {
-    margin-bottom: 20px;
+    margin-bottom: 4px;
 }
 
 @media (prefers-reduced-motion: reduce) {
