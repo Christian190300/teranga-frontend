@@ -8,6 +8,7 @@ import {
     listerOffresPubliques,
     listerSecteursDisponibles,
     LABELS_TYPE_CONTRAT,
+    LABELS_NIVEAU_EXPERIENCE,
     type OffreDTO,
 } from "../../api/offreService";
 import "./offres.css";
@@ -39,13 +40,6 @@ function formatSalaire(offre: OffreDTO): string {
         return `${offre.salaireMin.toLocaleString()} - ${offre.salaireMax.toLocaleString()} ${devise}`;
     }
     return `${(offre.salaireMin ?? offre.salaireMax)?.toLocaleString()} ${devise}`;
-}
-
-/** Nettoie le HTML/Markdown de la description pour afficher un extrait propre */
-function stripHtml(html?: string): string {
-    if (!html) return "";
-    const doc = new DOMParser().parseFromString(html, "text/html");
-    return doc.body.textContent || "";
 }
 
 export function OffresPubliquesPage() {
@@ -99,6 +93,8 @@ export function OffresPubliquesPage() {
         charger();
     }, [page, rechercheAppliquee, secteurSelectionne]);
 
+    // Remonte en haut de page à chaque changement de page (pagination), puisque
+    // ScrollToTop (global) ne réagit qu'aux changements de route, pas de state ici.
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: "smooth" });
     }, [page]);
@@ -143,9 +139,9 @@ export function OffresPubliquesPage() {
     return (
         <main className="home-page page-transition">
             <div className="home-container">
-                <br />
+                {/* HERO BANNER & EN-TÊTE */}
+                <br/>
 
-                {/* HERO BANNER */}
                 <section className="offres-hero">
                     <div className="offres-hero__inner">
                         <h1 className="offres-hero__title">
@@ -162,7 +158,7 @@ export function OffresPubliquesPage() {
                                 </svg>
                                 <input
                                     type="text"
-                                    placeholder="Intitulé de poste, mots-clés..."
+                                    placeholder="Mots-clés"
                                     value={rechercheInput}
                                     onChange={(e) => setRechercheInput(e.target.value)}
                                     className="offres-filterbar__pill-input"
@@ -207,7 +203,7 @@ export function OffresPubliquesPage() {
                     </div>
                 </section>
 
-                {/* ERREURS */}
+                {/* GESTION DES ERREURS */}
                 {error && (
                     <div className="offres-alert offres-alert--error" role="alert">
                         <span>{error}</span>
@@ -219,15 +215,16 @@ export function OffresPubliquesPage() {
                     {loading ? (
                         <div className="home-jobs-grid">
                             {Array.from({ length: TAILLE_PAGE }).map((_, i) => (
-                                <div key={i} className="job-card job-card--skeleton" aria-hidden="true">
-                                    <div className="job-card__header">
+                                <div key={i} className="job-pass job-pass--skeleton" aria-hidden="true">
+                                    <div className="job-pass__top">
                                         <div className="skeleton-box skeleton-box--logo" />
                                         <div className="skeleton-box--content">
                                             <div className="skeleton-line skeleton-line--short" />
                                             <div className="skeleton-line skeleton-line--title" />
+                                            <div className="skeleton-line skeleton-line--sub" />
                                         </div>
                                     </div>
-                                    <div className="skeleton-line skeleton-line--sub" />
+                                    <div className="skeleton-line skeleton-line--tags" />
                                     <div className="skeleton-line skeleton-line--footer" />
                                 </div>
                             ))}
@@ -262,92 +259,83 @@ export function OffresPubliquesPage() {
                                         [job.ville, job.region, job.pays].filter(Boolean).join(", ") ||
                                         "Sénégal";
                                     const competences = (job.competences ?? []).slice(0, 3);
-                                    const descriptionPropre = stripHtml(job.description);
 
                                     return (
-                                        <article key={job.id} className="job-card">
-                                            {/* EN-TÊTE : Entreprise + Logo + Type de contrat */}
-                                            <div className="job-card__header">
+                                        <article
+                                            key={job.id}
+                                            className="job-pass"
+                                            style={
+                                                {
+                                                    "--job-color": couleur?.bar ?? "var(--hp-gold)",
+                                                } as React.CSSProperties
+                                            }
+                                        >
+                                            {estRecente && <span className="job-pass__new">Nouveau</span>}
+
+                                            <div className="job-pass__top">
                                                 <LogoEntreprise
                                                     recruteurId={job.recruteurId}
                                                     logoPresent={job.logoPresent}
                                                     nomEntreprise={job.nomEntreprise}
-                                                    className="job-card__logo"
+                                                    className="job-pass__logo"
                                                 />
-
-                                                <div className="job-card__company-details">
-                                                    <span className="job-card__company-name">
-                                                        {job.nomEntreprise ?? "Entreprise confidentielle"}
-                                                    </span>
-                                                    <span className="job-card__sector">
+                                                <div className="job-pass__id">
+                                                    <p className="job-pass__eyebrow">
                                                         {job.secteurActivite ?? "Général"}
-                                                    </span>
-                                                </div>
-
-                                                <div className="job-card__header-badges">
-                                                    {estRecente && <span className="job-card__badge-new">Nouveau</span>}
-                                                    <span
-                                                        className="job-card__contract-pill"
-                                                        style={{
-                                                            color: couleur?.text ?? "#0f172a",
-                                                            backgroundColor: couleur?.bg ?? "#f1f5f9",
-                                                        }}
-                                                    >
-                                                        {LABELS_TYPE_CONTRAT[job.typeContrat] ?? job.typeContrat}
-                                                    </span>
+                                                        {jours !== null && <> · {formatAnciennete(jours)}</>}
+                                                    </p>
+                                                    <h3>{job.titre}</h3>
+                                                    <p className="job-pass__company">
+                                                        {job.nomEntreprise ?? "Entreprise confidentielle"}
+                                                    </p>
                                                 </div>
                                             </div>
 
-                                            {/* TITRE DE L'OFFRE */}
-                                            <h3 className="job-card__title">
-                                                <Link to={`/offres/${job.id}`}>{job.titre}</Link>
-                                            </h3>
-
-                                            {/* EXTRAIT DE LA DESCRIPTION (Sobriété & pertinence) */}
-                                            {descriptionPropre && (
-                                                <p className="job-card__excerpt">{descriptionPropre}</p>
-                                            )}
-
-                                            {/* CHIPS DE MÉTADONNÉES (Lieu, Salaire, Ancienneté) */}
-                                            <div className="job-card__info-row">
-                                                <span className="job-card__info-chip">
-                                                    <IconMapPin />
-                                                    {lieu}
+                                            <div className="job-pass__tags">
+                                                <span className="job-pass__tag job-pass__tag--solid">
+                                                    {LABELS_TYPE_CONTRAT[job.typeContrat] ?? job.typeContrat}
                                                 </span>
-                                                <span className="job-card__info-chip job-card__info-chip--salary">
-                                                    <IconCoin />
-                                                    {formatSalaire(job)}
-                                                </span>
-                                                {jours !== null && (
-                                                    <span className="job-card__time">
-                                                        {formatAnciennete(jours)}
+                                                {job.teletravail && <span className="job-pass__tag">Télétravail</span>}
+                                                {job.hybride && <span className="job-pass__tag">Hybride</span>}
+                                                {job.niveauExperience && (
+                                                    <span className="job-pass__tag">
+                                                        {LABELS_NIVEAU_EXPERIENCE[job.niveauExperience] ?? job.niveauExperience}
                                                     </span>
                                                 )}
                                             </div>
 
-                                            {/* COMPÉTENCES & MODALITÉS */}
-                                            {(competences.length > 0 || job.teletravail || job.hybride) && (
-                                                <div className="job-card__skills-bar">
-                                                    {job.teletravail && <span className="job-card__skill-tag">Télétravail</span>}
-                                                    {job.hybride && <span className="job-card__skill-tag">Hybride</span>}
+                                            {competences.length > 0 && (
+                                                <div className="job-pass__skills">
                                                     {competences.map((c) => (
-                                                        <span className="job-card__skill-tag" key={c}>
+                                                        <span className="job-pass__skill" key={c}>
                                                             {c}
                                                         </span>
                                                     ))}
                                                 </div>
                                             )}
 
-                                            {/* PIED DE CARTE (Actions) */}
-                                            <div className="job-card__footer">
-                                                <Link to={`/offres/${job.id}`} className="job-card__more-link">
-                                                    En savoir plus <span>→</span>
-                                                </Link>
+                                            <div className="job-pass__footer">
+                                                <span className="job-pass__meta">
+                                                    <IconMapPin />
+                                                    {lieu}
+                                                </span>
+                                                <span className="job-pass__meta job-pass__meta--salaire">
+                                                    <IconCoin />
+                                                    {formatSalaire(job)}
+                                                </span>
+                                            </div>
 
+                                            <div className="job-pass__actions">
+                                                <Link
+                                                    to={`/offres/${job.id}`}
+                                                    className="job-pass__btn job-pass__btn--ghost"
+                                                >
+                                                    Voir détail
+                                                </Link>
                                                 {(!currentUser || estCandidat) && (
                                                     <button
                                                         type="button"
-                                                        className="job-card__btn-apply"
+                                                        className="job-pass__btn job-pass__btn--gold"
                                                         onClick={(e) => handlePostuler(e, job.id)}
                                                     >
                                                         Postuler
@@ -359,7 +347,7 @@ export function OffresPubliquesPage() {
                                 })}
                             </div>
 
-                            {/* PAGINATION */}
+                            {/* PAGINATION ELEGANTE */}
                             {totalPages > 1 && (
                                 <nav className="offres-pagination" aria-label="Navigation des pages">
                                     <button
