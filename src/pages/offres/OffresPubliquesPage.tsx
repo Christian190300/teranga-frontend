@@ -140,6 +140,8 @@ export function OffresPubliquesPage() {
         <main className="home-page page-transition">
             <div className="home-container">
                 {/* HERO BANNER & EN-TÊTE */}
+                <br/>
+
                 <section className="offres-hero">
                     <div className="offres-hero__inner">
                         <h1 className="offres-hero__title">
