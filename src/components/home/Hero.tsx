@@ -4,6 +4,7 @@ import talent1 from "../../assets/talent-1.jpg";
 import talent2 from "../../assets/talent-2.jpg";
 import talent3 from "../../assets/talent-3.jpg";
 import { IconUsers, IconBriefcase, IconGlobe, IconShieldCheck } from "./icons";
+import { listerOffresPubliques } from "../../api/offreService";
 
 interface Slide {
     image: string;
@@ -54,12 +55,25 @@ const AUTOPLAY_DELAY = 6000;
 
 export function Hero() {
     const [index, setIndex] = useState(0);
+    const [totalOffres, setTotalOffres] = useState<number | null>(null);
 
+    // Carrousel auto-play
     useEffect(() => {
         const timer = setInterval(() => {
             setIndex((current) => (current + 1) % slides.length);
         }, AUTOPLAY_DELAY);
         return () => clearInterval(timer);
+    }, []);
+
+    // Chargement du nombre total d'offres
+    useEffect(() => {
+        listerOffresPubliques(0, 1)
+            .then((data) => {
+                setTotalOffres(data.totalElements ?? data.content?.length ?? 0);
+            })
+            .catch((err) => {
+                console.error("Erreur lors de la récupération du nombre d'offres :", err);
+            });
     }, []);
 
     function goToPrevious() {
@@ -104,8 +118,6 @@ export function Hero() {
                 </button>
 
                 <div className="home-hero__content home-container">
-                    {/* key={index} force un nouveau montage à chaque changement de slide,
-                        ce qui relance proprement l'animation d'apparition du texte. */}
                     <div className="home-hero__text-block" key={index}>
                         <h1 className="home-hero__title">{current.title}</h1>
                         <p className="home-hero__subtitle">{current.subtitle}</p>
@@ -113,7 +125,7 @@ export function Hero() {
                             <Link to="/inscription?role=candidat" className="home-btn home-btn--gold">
                                 Créer mon profil
                             </Link>
-                            <Link to="/inscription?role=candidat" className="home-btn home-btn--outline">
+                            <Link to="/offres" className="home-btn home-btn--outline">
                                 Découvrir les offres
                             </Link>
                         </div>
@@ -145,15 +157,19 @@ export function Hero() {
                             <div className="home-stats-panel__label">Talents inscrits</div>
                         </div>
                     </div>
+
                     <div className="home-stats-panel__item">
                         <div className="home-stats-panel__icon">
                             <IconBriefcase />
                         </div>
                         <div>
-                            <div className="home-stats-panel__value">203+</div>
+                            <div className="home-stats-panel__value">
+                                {totalOffres !== null ? totalOffres : "—"}
+                            </div>
                             <div className="home-stats-panel__label">Offres actives</div>
                         </div>
                     </div>
+
                     <div className="home-stats-panel__item">
                         <div className="home-stats-panel__icon">
                             <IconGlobe />
@@ -163,6 +179,7 @@ export function Hero() {
                             <div className="home-stats-panel__label">Entreprises</div>
                         </div>
                     </div>
+
                     <div className="home-stats-panel__item">
                         <div className="home-stats-panel__icon">
                             <IconShieldCheck />
@@ -174,9 +191,8 @@ export function Hero() {
                     </div>
                 </div>
             </section>
-            <br/>
-            <br/>
+            <br />
+            <br />
         </>
     );
-
 }
