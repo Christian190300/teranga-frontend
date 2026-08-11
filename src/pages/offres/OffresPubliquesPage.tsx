@@ -42,11 +42,17 @@ function formatSalaire(offre: OffreDTO): string {
     return `${(offre.salaireMin ?? offre.salaireMax)?.toLocaleString()} ${devise}`;
 }
 
-/** Nettoie le HTML/Markdown de la description pour afficher un texte brut sur 1 ligne */
-function stripHtml(html?: string): string {
-    if (!html) return "";
-    const doc = new DOMParser().parseFromString(html, "text/html");
-    return doc.body.textContent || "";
+/** Nettoie le texte et gère les replis (description -> profilRecherche -> missions) */
+function extraireTexteDescription(job: OffreDTO): string {
+    const sourceTexte =
+        job.description ||
+        job.profilRecherche ||
+        (job.missions && job.missions.length > 0 ? job.missions[0] : "");
+
+    if (!sourceTexte) return "";
+
+    // Supprime le HTML/Markdown simple
+    return sourceTexte.replace(/<[^>]*>?/gm, "").trim();
 }
 
 export function OffresPubliquesPage() {
@@ -146,7 +152,7 @@ export function OffresPubliquesPage() {
         <main className="home-page page-transition">
             <div className="home-container">
                 {/* HERO BANNER & EN-TÊTE */}
-                <br/>
+                <br />
 
                 <section className="offres-hero">
                     <div className="offres-hero__inner">
@@ -265,7 +271,7 @@ export function OffresPubliquesPage() {
                                         [job.ville, job.region, job.pays].filter(Boolean).join(", ") ||
                                         "Sénégal";
                                     const competences = (job.competences ?? []).slice(0, 3);
-                                    const descriptionPropre = stripHtml(job.description);
+                                    const descriptionPropre = extraireTexteDescription(job);
 
                                     return (
                                         <article
@@ -298,15 +304,26 @@ export function OffresPubliquesPage() {
                                                 </div>
                                             </div>
 
-                                            {/* UNE SEULE LIGNE DE DESCRIPTION */}
-                                            {descriptionPropre && (
+                                            {/* EXTRAIT DE DESCRIPTION SUR 1 LIGNE */}
+                                            {descriptionPropre ? (
                                                 <p className="job-pass__description">
                                                     {descriptionPropre}
+                                                </p>
+                                            ) : (
+                                                <p className="job-pass__description job-pass__description--empty">
+                                                    Aucune description disponible.
                                                 </p>
                                             )}
 
                                             <div className="job-pass__tags">
-                                                <span className="job-pass__tag job-pass__tag--solid">
+                                                {/* BADGE PRINCIPAL EN BLANC */}
+                                                <span
+                                                    className="job-pass__tag job-pass__tag--solid"
+                                                    style={{
+                                                        backgroundColor: couleur?.bar ?? "var(--job-color, #0b1d3a)",
+                                                        color: "#ffffff",
+                                                    }}
+                                                >
                                                     {LABELS_TYPE_CONTRAT[job.typeContrat] ?? job.typeContrat}
                                                 </span>
                                                 {job.teletravail && <span className="job-pass__tag">Télétravail</span>}
@@ -361,7 +378,7 @@ export function OffresPubliquesPage() {
                                 })}
                             </div>
 
-                            {/* PAGINATION ELEGANTE */}
+                            {/* PAGINATION */}
                             {totalPages > 1 && (
                                 <nav className="offres-pagination" aria-label="Navigation des pages">
                                     <button
