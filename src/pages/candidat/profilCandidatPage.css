@@ -676,7 +676,7 @@
 }
 
 .profil-empty-upload:hover {
-    border-color: #2563eb;
+    border-color: #d1790a;
     background-color: #f0f9ff;
 }
 
@@ -705,7 +705,7 @@
 }
 
 .profil-save-btn {
-    background-color: #2563eb;
+    background-color: #d1790a;
     color: #ffffff;
     font-weight: 600;
     font-size: 0.95rem;
@@ -718,7 +718,7 @@
 }
 
 .profil-save-btn:hover:not(:disabled) {
-    background-color: #1d4ed8;
+    background-color: #d1790a;
 }
 
 .profil-save-btn:active:not(:disabled) {
