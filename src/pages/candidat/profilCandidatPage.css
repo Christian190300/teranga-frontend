@@ -659,28 +659,41 @@
     border-color: #cddcf5;
 }
 
+/* Conteneur de la zone d'upload vide */
 .profil-empty-upload {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
-    gap: 10px;
-    padding: 30px 16px;
-    border: 1.5px dashed var(--pc-border);
-    border-radius: var(--pc-radius-md);
-    background: #fafbfc;
-    text-align: center;
-    transition: border-color 0.15s ease, background 0.15s ease;
+    padding: 1.5rem 1rem;       /* Réduit la hauteur du bloc */
+    border: 2px dashed #cbd5e1;  /* Bordure pointillée discrète */
+    border-radius: 12px;
+    background-color: #f8fafc;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    gap: 0.5rem;
+    width: 100%;
 }
 
 .profil-empty-upload:hover {
-    border-color: var(--pc-gold-soft);
-    background: #fdf9f0;
+    border-color: #2563eb;
+    background-color: #f0f9ff;
 }
 
+/* 🔴 LE FIX ESSENTIEL : Bloquer la taille du SVG */
+.profil-empty-upload svg {
+    width: 40px;   /* Force l'icône à une taille raisonnable */
+    height: 40px;
+    color: #1e293b;
+    flex-shrink: 0;
+}
+
+/* Texte sous l'icône */
 .profil-empty-upload__text {
-    font-size: 0.82rem;
-    color: var(--pc-text-faint);
+    font-size: 0.875rem;
+    color: #64748b;
+    font-weight: 500;
+    text-align: center;
 }
 
 /* ---------- Tags & Métadonnées ---------- */
