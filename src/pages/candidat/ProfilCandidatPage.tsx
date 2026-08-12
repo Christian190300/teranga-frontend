@@ -80,6 +80,7 @@ export function ProfilCandidatPage() {
 
     const [loading, setLoading] = useState(true);
     const [loadError, setLoadError] = useState<string | null>(null);
+    const [saving, setSaving] = useState(false);
 
     // Score de complétion calculé par le backend
     const [scoreCompletion, setScoreCompletion] = useState<number>(0);
@@ -165,7 +166,6 @@ export function ProfilCandidatPage() {
                 setDateCreation(data.dateCreation);
                 setDateMaj(data.dateMaj);
 
-                // Extraction du score depuis score.percentage (avec fallbacks)
                 const scoreVal = data.score?.percentage ?? data.scoreCompletion ?? data.pourcentageCompletion ?? 0;
                 setScoreCompletion(scoreVal);
 
@@ -209,6 +209,25 @@ export function ProfilCandidatPage() {
         900,
         !loading
     );
+
+    // 🚀 Action manuelle pour tout enregistrer et rafraîchir
+    async function handleEnregistrerEtRafraichir() {
+        try {
+            setSaving(true);
+            await updateMonProfilCandidat({
+                telephone, adresse, sexe, ville, region, pays, mobilite, teletravail,
+                titreProfessionnel, aPropos, niveauExperience,
+                anneesExperience: anneesExperience === "" ? undefined : Number(anneesExperience),
+                disponibilite, formations, certifications, langues, competences,
+                linkedin, github, portfolio,
+            });
+            // Rechargement direct de la page
+            window.location.reload();
+        } catch {
+            setLoadError("Erreur lors de la sauvegarde complète des modifications.");
+            setSaving(false);
+        }
+    }
 
     async function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
         const file = e.target.files?.[0];
@@ -310,7 +329,6 @@ export function ProfilCandidatPage() {
             </div>
 
             <div className="profil-sidebar">
-                {/* Carte de Profil Avatar */}
                 <div className="profil-sidebar-card">
                     <div className="profil-avatar-wrap profil-sidebar-avatar">
                         {photoUrl ? (
@@ -338,12 +356,10 @@ export function ProfilCandidatPage() {
                     {photoError && <p className="profil-message profil-message--error">{photoError}</p>}
                 </div>
 
-                {/* Carte de Progression de Complétion */}
                 <div className="profil-sidebar-card">
                     <ProfileProgressBar score={scoreCompletion} />
                 </div>
 
-                {/* Navigation sticky */}
                 <div className="profil-sidebar-card">
                     <nav className="profil-nav">
                         <a href="#coordonnees">Coordonnées</a>
@@ -620,6 +636,19 @@ export function ProfilCandidatPage() {
                         </div>
                     </div>
                 </div>
+
+                {/* 🔽 Bouton global de sauvegarde en bas de page */}
+                <div className="profil-actions-footer">
+                    <button
+                        type="button"
+                        className="profil-save-btn"
+                        onClick={handleEnregistrerEtRafraichir}
+                        disabled={saving}
+                    >
+                        {saving ? "Enregistrement..." : "Enregistrer toutes les modifications"}
+                    </button>
+                </div>
+
             </div>
         </div>
     );

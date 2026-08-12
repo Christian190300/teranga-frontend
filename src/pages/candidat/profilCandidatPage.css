@@ -696,6 +696,41 @@
     text-align: center;
 }
 
+.profil-actions-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+.profil-save-btn {
+    background-color: #2563eb;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+}
+
+.profil-save-btn:hover:not(:disabled) {
+    background-color: #1d4ed8;
+}
+
+.profil-save-btn:active:not(:disabled) {
+    transform: translateY(1px);
+}
+
+.profil-save-btn:disabled {
+    background-color: #94a3b8;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
 /* ---------- Tags & Métadonnées ---------- */
 .profil-tags {
     display: flex;
