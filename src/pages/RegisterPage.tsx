@@ -233,7 +233,7 @@ export function RegisterPage() {
                     : {}),
             });
             setSuccess(true);
-            setTimeout(() => navigate("/connexion"), 1500);
+            setTimeout(() => navigate("/connexion"), 3500);
         } catch {
             setError("Impossible de créer le compte. Vérifiez vos informations et réessayez.");
         } finally {
@@ -337,7 +337,10 @@ export function RegisterPage() {
                     {success && (
                         <div className="form-success">
                             <IconCheckCircle />
-                            <span>Compte créé ! Redirection vers la connexion...</span>
+                            <span>
+                Compte créé ! Un email de confirmation vient de vous être envoyé — vérifiez
+                votre boîte de réception avant de vous connecter.
+            </span>
                         </div>
                     )}
 

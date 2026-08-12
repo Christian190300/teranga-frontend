@@ -215,3 +215,17 @@ export function isTokenExpired(): boolean {
         return true;
     }
 }
+
+// À insérer dans authService.ts, juste après reinitialiserMotDePasse().
+// Utilise httpClient comme le reste du fichier (pas axios directement,
+// puisque ces routes tapent ton backend Spring, pas Keycloak).
+
+/** POST /api/auth/verifier-email : valide le token reçu par email et active le compte. */
+export async function verifierEmail(token: string): Promise<void> {
+    await httpClient.post("/auth/verifier-email", { token });
+}
+
+/** POST /api/auth/renvoyer-verification : renvoie un nouvel email de vérification. */
+export async function renvoyerVerification(email: string): Promise<void> {
+    await httpClient.post("/auth/renvoyer-verification", { email });
+}

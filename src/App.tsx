@@ -36,6 +36,7 @@ import { ParametresAdminPage } from "./pages/admin/ParametresAdminPage";
 import { ImportOffresPage } from "./pages/admin/ImportOffresPage.tsx";
 import { CandidatsMatchesPage } from "./pages/recruteur/CandidatsMatchesPage";
 import { OffresRecommandeesPage } from "./pages/candidat/OffresRecommandeesPage";
+import { VerifyEmailPage } from "./pages/VerifyEmailPage.tsx";
 
 export default function App() {
     return (
@@ -81,6 +82,7 @@ export default function App() {
                             <Route path="/admin/offres/import" element={<ImportOffresPage />} />
                             <Route path="/recruteur/offres/:id/candidats-matches" element={<CandidatsMatchesPage />} />
                             <Route path="/candidat/offres-recommandees" element={<OffresRecommandeesPage />} />
+                            <Route path="/verifier-email" element={<VerifyEmailPage />} />
                         </Routes>
                     </AppLayout>
                 </MaintenanceGuard>
