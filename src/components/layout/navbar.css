@@ -644,30 +644,29 @@ body {
    ========================================================================== */
 
 .navbar__bottom-nav {
-    display: none; /* Masqué sur ordinateur par défaut */
+    display: none; /* Masqué sur écran d'ordinateur */
 }
 
 @media (max-width: 768px) {
-    /* Cache sur mobile si nécessaire, sinon s'affiche fixe en bas */
     .navbar__bottom-nav {
         display: flex;
         position: fixed;
         bottom: 0;
         left: 0;
         right: 0;
-        height: 64px;
+        height: 72px; /* LÉGÈREMENT PLUS HAUT (passé de 64px à 72px) */
         background-color: #ffffff;
         border-top: 1px solid #e2e8f0;
-        box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
         z-index: 999;
         justify-content: space-around;
         align-items: center;
-        padding: 4px 8px;
+        padding: 6px 4px;
     }
 
-    /* Ajuste la marge du body pour éviter que le footer soit masqué par la bar fixe */
+    /* Marge globale sous la page pour ne rien masquer tout en bas */
     body {
-        padding-bottom: 64px;
+        padding-bottom: 72px;
     }
 
     .navbar__bottom-item {
@@ -677,21 +676,24 @@ body {
         justify-content: center;
         flex: 1;
         text-decoration: none;
-        color: #64748b;
-        font-size: 0.75rem;
-        font-weight: 500;
-        gap: 3px;
-        transition: color 0.2s ease;
+        color: #475569;
+        font-size: 0.85rem; /* PLUS GRAND (passé de 0.75rem à 0.85rem) */
+        font-weight: 600;
+        gap: 4px;
+        transition: all 0.2s ease-in-out;
     }
 
+    /* TAILE DES ICÔNES AUMENTÉE */
     .navbar__bottom-icon {
-        width: 22px;
-        height: 22px;
+        width: 26px; /* PLUS GRAND (passé de 22px à 26px) */
+        height: 26px;
     }
 
+    /* État survol / lien actif */
     .navbar__bottom-item:hover,
     .navbar__bottom-item.active {
-        color: #d1790a; /* Ta couleur principale/accent */
+        color: #d1790a; /* Couleur d'accentuation */
         font-weight: 700;
+        transform: translateY(-1px);
     }
 }
