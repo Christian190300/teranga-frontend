@@ -638,3 +638,60 @@ body {
     overflow-x: hidden;
     max-width: 100%;
 }
+
+/* ==========================================================================
+   Bottom Navigation Bar (Mobile / Visiteur)
+   ========================================================================== */
+
+.navbar__bottom-nav {
+    display: none; /* Masqué sur ordinateur par défaut */
+}
+
+@media (max-width: 768px) {
+    /* Cache sur mobile si nécessaire, sinon s'affiche fixe en bas */
+    .navbar__bottom-nav {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 64px;
+        background-color: #ffffff;
+        border-top: 1px solid #e2e8f0;
+        box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+        z-index: 999;
+        justify-content: space-around;
+        align-items: center;
+        padding: 4px 8px;
+    }
+
+    /* Ajuste la marge du body pour éviter que le footer soit masqué par la bar fixe */
+    body {
+        padding-bottom: 64px;
+    }
+
+    .navbar__bottom-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+        text-decoration: none;
+        color: #64748b;
+        font-size: 0.75rem;
+        font-weight: 500;
+        gap: 3px;
+        transition: color 0.2s ease;
+    }
+
+    .navbar__bottom-icon {
+        width: 22px;
+        height: 22px;
+    }
+
+    .navbar__bottom-item:hover,
+    .navbar__bottom-item.active {
+        color: #d1790a; /* Ta couleur principale/accent */
+        font-weight: 700;
+    }
+}

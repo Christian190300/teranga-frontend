@@ -24,8 +24,6 @@ const recruteurLinks: NavLinkItem[] = [
     { to: "/recruteur/entreprise", label: "Mon entreprise" },
 ];
 
-// Menus visiteurs (visibles uniquement quand l'utilisateur n'est pas connecté),
-// affichés juste avant les liens Connexion / Inscription.
 const visiteurCandidatLinks: NavLinkItem[] = [
     { to: "/offres", label: "Offres d'emploi" },
     { to: "/formations", label: "Formations" },
@@ -38,7 +36,25 @@ const visiteurRecruteurLinks: NavLinkItem[] = [
     { to: "/inscription?role=recruteur", label: "Créer un compte recruteur" },
 ];
 
-/* ---------- Icônes (SVG inline, même style que le reste du projet) ---------- */
+/* ---------- Icônes SVG ---------- */
+
+function IconHome() {
+    return (
+        <svg className="navbar__bottom-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <polyline points="9 22 9 12 15 12 15 22" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+    );
+}
+
+function IconSearch() {
+    return (
+        <svg className="navbar__bottom-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+    );
+}
 
 function IconChevron() {
     return (
@@ -152,14 +168,12 @@ export function Navbar() {
     const espaceLinks: NavLinkItem[] =
         currentUser?.role === "RECRUTEUR" ? recruteurLinks : currentUser?.role === "CANDIDAT" ? candidatLinks : [];
 
-    // Ferme le menu mobile à chaque changement de page.
     useEffect(() => {
         setMenuOuvert(false);
         setActiveVisitorMenu(null);
         setMobileVisitorMenu(null);
     }, [location.pathname]);
 
-    // Empêche le scroll de fond quand le menu mobile est ouvert.
     useEffect(() => {
         document.body.style.overflow = menuOuvert ? "hidden" : "";
         return () => {
@@ -167,7 +181,6 @@ export function Navbar() {
         };
     }, [menuOuvert]);
 
-    // Ferme les menus déroulants visiteurs au clic en dehors, ou avec Échap.
     useEffect(() => {
         if (!activeVisitorMenu) return;
 
@@ -195,92 +208,20 @@ export function Navbar() {
     }
 
     return (
-        <header className="container navbar">
-            <Link to="/" className="navbar__brand">
-                Talent<span>Sénégal</span>
-            </Link>
+        <>
+            <header className="container navbar">
+                <Link to="/" className="navbar__brand">
+                    Talent<span>Sénégal</span>
+                </Link>
 
-            {isAuthenticated && espaceLinks.length > 0 && (
-                <nav className="navbar__menu navbar__desktop-only">
-                    {espaceLinks.map((link) => (
-                        <NavLink
-                            key={link.to}
-                            to={link.to}
-                            end={link.to === "/recruteur/offres"}
-                            className={({ isActive }) => `navbar__menu-link ${isActive ? "active" : ""}`}
-                        >
-                            {link.label}
-                        </NavLink>
-                    ))}
-                </nav>
-            )}
-
-            <nav className="navbar__links">
-                {isAuthenticated ? (
-                    <div className="navbar__desktop-only">
-                        <ProfileMenu />
-                    </div>
-                ) : (
-                    <div className="navbar__auth-links navbar__desktop-only">
-                        <div className="navbar__visitor-menus" ref={visitorMenusRef}>
-                            <VisitorDropdown
-                                id="candidat"
-                                label="Candidat"
-                                icon={<IconUser />}
-                                links={visiteurCandidatLinks}
-                                activeMenu={activeVisitorMenu}
-                                setActiveMenu={setActiveVisitorMenu}
-                            />
-                            <VisitorDropdown
-                                id="recruteur"
-                                label="Recruteur"
-                                icon={<IconBriefcase />}
-                                links={visiteurRecruteurLinks}
-                                activeMenu={activeVisitorMenu}
-                                setActiveMenu={setActiveVisitorMenu}
-                            />
-                        </div>
-
-                        <span className="navbar__auth-divider" aria-hidden="true" />
-
-                        <Link to="/connexion" className="btn btn--ghost">
-                            <IconLogin />
-                            Connexion
-                        </Link>
-                        <Link to="/inscription" className="btn btn--ghost">
-                            <IconUserPlus />
-                            Inscription
-                        </Link>
-                    </div>
-                )}
-
-                <button
-                    type="button"
-                    className="navbar__burger-btn"
-                    onClick={() => setMenuOuvert((v) => !v)}
-                    aria-label={menuOuvert ? "Fermer le menu" : "Ouvrir le menu"}
-                    aria-expanded={menuOuvert}
-                >
-                    <IconHamburger ouvert={menuOuvert} />
-                </button>
-            </nav>
-
-            {/* ---------- Menu mobile ---------- */}
-            <div
-                className={`navbar__mobile-overlay${menuOuvert ? " navbar__mobile-overlay--open" : ""}`}
-                onClick={() => setMenuOuvert(false)}
-                aria-hidden="true"
-            />
-
-            <div className={`navbar__mobile-panel${menuOuvert ? " navbar__mobile-panel--open" : ""}`}>
-                {espaceLinks.length > 0 && (
-                    <nav className="navbar__mobile-links">
+                {isAuthenticated && espaceLinks.length > 0 && (
+                    <nav className="navbar__menu navbar__desktop-only">
                         {espaceLinks.map((link) => (
                             <NavLink
                                 key={link.to}
                                 to={link.to}
                                 end={link.to === "/recruteur/offres"}
-                                className={({ isActive }) => `navbar__mobile-link ${isActive ? "active" : ""}`}
+                                className={({ isActive }) => `navbar__menu-link ${isActive ? "active" : ""}`}
                             >
                                 {link.label}
                             </NavLink>
@@ -288,74 +229,34 @@ export function Navbar() {
                     </nav>
                 )}
 
-                {!isAuthenticated && (
-                    <div className="navbar__mobile-visitor-menus">
-                        <div className="navbar__mobile-visitor-group">
-                            <button
-                                type="button"
-                                className={`navbar__mobile-visitor-trigger${mobileVisitorMenu === "candidat" ? " navbar__mobile-visitor-trigger--open" : ""}`}
-                                onClick={() => setMobileVisitorMenu((v) => (v === "candidat" ? null : "candidat"))}
-                                aria-expanded={mobileVisitorMenu === "candidat"}
-                            >
-                                <span className="navbar__mobile-visitor-label">
-                                    <IconUser />
-                                    Candidat
-                                </span>
-                                <IconChevron />
-                            </button>
-                            {mobileVisitorMenu === "candidat" && (
-                                <div className="navbar__mobile-visitor-sublinks">
-                                    {visiteurCandidatLinks.map((link) => (
-                                        <Link key={link.label} to={link.to} className="navbar__mobile-visitor-sublink">
-                                            {link.label}
-                                        </Link>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-
-                        <div className="navbar__mobile-visitor-group">
-                            <button
-                                type="button"
-                                className={`navbar__mobile-visitor-trigger${mobileVisitorMenu === "recruteur" ? " navbar__mobile-visitor-trigger--open" : ""}`}
-                                onClick={() => setMobileVisitorMenu((v) => (v === "recruteur" ? null : "recruteur"))}
-                                aria-expanded={mobileVisitorMenu === "recruteur"}
-                            >
-                                <span className="navbar__mobile-visitor-label">
-                                    <IconBriefcase />
-                                    Recruteur
-                                </span>
-                                <IconChevron />
-                            </button>
-                            {mobileVisitorMenu === "recruteur" && (
-                                <div className="navbar__mobile-visitor-sublinks">
-                                    {visiteurRecruteurLinks.map((link) => (
-                                        <Link key={link.label} to={link.to} className="navbar__mobile-visitor-sublink">
-                                            {link.label}
-                                        </Link>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                )}
-
-                <div className="navbar__mobile-actions">
+                <nav className="navbar__links">
                     {isAuthenticated ? (
-                        <>
-                            <Link
-                                to={currentUser?.role === "RECRUTEUR" ? "/recruteur/entreprise" : "/candidat/profil"}
-                                className="btn btn--ghost"
-                            >
-                                <IconUser />
-                                Mon profil
-                            </Link>
-                            <button type="button" className="btn btn--ghost" onClick={handleDeconnexion}>
-                                Se déconnecter
-                            </button>
-                        </>
+                        <div className="navbar__desktop-only">
+                            <ProfileMenu />
+                        </div>
                     ) : (
-                        <>
+                        <div className="navbar__auth-links navbar__desktop-only">
+                            <div className="navbar__visitor-menus" ref={visitorMenusRef}>
+                                <VisitorDropdown
+                                    id="candidat"
+                                    label="Candidat"
+                                    icon={<IconUser />}
+                                    links={visiteurCandidatLinks}
+                                    activeMenu={activeVisitorMenu}
+                                    setActiveMenu={setActiveVisitorMenu}
+                                />
+                                <VisitorDropdown
+                                    id="recruteur"
+                                    label="Recruteur"
+                                    icon={<IconBriefcase />}
+                                    links={visiteurRecruteurLinks}
+                                    activeMenu={activeVisitorMenu}
+                                    setActiveMenu={setActiveVisitorMenu}
+                                />
+                            </div>
+
+                            <span className="navbar__auth-divider" aria-hidden="true" />
+
                             <Link to="/connexion" className="btn btn--ghost">
                                 <IconLogin />
                                 Connexion
@@ -364,10 +265,149 @@ export function Navbar() {
                                 <IconUserPlus />
                                 Inscription
                             </Link>
-                        </>
+                        </div>
                     )}
+
+                    <button
+                        type="button"
+                        className="navbar__burger-btn"
+                        onClick={() => setMenuOuvert((v) => !v)}
+                        aria-label={menuOuvert ? "Fermer le menu" : "Ouvrir le menu"}
+                        aria-expanded={menuOuvert}
+                    >
+                        <IconHamburger ouvert={menuOuvert} />
+                    </button>
+                </nav>
+
+                {/* ---------- Menu tiroir mobile (Burger) ---------- */}
+                <div
+                    className={`navbar__mobile-overlay${menuOuvert ? " navbar__mobile-overlay--open" : ""}`}
+                    onClick={() => setMenuOuvert(false)}
+                    aria-hidden="true"
+                />
+
+                <div className={`navbar__mobile-panel${menuOuvert ? " navbar__mobile-panel--open" : ""}`}>
+                    {espaceLinks.length > 0 && (
+                        <nav className="navbar__mobile-links">
+                            {espaceLinks.map((link) => (
+                                <NavLink
+                                    key={link.to}
+                                    to={link.to}
+                                    end={link.to === "/recruteur/offres"}
+                                    className={({ isActive }) => `navbar__mobile-link ${isActive ? "active" : ""}`}
+                                >
+                                    {link.label}
+                                </NavLink>
+                            ))}
+                        </nav>
+                    )}
+
+                    {!isAuthenticated && (
+                        <div className="navbar__mobile-visitor-menus">
+                            <div className="navbar__mobile-visitor-group">
+                                <button
+                                    type="button"
+                                    className={`navbar__mobile-visitor-trigger${mobileVisitorMenu === "candidat" ? " navbar__mobile-visitor-trigger--open" : ""}`}
+                                    onClick={() => setMobileVisitorMenu((v) => (v === "candidat" ? null : "candidat"))}
+                                    aria-expanded={mobileVisitorMenu === "candidat"}
+                                >
+                                    <span className="navbar__mobile-visitor-label">
+                                        <IconUser />
+                                        Candidat
+                                    </span>
+                                    <IconChevron />
+                                </button>
+                                {mobileVisitorMenu === "candidat" && (
+                                    <div className="navbar__mobile-visitor-sublinks">
+                                        {visiteurCandidatLinks.map((link) => (
+                                            <Link key={link.label} to={link.to} className="navbar__mobile-visitor-sublink">
+                                                {link.label}
+                                            </Link>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="navbar__mobile-visitor-group">
+                                <button
+                                    type="button"
+                                    className={`navbar__mobile-visitor-trigger${mobileVisitorMenu === "recruteur" ? " navbar__mobile-visitor-trigger--open" : ""}`}
+                                    onClick={() => setMobileVisitorMenu((v) => (v === "recruteur" ? null : "recruteur"))}
+                                    aria-expanded={mobileVisitorMenu === "recruteur"}
+                                >
+                                    <span className="navbar__mobile-visitor-label">
+                                        <IconBriefcase />
+                                        Recruteur
+                                    </span>
+                                    <IconChevron />
+                                </button>
+                                {mobileVisitorMenu === "recruteur" && (
+                                    <div className="navbar__mobile-visitor-sublinks">
+                                        {visiteurRecruteurLinks.map((link) => (
+                                            <Link key={link.label} to={link.to} className="navbar__mobile-visitor-sublink">
+                                                {link.label}
+                                            </Link>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="navbar__mobile-actions">
+                        {isAuthenticated ? (
+                            <>
+                                <Link
+                                    to={currentUser?.role === "RECRUTEUR" ? "/recruteur/entreprise" : "/candidat/profil"}
+                                    className="btn btn--ghost"
+                                >
+                                    <IconUser />
+                                    Mon profil
+                                </Link>
+                                <button type="button" className="btn btn--ghost" onClick={handleDeconnexion}>
+                                    Se déconnecter
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <Link to="/connexion" className="btn btn--ghost">
+                                    <IconLogin />
+                                    Connexion
+                                </Link>
+                                <Link to="/inscription" className="btn btn--ghost">
+                                    <IconUserPlus />
+                                    Inscription
+                                </Link>
+                            </>
+                        )}
+                    </div>
                 </div>
-            </div>
-        </header>
+            </header>
+
+            {/* ---------- Bottom Nav Mobile (Visible uniquement quand non connecté sur mobile) ---------- */}
+            {!isAuthenticated && (
+                <nav className="navbar__bottom-nav" aria-label="Navigation principale mobile">
+                    <NavLink to="/" end className={({ isActive }) => `navbar__bottom-item ${isActive ? "active" : ""}`}>
+                        <IconHome />
+                        <span>Accueil</span>
+                    </NavLink>
+
+                    <NavLink to="/offres" className={({ isActive }) => `navbar__bottom-item ${isActive ? "active" : ""}`}>
+                        <IconSearch />
+                        <span>Recherche</span>
+                    </NavLink>
+
+                    <NavLink to="/inscription?role=candidat" className={({ isActive }) => `navbar__bottom-item ${isActive ? "active" : ""}`}>
+                        <IconUser />
+                        <span>Candidat</span>
+                    </NavLink>
+
+                    <NavLink to="/inscription?role=recruteur" className={({ isActive }) => `navbar__bottom-item ${isActive ? "active" : ""}`}>
+                        <IconBriefcase />
+                        <span>Recruteur</span>
+                    </NavLink>
+                </nav>
+            )}
+        </>
     );
 }
