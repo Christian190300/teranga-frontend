@@ -43,6 +43,10 @@ export interface ProfilCandidatDTO {
     lettreMotivationContentType: string | null;
     lettreMotivationPresente: boolean;
 
+    // Score de complétion calculé à la volée par le backend (en %)
+    scoreCompletion?: number;
+    pourcentageCompletion?: number;
+
     dateCreation: string | null;
     dateMaj: string | null;
 }

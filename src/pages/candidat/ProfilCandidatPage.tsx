@@ -13,6 +13,7 @@ import {
 import { useAuth } from "../../context/AuthContext";
 import { useAutoSave } from "../../hooks/useAutoSave";
 import { SaveStatusBadge } from "../../components/common/SaveStatusBadge";
+import { ProfileProgressBar } from "../../components/common/ProfileProgressBar";
 import { TagListEditor } from "../../components/common/TagListEditor";
 import { EditableField } from "../../components/common/EditableField";
 import { EditableTextarea } from "../../components/common/EditableTextarea";
@@ -79,6 +80,9 @@ export function ProfilCandidatPage() {
 
     const [loading, setLoading] = useState(true);
     const [loadError, setLoadError] = useState<string | null>(null);
+
+    // Score de complétion calculé par le backend
+    const [scoreCompletion, setScoreCompletion] = useState<number>(0);
 
     const [telephone, setTelephone] = useState("");
     const [adresse, setAdresse] = useState("");
@@ -161,6 +165,9 @@ export function ProfilCandidatPage() {
                 setDateCreation(data.dateCreation);
                 setDateMaj(data.dateMaj);
 
+                // Initialisation du score
+                setScoreCompletion(data.scoreCompletion ?? data.pourcentageCompletion ?? 0);
+
                 if (data.photoPresente) {
                     const url = await obtenirPhotoCandidatUrl();
                     setPhotoUrl(url);
@@ -193,6 +200,8 @@ export function ProfilCandidatPage() {
                 anneesExperience: value.anneesExperience === "" ? undefined : Number(value.anneesExperience),
             });
             setDateMaj(updated.dateMaj);
+            const score = updated.scoreCompletion ?? updated.pourcentageCompletion;
+            if (score !== undefined) setScoreCompletion(score);
         },
         900,
         !loading
@@ -206,6 +215,9 @@ export function ProfilCandidatPage() {
         try {
             const updated = await uploaderPhotoCandidat(file);
             setDateMaj(updated.dateMaj);
+            const score = updated.scoreCompletion ?? updated.pourcentageCompletion;
+            if (score !== undefined) setScoreCompletion(score);
+
             if (photoUrl) URL.revokeObjectURL(photoUrl);
             const url = await obtenirPhotoCandidatUrl();
             setPhotoUrl(url);
@@ -228,6 +240,8 @@ export function ProfilCandidatPage() {
             setCvPresent(updated.cvPresent);
             setCvOriginalFilename(updated.cvOriginalFilename);
             setDateMaj(updated.dateMaj);
+            const score = updated.scoreCompletion ?? updated.pourcentageCompletion;
+            if (score !== undefined) setScoreCompletion(score);
         } catch {
             setCvError("Échec de l'envoi. Le fichier doit être un PDF (5 Mo max).");
         } finally {
@@ -246,6 +260,8 @@ export function ProfilCandidatPage() {
             setLmPresente(updated.lettreMotivationPresente);
             setLmOriginalFilename(updated.lettreMotivationOriginalFilename);
             setDateMaj(updated.dateMaj);
+            const score = updated.scoreCompletion ?? updated.pourcentageCompletion;
+            if (score !== undefined) setScoreCompletion(score);
         } catch {
             setLmError("Échec de l'envoi. Le fichier doit être un PDF (5 Mo max).");
         } finally {
@@ -285,6 +301,7 @@ export function ProfilCandidatPage() {
             </div>
 
             <div className="profil-sidebar">
+                {/* Carte de Profil Avatar */}
                 <div className="profil-sidebar-card">
                     <div className="profil-avatar-wrap profil-sidebar-avatar">
                         {photoUrl ? (
@@ -312,6 +329,12 @@ export function ProfilCandidatPage() {
                     {photoError && <p className="profil-message profil-message--error">{photoError}</p>}
                 </div>
 
+                {/* Carte de Progression de Complétion */}
+                <div className="profil-sidebar-card">
+                    <ProfileProgressBar score={scoreCompletion} />
+                </div>
+
+                {/* Navigation sticky */}
                 <div className="profil-sidebar-card">
                     <nav className="profil-nav">
                         <a href="#coordonnees">Coordonnées</a>

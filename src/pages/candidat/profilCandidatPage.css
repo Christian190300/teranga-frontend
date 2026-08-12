@@ -767,6 +767,62 @@
     margin-bottom: 4px;
 }
 
+
+/* ---------- Score de complétion du profil ---------- */
+.profil-completion {
+    background: white;
+    border: 1px solid var(--pc-border-soft);
+    border-radius: var(--pc-radius-lg);
+    box-shadow: var(--pc-shadow-card);
+    padding: 18px 20px;
+}
+
+.profil-completion__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.profil-completion__title {
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: var(--pc-navy);
+}
+
+.profil-completion__badge {
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: var(--pc-navy);
+    background: var(--pc-bg-tint);
+    padding: 3px 8px;
+    border-radius: 999px;
+    border: 1px solid #cddcf5;
+}
+
+.profil-completion__track {
+    width: 100%;
+    height: 8px;
+    background: var(--pc-bg-muted);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.profil-completion__fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--pc-gold-soft) 0%, var(--pc-gold) 100%);
+    border-radius: 999px;
+    transition: width 0.4s ease;
+}
+
+.profil-completion__hint {
+    font-size: 0.76rem;
+    color: var(--pc-text-faint);
+    margin-top: 8px;
+    line-height: 1.4;
+}
+
+
 @media (prefers-reduced-motion: reduce) {
     .profil-page * {
         transition: none !important;
