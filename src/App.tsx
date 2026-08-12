@@ -37,6 +37,7 @@ import { ImportOffresPage } from "./pages/admin/ImportOffresPage.tsx";
 import { CandidatsMatchesPage } from "./pages/recruteur/CandidatsMatchesPage";
 import { OffresRecommandeesPage } from "./pages/candidat/OffresRecommandeesPage";
 import { VerifyEmailPage } from "./pages/VerifyEmailPage.tsx";
+import { VerificationEnvoyeePage } from "./pages/VerificationEnvoyeePage.tsx";
 
 export default function App() {
     return (
@@ -83,6 +84,7 @@ export default function App() {
                             <Route path="/recruteur/offres/:id/candidats-matches" element={<CandidatsMatchesPage />} />
                             <Route path="/candidat/offres-recommandees" element={<OffresRecommandeesPage />} />
                             <Route path="/verifier-email" element={<VerifyEmailPage />} />
+                            <Route path="/verification-envoyee" element={<VerificationEnvoyeePage />} />
                         </Routes>
                     </AppLayout>
                 </MaintenanceGuard>

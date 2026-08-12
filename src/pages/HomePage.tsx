@@ -6,7 +6,6 @@ import { FinalCTA } from "../components/home/FinalCTA";
 export function HomePage() {
     return (
         <div className="home-page">
-            <br/>
             <Hero />
             <br/>
             <RecentJobs />
@@ -14,7 +13,6 @@ export function HomePage() {
             <WhyChooseUs />
             <br/>
             <FinalCTA />
-            <br/>
         </div>
     );
 }

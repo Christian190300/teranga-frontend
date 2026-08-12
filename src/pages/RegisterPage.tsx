@@ -211,7 +211,7 @@ export function RegisterPage() {
     const [telephoneEntreprise, setTelephoneEntreprise] = useState("");
 
     const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState(false);
+    const [success] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const features = role === "RECRUTEUR" ? featuresRecruteur : featuresCandidat;
@@ -232,8 +232,7 @@ export function RegisterPage() {
                     ? { nomEntreprise, secteurActivite, descriptionEntreprise, telephoneEntreprise }
                     : {}),
             });
-            setSuccess(true);
-            setTimeout(() => navigate("/connexion"), 3500);
+            navigate("/verification-envoyee", { state: { email } });
         } catch {
             setError("Impossible de créer le compte. Vérifiez vos informations et réessayez.");
         } finally {
