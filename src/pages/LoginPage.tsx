@@ -1,9 +1,8 @@
 import { type FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { getMonCompte } from "../api/authService";
-import { PremiereConnexionRequiredError } from "../api/authService";
-import "./authPage.css"
+import { getMonCompte, PremiereConnexionRequiredError } from "../api/authService";
+import "./authPage.css";
 
 function LogoMark({ size = 36, light = false }: { size?: number; light?: boolean }) {
     return (
@@ -95,6 +94,11 @@ const features = [
     "Accès à des centaines d'offres actives",
 ];
 
+interface FieldErrors {
+    email?: string;
+    password?: string;
+}
+
 export function LoginPage() {
     const { login } = useAuth();
     const navigate = useNavigate();
@@ -102,19 +106,44 @@ export function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+
     const [error, setError] = useState<string | null>(null);
+    const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
     const [loading, setLoading] = useState(false);
+
+    // Validation front-end avant soumission
+    const validateForm = (): boolean => {
+        const errors: FieldErrors = {};
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email.trim()) {
+            errors.email = "L'adresse e-mail est obligatoire.";
+        } else if (!emailRegex.test(email)) {
+            errors.email = "Adresse e-mail incorrecte (ex: nom@domaine.sn).";
+        }
+
+        if (!password) {
+            errors.password = "Le mot de passe est obligatoire.";
+        }
+
+        setFieldErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
 
     async function handleSubmit(event: FormEvent) {
         event.preventDefault();
         setError(null);
+
+        if (!validateForm()) {
+            return;
+        }
+
         setLoading(true);
 
         try {
             await login(email, password);
 
             const compte = await getMonCompte();
-
             const authorities = compte.compte.authorities;
 
             if (authorities.includes("ROLE_ADMIN")) {
@@ -126,12 +155,18 @@ export function LoginPage() {
             } else {
                 navigate("/");
             }
-        } catch (err) {
+        } catch (err: any) {
             if (err instanceof PremiereConnexionRequiredError) {
                 navigate("/premiere-connexion", { state: { email, motDePasseTemporaire: password } });
                 return;
             }
-            setError("Email ou mot de passe incorrect.");
+
+            // Message clair & orienté solution selon l'erreur rencontrée
+            if (err?.status === 401 || err?.response?.status === 401) {
+                setError("E-mail ou mot de passe incorrect. Vérifiez vos identifiants ou réinitialisez votre mot de passe.");
+            } else {
+                setError("Erreur de connexion. Vérifiez votre connexion internet et réessayez.");
+            }
         } finally {
             setLoading(false);
         }
@@ -212,7 +247,7 @@ export function LoginPage() {
 
                     <form onSubmit={handleSubmit} noValidate>
                         <div className="field">
-                            <label htmlFor="email">Adresse email</label>
+                            <label htmlFor="email">Adresse e-mail</label>
                             <div className="input-with-icon">
                                 <span className="input-with-icon__icon">
                                     <IconMail />
@@ -220,13 +255,16 @@ export function LoginPage() {
                                 <input
                                     id="email"
                                     type="email"
-                                    required
                                     autoComplete="email"
                                     value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    onChange={(e) => {
+                                        setEmail(e.target.value);
+                                        setFieldErrors((prev) => ({ ...prev, email: undefined }));
+                                    }}
                                     placeholder="votre@email.com"
                                 />
                             </div>
+                            {fieldErrors.email && <span className="field-hint field-hint--error">{fieldErrors.email}</span>}
                         </div>
 
                         <div className="field">
@@ -243,11 +281,13 @@ export function LoginPage() {
                                 <input
                                     id="password"
                                     type={showPassword ? "text" : "password"}
-                                    required
                                     autoComplete="current-password"
                                     value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    placeholder="Au moins 8 caractères"
+                                    onChange={(e) => {
+                                        setPassword(e.target.value);
+                                        setFieldErrors((prev) => ({ ...prev, password: undefined }));
+                                    }}
+                                    placeholder="Entrez votre mot de passe"
                                 />
                                 <button
                                     type="button"
@@ -258,13 +298,14 @@ export function LoginPage() {
                                     {showPassword ? <IconEyeOff /> : <IconEye />}
                                 </button>
                             </div>
+                            {fieldErrors.password && <span className="field-hint field-hint--error">{fieldErrors.password}</span>}
                         </div>
 
                         <button type="submit" className="btn btn--primary" disabled={loading}>
                             {loading ? (
                                 <>
                                     <span className="btn__spinner" aria-hidden="true" />
-                                    Connexion...
+                                    Connexion en cours...
                                 </>
                             ) : (
                                 <>

@@ -1,7 +1,8 @@
 import { type FormEvent, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { register, type RoleUtilisateur } from "../api/authService";
-import "./authPage.css"
+import "./authPage.css";
+
 function LogoMark({ size = 36, light = false }: { size?: number; light?: boolean }) {
     return (
         <span className="logo-mark" style={{ width: size, height: size }}>
@@ -136,16 +137,6 @@ function IconAlert() {
         </svg>
     );
 }
-
-function IconCheckCircle() {
-    return (
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="12" cy="12" r="9.5" stroke="currentColor" strokeWidth="1.6" />
-            <path d="M8 12.3l2.6 2.7L16.3 9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-    );
-}
-
 const featuresCandidat = [
     "Profils vérifiés, candidatures suivies en temps réel",
     "Messagerie directe avec les recruteurs",
@@ -159,37 +150,22 @@ const featuresRecruteur = [
 ];
 
 const SECTEURS_ACTIVITE = [
-    "Agriculture",
-    "Agroalimentaire",
-    "Assurance",
-    "Banque et Finance",
-    "BTP / Construction",
-    "Commerce et Distribution",
-    "Communication",
-    "Conseil",
-    "Éducation et Formation",
-    "Énergie",
-    "Environnement",
-    "Hôtellerie et Restauration",
-    "Immobilier",
-    "Industrie",
-    "Informatique / IT",
-    "Logistique et Transport",
-    "Marketing et Publicité",
-    "Médias",
-    "Mines",
-    "ONG / Associations",
-    "Pêche",
-    "Pharmaceutique",
-    "Santé",
-    "Sécurité",
-    "Services",
-    "Télécommunications",
-    "Textile",
-    "Tourisme",
-    "Administration publique",
-    "Autre",
+    "Agriculture", "Agroalimentaire", "Assurance", "Banque et Finance", "BTP / Construction",
+    "Commerce et Distribution", "Communication", "Conseil", "Éducation et Formation", "Énergie",
+    "Environnement", "Hôtellerie et Restauration", "Immobilier", "Industrie", "Informatique / IT",
+    "Logistique et Transport", "Marketing et Publicité", "Médias", "Mines", "ONG / Associations",
+    "Pêche", "Pharmaceutique", "Santé", "Sécurité", "Services", "Télécommunications",
+    "Textile", "Tourisme", "Administration publique", "Autre",
 ];
+
+interface FieldErrors {
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    password?: string;
+    nomEntreprise?: string;
+    secteurActivite?: string;
+}
 
 export function RegisterPage() {
     const [searchParams] = useSearchParams();
@@ -211,14 +187,62 @@ export function RegisterPage() {
     const [telephoneEntreprise, setTelephoneEntreprise] = useState("");
 
     const [error, setError] = useState<string | null>(null);
-    const [success] = useState(false);
+    const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
     const [loading, setLoading] = useState(false);
 
     const features = role === "RECRUTEUR" ? featuresRecruteur : featuresCandidat;
 
+    // Validation des règles métier
+    const validateForm = (): boolean => {
+        const errors: FieldErrors = {};
+
+        if (!firstName.trim()) {
+            errors.firstName = "Le prénom est obligatoire.";
+        }
+
+        if (!lastName.trim()) {
+            errors.lastName = "Le nom est obligatoire.";
+        }
+
+        // Format d'email valide
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email.trim()) {
+            errors.email = "L'adresse e-mail est obligatoire.";
+        } else if (!emailRegex.test(email)) {
+            errors.email = "Adresse e-mail incorrecte. Exemple: nom@domaine.sn";
+        }
+
+        // Complexité du mot de passe (8 car, 1 maj, 1 chiffre, 1 spécial)
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (!password) {
+            errors.password = "Le mot de passe est obligatoire.";
+        } else if (password.length < 8) {
+            errors.password = "Mot de passe trop court (8 caractères minimum).";
+        } else if (!passwordRegex.test(password)) {
+            errors.password = "Mot de passe trop faible (inclure majuscule, chiffre et caractère spécial).";
+        }
+
+        if (role === "RECRUTEUR") {
+            if (!nomEntreprise.trim()) {
+                errors.nomEntreprise = "Le nom de l'entreprise est obligatoire.";
+            }
+            if (!secteurActivite) {
+                errors.secteurActivite = "Veuillez sélectionner votre secteur d'activité.";
+            }
+        }
+
+        setFieldErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
     async function handleSubmit(event: FormEvent) {
         event.preventDefault();
         setError(null);
+
+        if (!validateForm()) {
+            return;
+        }
+
         setLoading(true);
 
         try {
@@ -233,8 +257,14 @@ export function RegisterPage() {
                     : {}),
             });
             navigate("/verification-envoyee", { state: { email } });
-        } catch {
-            setError("Impossible de créer le compte. Vérifiez vos informations et réessayez.");
+        } catch (err: any) {
+            const apiMessage = err?.response?.data?.message || err?.message || "";
+
+            if (apiMessage.includes("EMAIL_EXISTS") || apiMessage.includes("already in use") || err?.status === 409) {
+                setError("Adresse e-mail déjà utilisée. Essayez de vous connecter ou d'utiliser une autre adresse.");
+            } else {
+                setError("Erreur lors de l'enregistrement. Veuillez vérifier vos informations et réessayer.");
+            }
         } finally {
             setLoading(false);
         }
@@ -312,7 +342,11 @@ export function RegisterPage() {
                             role="tab"
                             aria-selected={role === "CANDIDAT"}
                             className={role === "CANDIDAT" ? "active" : ""}
-                            onClick={() => setRole("CANDIDAT")}
+                            onClick={() => {
+                                setRole("CANDIDAT");
+                                setFieldErrors({});
+                                setError(null);
+                            }}
                         >
                             Candidat
                         </button>
@@ -321,7 +355,11 @@ export function RegisterPage() {
                             role="tab"
                             aria-selected={role === "RECRUTEUR"}
                             className={role === "RECRUTEUR" ? "active" : ""}
-                            onClick={() => setRole("RECRUTEUR")}
+                            onClick={() => {
+                                setRole("RECRUTEUR");
+                                setFieldErrors({});
+                                setError(null);
+                            }}
                         >
                             Recruteur
                         </button>
@@ -331,15 +369,6 @@ export function RegisterPage() {
                         <div className="form-error">
                             <IconAlert />
                             <span>{error}</span>
-                        </div>
-                    )}
-                    {success && (
-                        <div className="form-success">
-                            <IconCheckCircle />
-                            <span>
-                Compte créé ! Un email de confirmation vient de vous être envoyé — vérifiez
-                votre boîte de réception avant de vous connecter.
-            </span>
                         </div>
                     )}
 
@@ -353,13 +382,17 @@ export function RegisterPage() {
                                     </span>
                                     <input
                                         id="firstName"
-                                        required
                                         value={firstName}
-                                        onChange={(e) => setFirstName(e.target.value)}
+                                        onChange={(e) => {
+                                            setFirstName(e.target.value);
+                                            setFieldErrors((prev) => ({ ...prev, firstName: undefined }));
+                                        }}
                                         placeholder="Aminata"
                                     />
                                 </div>
+                                {fieldErrors.firstName && <span className="field-hint field-hint--error">{fieldErrors.firstName}</span>}
                             </div>
+
                             <div className="field">
                                 <label htmlFor="lastName">Nom</label>
                                 <div className="input-with-icon">
@@ -368,17 +401,20 @@ export function RegisterPage() {
                                     </span>
                                     <input
                                         id="lastName"
-                                        required
                                         value={lastName}
-                                        onChange={(e) => setLastName(e.target.value)}
+                                        onChange={(e) => {
+                                            setLastName(e.target.value);
+                                            setFieldErrors((prev) => ({ ...prev, lastName: undefined }));
+                                        }}
                                         placeholder="Diop"
                                     />
                                 </div>
+                                {fieldErrors.lastName && <span className="field-hint field-hint--error">{fieldErrors.lastName}</span>}
                             </div>
                         </div>
 
                         <div className="field">
-                            <label htmlFor="email">Adresse email</label>
+                            <label htmlFor="email">Adresse e-mail</label>
                             <div className="input-with-icon">
                                 <span className="input-with-icon__icon">
                                     <IconMail />
@@ -386,13 +422,16 @@ export function RegisterPage() {
                                 <input
                                     id="email"
                                     type="email"
-                                    required
                                     autoComplete="email"
                                     value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    onChange={(e) => {
+                                        setEmail(e.target.value);
+                                        setFieldErrors((prev) => ({ ...prev, email: undefined }));
+                                    }}
                                     placeholder="votre@email.com"
                                 />
                             </div>
+                            {fieldErrors.email && <span className="field-hint field-hint--error">{fieldErrors.email}</span>}
                         </div>
 
                         <div className="field">
@@ -404,12 +443,13 @@ export function RegisterPage() {
                                 <input
                                     id="password"
                                     type={showPassword ? "text" : "password"}
-                                    required
-                                    minLength={8}
                                     autoComplete="new-password"
                                     value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    placeholder="8 caractères minimum"
+                                    onChange={(e) => {
+                                        setPassword(e.target.value);
+                                        setFieldErrors((prev) => ({ ...prev, password: undefined }));
+                                    }}
+                                    placeholder="Min. 8 car., majuscule, chiffre et spécial"
                                 />
                                 <button
                                     type="button"
@@ -420,6 +460,7 @@ export function RegisterPage() {
                                     {showPassword ? <IconEyeOff /> : <IconEye />}
                                 </button>
                             </div>
+                            {fieldErrors.password && <span className="field-hint field-hint--error">{fieldErrors.password}</span>}
                         </div>
 
                         {role === "RECRUTEUR" && (
@@ -436,12 +477,15 @@ export function RegisterPage() {
                                         </span>
                                         <input
                                             id="nomEntreprise"
-                                            required
                                             value={nomEntreprise}
-                                            onChange={(e) => setNomEntreprise(e.target.value)}
+                                            onChange={(e) => {
+                                                setNomEntreprise(e.target.value);
+                                                setFieldErrors((prev) => ({ ...prev, nomEntreprise: undefined }));
+                                            }}
                                             placeholder="Nom de votre entreprise"
                                         />
                                     </div>
+                                    {fieldErrors.nomEntreprise && <span className="field-hint field-hint--error">{fieldErrors.nomEntreprise}</span>}
                                 </div>
 
                                 <div className="field">
@@ -453,10 +497,12 @@ export function RegisterPage() {
                                         <select
                                             id="secteurActivite"
                                             value={secteurActivite}
-                                            onChange={(e) => setSecteurActivite(e.target.value)}
+                                            onChange={(e) => {
+                                                setSecteurActivite(e.target.value);
+                                                setFieldErrors((prev) => ({ ...prev, secteurActivite: undefined }));
+                                            }}
                                         >
                                             <option value="">Sélectionnez un secteur</option>
-
                                             {SECTEURS_ACTIVITE.map((secteur) => (
                                                 <option key={secteur} value={secteur}>
                                                     {secteur}
@@ -464,6 +510,7 @@ export function RegisterPage() {
                                             ))}
                                         </select>
                                     </div>
+                                    {fieldErrors.secteurActivite && <span className="field-hint field-hint--error">{fieldErrors.secteurActivite}</span>}
                                 </div>
 
                                 <div className="field">

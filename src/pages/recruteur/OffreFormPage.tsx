@@ -11,7 +11,7 @@ import {
 } from "../../api/offreService";
 import { TagListEditor } from "../../components/common/TagListEditor";
 import "../offres/offres.css";
-import {SECTEURS_ACTIVITE } from "../../constants/secteursActivite";
+import { SECTEURS_ACTIVITE } from "../../constants/secteursActivite";
 import { REGIONS_SENEGAL } from "../../constants/regions";
 import { PAYS } from "../../constants/pays";
 import { DISPONIBILITES } from "../../constants/disponibilites";
@@ -24,10 +24,16 @@ function versIso(valeurInput: string): string | undefined {
     return valeurInput ? new Date(`${valeurInput}T00:00:00`).toISOString() : undefined;
 }
 
-
 const TYPES_CONTRAT: TypeContrat[] = ["CDI", "CDD", "STAGE", "FREELANCE", "INTERIM", "ALTERNANCE", "SERVICE_CIVIQUE", "TEMPS_PARTIEL"];
 const NIVEAUX_EXPERIENCE: NiveauExperience[] = ["DEBUTANT", "JUNIOR", "INTERMEDIAIRE", "SENIOR", "EXPERT"];
 const NIVEAUX_ETUDE: NiveauEtude[] = ["AUCUN", "BAC", "BAC_2", "BAC_3", "BAC_5", "DOCTORAT"];
+
+interface FieldErrors {
+    titre?: string;
+    typeContrat?: string;
+    salaireMax?: string;
+    nombrePostes?: string;
+}
 
 export function OffreFormPage() {
     const { id } = useParams<{ id?: string }>();
@@ -37,10 +43,11 @@ export function OffreFormPage() {
     const [loading, setLoading] = useState(modeEdition);
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
 
     const [titre, setTitre] = useState("");
-    const [dateExpiration, setDateExpiration] = useState<string | undefined>(undefined);   // AJOUT ICI
-    const [dateDebut, setDateDebut] = useState<string | undefined>(undefined); 
+    const [dateExpiration, setDateExpiration] = useState<string | undefined>(undefined);
+    const [dateDebut, setDateDebut] = useState<string | undefined>(undefined);
     const [secteurActivite, setSecteurActivite] = useState("");
     const [typeContrat, setTypeContrat] = useState<TypeContrat>("CDI");
     const [pays, setPays] = useState("Sénégal");
@@ -99,7 +106,7 @@ export function OffreFormPage() {
                 setDateExpiration(offre.dateExpiration ?? undefined);
                 setDateDebut(offre.dateDebut ?? undefined);
             } catch {
-                setError("Impossible de charger cette offre.");
+                setError("Impossible de charger les données de cette offre. Veuillez rafraîchir la page.");
             } finally {
                 setLoading(false);
             }
@@ -107,9 +114,38 @@ export function OffreFormPage() {
         charger();
     }, [id, modeEdition]);
 
+    const validateForm = (): boolean => {
+        const errors: FieldErrors = {};
+
+        if (!titre.trim()) {
+            errors.titre = "Le titre du poste est obligatoire.";
+        }
+
+        if (!typeContrat) {
+            errors.typeContrat = "Veuillez choisir un type de contrat.";
+        }
+
+        if (salaireMin !== "" && salaireMax !== "" && Number(salaireMax) < Number(salaireMin)) {
+            errors.salaireMax = "Le salaire maximum doit être supérieur ou égal au salaire minimum.";
+        }
+
+        if (nombrePostes !== "" && Number(nombrePostes) < 1) {
+            errors.nombrePostes = "Le nombre de postes doit être d'au moins 1.";
+        }
+
+        setFieldErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         setError(null);
+
+        if (!validateForm()) {
+            setError("Veuillez corriger les erreurs signalées dans le formulaire avant de soumettre.");
+            return;
+        }
+
         setSaving(true);
 
         const payload: UpsertOffrePayload = {
@@ -150,7 +186,7 @@ export function OffreFormPage() {
             }
             navigate("/recruteur/offres");
         } catch {
-            setError("Impossible d'enregistrer l'offre. Vérifiez les champs obligatoires (titre, type de contrat).");
+            setError("Erreur lors de la publication de l'offre. Veuillez vérifier les champs obligatoires du formulaire.");
         } finally {
             setSaving(false);
         }
@@ -173,24 +209,33 @@ export function OffreFormPage() {
 
             {error && <div className="offre-message--error">{error}</div>}
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} noValidate>
                 <div className="offre-form-card">
                     <p className="offre-form-card__section-title">Informations générales</p>
+
                     <div className="offre-field">
                         <label htmlFor="titre">Titre du poste *</label>
-                        <input id="titre" required value={titre} onChange={(e) => setTitre(e.target.value)} placeholder="Développeur Full Stack" />
+                        <input
+                            id="titre"
+                            value={titre}
+                            onChange={(e) => {
+                                setTitre(e.target.value);
+                                setFieldErrors((prev) => ({ ...prev, titre: undefined }));
+                            }}
+                            placeholder="Ex : Développeur Full Stack"
+                        />
+                        {fieldErrors.titre && <span className="offre-field-hint--error">{fieldErrors.titre}</span>}
                     </div>
+
                     <div className="offre-field-row">
                         <div className="offre-field">
                             <label htmlFor="secteurActivite">Secteur d'activité</label>
-
                             <select
                                 id="secteurActivite"
                                 value={secteurActivite}
                                 onChange={(e) => setSecteurActivite(e.target.value)}
                             >
                                 <option value="">Sélectionnez un secteur</option>
-
                                 {SECTEURS_ACTIVITE.map((secteur) => (
                                     <option key={secteur} value={secteur}>
                                         {secteur}
@@ -198,16 +243,26 @@ export function OffreFormPage() {
                                 ))}
                             </select>
                         </div>
+
                         <div className="offre-field">
                             <label htmlFor="typeContrat">Type de contrat *</label>
-                            <select id="typeContrat" value={typeContrat} onChange={(e) => setTypeContrat(e.target.value as TypeContrat)}>
+                            <select
+                                id="typeContrat"
+                                value={typeContrat}
+                                onChange={(e) => {
+                                    setTypeContrat(e.target.value as TypeContrat);
+                                    setFieldErrors((prev) => ({ ...prev, typeContrat: undefined }));
+                                }}
+                            >
                                 {TYPES_CONTRAT.map((t) => (
                                     <option key={t} value={t}>
                                         {t}
                                     </option>
                                 ))}
                             </select>
+                            {fieldErrors.typeContrat && <span className="offre-field-hint--error">{fieldErrors.typeContrat}</span>}
                         </div>
+
                         <div className="offre-field">
                             <label htmlFor="dateExpiration">Date d'expiration</label>
                             <input
@@ -229,7 +284,7 @@ export function OffreFormPage() {
                     <div className="offre-field-row offre-field-row--3">
                         <div className="offre-field">
                             <label htmlFor="ville">Ville</label>
-                            <input id="ville" value={ville} onChange={(e) => setVille(e.target.value)} />
+                            <input id="ville" value={ville} onChange={(e) => setVille(e.target.value)} placeholder="Dakar, Thiès, etc." />
                         </div>
                         <div className="offre-field">
                             <label htmlFor="region">Région</label>
@@ -239,7 +294,6 @@ export function OffreFormPage() {
                                 onChange={(e) => setRegion(e.target.value)}
                             >
                                 <option value="">Sélectionnez une région</option>
-
                                 {REGIONS_SENEGAL.map((r) => (
                                     <option key={r} value={r}>
                                         {r}
@@ -264,7 +318,7 @@ export function OffreFormPage() {
                     </div>
                     <div className="offre-field">
                         <label htmlFor="adresse">Adresse</label>
-                        <input id="adresse" value={adresse} onChange={(e) => setAdresse(e.target.value)} />
+                        <input id="adresse" value={adresse} onChange={(e) => setAdresse(e.target.value)} placeholder="Adresse exacte des locaux" />
                     </div>
                     <div className="offre-field-row">
                         <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -282,10 +336,16 @@ export function OffreFormPage() {
                     <p className="offre-form-card__section-title">Description du poste</p>
                     <div className="offre-field">
                         <label htmlFor="description">Description</label>
-                        <textarea id="description" rows={5} value={description} onChange={(e) => setDescription(e.target.value)} />
+                        <textarea
+                            id="description"
+                            rows={5}
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            placeholder="Présentez le poste, l'équipe et les objectifs du rôle..."
+                        />
                     </div>
                     <div className="offre-field">
-                        <label>Missions</label>
+                        <label>Missions principaux</label>
                         <TagListEditor
                             values={missions}
                             onChange={setMissions}
@@ -299,7 +359,13 @@ export function OffreFormPage() {
                     <p className="offre-form-card__section-title">Profil recherché</p>
                     <div className="offre-field">
                         <label htmlFor="profilRecherche">Profil recherché</label>
-                        <textarea id="profilRecherche" rows={4} value={profilRecherche} onChange={(e) => setProfilRecherche(e.target.value)} />
+                        <textarea
+                            id="profilRecherche"
+                            rows={4}
+                            value={profilRecherche}
+                            onChange={(e) => setProfilRecherche(e.target.value)}
+                            placeholder="Décrivez les qualités et l'état d'esprit recherchés..."
+                        />
                     </div>
                     <div className="offre-field-row offre-field-row--3">
                         <div className="offre-field">
@@ -325,6 +391,7 @@ export function OffreFormPage() {
                                 min={0}
                                 value={experienceMinimum}
                                 onChange={(e) => setExperienceMinimum(e.target.value === "" ? "" : Number(e.target.value))}
+                                placeholder="0"
                             />
                         </div>
                         <div className="offre-field">
@@ -344,7 +411,7 @@ export function OffreFormPage() {
                         <TagListEditor
                             values={competences}
                             onChange={setCompetences}
-                            placeholder="Ex : Java, puis Entrée"
+                            placeholder="Ex : React, Spring Boot, puis Entrée"
                             emptyLabel="Aucune compétence ajoutée."
                         />
                     </div>
@@ -353,7 +420,7 @@ export function OffreFormPage() {
                         <TagListEditor
                             values={langues}
                             onChange={setLangues}
-                            placeholder="Ex : Français, puis Entrée"
+                            placeholder="Ex : Français, Anglais, puis Entrée"
                             emptyLabel="Aucune langue ajoutée."
                         />
                     </div>
@@ -362,7 +429,7 @@ export function OffreFormPage() {
                         <TagListEditor
                             values={certifications}
                             onChange={setCertifications}
-                            placeholder="Ex : AWS Certified, puis Entrée"
+                            placeholder="Ex : AWS Certified Developer, puis Entrée"
                             emptyLabel="Aucune certification ajoutée."
                         />
                     </div>
@@ -372,24 +439,33 @@ export function OffreFormPage() {
                     <p className="offre-form-card__section-title">Rémunération & avantages</p>
                     <div className="offre-field-row">
                         <div className="offre-field">
-                            <label htmlFor="salaireMin">Salaire minimum</label>
+                            <label htmlFor="salaireMin">Salaire minimum (FCFA)</label>
                             <input
                                 id="salaireMin"
                                 type="number"
                                 min={0}
                                 value={salaireMin}
-                                onChange={(e) => setSalaireMin(e.target.value === "" ? "" : Number(e.target.value))}
+                                onChange={(e) => {
+                                    setSalaireMin(e.target.value === "" ? "" : Number(e.target.value));
+                                    setFieldErrors((prev) => ({ ...prev, salaireMax: undefined }));
+                                }}
+                                placeholder="300000"
                             />
                         </div>
                         <div className="offre-field">
-                            <label htmlFor="salaireMax">Salaire maximum</label>
+                            <label htmlFor="salaireMax">Salaire maximum (FCFA)</label>
                             <input
                                 id="salaireMax"
                                 type="number"
                                 min={0}
                                 value={salaireMax}
-                                onChange={(e) => setSalaireMax(e.target.value === "" ? "" : Number(e.target.value))}
+                                onChange={(e) => {
+                                    setSalaireMax(e.target.value === "" ? "" : Number(e.target.value));
+                                    setFieldErrors((prev) => ({ ...prev, salaireMax: undefined }));
+                                }}
+                                placeholder="600000"
                             />
+                            {fieldErrors.salaireMax && <span className="offre-field-hint--error">{fieldErrors.salaireMax}</span>}
                         </div>
                     </div>
                     <label style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }}>
@@ -401,7 +477,7 @@ export function OffreFormPage() {
                         <TagListEditor
                             values={avantages}
                             onChange={setAvantages}
-                            placeholder="Ex : Assurance santé, puis Entrée"
+                            placeholder="Ex : Mutuelle de santé, Ordinateur fourni, puis Entrée"
                             emptyLabel="Aucun avantage ajouté."
                         />
                     </div>
@@ -417,8 +493,12 @@ export function OffreFormPage() {
                                 type="number"
                                 min={1}
                                 value={nombrePostes}
-                                onChange={(e) => setNombrePostes(e.target.value === "" ? "" : Number(e.target.value))}
+                                onChange={(e) => {
+                                    setNombrePostes(e.target.value === "" ? "" : Number(e.target.value));
+                                    setFieldErrors((prev) => ({ ...prev, nombrePostes: undefined }));
+                                }}
                             />
+                            {fieldErrors.nombrePostes && <span className="offre-field-hint--error">{fieldErrors.nombrePostes}</span>}
                         </div>
                         <div className="offre-field">
                             <label htmlFor="disponibiliteSouhaitee">Disponibilité souhaitée</label>
@@ -428,7 +508,6 @@ export function OffreFormPage() {
                                 onChange={(e) => setDisponibiliteSouhaitee(e.target.value)}
                             >
                                 <option value="">Sélectionnez une disponibilité</option>
-
                                 {DISPONIBILITES.map((d) => (
                                     <option key={d} value={d}>
                                         {d}
@@ -439,7 +518,7 @@ export function OffreFormPage() {
                     </div>
                     <div className="offre-field">
                         <label htmlFor="horaires">Horaires</label>
-                        <input id="horaires" value={horaires} onChange={(e) => setHoraires(e.target.value)} placeholder="Temps plein, 9h-18h" />
+                        <input id="horaires" value={horaires} onChange={(e) => setHoraires(e.target.value)} placeholder="Ex : Temps plein, 8h30-17h00" />
                     </div>
                 </div>
 

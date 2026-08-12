@@ -25,9 +25,19 @@ function formatDate(iso: string | null): string {
     return new Date(iso).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
 }
 
+function isValidUrl(url: string): boolean {
+    if (!url.trim()) return true;
+    try {
+        const parsed = new URL(url);
+        return parsed.protocol === "http:" || parsed.protocol === "https:";
+    } catch {
+        return false;
+    }
+}
+
 function IconCamera() {
     return (
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path
                 d="M4 8.5C4 7.67 4.67 7 5.5 7H8l1-2h6l1 2h2.5c.83 0 1.5.67 1.5 1.5v9c0 .83-.67 1.5-1.5 1.5h-14C4.67 19 4 18.33 4 17.5v-9Z"
                 stroke="currentColor"
@@ -41,7 +51,7 @@ function IconCamera() {
 
 function IconDocument() {
     return (
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path
                 d="M7 3.5h7l4 4v12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-15a1 1 0 0 1 1-1Z"
                 stroke="currentColor"
@@ -81,8 +91,8 @@ export function ProfilCandidatPage() {
     const [loading, setLoading] = useState(true);
     const [loadError, setLoadError] = useState<string | null>(null);
     const [saving, setSaving] = useState(false);
+    const [saveSuccessMsg, setSaveSuccessMsg] = useState<string | null>(null);
 
-    // Score de complétion calculé par le backend
     const [scoreCompletion, setScoreCompletion] = useState<number>(0);
 
     const [telephone, setTelephone] = useState("");
@@ -130,44 +140,48 @@ export function ProfilCandidatPage() {
     const cvInputRef = useRef<HTMLInputElement>(null);
     const lmInputRef = useRef<HTMLInputElement>(null);
 
+    const applyProfileData = (data: ProfilCandidatDTO) => {
+        setTelephone(data.telephone ?? "");
+        setAdresse(data.adresse ?? "");
+        setSexe(data.sexe ?? "");
+        setVille(data.ville ?? "");
+        setRegion(data.region ?? "");
+        setPays(data.pays ?? "");
+        setMobilite(data.mobilite ?? false);
+        setTeletravail(data.teletravail ?? false);
+
+        setTitreProfessionnel(data.titreProfessionnel ?? "");
+        setAPropos(data.aPropos ?? "");
+        setNiveauExperience(data.niveauExperience ?? "");
+        setAnneesExperience(data.anneesExperience ?? "");
+        setDisponibilite(data.disponibilite ?? "");
+
+        setFormations(data.formations ?? []);
+        setCertifications(data.certifications ?? []);
+        setLangues(data.langues ?? []);
+        setCompetences(data.competences ?? []);
+
+        setLinkedin(data.linkedin ?? "");
+        setGithub(data.github ?? "");
+        setPortfolio(data.portfolio ?? "");
+
+        setCvPresent(data.cvPresent);
+        setCvOriginalFilename(data.cvOriginalFilename);
+        setLmPresente(data.lettreMotivationPresente);
+        setLmOriginalFilename(data.lettreMotivationOriginalFilename);
+
+        setDateCreation(data.dateCreation);
+        setDateMaj(data.dateMaj);
+
+        const scoreVal = data.score?.percentage ?? data.scoreCompletion ?? data.pourcentageCompletion ?? 0;
+        setScoreCompletion(scoreVal);
+    };
+
     useEffect(() => {
         async function charger() {
             try {
-                const data: ProfilCandidatDTO = await getMonProfilCandidat();
-                setTelephone(data.telephone ?? "");
-                setAdresse(data.adresse ?? "");
-                setSexe(data.sexe ?? "");
-                setVille(data.ville ?? "");
-                setRegion(data.region ?? "");
-                setPays(data.pays ?? "");
-                setMobilite(data.mobilite ?? false);
-                setTeletravail(data.teletravail ?? false);
-
-                setTitreProfessionnel(data.titreProfessionnel ?? "");
-                setAPropos(data.aPropos ?? "");
-                setNiveauExperience(data.niveauExperience ?? "");
-                setAnneesExperience(data.anneesExperience ?? "");
-                setDisponibilite(data.disponibilite ?? "");
-
-                setFormations(data.formations ?? []);
-                setCertifications(data.certifications ?? []);
-                setLangues(data.langues ?? []);
-                setCompetences(data.competences ?? []);
-
-                setLinkedin(data.linkedin ?? "");
-                setGithub(data.github ?? "");
-                setPortfolio(data.portfolio ?? "");
-
-                setCvPresent(data.cvPresent);
-                setCvOriginalFilename(data.cvOriginalFilename);
-                setLmPresente(data.lettreMotivationPresente);
-                setLmOriginalFilename(data.lettreMotivationOriginalFilename);
-
-                setDateCreation(data.dateCreation);
-                setDateMaj(data.dateMaj);
-
-                const scoreVal = data.score?.percentage ?? data.scoreCompletion ?? data.pourcentageCompletion ?? 0;
-                setScoreCompletion(scoreVal);
+                const data = await getMonProfilCandidat();
+                applyProfileData(data);
 
                 if (data.photoPresente) {
                     const url = await obtenirPhotoCandidatUrl();
@@ -210,21 +224,32 @@ export function ProfilCandidatPage() {
         !loading
     );
 
-    // 🚀 Action manuelle pour tout enregistrer et rafraîchir
+    // Enregistrement global sans rechargement de page
     async function handleEnregistrerEtRafraichir() {
+        setSaveSuccessMsg(null);
+        setLoadError(null);
+
+        if (!isValidUrl(linkedin) || !isValidUrl(github) || !isValidUrl(portfolio)) {
+            setLoadError("Certaines URLs saisies dans la section Réseaux ne sont pas valides (ex: https://...).");
+            return;
+        }
+
         try {
             setSaving(true);
-            await updateMonProfilCandidat({
+            const updated = await updateMonProfilCandidat({
                 telephone, adresse, sexe, ville, region, pays, mobilite, teletravail,
                 titreProfessionnel, aPropos, niveauExperience,
                 anneesExperience: anneesExperience === "" ? undefined : Number(anneesExperience),
                 disponibilite, formations, certifications, langues, competences,
                 linkedin, github, portfolio,
             });
-            // Rechargement direct de la page
-            window.location.reload();
+
+            applyProfileData(updated);
+            setSaveSuccessMsg("Profil mis à jour avec succès !");
+            setTimeout(() => setSaveSuccessMsg(null), 4000);
         } catch {
-            setLoadError("Erreur lors de la sauvegarde complète des modifications.");
+            setLoadError("Erreur lors de la sauvegarde globale des modifications.");
+        } finally {
             setSaving(false);
         }
     }
@@ -238,9 +263,7 @@ export function ProfilCandidatPage() {
             const updated = await uploaderPhotoCandidat(file);
             setDateMaj(updated.dateMaj);
             const scoreVal = updated.score?.percentage ?? updated.scoreCompletion ?? updated.pourcentageCompletion;
-            if (scoreVal !== undefined) {
-                setScoreCompletion(scoreVal);
-            }
+            if (scoreVal !== undefined) setScoreCompletion(scoreVal);
 
             if (photoUrl) URL.revokeObjectURL(photoUrl);
             const url = await obtenirPhotoCandidatUrl();
@@ -257,6 +280,12 @@ export function ProfilCandidatPage() {
     async function handleCvChange(e: React.ChangeEvent<HTMLInputElement>) {
         const file = e.target.files?.[0];
         if (!file) return;
+
+        if (file.type !== "application/pdf") {
+            setCvError("Le fichier CV doit être au format PDF.");
+            return;
+        }
+
         setCvError(null);
         setCvUploading(true);
         try {
@@ -265,9 +294,7 @@ export function ProfilCandidatPage() {
             setCvOriginalFilename(updated.cvOriginalFilename);
             setDateMaj(updated.dateMaj);
             const scoreVal = updated.score?.percentage ?? updated.scoreCompletion ?? updated.pourcentageCompletion;
-            if (scoreVal !== undefined) {
-                setScoreCompletion(scoreVal);
-            }
+            if (scoreVal !== undefined) setScoreCompletion(scoreVal);
         } catch {
             setCvError("Échec de l'envoi. Le fichier doit être un PDF (5 Mo max).");
         } finally {
@@ -279,6 +306,12 @@ export function ProfilCandidatPage() {
     async function handleLmChange(e: React.ChangeEvent<HTMLInputElement>) {
         const file = e.target.files?.[0];
         if (!file) return;
+
+        if (file.type !== "application/pdf") {
+            setLmError("La lettre de motivation doit être au format PDF.");
+            return;
+        }
+
         setLmError(null);
         setLmUploading(true);
         try {
@@ -287,9 +320,7 @@ export function ProfilCandidatPage() {
             setLmOriginalFilename(updated.lettreMotivationOriginalFilename);
             setDateMaj(updated.dateMaj);
             const scoreVal = updated.score?.percentage ?? updated.scoreCompletion ?? updated.pourcentageCompletion;
-            if (scoreVal !== undefined) {
-                setScoreCompletion(scoreVal);
-            }
+            if (scoreVal !== undefined) setScoreCompletion(scoreVal);
         } catch {
             setLmError("Échec de l'envoi. Le fichier doit être un PDF (5 Mo max).");
         } finally {
@@ -361,7 +392,7 @@ export function ProfilCandidatPage() {
                 </div>
 
                 <div className="profil-sidebar-card">
-                    <nav className="profil-nav">
+                    <nav className="profil-nav" aria-label="Navigation profil">
                         <a href="#coordonnees">Coordonnées</a>
                         <a href="#pro">Infos pro</a>
                         <a href="#parcours">Parcours</a>
@@ -374,6 +405,7 @@ export function ProfilCandidatPage() {
 
             <div className="profil-content">
                 {loadError && <div className="profil-message profil-message--error">{loadError}</div>}
+                {saveSuccessMsg && <div className="profil-message profil-message--success">{saveSuccessMsg}</div>}
 
                 {/* Coordonnées */}
                 <div className="profil-card" id="coordonnees">
@@ -449,7 +481,7 @@ export function ProfilCandidatPage() {
                         label="Titre professionnel"
                         value={titreProfessionnel}
                         onSave={setTitreProfessionnel}
-                        placeholder="Développeur Full Stack Java/Angular"
+                        placeholder="Développeur Front-End & UX/UI Designer"
                     />
                     <EditableTextarea
                         id="aPropos"
@@ -498,14 +530,14 @@ export function ProfilCandidatPage() {
                     <TagListEditor
                         values={formations}
                         onChange={setFormations}
-                        placeholder="Ex : Licence Informatique - UCAD (2022), puis Entrée"
+                        placeholder="Ex : Licence Informatique - UCAD (2024), puis Entrée"
                         emptyLabel="Aucune formation ajoutée pour l'instant."
                     />
                     <p className="profil-card__subtitle">Certifications</p>
                     <TagListEditor
                         values={certifications}
                         onChange={setCertifications}
-                        placeholder="Ex : AWS Certified Cloud Practitioner (2024), puis Entrée"
+                        placeholder="Ex : AWS Certified Cloud Practitioner (2025), puis Entrée"
                         emptyLabel="Aucune certification ajoutée pour l'instant."
                     />
                 </div>
@@ -522,7 +554,7 @@ export function ProfilCandidatPage() {
                     <TagListEditor
                         values={competences}
                         onChange={setCompetences}
-                        placeholder="Tapez une compétence puis Entrée (ex : Java, Spring Boot)"
+                        placeholder="Tapez une compétence puis Entrée (ex : React, TypeScript, Figma)"
                         emptyLabel="Aucune compétence ajoutée pour l'instant."
                     />
                     <p className="profil-card__subtitle">Langues</p>
@@ -617,7 +649,7 @@ export function ProfilCandidatPage() {
                     </div>
                 </div>
 
-                {/* Meta */}
+                {/* Métadonnées */}
                 <div className="profil-card">
                     <div className="profil-card__header">
                         <div className="profil-card__icon profil-card__icon--blue">
@@ -637,7 +669,7 @@ export function ProfilCandidatPage() {
                     </div>
                 </div>
 
-                {/* 🔽 Bouton global de sauvegarde en bas de page */}
+                {/* Bouton global de sauvegarde */}
                 <div className="profil-actions-footer">
                     <button
                         type="button"
@@ -645,7 +677,7 @@ export function ProfilCandidatPage() {
                         onClick={handleEnregistrerEtRafraichir}
                         disabled={saving}
                     >
-                        {saving ? "Enregistrement..." : "Enregistrer toutes les modifications"}
+                        {saving ? "Enregistrement en cours..." : "Enregistrer toutes les modifications"}
                     </button>
                 </div>
 
