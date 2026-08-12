@@ -165,8 +165,9 @@ export function ProfilCandidatPage() {
                 setDateCreation(data.dateCreation);
                 setDateMaj(data.dateMaj);
 
-                // Initialisation du score
-                setScoreCompletion(data.scoreCompletion ?? data.pourcentageCompletion ?? 0);
+                // Extraction du score depuis score.percentage (avec fallbacks)
+                const scoreVal = data.score?.percentage ?? data.scoreCompletion ?? data.pourcentageCompletion ?? 0;
+                setScoreCompletion(scoreVal);
 
                 if (data.photoPresente) {
                     const url = await obtenirPhotoCandidatUrl();
@@ -200,8 +201,10 @@ export function ProfilCandidatPage() {
                 anneesExperience: value.anneesExperience === "" ? undefined : Number(value.anneesExperience),
             });
             setDateMaj(updated.dateMaj);
-            const score = updated.scoreCompletion ?? updated.pourcentageCompletion;
-            if (score !== undefined) setScoreCompletion(score);
+            const scoreVal = updated.score?.percentage ?? updated.scoreCompletion ?? updated.pourcentageCompletion;
+            if (scoreVal !== undefined) {
+                setScoreCompletion(scoreVal);
+            }
         },
         900,
         !loading
@@ -215,8 +218,10 @@ export function ProfilCandidatPage() {
         try {
             const updated = await uploaderPhotoCandidat(file);
             setDateMaj(updated.dateMaj);
-            const score = updated.scoreCompletion ?? updated.pourcentageCompletion;
-            if (score !== undefined) setScoreCompletion(score);
+            const scoreVal = updated.score?.percentage ?? updated.scoreCompletion ?? updated.pourcentageCompletion;
+            if (scoreVal !== undefined) {
+                setScoreCompletion(scoreVal);
+            }
 
             if (photoUrl) URL.revokeObjectURL(photoUrl);
             const url = await obtenirPhotoCandidatUrl();
@@ -240,8 +245,10 @@ export function ProfilCandidatPage() {
             setCvPresent(updated.cvPresent);
             setCvOriginalFilename(updated.cvOriginalFilename);
             setDateMaj(updated.dateMaj);
-            const score = updated.scoreCompletion ?? updated.pourcentageCompletion;
-            if (score !== undefined) setScoreCompletion(score);
+            const scoreVal = updated.score?.percentage ?? updated.scoreCompletion ?? updated.pourcentageCompletion;
+            if (scoreVal !== undefined) {
+                setScoreCompletion(scoreVal);
+            }
         } catch {
             setCvError("Échec de l'envoi. Le fichier doit être un PDF (5 Mo max).");
         } finally {
@@ -260,8 +267,10 @@ export function ProfilCandidatPage() {
             setLmPresente(updated.lettreMotivationPresente);
             setLmOriginalFilename(updated.lettreMotivationOriginalFilename);
             setDateMaj(updated.dateMaj);
-            const score = updated.scoreCompletion ?? updated.pourcentageCompletion;
-            if (score !== undefined) setScoreCompletion(score);
+            const scoreVal = updated.score?.percentage ?? updated.scoreCompletion ?? updated.pourcentageCompletion;
+            if (scoreVal !== undefined) {
+                setScoreCompletion(scoreVal);
+            }
         } catch {
             setLmError("Échec de l'envoi. Le fichier doit être un PDF (5 Mo max).");
         } finally {

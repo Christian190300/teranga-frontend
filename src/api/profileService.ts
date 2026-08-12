@@ -1,6 +1,16 @@
 import { httpClient } from "./httpClient";
 
 // ---------------------------------------------------------------------------
+// Score / Progression
+// ---------------------------------------------------------------------------
+
+export interface ProfileScoreDTO {
+    percentage: number;
+    isComplete: boolean;
+    pendingSteps: string[];
+}
+
+// ---------------------------------------------------------------------------
 // Candidat
 // ---------------------------------------------------------------------------
 
@@ -22,6 +32,7 @@ export interface ProfilCandidatDTO {
     niveauExperience: string | null;
     anneesExperience: number | null;
     disponibilite: string | null;
+    niveauEtude?: string | null;
 
     formations: string[] | null;
     certifications: string[] | null;
@@ -43,7 +54,10 @@ export interface ProfilCandidatDTO {
     lettreMotivationContentType: string | null;
     lettreMotivationPresente: boolean;
 
-    // Score de complétion calculé à la volée par le backend (en %)
+    // Structure du score retournée par le backend
+    score?: ProfileScoreDTO;
+
+    // Fallbacks si nécessaires
     scoreCompletion?: number;
     pourcentageCompletion?: number;
 
@@ -65,6 +79,7 @@ export interface UpdateProfilCandidatPayload {
     niveauExperience?: string;
     anneesExperience?: number;
     disponibilite?: string;
+    niveauEtude?: string;
     formations?: string[];
     certifications?: string[];
     langues?: string[];
