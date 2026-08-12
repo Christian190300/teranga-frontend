@@ -644,7 +644,7 @@ body {
    ========================================================================== */
 
 .navbar__bottom-nav {
-    display: none; /* Masqué sur écran d'ordinateur */
+    display: none;
 }
 
 @media (max-width: 768px) {
@@ -654,19 +654,18 @@ body {
         bottom: 0;
         left: 0;
         right: 0;
-        height: 72px; /* LÉGÈREMENT PLUS HAUT (passé de 64px à 72px) */
+        height: 76px;
         background-color: #ffffff;
-        border-top: 1px solid #e2e8f0;
+        border-top: 1.5px solid #e2e8f0;
         box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
         z-index: 999;
         justify-content: space-around;
         align-items: center;
-        padding: 6px 4px;
+        padding: 6px 0;
     }
 
-    /* Marge globale sous la page pour ne rien masquer tout en bas */
     body {
-        padding-bottom: 72px;
+        padding-bottom: 76px;
     }
 
     .navbar__bottom-item {
@@ -676,24 +675,20 @@ body {
         justify-content: center;
         flex: 1;
         text-decoration: none;
-        color: #475569;
-        font-size: 0.85rem; /* PLUS GRAND (passé de 0.75rem à 0.85rem) */
+        color: #0d4b82; /* Bleu principal EmploiSénégal */
+        font-size: 0.95rem;
         font-weight: 600;
-        gap: 4px;
-        transition: all 0.2s ease-in-out;
+        gap: 3px;
     }
 
-    /* TAILE DES ICÔNES AUMENTÉE */
     .navbar__bottom-icon {
-        width: 26px; /* PLUS GRAND (passé de 22px à 26px) */
-        height: 26px;
+        width: 36px;
+        height: 36px;
     }
 
-    /* État survol / lien actif */
-    .navbar__bottom-item:hover,
+    /* Traitement spécifique de l'élément actif (ex: Rouge sur Accueil) */
     .navbar__bottom-item.active {
-        color: #d1790a; /* Couleur d'accentuation */
+        color: #d1790a; /* Rouge modèle */
         font-weight: 700;
-        transform: translateY(-1px);
     }
 }

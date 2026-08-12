@@ -9,6 +9,10 @@ interface NavLinkItem {
     label: string;
 }
 
+interface IconProps {
+    className?: string;
+}
+
 const candidatLinks: NavLinkItem[] = [
     { to: "/offres", label: "Offres d'emploi" },
     { to: "/candidat/offres-recommandees", label: "Recommandées pour vous" },
@@ -36,22 +40,41 @@ const visiteurRecruteurLinks: NavLinkItem[] = [
     { to: "/inscription?role=recruteur", label: "Créer un compte recruteur" },
 ];
 
-/* ---------- Icônes SVG ---------- */
+/* ---------- Icônes SVG Ajustées ---------- */
 
-function IconHome() {
+function IconHome({ className = "navbar__bottom-icon" }: IconProps) {
     return (
-        <svg className="navbar__bottom-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            <polyline points="9 22 9 12 15 12 15 22" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <svg className={className} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
         </svg>
     );
 }
 
-function IconSearch() {
+function IconSearch({ className = "navbar__bottom-icon" }: IconProps) {
     return (
-        <svg className="navbar__bottom-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2" />
-            <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+        <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2.8" />
+            <path d="M16 16L21 21" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" />
+        </svg>
+    );
+}
+
+function IconUserCircle({ className = "navbar__bottom-icon" }: IconProps) {
+    return (
+        <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
+            <circle cx="12" cy="9.5" r="3.5" fill="currentColor" />
+            <path d="M12 14c-3.2 0-5.5 1.8-6 4 1.5 2 4 3 6 3s4.5-1 6-3c-.5-2.2-2.8-4-6-4z" fill="currentColor" />
+        </svg>
+    );
+}
+
+function IconRecruiterCircle({ className = "navbar__bottom-icon" }: IconProps) {
+    return (
+        <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
+            <path d="M12 6a3 3 0 100 6 3 3 0 000-6z" fill="currentColor" />
+            <path d="M12 13c-2.5 0-4.5 1.2-5 3 .8 1.5 2.5 2.5 5 2.5s4.2-1 5-2.5c-.5-1.8-2.5-3-5-3z" fill="currentColor" />
         </svg>
     );
 }
@@ -64,18 +87,18 @@ function IconChevron() {
     );
 }
 
-function IconUser() {
+function IconUser({ className = "navbar__icon" }: IconProps) {
     return (
-        <svg className="navbar__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="2" />
             <path d="M4 20c0-4 3.5-6 8-6s8 2 8 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
         </svg>
     );
 }
 
-function IconBriefcase() {
+function IconBriefcase({ className = "navbar__icon" }: IconProps) {
     return (
-        <svg className="navbar__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="3" y="7" width="18" height="13" rx="2" stroke="currentColor" strokeWidth="2" />
             <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor" strokeWidth="2" />
             <path d="M3 12h18" stroke="currentColor" strokeWidth="2" />
@@ -83,9 +106,9 @@ function IconBriefcase() {
     );
 }
 
-function IconLogin() {
+function IconLogin({ className = "navbar__icon" }: IconProps) {
     return (
-        <svg className="navbar__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M11 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             <path d="M15 8l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             <path d="M19 12H9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
@@ -93,9 +116,9 @@ function IconLogin() {
     );
 }
 
-function IconUserPlus() {
+function IconUserPlus({ className = "navbar__icon" }: IconProps) {
     return (
-        <svg className="navbar__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="9" cy="8" r="4" stroke="currentColor" strokeWidth="2" />
             <path d="M2 20c0-4 3-6 7-6s7 2 7 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
             <path d="M19 8v6M16 11h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
@@ -384,7 +407,7 @@ export function Navbar() {
                 </div>
             </header>
 
-            {/* ---------- Bottom Nav Mobile (Visible uniquement quand non connecté sur mobile) ---------- */}
+            {/* ---------- Bottom Nav Mobile (Visible uniquement pour les visiteurs sur mobile) ---------- */}
             {!isAuthenticated && (
                 <nav className="navbar__bottom-nav" aria-label="Navigation principale mobile">
                     <NavLink to="/" end className={({ isActive }) => `navbar__bottom-item ${isActive ? "active" : ""}`}>
@@ -398,12 +421,12 @@ export function Navbar() {
                     </NavLink>
 
                     <NavLink to="/inscription?role=candidat" className={({ isActive }) => `navbar__bottom-item ${isActive ? "active" : ""}`}>
-                        <IconUser />
+                        <IconUserCircle />
                         <span>Candidat</span>
                     </NavLink>
 
                     <NavLink to="/inscription?role=recruteur" className={({ isActive }) => `navbar__bottom-item ${isActive ? "active" : ""}`}>
-                        <IconBriefcase />
+                        <IconRecruiterCircle />
                         <span>Recruteur</span>
                     </NavLink>
                 </nav>
