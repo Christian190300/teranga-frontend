@@ -38,6 +38,7 @@ import { CandidatsMatchesPage } from "./pages/recruteur/CandidatsMatchesPage";
 import { OffresRecommandeesPage } from "./pages/candidat/OffresRecommandeesPage";
 import { VerifyEmailPage } from "./pages/VerifyEmailPage.tsx";
 import { VerificationEnvoyeePage } from "./pages/VerificationEnvoyeePage.tsx";
+import { ProfilWidget } from "./components/common/ProfilWidget";
 
 export default function App() {
     return (
@@ -86,6 +87,7 @@ export default function App() {
                             <Route path="/verifier-email" element={<VerifyEmailPage />} />
                             <Route path="/verification-envoyee" element={<VerificationEnvoyeePage />} />
                         </Routes>
+                        <ProfilWidget />
                     </AppLayout>
                 </MaintenanceGuard>
                 <footer />

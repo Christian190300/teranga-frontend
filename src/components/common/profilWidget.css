@@ -1,0 +1,135 @@
+.profil-widget-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-family: 'Inter', -apple-system, sans-serif;
+}
+
+/* Bouton Cercle Flottant */
+.profil-widget-btn {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #14294d;
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 4px 16px rgba(20, 41, 77, 0.25);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    animation: floatAnimation 3s infinite ease-in-out;
+}
+
+.profil-widget-btn:hover {
+    background: #1e3a6b;
+    transform: scale(1.08);
+}
+
+.profil-widget-btn svg {
+    width: 24px;
+    height: 24px;
+}
+
+.profil-widget-badge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background: #d1790a;
+    color: #ffffff;
+    font-size: 0.72rem;
+    font-weight: 800;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Bannière */
+.profil-widget-banner {
+    background: #ffffff;
+    border: 1px solid #e5e7ee;
+    border-left: 4px solid #d1790a;
+    box-shadow: 0 10px 25px rgba(20, 41, 77, 0.15);
+    border-radius: 12px;
+    padding: 16px 36px 16px 16px;
+    margin-bottom: 12px;
+    max-width: 300px;
+    position: relative;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px) scale(0.95);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.profil-widget-banner.is-open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+.profil-widget-content p {
+    margin: 0 0 6px 0;
+    font-size: 0.86rem;
+    color: #14294d;
+    line-height: 1.45;
+}
+
+.profil-widget-content p:last-child {
+    margin-bottom: 0;
+}
+
+/* Lien "Cliquez ici" */
+.profil-widget-link {
+    color: #d1790a;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.profil-widget-link:hover {
+    color: #b56808;
+}
+
+/* Croix de fermeture */
+.profil-widget-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    color: #9aa1ac;
+    cursor: pointer;
+    padding: 2px 6px;
+}
+
+@keyframes floatAnimation {
+    0%, 100% {
+        transform: translateY(0);
+        box-shadow: 0 4px 16px rgba(20, 41, 77, 0.25);
+    }
+    50% {
+        transform: translateY(-6px);
+        box-shadow: 0 8px 20px rgba(20, 41, 77, 0.35);
+    }
+}
+
+@media (max-width: 480px) {
+    .profil-widget-container {
+        bottom: 16px;
+        right: 16px;
+    }
+    .profil-widget-banner {
+        max-width: calc(100vw - 32px);
+    }
+}
