@@ -1,5 +1,5 @@
 /* ============================================================
-   PROFIL CANDIDAT — design dashboard, carte profil + cartes contenu
+   PROFIL CANDIDAT — Design Dashboard Responsive & Design System
    ============================================================ */
 
 :root {
@@ -30,6 +30,7 @@
     box-sizing: border-box;
 }
 
+/* ---------- Layout Principal (Desktop) ---------- */
 .profil-page {
     max-width: 1280px;
     width: 94%;
@@ -44,16 +45,6 @@
         "sidebar content";
     gap: 20px 24px;
     align-items: start;
-}
-
-@media (max-width: 900px) {
-    .profil-page {
-        grid-template-columns: 1fr;
-        grid-template-areas:
-            "header"
-            "sidebar"
-            "content";
-    }
 }
 
 /* ---------- Header ---------- */
@@ -86,7 +77,7 @@
     font-size: 0.92rem;
 }
 
-/* ---------- Carte profil (sidebar gauche) ---------- */
+/* ---------- Sidebar (Gauche) ---------- */
 .profil-sidebar {
     grid-area: sidebar;
     position: sticky;
@@ -225,12 +216,12 @@
     background: var(--pc-danger-bg);
 }
 
-/* ---------- Nav sections (dans la carte sidebar) ---------- */
+/* Navigation des ancres */
 .profil-nav {
     display: flex;
     flex-direction: column;
     gap: 2px;
-    padding: 6px;
+    padding: 2px;
 }
 
 .profil-nav a {
@@ -250,23 +241,61 @@
     color: var(--pc-navy);
 }
 
-@media (max-width: 900px) {
-    .profil-sidebar {
-        position: static;
-    }
-
-    .profil-sidebar-card:last-child .profil-nav {
-        flex-direction: row;
-        overflow-x: auto;
-        gap: 4px;
-    }
-
-    .profil-nav a {
-        white-space: nowrap;
-        flex-shrink: 0;
-    }
+/* ---------- Score de complétion ---------- */
+.profil-completion {
+    background: white;
+    border: 1px solid var(--pc-border-soft);
+    border-radius: var(--pc-radius-lg);
+    box-shadow: var(--pc-shadow-card);
+    padding: 18px 20px;
 }
 
+.profil-completion__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.profil-completion__title {
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: var(--pc-navy);
+}
+
+.profil-completion__badge {
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: var(--pc-navy);
+    background: var(--pc-bg-tint);
+    padding: 3px 8px;
+    border-radius: 999px;
+    border: 1px solid #cddcf5;
+}
+
+.profil-completion__track {
+    width: 100%;
+    height: 8px;
+    background: var(--pc-bg-muted);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.profil-completion__fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--pc-gold-soft) 0%, var(--pc-gold) 100%);
+    border-radius: 999px;
+    transition: width 0.4s ease;
+}
+
+.profil-completion__hint {
+    font-size: 0.76rem;
+    color: var(--pc-text-faint);
+    margin-top: 8px;
+    line-height: 1.4;
+}
+
+/* ---------- Zones de Contenu & Cartes ---------- */
 .profil-content {
     grid-area: content;
     min-width: 0;
@@ -275,7 +304,6 @@
     gap: 16px;
 }
 
-/* ---------- Cards de contenu ---------- */
 .profil-card {
     background: white;
     border: 1px solid var(--pc-border-soft);
@@ -283,12 +311,6 @@
     box-shadow: var(--pc-shadow-card);
     padding: 26px 28px;
     scroll-margin-top: 24px;
-}
-
-@media (max-width: 640px) {
-    .profil-card {
-        padding: 20px 18px;
-    }
 }
 
 .profil-card__header {
@@ -341,32 +363,7 @@
     border-top: 1px solid var(--pc-border-soft);
 }
 
-/* ---------- Input fichier caché ---------- */
-.profil-file-input-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    border: 0;
-}
-
-.profil-upload-btn--disabled {
-    opacity: 0.55;
-    cursor: not-allowed;
-    pointer-events: none;
-}
-
-.profil-field__hint {
-    font-size: 0.78rem;
-    color: var(--pc-text-faint);
-    margin: 8px 0 0;
-    line-height: 1.5;
-}
-
-/* ---------- Champs ---------- */
+/* ---------- Inputs & Formulaires ---------- */
 .profil-field {
     margin-bottom: 20px;
 }
@@ -393,7 +390,7 @@
     border: 1.5px solid var(--pc-border);
     border-radius: var(--pc-radius-sm);
     font-family: inherit;
-    font-size: 16px;
+    font-size: 16px; /* Empêche le zoom automatique sur iOS */
     background: var(--pc-bg-muted);
     color: var(--pc-navy);
     transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
@@ -410,7 +407,6 @@
 
 .profil-field select.profil-field__select--with-actions {
     background-image: none;
-    cursor: pointer;
 }
 
 .profil-field textarea {
@@ -439,6 +435,7 @@
     box-shadow: 0 0 0 3px rgba(200, 149, 30, 0.14);
 }
 
+/* Grilles de formulaires */
 .profil-field-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -446,17 +443,12 @@
 }
 
 .profil-field-row--3 {
+    display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
 }
 
-@media (max-width: 640px) {
-    .profil-field-row,
-    .profil-field-row--3 {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* ---------- Champ éditable (icônes ✓ / ✕) ---------- */
+/* ---------- Champs Éditables (Boutons Valider / Annuler) ---------- */
 .profil-field__editable {
     position: relative;
 }
@@ -515,6 +507,7 @@
 .profil-field__icon-btn--save {
     color: var(--pc-success);
 }
+
 .profil-field__icon-btn--save:hover {
     background: var(--pc-success-bg);
 }
@@ -522,11 +515,19 @@
 .profil-field__icon-btn--cancel {
     color: var(--pc-danger);
 }
+
 .profil-field__icon-btn--cancel:hover {
     background: var(--pc-danger-bg);
 }
 
-/* ---------- Toggles ---------- */
+.profil-field__hint {
+    font-size: 0.78rem;
+    color: var(--pc-text-faint);
+    margin: 8px 0 0;
+    line-height: 1.5;
+}
+
+/* ---------- Toggles (Switchs) ---------- */
 .profil-toggle-row {
     display: flex;
     flex-wrap: wrap;
@@ -566,7 +567,24 @@
     color: var(--pc-navy);
 }
 
-/* ---------- Documents ---------- */
+/* ---------- Téléversement & Fichiers ---------- */
+.profil-file-input-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+.profil-upload-btn--disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
 .profil-file-card {
     display: flex;
     align-items: center;
@@ -575,7 +593,6 @@
     background: var(--pc-bg-muted);
     border: 1px solid var(--pc-border);
     border-radius: var(--pc-radius-md);
-    flex-wrap: wrap;
 }
 
 .profil-file-card__icon {
@@ -597,7 +614,7 @@
 
 .profil-file-card__info {
     flex: 1;
-    min-width: 120px;
+    min-width: 0; /* Permet à la troncature texte de fonctionner */
 }
 
 .profil-file-card__name {
@@ -666,38 +683,7 @@
     color: var(--pc-text-faint);
 }
 
-/* ---------- Meta ---------- */
-.profil-meta {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-}
-
-@media (max-width: 560px) {
-    .profil-meta {
-        grid-template-columns: 1fr;
-    }
-}
-
-.profil-meta__item {
-    background: var(--pc-bg-muted);
-    border-radius: var(--pc-radius-md);
-    padding: 14px 16px;
-}
-
-.profil-meta__label {
-    font-size: 0.74rem;
-    color: var(--pc-text-faint);
-    margin-bottom: 3px;
-}
-
-.profil-meta__value {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--pc-navy);
-}
-
-/* ---------- Tags ---------- */
+/* ---------- Tags & Métadonnées ---------- */
 .profil-tags {
     display: flex;
     flex-wrap: wrap;
@@ -749,6 +735,30 @@
     margin: 0 0 14px;
 }
 
+.profil-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.profil-meta__item {
+    background: var(--pc-bg-muted);
+    border-radius: var(--pc-radius-md);
+    padding: 14px 16px;
+}
+
+.profil-meta__label {
+    font-size: 0.74rem;
+    color: var(--pc-text-faint);
+    margin-bottom: 3px;
+}
+
+.profil-meta__value {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--pc-navy);
+}
+
 /* ---------- Messages ---------- */
 .profil-message {
     padding: 12px 14px;
@@ -768,61 +778,101 @@
 }
 
 
-/* ---------- Score de complétion du profil ---------- */
-.profil-completion {
-    background: white;
-    border: 1px solid var(--pc-border-soft);
-    border-radius: var(--pc-radius-lg);
-    box-shadow: var(--pc-shadow-card);
-    padding: 18px 20px;
+/* ============================================================
+   MEDIA QUERIES (RESPONSIVE MOVILE & TABLETTE)
+   ============================================================ */
+
+/* Tablettes et écrans intermédiaires (< 900px) */
+@media (max-width: 900px) {
+    .profil-page {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "header"
+            "sidebar"
+            "content";
+        padding: 24px 0 60px;
+    }
+
+    .profil-sidebar {
+        position: static;
+    }
+
+    /* Menu de navigation sous forme d'onglets horizontaux défilants */
+    .profil-sidebar-card:last-child {
+        padding: 12px;
+    }
+
+    .profil-sidebar-card:last-child .profil-nav {
+        flex-direction: row;
+        overflow-x: auto;
+        gap: 6px;
+        scrollbar-width: thin;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .profil-nav a {
+        white-space: nowrap;
+        flex-shrink: 0;
+        background: var(--pc-bg-muted);
+        padding: 8px 14px;
+    }
 }
 
-.profil-completion__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 10px;
+/* Smartphones (< 640px) */
+@media (max-width: 640px) {
+    .profil-page {
+        width: 92%;
+        gap: 16px;
+    }
+
+    .profil-page__header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .profil-card {
+        padding: 20px 16px;
+    }
+
+    /* Passage de tous les formulaires sur 1 seule colonne */
+    .profil-field-row,
+    .profil-field-row--3 {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    /* Toggles pleine largeur */
+    .profil-toggle-row {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .profil-toggle {
+        width: 100%;
+        justify-content: flex-start;
+        box-sizing: border-box;
+    }
+
+    /* Cartes de documents adaptatives */
+    .profil-file-card {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .profil-file-card__actions {
+        justify-content: flex-end;
+        border-top: 1px solid var(--pc-border-soft);
+        padding-top: 10px;
+    }
+
+    .profil-meta {
+        grid-template-columns: 1fr;
+    }
 }
 
-.profil-completion__title {
-    font-size: 0.84rem;
-    font-weight: 700;
-    color: var(--pc-navy);
-}
-
-.profil-completion__badge {
-    font-size: 0.82rem;
-    font-weight: 800;
-    color: var(--pc-navy);
-    background: var(--pc-bg-tint);
-    padding: 3px 8px;
-    border-radius: 999px;
-    border: 1px solid #cddcf5;
-}
-
-.profil-completion__track {
-    width: 100%;
-    height: 8px;
-    background: var(--pc-bg-muted);
-    border-radius: 999px;
-    overflow: hidden;
-}
-
-.profil-completion__fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--pc-gold-soft) 0%, var(--pc-gold) 100%);
-    border-radius: 999px;
-    transition: width 0.4s ease;
-}
-
-.profil-completion__hint {
-    font-size: 0.76rem;
-    color: var(--pc-text-faint);
-    margin-top: 8px;
-    line-height: 1.4;
-}
-
-
+/* Accessibilité : réduction de mouvement */
 @media (prefers-reduced-motion: reduce) {
     .profil-page * {
         transition: none !important;
