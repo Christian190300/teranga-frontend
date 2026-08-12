@@ -80,6 +80,10 @@ export function OffreDetailPage() {
     }
 
     function ouvrirFormulaire() {
+        if (!currentUser) {
+            navigate(`/connexion?redirect=/offres/${offre?.id}`);
+            return;
+        }
         setEtapeCandidature("formulaire");
     }
 
@@ -99,6 +103,9 @@ export function OffreDetailPage() {
     const salaire = formatSalaire(offre);
     const estCandidat = currentUser?.role === "CANDIDAT";
     const expiree = estExpiree(offre);
+    // Le CTA "Postuler" est visible pour les visiteurs non connectés (redirection vers la connexion)
+    // et pour les candidats connectés ; jamais pour les recruteurs/admins.
+    const peutVoirCta = !currentUser || estCandidat;
 
     return (
         <div className="offre-detail">
@@ -304,14 +311,20 @@ export function OffreDetailPage() {
                 </div>
             </div>
 
-            {estCandidat && offre.statut === "PUBLIEE" && etapeCandidature === "idle" && (
+            {peutVoirCta && offre.statut === "PUBLIEE" && etapeCandidature === "idle" && (
                 <div className="offre-detail__cta">
                     <div>
                         <div className="offre-detail__fact-value" style={{ marginBottom: 2 }}>
                             {salaire ?? "Salaire non communiqué"}
                         </div>
                         <div className="offre-detail__cta-info">
-                            {expiree ? "Cette offre a expiré" : dejaPostule ? "Candidature envoyée ✓" : "Postulez en un clic"}
+                            {expiree
+                                ? "Cette offre a expiré"
+                                : !currentUser
+                                    ? "Connectez-vous pour postuler"
+                                    : dejaPostule
+                                        ? "Candidature envoyée ✓"
+                                        : "Postulez en un clic"}
                         </div>
                     </div>
                     <button className="btn-gold" onClick={ouvrirFormulaire} disabled={expiree || dejaPostule}>
