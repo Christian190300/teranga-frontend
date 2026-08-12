@@ -2,11 +2,23 @@ import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import "./profilWidget.css";
 
-export function ProfilWidget() {
+// 1. Définition des types des props
+interface ProfilWidgetProps {
+    isAuthenticated: boolean; // Vrai si l'utilisateur est connecté
+    profileCompletionRate: number; // Pourcentage de remplissage (ex: 70 pour 70%)
+}
+
+export function ProfilWidget({ isAuthenticated, profileCompletionRate }: ProfilWidgetProps) {
     const [isOpen, setIsOpen] = useState(false);
     const widgetRef = useRef<HTMLDivElement>(null);
 
-    // Ferme le popover au clic à l'extérieur
+    // 🔒 CONDITION D'AFFICHAGE :
+    // Si l'utilisateur N'EST PAS connecté OU que le profil est déjà complet (100%), on n'affiche RIEN.
+    if (!isAuthenticated || profileCompletionRate >= 100) {
+        return null;
+    }
+
+    // Gestion de la fermeture lors d'un clic à l'extérieur
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             if (widgetRef.current && !widgetRef.current.contains(event.target as Node)) {
@@ -34,7 +46,7 @@ export function ProfilWidget() {
                 <div className="profil-widget-content">
                     <p>🚀 <strong>Optimisez votre profil !</strong></p>
                     <p>
-                        Un profil complet attire <strong>3x plus d'opportunités</strong> !{" "}
+                        Votre profil est rempli à <strong>{profileCompletionRate}%</strong>. Un profil complet augmente vos opportunités !{" "}
                         <Link
                             to="/profil"
                             className="profil-widget-link"
