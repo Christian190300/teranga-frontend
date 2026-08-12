@@ -1,24 +1,21 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext"; // Ajuste le chemin selon l'emplacement exact
 import "./profilWidget.css";
 
-// 1. Définition des types des props
-interface ProfilWidgetProps {
-    isAuthenticated: boolean; // Vrai si l'utilisateur est connecté
-    profileCompletionRate: number; // Pourcentage de remplissage (ex: 70 pour 70%)
-}
-
-export function ProfilWidget({ isAuthenticated, profileCompletionRate }: ProfilWidgetProps) {
+export function ProfilWidget() {
+    // 1. On extrait 'currentUser' et 'isAuthenticated' de ton AuthContext
+    const { currentUser, isAuthenticated } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
     const widgetRef = useRef<HTMLDivElement>(null);
 
-    // 🔒 CONDITION D'AFFICHAGE :
-    // Si l'utilisateur N'EST PAS connecté OU que le profil est déjà complet (100%), on n'affiche RIEN.
-    if (!isAuthenticated || profileCompletionRate >= 100) {
+    // 2. Si l'utilisateur n'est PAS connecté ou qu'il n'est PAS un CANDIDAT, on ne l'affiche pas
+    // (Ajuste selon si tu veux l'afficher uniquement pour les candidats ou aussi pour les recruteurs)
+    if (!isAuthenticated || !currentUser || currentUser.role !== "CANDIDAT") {
         return null;
     }
 
-    // Gestion de la fermeture lors d'un clic à l'extérieur
+    // 3. Fermeture automatique si l'utilisateur clique en dehors de la bannière
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             if (widgetRef.current && !widgetRef.current.contains(event.target as Node)) {
@@ -46,9 +43,9 @@ export function ProfilWidget({ isAuthenticated, profileCompletionRate }: ProfilW
                 <div className="profil-widget-content">
                     <p>🚀 <strong>Optimisez votre profil !</strong></p>
                     <p>
-                        Votre profil est rempli à <strong>{profileCompletionRate}%</strong>. Un profil complet augmente vos opportunités !{" "}
+                        Bonjour {currentUser.firstName} ! Un profil complet attire <strong>3x plus d'opportunités</strong> !{" "}
                         <Link
-                            to="/profil"
+                            to="/candidat/profil"
                             className="profil-widget-link"
                             onClick={() => setIsOpen(false)}
                         >
@@ -59,7 +56,7 @@ export function ProfilWidget({ isAuthenticated, profileCompletionRate }: ProfilW
                 </div>
             </div>
 
-            {/* Bouton Cercle Flottant */}
+            {/* Bouton Cercle Flottant Animé */}
             <button
                 type="button"
                 className="profil-widget-btn"

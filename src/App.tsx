@@ -107,7 +107,7 @@ export default function App() {
                         </Routes>
 
                         {/* Widget global d'incitation profil */}
-                        <ProfilWidget isAuthenticated={false} profileCompletionRate={0} />
+                        <ProfilWidget/>
                     </AppLayout>
                 </MaintenanceGuard>
             </BrowserRouter>
