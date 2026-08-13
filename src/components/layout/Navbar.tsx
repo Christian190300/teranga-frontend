@@ -184,7 +184,7 @@ function VisitorDropdown({ label, icon, links, id, activeMenu, setActiveMenu }: 
     );
 }
 
-/* ---------- Composant Avatar SVG avec bordure dynamique ---------- */
+/* ---------- Composant Avatar SVG avec bordure & badge dynamique ---------- */
 function CircularScoreAvatar({
                                  photoUrl,
                                  score,
@@ -200,6 +200,15 @@ function CircularScoreAvatar({
     const circumference = 2 * Math.PI * radius;
     const strokeDashoffset = circumference - (score / 100) * circumference;
 
+    // Calcul de la couleur selon la valeur du score
+    const getScoreColor = (val: number) => {
+        if (val < 50) return "#dc2626"; // Rouge pour score faible
+        if (val < 80) return "#d1790a"; // Orange/Doré pour score intermédiaire
+        return "#16a34a";                  // Vert pour score élevé
+    };
+
+    const scoreColor = getScoreColor(score);
+
     return (
         <div className="navbar-profile-avatar">
             <div className="navbar-profile-avatar__wrapper">
@@ -213,18 +222,19 @@ function CircularScoreAvatar({
                         stroke="#e2e8f0"
                         strokeWidth={strokeWidth}
                     />
-                    {/* Cercle de progression rouge calculé à partir du score */}
+                    {/* Cercle de progression dynamique calculé selon le score */}
                     <circle
                         cx={size / 2}
                         cy={size / 2}
                         r={radius}
                         fill="none"
-                        stroke="#dc2626"
+                        stroke={scoreColor}
                         strokeWidth={strokeWidth}
                         strokeDasharray={circumference}
                         strokeDashoffset={strokeDashoffset}
                         strokeLinecap="round"
                         transform={`rotate(-90 ${size / 2} ${size / 2})`}
+                        style={{ transition: "stroke-dashoffset 0.5s ease, stroke 0.3s ease" }}
                     />
                 </svg>
 
@@ -238,9 +248,19 @@ function CircularScoreAvatar({
                     )}
                 </div>
 
-                <div className="navbar-profile-avatar__badge">{score}%</div>
+                {/* Badge avec couleur dynamique du score */}
+                <div
+                    className="navbar-profile-avatar__badge"
+                    style={{ backgroundColor: scoreColor, color: "#ffffff" }}
+                >
+                    {score}%
+                </div>
             </div>
-            <h3 className="navbar-profile-avatar__name">{nomComplet}</h3>
+
+            {/* Nom complet stylisé avec la couleur #d1790a */}
+            <h3 className="navbar-profile-avatar__name" style={{ color: "#d1790a" }}>
+                {nomComplet}
+            </h3>
         </div>
     );
 }
