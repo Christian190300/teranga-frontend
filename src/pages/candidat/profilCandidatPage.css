@@ -1069,3 +1069,75 @@
     color: var(--pc-navy);
     font-weight: 600;
 }
+
+/* ==========================================
+   Conteneur des actions du profil
+   ========================================== */
+.profil-actions {
+    display: flex;
+    justify-content: flex-end; /* Aligne le bouton à droite */
+    align-items: center;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+/* ==========================================
+   Style de base des boutons (.profil-btn)
+   ========================================== */
+.profil-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.4;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    outline: none;
+    user-select: none;
+    white-space: nowrap;
+}
+
+/* Accessibilité (Focus clavier) */
+.profil-btn:focus-visible {
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.35);
+}
+
+/* ==========================================
+   Bouton Principal (.profil-btn--primary)
+   ========================================== */
+.profil-btn--primary {
+    background-color: #d1790a; /* Bleu indigo moderne */
+    color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+/* État survol (Hover) */
+.profil-btn--primary:hover:not(:disabled) {
+    background-color: #d1790a;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+    transform: translateY(-1px);
+}
+
+/* État enfoncé (Active) */
+.profil-btn--primary:active:not(:disabled) {
+    background-color: #d1790a;
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* ==========================================
+   État Désactivé / En cours de sauvegarde
+   ========================================== */
+.profil-btn:disabled,
+.profil-btn--primary:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
