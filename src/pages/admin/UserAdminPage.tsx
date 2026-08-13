@@ -13,8 +13,8 @@ import "./UserAdminPage.css";
 
 const PAGE_SIZE = 20;
 
-function initiales(prenom: string, nom: string): string {
-    return `${prenom[0] ?? ""}${nom[0] ?? ""}`.toUpperCase() || "?";
+function initiales(prenom?: string | null, nom?: string | null): string {
+    return `${prenom?.[0] ?? ""}${nom?.[0] ?? ""}`.toUpperCase() || "?";
 }
 
 function IconSearch() {
