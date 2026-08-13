@@ -18,6 +18,7 @@ import { TagListEditor } from "../../components/common/TagListEditor";
 import { EditableField } from "../../components/common/EditableField";
 import { EditableTextarea } from "../../components/common/EditableTextarea";
 import { EditableSelect } from "../../components/common/EditableSelect";
+import { VideoPresentationManager } from "./VideoPresentationManager";
 import "./profilCandidatPage.css";
 
 function formatDate(iso: string | null): string {
@@ -59,6 +60,21 @@ function IconDocument() {
                 strokeLinejoin="round"
             />
             <path d="M14 3.5v4h4" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+        </svg>
+    );
+}
+
+function IconVideo() {
+    return (
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path
+                d="M15 10l4.55-2.27A1 1 0 0 1 21 8.62v6.76a1 1 0 0 1-1.45.89L15 14v-4z"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+            <rect x="3" y="6" width="12" height="12" rx="2" stroke="currentColor" strokeWidth="1.6" />
         </svg>
     );
 }
@@ -177,6 +193,15 @@ export function ProfilCandidatPage() {
         setScoreCompletion(scoreVal);
     };
 
+    const rechargerProfil = async () => {
+        try {
+            const data = await getMonProfilCandidat();
+            applyProfileData(data);
+        } catch {
+            // Silencieux lors du rafraîchissement d'arrière-plan
+        }
+    };
+
     useEffect(() => {
         async function charger() {
             try {
@@ -224,7 +249,6 @@ export function ProfilCandidatPage() {
         !loading
     );
 
-    // Enregistrement global sans rechargement de page
     async function handleEnregistrerEtRafraichir() {
         setSaveSuccessMsg(null);
         setLoadError(null);
@@ -398,6 +422,7 @@ export function ProfilCandidatPage() {
                         <a href="#parcours">Parcours</a>
                         <a href="#competences">Compétences</a>
                         <a href="#documents">Documents</a>
+                        <a href="#video">Vidéo de présentation</a>
                         <a href="#reseaux">Réseaux</a>
                     </nav>
                 </div>
@@ -632,6 +657,17 @@ export function ProfilCandidatPage() {
                         )}
                         {lmError && <p className="profil-message profil-message--error">{lmError}</p>}
                     </div>
+                </div>
+
+                {/* Vidéo de Présentation */}
+                <div className="profil-card" id="video">
+                    <div className="profil-card__header">
+                        <div className="profil-card__icon profil-card__icon--violet">
+                            <IconVideo />
+                        </div>
+                        <p className="profil-card__section-title">Vidéo de présentation</p>
+                    </div>
+                    <VideoPresentationManager onVideoUpdated={rechargerProfil} />
                 </div>
 
                 {/* Réseaux */}

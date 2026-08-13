@@ -960,3 +960,112 @@
         transition: none !important;
     }
 }
+
+/* ============================================================
+   SECTION VIDÉO DE PRÉSENTATION & MANAGER
+   ============================================================ */
+
+.video-presentation-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+}
+
+/* Player vidéo responsive */
+.video-player-wrapper {
+    position: relative;
+    width: 100%;
+    border-radius: var(--pc-radius-md);
+    overflow: hidden;
+    background-color: #000;
+    box-shadow: 0 4px 12px rgba(20, 41, 77, 0.08);
+}
+
+.video-player-wrapper video {
+    width: 100%;
+    height: auto;
+    max-height: 420px;
+    display: block;
+    object-fit: contain;
+}
+
+/* Badges de statut de la vidéo */
+.video-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    width: fit-content;
+}
+
+.video-status-badge--ready {
+    background-color: var(--pc-success-bg);
+    color: var(--pc-success);
+    border: 1px solid #b7e4c7;
+}
+
+.video-status-badge--processing {
+    background-color: #fef3c7;
+    color: #b45309;
+    border: 1px solid #fde68a;
+}
+
+.video-status-badge--failed {
+    background-color: var(--pc-danger-bg);
+    color: var(--pc-danger);
+    border: 1px solid #f2c1bd;
+}
+
+/* Actions sous le lecteur */
+.video-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.video-delete-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: var(--pc-radius-sm);
+    border: 1.5px solid #f2c1bd;
+    background-color: white;
+    color: var(--pc-danger);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.video-delete-btn:hover {
+    background-color: var(--pc-danger-bg);
+}
+
+/* Zone de chargement / Spinner pendant l'encodage */
+.video-processing-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+    background: var(--pc-bg-muted);
+    border: 1px solid var(--pc-border);
+    border-radius: var(--pc-radius-md);
+    text-align: center;
+    gap: 12px;
+}
+
+.video-processing-box p {
+    margin: 0;
+    font-size: 0.88rem;
+    color: var(--pc-navy);
+    font-weight: 600;
+}

@@ -11,6 +11,18 @@ export interface ProfileScoreDTO {
 }
 
 // ---------------------------------------------------------------------------
+// Vidéo de Présentation (Statuts & DTOs)
+// ---------------------------------------------------------------------------
+
+export type StatutVideoPresentation = "EN_ATTENTE" | "EN_COURS" | "DISPONIBLE" | "ECHEC";
+
+export interface VideoStatutDTO {
+    statut: StatutVideoPresentation;
+    dureeSecondes?: number | null;
+    erreurMessage?: string | null;
+}
+
+// ---------------------------------------------------------------------------
 // Candidat
 // ---------------------------------------------------------------------------
 
@@ -32,7 +44,7 @@ export interface ProfilCandidatDTO {
     niveauExperience: string | null;
     anneesExperience: number | null;
     disponibilite: string | null;
-    niveauEtude?: string | null;
+    niveauEtude: string | null;
 
     formations: string[] | null;
     certifications: string[] | null;
@@ -54,10 +66,13 @@ export interface ProfilCandidatDTO {
     lettreMotivationContentType: string | null;
     lettreMotivationPresente: boolean;
 
-    // Structure du score retournée par le backend
-    score?: ProfileScoreDTO;
+    // --- Vidéo de Présentation ---
+    videoStatut: StatutVideoPresentation | string | null;
+    videoDureeSecondes: number | null;
+    videoErreurMessage: string | null;
 
-    // Fallbacks si nécessaires
+    // --- Score de complétion ---
+    score?: ProfileScoreDTO;
     scoreCompletion?: number;
     pourcentageCompletion?: number;
 
@@ -93,11 +108,13 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
 
 /**
  * Construit l'URL publique (sans authentification) du logo d'un recruteur donné.
- * Utilisable directement dans un <img src>, pas besoin de fetch en blob.
+ * Utilisable directement dans un <img src>.
  */
 export function obtenirLogoEntreprisePublicUrl(recruteurId: string): string {
     return `${API_BASE_URL}/profil-recruteur/public/${recruteurId}/logo`;
 }
+
+// --- API Profil Candidat ---
 
 export async function getMonProfilCandidat(): Promise<ProfilCandidatDTO> {
     const response = await httpClient.get<ProfilCandidatDTO>("/profil");
@@ -109,7 +126,7 @@ export async function updateMonProfilCandidat(payload: UpdateProfilCandidatPaylo
     return response.data;
 }
 
-/** Téléverse (ou remplace) la photo de profil du candidat connecté. */
+/** Photo de profil */
 export async function uploaderPhotoCandidat(file: File): Promise<ProfilCandidatDTO> {
     const formData = new FormData();
     formData.append("file", file);
@@ -126,7 +143,7 @@ export async function obtenirPhotoCandidatUrl(): Promise<string | null> {
     }
 }
 
-/** Téléverse (ou remplace) le CV (PDF) du candidat connecté. */
+/** CV (PDF) */
 export async function uploaderCvCandidat(file: File): Promise<ProfilCandidatDTO> {
     const formData = new FormData();
     formData.append("file", file);
@@ -144,7 +161,7 @@ export async function telechargerCvCandidat(nomFichier = "cv.pdf"): Promise<void
     URL.revokeObjectURL(url);
 }
 
-/** Téléverse (ou remplace) la lettre de motivation (PDF) du candidat connecté. */
+/** Lettre de motivation (PDF) */
 export async function uploaderLettreMotivation(file: File): Promise<ProfilCandidatDTO> {
     const formData = new FormData();
     formData.append("file", file);
@@ -160,6 +177,38 @@ export async function telechargerLettreMotivation(nomFichier = "lettre-motivatio
     lien.download = nomFichier;
     lien.click();
     URL.revokeObjectURL(url);
+}
+
+// --- API Vidéo de Présentation ---
+
+/** Téléverse une nouvelle vidéo (déclenche le traitement asynchrone FFmpeg) */
+export async function uploaderVideoPresentation(file: File): Promise<VideoStatutDTO> {
+    const formData = new FormData();
+    formData.append("file", file);
+    const response = await httpClient.post<VideoStatutDTO>("/profil/video", formData);
+    return response.data;
+}
+
+/** Récupère le statut du traitement vidéo pour le polling */
+export async function obtenirStatutVideo(): Promise<VideoStatutDTO> {
+    const response = await httpClient.get<VideoStatutDTO>("/profil/video/statut");
+    return response.data;
+}
+
+/** Récupère le flux vidéo sous forme de Blob URL pour la balise <video> */
+export async function obtenirVideoPresentationUrl(): Promise<string | null> {
+    try {
+        const response = await httpClient.get("/profil/video", { responseType: "blob" });
+        return URL.createObjectURL(response.data as Blob);
+    } catch {
+        return null;
+    }
+}
+
+/** Supprime la vidéo du profil candidat */
+export async function supprimerVideoPresentation(): Promise<ProfilCandidatDTO> {
+    const response = await httpClient.delete<ProfilCandidatDTO>("/profil/video");
+    return response.data;
 }
 
 // ---------------------------------------------------------------------------
