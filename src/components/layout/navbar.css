@@ -688,12 +688,14 @@ MENU MOBILE TIROIR
 .navbar__mobile-actions {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    padding: 16px 20px 24px;
+    align-items: stretch; /* Force les boutons à prendre toute la largeur s'ils sont en bloc, ou "flex-start" s'ils doivent s'aligner à gauche comme le texte du menu */
+    gap: 12px; /* Espace propre entre les boutons */
 }
 
+/* Si les liens/boutons du menu mobile sont alignés à gauche : */
 .navbar__mobile-actions .btn {
-    width: 100%;
+    justify-content: flex-start; /* Aligne le contenu (icône + texte) à gauche si le bouton est un flex container */
+    text-align: left;
 }
 
 /* ============================================================
