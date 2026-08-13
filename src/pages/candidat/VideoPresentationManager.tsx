@@ -22,6 +22,7 @@ export function VideoPresentationManager({
                                              initialDuree,
                                              initialErreur,
                                              onProfilUpdated,
+                                             onVideoUpdated,
                                          }: Props) {
     const [statut, setStatut] = useState<StatutVideoPresentation>(
         (initialStatut as StatutVideoPresentation) || "EN_ATTENTE"
@@ -32,7 +33,13 @@ export function VideoPresentationManager({
     const [isUploading, setIsUploading] = useState(false);
     const [videoSrc, setVideoSrc] = useState<string | null>(null);
 
-    const pollingRef = useRef<NodeJS.Timeout | null>(null);
+    // Type universel compatible Navigateur / TS
+    const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+    const notifyUpdates = () => {
+        if (onProfilUpdated) onProfilUpdated();
+        if (onVideoUpdated) onVideoUpdated();
+    };
 
     const stopPolling = () => {
         if (pollingRef.current) {
@@ -41,7 +48,7 @@ export function VideoPresentationManager({
         }
     };
 
-    // 1. Chargement de la vidéo (Blob) quand le statut est DISPONIBLE
+    // 1. Chargement de l'URL Blob de la vidéo
     useEffect(() => {
         let isMounted = true;
         let blobUrl: string | null = null;
@@ -52,6 +59,8 @@ export function VideoPresentationManager({
                     blobUrl = url;
                     setVideoSrc(url);
                 }
+            }).catch(() => {
+                if (isMounted) setVideoSrc(null);
             });
         } else {
             setVideoSrc(null);
@@ -65,7 +74,7 @@ export function VideoPresentationManager({
         };
     }, [statut]);
 
-    // 2. Polling si le traitement FFmpeg est EN_ATTENTE ou EN_COURS
+    // 2. Polling si le traitement FFmpeg est en cours
     useEffect(() => {
         if (statut === "EN_ATTENTE" || statut === "EN_COURS") {
             pollingRef.current = setInterval(async () => {
@@ -79,7 +88,7 @@ export function VideoPresentationManager({
                             setErreurMessage(res.erreurMessage || "Échec de la compression vidéo.");
                         }
                         stopPolling();
-                        if (onProfilUpdated) onProfilUpdated();
+                        notifyUpdates();
                     }
                 } catch (e) {
                     console.error("Erreur polling statut vidéo:", e);
@@ -90,7 +99,7 @@ export function VideoPresentationManager({
         }
 
         return () => stopPolling();
-    }, [statut, onProfilUpdated]);
+    }, [statut]);
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -102,6 +111,7 @@ export function VideoPresentationManager({
         try {
             const res = await uploaderVideoPresentation(file);
             setStatut(res.statut);
+            notifyUpdates();
         } catch (err: any) {
             setErreurMessage(err?.response?.data?.message || "Erreur lors de l'envoi de la vidéo.");
             setStatut("ECHEC");
@@ -120,7 +130,7 @@ export function VideoPresentationManager({
             setDuree(null);
             setErreurMessage(null);
             setVideoSrc(null);
-            if (onProfilUpdated) onProfilUpdated();
+            notifyUpdates();
         } catch (err: any) {
             alert(err?.response?.data?.message || "Erreur lors de la suppression.");
         }
@@ -133,18 +143,19 @@ export function VideoPresentationManager({
         return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
     };
 
+    const showUploadZone = (!isUploading && statut !== "DISPONIBLE" && statut !== "EN_COURS") || (statut === "DISPONIBLE" && !videoSrc);
+
     return (
         <div className="video-card">
-            <h3 className="video-card__title">Vidéo de Présentation</h3>
-
-            {(statut === "EN_COURS" || statut === "EN_ATTENTE") && (
+            {/* Statuts de traitement */}
+            {(statut === "EN_COURS" || (statut === "EN_ATTENTE" && !showUploadZone)) && (
                 <div className="video-card__status video-card__status--processing">
                     <div className="spinner" />
                     <div>
                         <p className="status-text">
                             {statut === "EN_ATTENTE"
                                 ? "Vidéo reçue, mise en file d'attente..."
-                                : "Traitement et compression FFmpeg en cours..."}
+                                : "Traitement et compression de la vidéo en cours..."}
                         </p>
                         <span className="status-subtext">
                             Le traitement s'effectue en arrière-plan.
@@ -153,6 +164,7 @@ export function VideoPresentationManager({
                 </div>
             )}
 
+            {/* Lecteur Vidéo */}
             {statut === "DISPONIBLE" && videoSrc && (
                 <div className="video-card__player-box">
                     <video controls controlsList="nodownload" className="video-player" src={videoSrc}>
@@ -167,6 +179,7 @@ export function VideoPresentationManager({
                 </div>
             )}
 
+            {/* Message d'erreur */}
             {statut === "ECHEC" && (
                 <div className="video-card__status video-card__status--error">
                     <p className="error-title">Échec du traitement</p>
@@ -174,7 +187,8 @@ export function VideoPresentationManager({
                 </div>
             )}
 
-            {(statut === "EN_ATTENTE" || statut === "ECHEC") && !isUploading && (
+            {/* Zone de Téléversement */}
+            {showUploadZone && (
                 <div className="video-card__upload">
                     <label className="dropzone">
                         <input
@@ -188,12 +202,13 @@ export function VideoPresentationManager({
                             <p className="main-text">
                                 <strong>Cliquez pour ajouter une vidéo</strong> ou glissez-déposez
                             </p>
-                            <span className="sub-text">Formats : MP4, MOV, WebM</span>
+                            <span className="sub-text">Formats : MP4, MOV, WebM (50 Mo max)</span>
                         </div>
                     </label>
                 </div>
             )}
 
+            {/* Indicateur d'envoi */}
             {isUploading && (
                 <div className="video-card__status video-card__status--uploading">
                     <div className="spinner" />

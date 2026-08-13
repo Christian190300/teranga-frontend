@@ -149,6 +149,11 @@ export function ProfilCandidatPage() {
     const [lmUploading, setLmUploading] = useState(false);
     const [lmError, setLmError] = useState<string | null>(null);
 
+    // États spécifiques pour la vidéo
+    const [videoStatut, setVideoStatut] = useState<string | null>(null);
+    const [videoDuree, setVideoDuree] = useState<number | null>(null);
+    const [videoErreur, setVideoErreur] = useState<string | null>(null);
+
     const [dateCreation, setDateCreation] = useState<string | null>(null);
     const [dateMaj, setDateMaj] = useState<string | null>(null);
 
@@ -185,6 +190,12 @@ export function ProfilCandidatPage() {
         setCvOriginalFilename(data.cvOriginalFilename);
         setLmPresente(data.lettreMotivationPresente);
         setLmOriginalFilename(data.lettreMotivationOriginalFilename);
+
+        // Récupération des données vidéo du DTO s'il y en a
+        const anyData = data as any;
+        setVideoStatut(anyData.videoStatut ?? anyData.statutVideo ?? null);
+        setVideoDuree(anyData.videoDureeSecondes ?? anyData.videoDuree ?? null);
+        setVideoErreur(anyData.videoErreurMessage ?? anyData.videoErreur ?? null);
 
         setDateCreation(data.dateCreation);
         setDateMaj(data.dateMaj);
@@ -667,7 +678,14 @@ export function ProfilCandidatPage() {
                         </div>
                         <p className="profil-card__section-title">Vidéo de présentation</p>
                     </div>
-                    <VideoPresentationManager onVideoUpdated={rechargerProfil} />
+                    <VideoPresentationManager
+                        key={videoStatut || "video-mgr"}
+                        initialStatut={videoStatut}
+                        initialDuree={videoDuree}
+                        initialErreur={videoErreur}
+                        onVideoUpdated={rechargerProfil}
+                        onProfilUpdated={rechargerProfil}
+                    />
                 </div>
 
                 {/* Réseaux */}
@@ -685,38 +703,37 @@ export function ProfilCandidatPage() {
                     </div>
                 </div>
 
-                {/* Métadonnées */}
+                {/* Métadonnées du profil */}
                 <div className="profil-card">
                     <div className="profil-card__header">
                         <div className="profil-card__icon profil-card__icon--blue">
                             <IconDocument />
                         </div>
-                        <p className="profil-card__section-title">Informations du compte</p>
+                        <p className="profil-card__section-title">Métadonnées du profil</p>
                     </div>
-                    <div className="profil-meta">
-                        <div className="profil-meta__item">
-                            <div className="profil-meta__label">Membre depuis</div>
-                            <div className="profil-meta__value">{formatDate(dateCreation)}</div>
+                    <div className="profil-field-row">
+                        <div>
+                            <span className="profil-meta-label">Créé le : </span>
+                            <span className="profil-meta-value">{formatDate(dateCreation)}</span>
                         </div>
-                        <div className="profil-meta__item">
-                            <div className="profil-meta__label">Dernière mise à jour</div>
-                            <div className="profil-meta__value">{formatDate(dateMaj)}</div>
+                        <div>
+                            <span className="profil-meta-label">Dernière mise à jour : </span>
+                            <span className="profil-meta-value">{formatDate(dateMaj)}</span>
                         </div>
                     </div>
                 </div>
 
-                {/* Bouton global de sauvegarde */}
-                <div className="profil-actions-footer">
+                {/* Actions globales */}
+                <div className="profil-actions" style={{ marginTop: "24px", textAlign: "right" }}>
                     <button
                         type="button"
-                        className="profil-save-btn"
+                        className="profil-btn profil-btn--primary"
                         onClick={handleEnregistrerEtRafraichir}
                         disabled={saving}
                     >
-                        {saving ? "Enregistrement en cours..." : "Enregistrer toutes les modifications"}
+                        {saving ? "Enregistrement en cours..." : "Enregistrer les modifications"}
                     </button>
                 </div>
-
             </div>
         </div>
     );
