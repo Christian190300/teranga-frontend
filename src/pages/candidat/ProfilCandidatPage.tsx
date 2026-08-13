@@ -566,15 +566,17 @@ export function ProfilCandidatPage() {
                     <TagListEditor
                         values={formations}
                         onChange={setFormations}
-                        placeholder="Ex : Licence Informatique - UCAD (2024), puis Entrée"
+                        placeholder="Ex : Licence Informatique - UCAD, 2024"
                         emptyLabel="Aucune formation ajoutée pour l'instant."
+                        exemple="Licence Informatique - UCAD (2024)"
                     />
                     <p className="profil-card__subtitle">Certifications</p>
                     <TagListEditor
                         values={certifications}
                         onChange={setCertifications}
-                        placeholder="Ex : AWS Certified Cloud Practitioner (2025), puis Entrée"
+                        placeholder="Ex : AWS Certified Cloud Practitioner, 2025"
                         emptyLabel="Aucune certification ajoutée pour l'instant."
+                        exemple="AWS Certified Cloud Practitioner (2025)"
                     />
                 </div>
 
@@ -590,15 +592,17 @@ export function ProfilCandidatPage() {
                     <TagListEditor
                         values={competences}
                         onChange={setCompetences}
-                        placeholder="Tapez une compétence puis Entrée (ex : React, TypeScript, Figma)"
+                        placeholder="Ex : React"
                         emptyLabel="Aucune compétence ajoutée pour l'instant."
+                        exemple="React, TypeScript, Figma"
                     />
                     <p className="profil-card__subtitle">Langues</p>
                     <TagListEditor
                         values={langues}
                         onChange={setLangues}
-                        placeholder="Ex : Français - Courant, puis Entrée"
+                        placeholder="Ex : Français - Courant"
                         emptyLabel="Aucune langue ajoutée pour l'instant."
+                        exemple="Français - Courant, Anglais - Intermédiaire"
                     />
                 </div>
 

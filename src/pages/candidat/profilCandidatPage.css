@@ -1141,3 +1141,62 @@
     transform: none !important;
     box-shadow: none !important;
 }
+
+/* ---------- TagListEditor : ligne d'ajout avec bouton ---------- */
+.tag-editor__add-row {
+    display: flex;
+    gap: 10px;
+    align-items: stretch;
+}
+
+.tag-editor__input {
+    flex: 1;
+    min-width: 0;
+}
+
+.tag-editor__add-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 0 16px;
+    border-radius: var(--pc-radius-sm);
+    border: 1.5px solid var(--pc-gold);
+    background: var(--pc-gold);
+    color: white;
+    font-size: 0.84rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: background 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+}
+
+.tag-editor__add-btn:hover:not(:disabled) {
+    background: var(--pc-gold-soft);
+    border-color: var(--pc-gold-soft);
+}
+
+.tag-editor__add-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.tag-editor__exemple {
+    font-size: 0.78rem;
+    color: var(--pc-text-faint);
+    margin: 8px 0 0;
+    font-style: italic;
+    overflow-wrap: anywhere;
+}
+
+/* Sur mobile : bouton pleine largeur sous le champ pour rester lisible */
+@media (max-width: 640px) {
+    .tag-editor__add-row {
+        flex-direction: column;
+    }
+
+    .tag-editor__add-btn {
+        padding: 10px 16px;
+    }
+}

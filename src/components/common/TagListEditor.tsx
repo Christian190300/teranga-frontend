@@ -5,9 +5,23 @@ interface TagListEditorProps {
     onChange: (values: string[]) => void;
     placeholder: string;
     emptyLabel: string;
+    exemple?: string;
 }
 
-export function TagListEditor({ values, onChange, placeholder, emptyLabel }: TagListEditorProps) {
+function IconPlus() {
+    return (
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M12 5v14M5 12h14"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+            />
+        </svg>
+    );
+}
+
+export function TagListEditor({ values, onChange, placeholder, emptyLabel, exemple }: TagListEditorProps) {
     const [nouvelleValeur, setNouvelleValeur] = useState("");
 
     function ajouter() {
@@ -21,6 +35,8 @@ export function TagListEditor({ values, onChange, placeholder, emptyLabel }: Tag
     function retirer(value: string) {
         onChange(values.filter((v) => v !== value));
     }
+
+    const peutAjouter = nouvelleValeur.trim().length > 0;
 
     return (
         <div className="profil-field">
@@ -44,17 +60,32 @@ export function TagListEditor({ values, onChange, placeholder, emptyLabel }: Tag
                 <p className="profil-tags-empty">{emptyLabel}</p>
             )}
 
-            <input
-                value={nouvelleValeur}
-                onChange={(e) => setNouvelleValeur(e.target.value)}
-                onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                        e.preventDefault();
-                        ajouter();
-                    }
-                }}
-                placeholder={placeholder}
-            />
+            <div className="tag-editor__add-row">
+                <input
+                    value={nouvelleValeur}
+                    onChange={(e) => setNouvelleValeur(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                            e.preventDefault();
+                            ajouter();
+                        }
+                    }}
+                    placeholder={placeholder}
+                    className="tag-editor__input"
+                />
+                <button
+                    type="button"
+                    className="tag-editor__add-btn"
+                    onClick={ajouter}
+                    disabled={!peutAjouter}
+                    aria-label="Ajouter"
+                >
+                    <IconPlus />
+                    Ajouter
+                </button>
+            </div>
+
+            {exemple && <p className="tag-editor__exemple">Exemple : {exemple}</p>}
         </div>
     );
 }
