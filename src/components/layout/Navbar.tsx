@@ -540,7 +540,20 @@ export function Navbar() {
                                     <IconUser />
                                     Mon profil
                                 </Link>
-                                <button type="button" className="btn btn--ghost" onClick={handleDeconnexion}>
+                                <button
+                                    type="button"
+                                    className="btn btn--ghost"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        void handleDeconnexion();
+                                    }}
+                                    onTouchEnd={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        void handleDeconnexion();
+                                    }}
+                                >
                                     Se déconnecter
                                 </button>
                             </>
