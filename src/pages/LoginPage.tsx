@@ -23,11 +23,11 @@ function LogoMark({ size = 36, light = false }: { size?: number; light?: boolean
     );
 }
 
-function IconUser() {
+function IconMail() {
     return (
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-            <circle cx="12" cy="7" r="4" stroke="currentColor" strokeWidth="1.6" />
+            <rect x="3" y="5" width="18" height="14" rx="2.5" stroke="currentColor" strokeWidth="1.6" />
+            <path d="M4 6.5l8 6 8-6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
     );
 }
@@ -111,12 +111,15 @@ export function LoginPage() {
     const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
     const [loading, setLoading] = useState(false);
 
-    // Validation front-end assouplie (plus de contrainte de '@')
+    // Validation front-end avant soumission
     const validateForm = (): boolean => {
         const errors: FieldErrors = {};
 
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!email.trim()) {
-            errors.email = "L'identifiant est obligatoire.";
+            errors.email = "L'adresse e-mail est obligatoire.";
+        } else if (!emailRegex.test(email)) {
+            errors.email = "Adresse e-mail incorrecte (ex: nom@domaine.sn).";
         }
 
         if (!password) {
@@ -158,8 +161,9 @@ export function LoginPage() {
                 return;
             }
 
+            // Message clair & orienté solution selon l'erreur rencontrée
             if (err?.status === 401 || err?.response?.status === 401) {
-                setError("Identifiant ou mot de passe incorrect. Vérifiez vos informations ou réinitialisez votre mot de passe.");
+                setError("E-mail ou mot de passe incorrect. Vérifiez vos identifiants ou réinitialisez votre mot de passe.");
             } else {
                 setError("Erreur de connexion. Vérifiez votre connexion internet et réessayez.");
             }
@@ -243,21 +247,21 @@ export function LoginPage() {
 
                     <form onSubmit={handleSubmit} noValidate>
                         <div className="field">
-                            <label htmlFor="email">Identifiant</label>
+                            <label htmlFor="email">Adresse e-mail</label>
                             <div className="input-with-icon">
                                 <span className="input-with-icon__icon">
-                                    <IconUser />
+                                    <IconMail />
                                 </span>
                                 <input
                                     id="email"
-                                    type="text"
-                                    autoComplete="username"
+                                    type="email"
+                                    autoComplete="email"
                                     value={email}
                                     onChange={(e) => {
                                         setEmail(e.target.value);
                                         setFieldErrors((prev) => ({ ...prev, email: undefined }));
                                     }}
-                                    placeholder="Entrez votre identifiant"
+                                    placeholder="votre@email.com"
                                 />
                             </div>
                             {fieldErrors.email && <span className="field-hint field-hint--error">{fieldErrors.email}</span>}
