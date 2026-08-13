@@ -2,6 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { ProfileMenu } from "./ProfileMenu";
+import {
+    getMonProfilCandidat,
+    obtenirPhotoCandidatUrl,
+    type ProfilCandidatDTO,
+} from "../../api/profileService";
 import "./navbar.css";
 
 interface NavLinkItem {
@@ -40,7 +45,7 @@ const visiteurRecruteurLinks: NavLinkItem[] = [
     { to: "/inscription?role=recruteur", label: "Créer un compte recruteur" },
 ];
 
-/* ---------- Icônes SVG Ajustées ---------- */
+/* ---------- Icônes SVG ---------- */
 
 function IconHome({ className = "navbar__bottom-icon" }: IconProps) {
     return (
@@ -179,14 +184,80 @@ function VisitorDropdown({ label, icon, links, id, activeMenu, setActiveMenu }: 
     );
 }
 
+/* ---------- Composant Avatar SVG avec bordure dynamique ---------- */
+function CircularScoreAvatar({
+                                 photoUrl,
+                                 score,
+                                 nomComplet,
+                             }: {
+    photoUrl: string | null;
+    score: number;
+    nomComplet: string;
+}) {
+    const size = 130;
+    const strokeWidth = 6;
+    const radius = (size - strokeWidth) / 2;
+    const circumference = 2 * Math.PI * radius;
+    const strokeDashoffset = circumference - (score / 100) * circumference;
+
+    return (
+        <div className="navbar-profile-avatar">
+            <div className="navbar-profile-avatar__wrapper">
+                <svg width={size} height={size} className="navbar-profile-avatar__svg">
+                    {/* Cercle de fond gris */}
+                    <circle
+                        cx={size / 2}
+                        cy={size / 2}
+                        r={radius}
+                        fill="none"
+                        stroke="#e2e8f0"
+                        strokeWidth={strokeWidth}
+                    />
+                    {/* Cercle de progression rouge calculé à partir du score */}
+                    <circle
+                        cx={size / 2}
+                        cy={size / 2}
+                        r={radius}
+                        fill="none"
+                        stroke="#dc2626"
+                        strokeWidth={strokeWidth}
+                        strokeDasharray={circumference}
+                        strokeDashoffset={strokeDashoffset}
+                        strokeLinecap="round"
+                        transform={`rotate(-90 ${size / 2} ${size / 2})`}
+                    />
+                </svg>
+
+                <div className="navbar-profile-avatar__img-container">
+                    {photoUrl ? (
+                        <img src={photoUrl} alt={nomComplet} className="navbar-profile-avatar__img" />
+                    ) : (
+                        <div className="navbar-profile-avatar__placeholder">
+                            {nomComplet.charAt(0).toUpperCase()}
+                        </div>
+                    )}
+                </div>
+
+                <div className="navbar-profile-avatar__badge">{score}%</div>
+            </div>
+            <h3 className="navbar-profile-avatar__name">{nomComplet}</h3>
+        </div>
+    );
+}
+
 export function Navbar() {
     const { isAuthenticated, currentUser, logout } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
+
     const [menuOuvert, setMenuOuvert] = useState(false);
     const [activeVisitorMenu, setActiveVisitorMenu] = useState<string | null>(null);
     const [mobileVisitorMenu, setMobileVisitorMenu] = useState<string | null>(null);
     const visitorMenusRef = useRef<HTMLDivElement>(null);
+
+    // Profil du candidat
+    const [profilCandidat, setProfilCandidat] = useState<ProfilCandidatDTO | null>(null);
+    const [photoBlobUrl, setPhotoBlobUrl] = useState<string | null>(null);
 
     const espaceLinks: NavLinkItem[] =
         currentUser?.role === "RECRUTEUR" ? recruteurLinks : currentUser?.role === "CANDIDAT" ? candidatLinks : [];
@@ -203,6 +274,42 @@ export function Navbar() {
             document.body.style.overflow = "";
         };
     }, [menuOuvert]);
+
+    // Récupération du profil candidat et gestion propre du Blob photo
+    useEffect(() => {
+        let isMounted = true;
+        let objectUrlCreated: string | null = null;
+
+        async function chargerProfil() {
+            if (isAuthenticated && currentUser?.role === "CANDIDAT") {
+                try {
+                    const data = await getMonProfilCandidat();
+                    if (!isMounted) return;
+                    setProfilCandidat(data);
+
+                    if (data.photoPresente) {
+                        const blobUrl = await obtenirPhotoCandidatUrl();
+                        if (isMounted && blobUrl) {
+                            objectUrlCreated = blobUrl;
+                            setPhotoBlobUrl(blobUrl);
+                        }
+                    }
+                } catch (e) {
+                    console.error("Erreur lors de la récupération du profil dans la Navbar", e);
+                }
+            }
+        }
+
+        chargerProfil();
+
+        return () => {
+            isMounted = false;
+            // Libère la mémoire des URL blob générées lors du démontage
+            if (objectUrlCreated) {
+                URL.revokeObjectURL(objectUrlCreated);
+            }
+        };
+    }, [isAuthenticated, currentUser]);
 
     useEffect(() => {
         if (!activeVisitorMenu) return;
@@ -229,6 +336,22 @@ export function Navbar() {
         await logout();
         navigate("/");
     }
+
+    // Récupère le score depuis profil.score.percentage, ou prend les fallbacks
+    const scoreCompletion =
+        profilCandidat?.score?.percentage ??
+        profilCandidat?.scoreCompletion ??
+        profilCandidat?.pourcentageCompletion ??
+        0;
+
+    // Nom affiché à partir de CurrentUser (firstName / lastName)
+    const nomAffiché =
+        currentUser?.firstName && currentUser?.lastName
+            ? `${currentUser.firstName} ${currentUser.lastName}`
+            : currentUser?.email ?? "Candidat";
+
+    // URL de photo finale (Blob récupéré ou photoUrl du currentUser)
+    const photoFinale = photoBlobUrl || currentUser?.photoUrl || null;
 
     return (
         <>
@@ -302,7 +425,7 @@ export function Navbar() {
                     </button>
                 </nav>
 
-                {/* ---------- Menu tiroir mobile (Burger) ---------- */}
+                {/* ---------- Menu tiroir mobile ---------- */}
                 <div
                     className={`navbar__mobile-overlay${menuOuvert ? " navbar__mobile-overlay--open" : ""}`}
                     onClick={() => setMenuOuvert(false)}
@@ -310,6 +433,16 @@ export function Navbar() {
                 />
 
                 <div className={`navbar__mobile-panel${menuOuvert ? " navbar__mobile-panel--open" : ""}`}>
+
+                    {/* Carte Avatar candidat dynamique */}
+                    {isAuthenticated && currentUser?.role === "CANDIDAT" && (
+                        <CircularScoreAvatar
+                            photoUrl={photoFinale}
+                            score={scoreCompletion}
+                            nomComplet={nomAffiché}
+                        />
+                    )}
+
                     {espaceLinks.length > 0 && (
                         <nav className="navbar__mobile-links">
                             {espaceLinks.map((link) => (
@@ -407,7 +540,7 @@ export function Navbar() {
                 </div>
             </header>
 
-            {/* ---------- Bottom Nav Mobile (Visible uniquement pour les visiteurs sur mobile) ---------- */}
+            {/* ---------- Bottom Nav Mobile ---------- */}
             {!isAuthenticated && (
                 <nav className="navbar__bottom-nav" aria-label="Navigation principale mobile">
                     <NavLink to="/" end className={({ isActive }) => `navbar__bottom-item ${isActive ? "active" : ""}`}>
