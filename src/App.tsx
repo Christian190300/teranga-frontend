@@ -18,6 +18,8 @@ import { VerificationEnvoyeePage } from "./pages/VerificationEnvoyeePage";
 import { OffresPubliquesPage } from "./pages/offres/OffresPubliquesPage";
 import { OffreDetailPage } from "./pages/public/OffreDetailPage";
 import { FormationsPubliquesPage } from "./pages/public/FormationsPubliquesPage";
+import { EspaceCandidatPage } from "./pages/candidat/EspaceCandidatPage";
+
 
 // --- PAGES CANDIDAT ---
 import { ProfilCandidatPage } from "./pages/candidat/ProfilCandidatPage";
@@ -26,7 +28,6 @@ import { MesFormationsPage } from "./pages/candidat/MesFormationsPage";
 import { FormationLecteurPage } from "./pages/candidat/FormationLecteurPage";
 import { FormationQuizPage } from "./pages/candidat/FormationQuizPage";
 import { OffresRecommandeesPage } from "./pages/candidat/OffresRecommandeesPage";
-import { EspaceCandidatPage } from "./pages/candidat/EspaceCandidatPage"
 
 
 // --- PAGES RECRUTEUR ---
@@ -69,6 +70,8 @@ export default function App() {
                             <Route path="/offres" element={<OffresPubliquesPage />} />
                             <Route path="/offres/:id" element={<OffreDetailPage />} />
                             <Route path="/formations" element={<FormationsPubliquesPage />} />
+                            <Route path="/candidat/espace-candidat" element={<EspaceCandidatPage />} />
+
 
                             {/* Auth & Vérification */}
                             <Route path="/mot-de-passe-oublie" element={<ForgotPasswordPage />} />
@@ -84,7 +87,6 @@ export default function App() {
                             <Route path="/candidat/formation/:formationId" element={<FormationLecteurPage />} />
                             <Route path="/candidat/formation/:formationId/quiz/:quizId" element={<FormationQuizPage />} />
                             <Route path="/candidat/offres-recommandees" element={<OffresRecommandeesPage />} />
-                            <Route path="/candidat/espace-candidat" element={<EspaceCandidatPage />} />
 
                             {/* Espace Recruteur */}
                             <Route path="/recruteur/entreprise" element={<ProfilRecruteurPage />} />
