@@ -46,6 +46,7 @@ import { FormationWizardPage } from "./pages/admin/FormationWizardPage";
 import { CandidaturesAdminPage } from "./pages/admin/CandidaturesAdminPage";
 import { ParametresAdminPage } from "./pages/admin/ParametresAdminPage";
 import { ImportOffresPage } from "./pages/admin/ImportOffresPage";
+import {EspaceCandidatPage } from "./pages/candidat/EspaceCandidatPage"
 
 // --- COMPOSANTS & WIDGETS ---
 import { ProfilWidget } from "./components/common/ProfilWidget";
@@ -104,6 +105,7 @@ export default function App() {
                             <Route path="/admin/formations/:id/modifier" element={<FormationWizardPage />} />
                             <Route path="/admin/candidatures" element={<CandidaturesAdminPage />} />
                             <Route path="/admin/parametres" element={<ParametresAdminPage />} />
+                            <Route path="/espace-candidat" element={<EspaceCandidatPage />} />
                         </Routes>
 
                         {/* Widget global d'incitation profil */}

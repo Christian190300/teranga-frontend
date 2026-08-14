@@ -34,6 +34,7 @@ const recruteurLinks: NavLinkItem[] = [
 ];
 
 const visiteurCandidatLinks: NavLinkItem[] = [
+    { to: "/espace-candidat", label: "Je suis candidat" },
     { to: "/offres", label: "Offres d'emploi" },
     { to: "/formations", label: "Formations" },
     { to: "/inscription?role=candidat", label: "Créer un compte candidat" },
