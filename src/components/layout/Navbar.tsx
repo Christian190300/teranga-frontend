@@ -23,7 +23,7 @@ const candidatLinks: NavLinkItem[] = [
     { to: "/candidat/offres-recommandees", label: "Recommandées pour vous" },
     { to: "/candidat/candidatures", label: "Mes candidatures" },
     { to: "/candidat/profil", label: "Mon profil" },
-    { to: "/candidat/formation", label: "Carrière pro" },
+    { to: "/candidat/formation", label: "Formations" },
 ];
 
 const recruteurLinks: NavLinkItem[] = [
