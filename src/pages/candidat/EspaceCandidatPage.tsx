@@ -1,16 +1,16 @@
 import { Link } from "react-router-dom";
-import "./espaceCandidatPage.css";
+import "./EspaceCandidatPage.css";
 
 // Ajuster le chemin relatif ci-dessous selon l'emplacement réel de ce fichier
 // par rapport à src/main/webapp/app/assets/hero/
-import heroCandidats from "../../assets/hero/candidats.jpg";
-import heroCandidature from "../../assets/hero/candidature.jpg";
-import heroFormation from "../../assets/hero/formation-hero.jpg";
-import heroPhotoPro from "../../assets/hero/photoPro.jpeg";
-import heroSendCv from "../../assets/hero/sendCv.jpg";
-import heroTalent1 from "../../assets/hero/talent-1.jpg";
-import heroTalent2 from "../../assets/hero/talent-2.jpg";
-import heroTalent3 from "../../assets/hero/talent-3.jpg";
+import heroCandidats from "../../assets/candidats.jpg";
+import heroCandidature from "../../assets/candidature.jpg";
+import heroFormation from "../../assets/formation-hero.jpg";
+import heroPhotoPro from "../../assets/photoPro.jpeg";
+import heroSendCv from "../../assets/sendCv.jpg";
+import heroTalent1 from "../../assets/talent-1.jpg";
+import heroTalent2 from "../../assets/talent-2.jpg";
+import heroTalent3 from "../../assets/talent-3.jpg";
 
 /**
  * À coller dans Navbar.tsx, dans la liste de liens affichés aux visiteurs
