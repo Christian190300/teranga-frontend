@@ -8,7 +8,7 @@
     width: 100%;
     max-width: 100%;
     overflow-x: hidden;
-    background: #0d1f3c;
+    background: #10284a;
     color: rgba(255, 255, 255, 0.72);
     font-family: var(--font-body, "Inter", sans-serif);
     margin-top: 80px;
@@ -16,7 +16,7 @@
 
 .footer__accent {
     height: 3px;
-    background: linear-gradient(90deg, #0d1f3c 0%, #c8951e 50%, #0d1f3c 100%);
+    background: linear-gradient(90deg, #10284a 0%, #c8951e 50%, #10284a 100%);
 }
 
 .footer__container {
@@ -63,7 +63,7 @@
     justify-content: center;
     border-radius: 10px;
     background: #c8951e;
-    color: #0d1f3c;
+    color: #10284a;
     font-family: var(--font-display, "Inter", sans-serif);
     font-size: 0.78rem;
     font-weight: 800;
