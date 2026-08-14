@@ -26,6 +26,8 @@ import { MesFormationsPage } from "./pages/candidat/MesFormationsPage";
 import { FormationLecteurPage } from "./pages/candidat/FormationLecteurPage";
 import { FormationQuizPage } from "./pages/candidat/FormationQuizPage";
 import { OffresRecommandeesPage } from "./pages/candidat/OffresRecommandeesPage";
+import { EspaceCandidatPage } from "./pages/candidat/EspaceCandidatPage"
+
 
 // --- PAGES RECRUTEUR ---
 import { ProfilRecruteurPage } from "./pages/recruteur/ProfilRecruteurPage";
@@ -46,7 +48,6 @@ import { FormationWizardPage } from "./pages/admin/FormationWizardPage";
 import { CandidaturesAdminPage } from "./pages/admin/CandidaturesAdminPage";
 import { ParametresAdminPage } from "./pages/admin/ParametresAdminPage";
 import { ImportOffresPage } from "./pages/admin/ImportOffresPage";
-import {EspaceCandidatPage } from "./pages/candidat/EspaceCandidatPage"
 
 // --- COMPOSANTS & WIDGETS ---
 import { ProfilWidget } from "./components/common/ProfilWidget";
@@ -83,6 +84,7 @@ export default function App() {
                             <Route path="/candidat/formation/:formationId" element={<FormationLecteurPage />} />
                             <Route path="/candidat/formation/:formationId/quiz/:quizId" element={<FormationQuizPage />} />
                             <Route path="/candidat/offres-recommandees" element={<OffresRecommandeesPage />} />
+                            <Route path="/candidat/espace-candidat" element={<EspaceCandidatPage />} />
 
                             {/* Espace Recruteur */}
                             <Route path="/recruteur/entreprise" element={<ProfilRecruteurPage />} />
@@ -105,7 +107,6 @@ export default function App() {
                             <Route path="/admin/formations/:id/modifier" element={<FormationWizardPage />} />
                             <Route path="/admin/candidatures" element={<CandidaturesAdminPage />} />
                             <Route path="/admin/parametres" element={<ParametresAdminPage />} />
-                            <Route path="/espace-candidat" element={<EspaceCandidatPage />} />
                         </Routes>
 
                         {/* Widget global d'incitation profil */}

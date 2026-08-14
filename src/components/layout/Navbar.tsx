@@ -587,7 +587,7 @@ export function Navbar() {
                         <span>Recherche</span>
                     </NavLink>
 
-                    <NavLink to="/inscription?role=candidat" className={({ isActive }) => `navbar__bottom-item ${isActive ? "active" : ""}`}>
+                    <NavLink to="/espace-candidat" className={({ isActive }) => `navbar__bottom-item ${isActive ? "active" : ""}`}>
                         <IconUserCircle />
                         <span>Candidat</span>
                     </NavLink>
