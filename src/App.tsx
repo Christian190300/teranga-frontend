@@ -70,7 +70,7 @@ export default function App() {
                             <Route path="/offres" element={<OffresPubliquesPage />} />
                             <Route path="/offres/:id" element={<OffreDetailPage />} />
                             <Route path="/formations" element={<FormationsPubliquesPage />} />
-                            <Route path="/candidat/espace-candidat" element={<EspaceCandidatPage />} />
+                            <Route path="/espace-candidat" element={<EspaceCandidatPage />} />
 
 
                             {/* Auth & Vérification */}
