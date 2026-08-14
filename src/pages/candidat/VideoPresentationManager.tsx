@@ -113,7 +113,16 @@ export function VideoPresentationManager({
             setStatut(res.statut);
             notifyUpdates();
         } catch (err: any) {
-            setErreurMessage(err?.response?.data?.message || "Erreur lors de l'envoi de la vidéo.");
+            let message = "Erreur lors de l'envoi de la vidéo.";
+
+            // Détection spécifique de l'erreur 413 (Request Entity Too Large)
+            if (err?.response?.status === 413) {
+                message = "Le fichier vidéo est trop volumineux. La taille maximale autorisée est de 150 Mo.";
+            } else if (err?.response?.data?.message) {
+                message = err.response.data.message;
+            }
+
+            setErreurMessage(message);
             setStatut("ECHEC");
         } finally {
             setIsUploading(false);
