@@ -42,6 +42,7 @@ const visiteurCandidatLinks: NavLinkItem[] = [
 ];
 
 const visiteurRecruteurLinks: NavLinkItem[] = [
+    { to: "/espace-recruteur", label: "Je suis recruteur" },
     { to: "/espace-recruteur", label: "Espace recruteur" },
     { to: "/connexion", label: "Connexion recruteur" },
     { to: "/inscription?role=recruteur", label: "Créer un compte recruteur" },
@@ -468,6 +469,7 @@ export function Navbar() {
                                     to={link.to}
                                     end={link.to === "/recruteur/offres"}
                                     className={({ isActive }) => `navbar__mobile-link ${isActive ? "active" : ""}`}
+                                    onClick={() => setMenuOuvert(false)}
                                 >
                                     {link.label}
                                 </NavLink>
@@ -493,7 +495,12 @@ export function Navbar() {
                                 {mobileVisitorMenu === "candidat" && (
                                     <div className="navbar__mobile-visitor-sublinks">
                                         {visiteurCandidatLinks.map((link) => (
-                                            <Link key={link.label} to={link.to} className="navbar__mobile-visitor-sublink">
+                                            <Link
+                                                key={link.label}
+                                                to={link.to}
+                                                className="navbar__mobile-visitor-sublink"
+                                                onClick={() => setMenuOuvert(false)}
+                                            >
                                                 {link.label}
                                             </Link>
                                         ))}
@@ -517,7 +524,12 @@ export function Navbar() {
                                 {mobileVisitorMenu === "recruteur" && (
                                     <div className="navbar__mobile-visitor-sublinks">
                                         {visiteurRecruteurLinks.map((link) => (
-                                            <Link key={link.label} to={link.to} className="navbar__mobile-visitor-sublink">
+                                            <Link
+                                                key={link.label}
+                                                to={link.to}
+                                                className="navbar__mobile-visitor-sublink"
+                                                onClick={() => setMenuOuvert(false)}
+                                            >
                                                 {link.label}
                                             </Link>
                                         ))}
@@ -533,6 +545,7 @@ export function Navbar() {
                                 <Link
                                     to={currentUser?.role === "RECRUTEUR" ? "/recruteur/entreprise" : "/candidat/profil"}
                                     className="btn btn--ghost"
+                                    onClick={() => setMenuOuvert(false)}
                                 >
                                     <IconUser />
                                     Mon profil
@@ -556,11 +569,19 @@ export function Navbar() {
                             </>
                         ) : (
                             <>
-                                <Link to="/connexion" className="btn btn--ghost">
+                                <Link
+                                    to="/connexion"
+                                    className="btn btn--ghost"
+                                    onClick={() => setMenuOuvert(false)}
+                                >
                                     <IconLogin />
                                     Connexion
                                 </Link>
-                                <Link to="/inscription" className="btn btn--ghost">
+                                <Link
+                                    to="/inscription"
+                                    className="btn btn--ghost"
+                                    onClick={() => setMenuOuvert(false)}
+                                >
                                     <IconUserPlus />
                                     Inscription
                                 </Link>
