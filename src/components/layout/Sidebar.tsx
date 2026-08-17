@@ -33,6 +33,7 @@ const generalLinks = [
     { to: "/admin/offres/import", label: "Import SENJOB", icon: <IconBriefcase /> },
     { to: "/admin/candidatures", label: "Candidatures", icon: <IconBriefcase /> },
     { to: "/admin/formations", label: "Creer Formation", icon: <IconBriefcase /> },
+    { to: "/admin/annonces", label: "Envoyer une annonce", icon: <IconUsers /> },
 ];
 
 const systemLinks = [{ to: "/admin/parametres", label: "Paramètres", icon: <IconSettings /> }];

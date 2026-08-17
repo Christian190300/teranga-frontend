@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { ProfileMenu } from "./ProfileMenu";
+import { NotificationsBellCandidat } from "./NotificationsBellCandidat";
 import {
     getMonProfilCandidat,
     obtenirPhotoCandidatUrl,
@@ -201,11 +202,10 @@ function CircularScoreAvatar({
     const circumference = 2 * Math.PI * radius;
     const strokeDashoffset = circumference - (score / 100) * circumference;
 
-    // Calcul de la couleur selon la valeur du score
     const getScoreColor = (val: number) => {
-        if (val < 50) return "#dc2626"; // Rouge pour score faible
-        if (val < 80) return "#d1790a"; // Orange/Doré pour score intermédiaire
-        return "#16a34a";                  // Vert pour score élevé
+        if (val < 50) return "#dc2626";
+        if (val < 80) return "#d1790a";
+        return "#16a34a";
     };
 
     const scoreColor = getScoreColor(score);
@@ -214,7 +214,6 @@ function CircularScoreAvatar({
         <div className="navbar-profile-avatar">
             <div className="navbar-profile-avatar__wrapper">
                 <svg width={size} height={size} className="navbar-profile-avatar__svg">
-                    {/* Cercle de fond gris */}
                     <circle
                         cx={size / 2}
                         cy={size / 2}
@@ -223,7 +222,6 @@ function CircularScoreAvatar({
                         stroke="#e2e8f0"
                         strokeWidth={strokeWidth}
                     />
-                    {/* Cercle de progression dynamique calculé selon le score */}
                     <circle
                         cx={size / 2}
                         cy={size / 2}
@@ -249,7 +247,6 @@ function CircularScoreAvatar({
                     )}
                 </div>
 
-                {/* Badge avec couleur dynamique du score */}
                 <div
                     className="navbar-profile-avatar__badge"
                     style={{ backgroundColor: scoreColor, color: "#ffffff" }}
@@ -258,7 +255,6 @@ function CircularScoreAvatar({
                 </div>
             </div>
 
-            {/* Nom complet stylisé avec la couleur #d1790a */}
             <h3 className="navbar-profile-avatar__name" style={{ color: "#d1790a" }}>
                 {nomComplet}
             </h3>
@@ -276,7 +272,6 @@ export function Navbar() {
     const [mobileVisitorMenu, setMobileVisitorMenu] = useState<string | null>(null);
     const visitorMenusRef = useRef<HTMLDivElement>(null);
 
-    // Profil du candidat
     const [profilCandidat, setProfilCandidat] = useState<ProfilCandidatDTO | null>(null);
     const [photoBlobUrl, setPhotoBlobUrl] = useState<string | null>(null);
 
@@ -296,7 +291,6 @@ export function Navbar() {
         };
     }, [menuOuvert]);
 
-    // Récupération du profil candidat et gestion propre du Blob photo
     useEffect(() => {
         let isMounted = true;
         let objectUrlCreated: string | null = null;
@@ -325,7 +319,6 @@ export function Navbar() {
 
         return () => {
             isMounted = false;
-            // Libère la mémoire des URL blob générées lors du démontage
             if (objectUrlCreated) {
                 URL.revokeObjectURL(objectUrlCreated);
             }
@@ -358,20 +351,17 @@ export function Navbar() {
         navigate("/");
     }
 
-    // Récupère le score depuis profil.score.percentage, ou prend les fallbacks
     const scoreCompletion =
         profilCandidat?.score?.percentage ??
         profilCandidat?.scoreCompletion ??
         profilCandidat?.pourcentageCompletion ??
         0;
 
-    // Nom affiché à partir de CurrentUser (firstName / lastName)
     const nomAffiché =
         currentUser?.firstName && currentUser?.lastName
             ? `${currentUser.firstName} ${currentUser.lastName}`
             : currentUser?.email ?? "Candidat";
 
-    // URL de photo finale (Blob récupéré ou photoUrl du currentUser)
     const photoFinale = photoBlobUrl || currentUser?.photoUrl || null;
 
     return (
@@ -398,7 +388,8 @@ export function Navbar() {
 
                 <nav className="navbar__links">
                     {isAuthenticated ? (
-                        <div className="navbar__desktop-only">
+                        <div className="navbar__desktop-only" style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                            {currentUser?.role === "CANDIDAT" && <NotificationsBellCandidat />}
                             <ProfileMenu />
                         </div>
                     ) : (
@@ -455,13 +446,18 @@ export function Navbar() {
 
                 <div className={`navbar__mobile-panel${menuOuvert ? " navbar__mobile-panel--open" : ""}`}>
 
-                    {/* Carte Avatar candidat dynamique */}
                     {isAuthenticated && currentUser?.role === "CANDIDAT" && (
                         <CircularScoreAvatar
                             photoUrl={photoFinale}
                             score={scoreCompletion}
                             nomComplet={nomAffiché}
                         />
+                    )}
+
+                    {isAuthenticated && currentUser?.role === "CANDIDAT" && (
+                        <div style={{ display: "flex", justifyContent: "center", marginTop: -8, marginBottom: 12 }}>
+                            <NotificationsBellCandidat />
+                        </div>
                     )}
 
                     {espaceLinks.length > 0 && (

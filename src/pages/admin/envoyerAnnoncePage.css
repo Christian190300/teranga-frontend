@@ -1,0 +1,165 @@
+/* ============================================================
+   ENVOYER UNE ANNONCE — admin
+   ============================================================ */
+
+.annonce-page {
+    max-width: 640px;
+    width: 94%;
+    margin: 0 auto;
+    padding: 40px 0 90px;
+    font-family: 'Inter', -apple-system, sans-serif;
+}
+
+.annonce-page * {
+    box-sizing: border-box;
+}
+
+.annonce-page__header h1 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #14294d;
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
+}
+
+.annonce-page__header p {
+    font-size: 0.9rem;
+    color: #667085;
+    margin: 0 0 24px;
+    max-width: 60ch;
+    line-height: 1.5;
+}
+
+.annonce-page__error {
+    background: #fdecea;
+    color: #b3261e;
+    border: 1px solid #f2c1bd;
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 0.86rem;
+    margin-bottom: 20px;
+}
+
+.annonce-page__success {
+    background: #e6f4ea;
+    color: #1a7f4b;
+    border: 1px solid #b7ddc2;
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 0.86rem;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.annonce-page__form {
+    background: white;
+    border: 1px solid #e8e9ee;
+    border-radius: 14px;
+    padding: 28px 32px;
+}
+
+.annonce-field {
+    margin-bottom: 20px;
+}
+
+.annonce-field:last-child {
+    margin-bottom: 0;
+}
+
+.annonce-field label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #14294d;
+    margin-bottom: 6px;
+}
+
+.annonce-field input,
+.annonce-field textarea {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid #e8e9ee;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 16px;
+    background: #f7f8fb;
+    color: #14294d;
+    transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.annonce-field input:focus,
+.annonce-field textarea:focus {
+    outline: none;
+    border-color: #c8951e;
+    background: white;
+}
+
+.annonce-field textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.annonce-field__hint {
+    font-size: 0.78rem;
+    color: #9aa1ac;
+    margin: 6px 0 0;
+}
+
+.annonce-field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+@media (max-width: 560px) {
+    .annonce-field-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.annonce-cible-toggle {
+    display: flex;
+    gap: 8px;
+}
+
+.annonce-cible-toggle button {
+    flex: 1;
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: 1.5px solid #e8e9ee;
+    background: #f7f8fb;
+    color: #667085;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.annonce-cible-toggle button.active {
+    background: #eaf0fb;
+    border-color: #cddcf5;
+    color: #14294d;
+}
+
+.annonce-submit {
+    width: 100%;
+    padding: 13px 24px;
+    border: none;
+    border-radius: 8px;
+    background: #e8b84b;
+    color: #0d1c38;
+    font-size: 0.92rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    margin-top: 8px;
+}
+
+.annonce-submit:hover:not(:disabled) {
+    background: #c8951e;
+}
+
+.annonce-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
