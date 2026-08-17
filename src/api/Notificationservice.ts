@@ -1,6 +1,6 @@
 import { httpClient } from "./httpClient";
 
-export type TypeNotificationCandidat = "NOUVELLE_OFFRE" | "FORMATION_RECOMMANDEE" | "ANNONCE";
+export type TypeNotificationCandidat = "NOUVELLE_OFFRE" | "FORMATION_RECOMMANDEE" | "ANNONCE" | "COMPLETUDE_PROFIL";
 
 export interface NotificationCandidatDTO {
     id: number;
@@ -11,6 +11,19 @@ export interface NotificationCandidatDTO {
     libelleAction: string | null;
     dateCreation: string;
     lu: boolean;
+}
+
+function libellePourType(type: NotificationCandidatDTO["type"]): string {
+    switch (type) {
+        case "NOUVELLE_OFFRE":
+            return "Offre";
+        case "FORMATION_RECOMMANDEE":
+            return "Formation";
+        case "COMPLETUDE_PROFIL":
+            return "Visibilité"; // <-- Plus engageant que "Profil"
+        default:
+            return "Annonce";
+    }
 }
 
 export interface PageResult<T> {
