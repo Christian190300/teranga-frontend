@@ -19,6 +19,7 @@ import { OffresPubliquesPage } from "./pages/offres/OffresPubliquesPage";
 import { OffreDetailPage } from "./pages/public/OffreDetailPage";
 import { FormationsPubliquesPage } from "./pages/public/FormationsPubliquesPage";
 import { EspaceCandidatPage } from "./pages/candidat/EspaceCandidatPage";
+import { EspaceRecruteurPage } from "./pages/recruteur/EspaceRecruteurPage";
 
 
 // --- PAGES CANDIDAT ---
@@ -72,6 +73,7 @@ export default function App() {
                             <Route path="/offres/:id" element={<OffreDetailPage />} />
                             <Route path="/formations" element={<FormationsPubliquesPage />} />
                             <Route path="/espace-candidat" element={<EspaceCandidatPage />} />
+                            <Route path="/espace-recruteur" element={<EspaceRecruteurPage />} />
 
 
                             {/* Auth & Vérification */}

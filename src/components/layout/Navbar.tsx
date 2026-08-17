@@ -42,8 +42,8 @@ const visiteurCandidatLinks: NavLinkItem[] = [
 ];
 
 const visiteurRecruteurLinks: NavLinkItem[] = [
+    { to: "/espace-recruteur", label: "Espace recruteur" },
     { to: "/inscription?role=recruteur", label: "Publier une offre" },
-    { to: "/a-propos", label: "Pourquoi Talent Sénégal" },
     { to: "/inscription?role=recruteur", label: "Créer un compte recruteur" },
 ];
 
@@ -588,7 +588,7 @@ export function Navbar() {
                         <span>Candidat</span>
                     </NavLink>
 
-                    <NavLink to="/inscription?role=recruteur" className={({ isActive }) => `navbar__bottom-item ${isActive ? "active" : ""}`}>
+                    <NavLink to="/espace-recruteur" className={({ isActive }) => `navbar__bottom-item ${isActive ? "active" : ""}`}>
                         <IconRecruiterCircle />
                         <span>Recruteur</span>
                     </NavLink>
