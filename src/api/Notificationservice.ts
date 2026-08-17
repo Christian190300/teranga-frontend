@@ -13,19 +13,6 @@ export interface NotificationCandidatDTO {
     lu: boolean;
 }
 
-function libellePourType(type: NotificationCandidatDTO["type"]): string {
-    switch (type) {
-        case "NOUVELLE_OFFRE":
-            return "Offre";
-        case "FORMATION_RECOMMANDEE":
-            return "Formation";
-        case "COMPLETUDE_PROFIL":
-            return "Visibilité"; // <-- Plus engageant que "Profil"
-        default:
-            return "Annonce";
-    }
-}
-
 export interface PageResult<T> {
     content: T[];
     totalCount: number;
