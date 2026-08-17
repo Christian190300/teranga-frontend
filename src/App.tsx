@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
-import { AppLayout } from "./components/layout/AppLayout";
+import AppLayout from "./components/layout/AppLayout";
 import { MaintenanceGuard } from "./components/layout/MaintenanceGuard";
 import { ScrollToTop } from "./components/layout/ScrollToTop";
 
