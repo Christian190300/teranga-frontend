@@ -30,6 +30,7 @@ import { MesFormationsPage } from "./pages/candidat/MesFormationsPage";
 import { FormationLecteurPage } from "./pages/candidat/FormationLecteurPage";
 import { FormationQuizPage } from "./pages/candidat/FormationQuizPage";
 import { OffresRecommandeesPage } from "./pages/candidat/OffresRecommandeesPage";
+import { OnboardingCandidat } from "./pages/candidat/OnboardingCandidatPage";
 
 
 // --- PAGES RECRUTEUR ---
@@ -93,6 +94,7 @@ export default function App() {
                             <Route path="/candidat/formation/:formationId" element={<FormationLecteurPage />} />
                             <Route path="/candidat/formation/:formationId/quiz/:quizId" element={<FormationQuizPage />} />
                             <Route path="/candidat/offres-recommandees" element={<OffresRecommandeesPage />} />
+                            <Route path="/candidat/onboarding/candidat" element={<OnboardingCandidat />} />
 
                             {/* Espace Recruteur */}
                             <Route path="/recruteur/entreprise" element={<ProfilRecruteurPage />} />
