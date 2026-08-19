@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import * as authService from "../api/authService";
 import { getMonCompte } from "../api/authService";
-import { obtenirPhotoCandidatUrl, obtenirLogoRecruteurUrl } from "../api/profileService";
+import { obtenirPhotoCandidatUrl, obtenirLogoRecruteurUrl, getMonProfilCandidat } from "../api/profileService";
 
 export type Role = "CANDIDAT" | "RECRUTEUR" | "ADMIN";
 
@@ -11,6 +11,8 @@ interface CurrentUser {
     email: string;
     role: Role | null;
     photoUrl: string | null;
+    /** Uniquement pertinent pour un CANDIDAT : true si le profil n'a jamais été renseigné. */
+    profilIncomplet?: boolean;
 }
 
 interface AuthContextValue {
@@ -40,6 +42,22 @@ async function chargerPhotoSelonRole(role: Role | null): Promise<string | null> 
     return null;
 }
 
+/**
+ * Détermine si le profil candidat n'a jamais été renseigné (onboarding jamais fait).
+ * Ne s'applique qu'aux CANDIDAT ; retourne undefined pour les autres rôles.
+ * En cas d'échec de récupération du profil, on considère le profil comme complet
+ * pour ne pas bloquer l'utilisateur dans une boucle de redirection.
+ */
+async function calculerProfilIncomplet(role: Role | null): Promise<boolean | undefined> {
+    if (role !== "CANDIDAT") return undefined;
+    try {
+        const profil = await getMonProfilCandidat();
+        return !profil.titreProfessionnel && (profil.score?.percentage ?? 0) === 0;
+    } catch {
+        return false;
+    }
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [authenticated, setAuthenticated] = useState(authService.isAuthenticated());
     const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
@@ -66,7 +84,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         try {
             const data = await getMonCompte();
             const role = extractRole(data.compte.authorities);
-            const photoUrl = await chargerPhotoSelonRole(role);
+            const [photoUrl, profilIncomplet] = await Promise.all([
+                chargerPhotoSelonRole(role),
+                calculerProfilIncomplet(role),
+            ]);
 
             revokePhotoActuelle();
             photoUrlRef.current = photoUrl;
@@ -77,6 +98,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 email: data.compte.email,
                 role,
                 photoUrl,
+                profilIncomplet,
             });
         } catch {
             revokePhotoActuelle();

@@ -1,0 +1,509 @@
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=JetBrains+Mono:wght@500&display=swap");
+
+.ob-shell {
+    --ob-navy-950: #0c1c33;
+    --ob-navy-900: #14294d;
+    --ob-navy-700: #1f3a63;
+    --ob-gold-500: #c8951e;
+    --ob-gold-300: #e8b84b;
+    --ob-paper: #faf8f4;
+    --ob-ink: #1c2536;
+    --ob-ink-soft: #5b6472;
+    --ob-line: rgba(20, 41, 77, 0.12);
+
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    min-height: 100vh;
+    background: var(--ob-paper);
+    font-family: "Inter", sans-serif;
+    color: var(--ob-ink);
+}
+
+.ob-loading {
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
+    font-family: "Inter", sans-serif;
+    color: var(--ob-navy-900);
+}
+
+/* ---------- Panneau navy ---------- */
+
+.ob-rail {
+    background: radial-gradient(circle at 15% 0%, var(--ob-navy-700), var(--ob-navy-950) 70%);
+    color: #fff;
+    padding: 40px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.ob-rail__brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ob-rail__brand-mark {
+    font-family: "JetBrains Mono", monospace;
+    font-weight: 600;
+    font-size: 13px;
+    border: 1px solid var(--ob-gold-300);
+    color: var(--ob-gold-300);
+    border-radius: 6px;
+    padding: 4px 8px;
+    letter-spacing: 0.06em;
+}
+
+.ob-rail__brand-name {
+    font-family: "Sora", sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.02em;
+}
+
+.ob-rail__eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ob-gold-300);
+    margin: 0 0 12px;
+}
+
+.ob-rail__title {
+    font-family: "Sora", sans-serif;
+    font-size: 26px;
+    line-height: 1.25;
+    font-weight: 700;
+    margin: 0 0 12px;
+}
+
+.ob-rail__sub {
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+}
+
+.ob-rail__steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.ob-rail__step {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 10px;
+    border-radius: 10px;
+    opacity: 0.5;
+    transition: opacity 0.25s ease, background 0.25s ease;
+}
+
+.ob-rail__step--active {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.ob-rail__step--done {
+    opacity: 0.9;
+}
+
+.ob-rail__step-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.ob-rail__step-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--ob-gold-300);
+}
+
+.ob-rail__step-label {
+    font-family: "Sora", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.ob-stamp {
+    width: 30px;
+    height: 30px;
+    flex: none;
+    display: grid;
+    place-items: center;
+}
+
+.ob-stamp svg {
+    width: 100%;
+    height: 100%;
+    stroke: rgba(255, 255, 255, 0.45);
+    stroke-width: 1.6;
+    fill: none;
+    transition: stroke 0.3s ease, transform 0.3s ease;
+}
+
+.ob-stamp--validated svg {
+    stroke: var(--ob-gold-300);
+    transform: rotate(-8deg) scale(1.05);
+}
+
+.ob-rail__progress {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ob-rail__progress-track {
+    height: 4px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.14);
+    overflow: hidden;
+}
+
+.ob-rail__progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--ob-gold-500), var(--ob-gold-300));
+    transition: width 0.4s ease;
+}
+
+.ob-rail__progress-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.65);
+}
+
+/* ---------- Panneau contenu ---------- */
+
+.ob-content {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 64px 40px;
+}
+
+.ob-card {
+    width: 100%;
+    max-width: 620px;
+    background: #fff;
+    border: 1px solid var(--ob-line);
+    border-radius: 18px;
+    padding: 40px 44px 32px;
+    box-shadow: 0 24px 60px -32px rgba(12, 28, 51, 0.35);
+    animation: ob-card-in 0.35s ease both;
+}
+
+@keyframes ob-card-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.ob-card--stamping {
+    animation: ob-card-in 0.35s ease both, ob-stamp-pulse 0.5s ease;
+}
+
+@keyframes ob-stamp-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(200, 149, 30, 0.35); }
+    70% { box-shadow: 0 0 0 14px rgba(200, 149, 30, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(200, 149, 30, 0); }
+}
+
+.ob-card__eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ob-gold-500);
+}
+
+.ob-card__title {
+    font-family: "Sora", sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 8px 0 6px;
+    color: var(--ob-navy-900);
+}
+
+.ob-card__desc {
+    color: var(--ob-ink-soft);
+    font-size: 14px;
+    margin: 0 0 28px;
+}
+
+.ob-alert {
+    background: #fdecec;
+    color: #a13636;
+    border: 1px solid #f2c6c6;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+.ob-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.ob-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.ob-field-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 16px;
+}
+
+.ob-field label {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ob-navy-900);
+}
+
+.ob-field input,
+.ob-field select,
+.ob-field textarea {
+    border: 1px solid var(--ob-line);
+    border-radius: 10px;
+    padding: 11px 13px;
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    color: var(--ob-ink);
+    background: var(--ob-paper);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ob-field input:focus,
+.ob-field select:focus,
+.ob-field textarea:focus {
+    outline: none;
+    border-color: var(--ob-gold-500);
+    box-shadow: 0 0 0 3px rgba(200, 149, 30, 0.15);
+}
+
+.ob-toggle-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.ob-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13.5px;
+    padding: 9px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--ob-line);
+    cursor: pointer;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.ob-toggle--active {
+    border-color: var(--ob-gold-500);
+    background: rgba(200, 149, 30, 0.08);
+}
+
+.ob-tag-input input {
+    width: 100%;
+}
+
+.ob-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.ob-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--ob-navy-900);
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12.5px;
+}
+
+.ob-tag button {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+}
+
+.ob-dropzone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px dashed var(--ob-line);
+    border-radius: 14px;
+    padding: 22px;
+    cursor: pointer;
+    text-align: center;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.ob-dropzone:hover {
+    border-color: var(--ob-gold-500);
+    background: rgba(200, 149, 30, 0.05);
+}
+
+.ob-dropzone__text {
+    font-size: 13.5px;
+    color: var(--ob-ink-soft);
+}
+
+.ob-dropzone__preview {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.ob-hidden-input {
+    display: none;
+}
+
+.ob-card__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid var(--ob-line);
+}
+
+.ob-card__footer-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.ob-btn {
+    font-family: "Sora", sans-serif;
+    font-weight: 600;
+    font-size: 13.5px;
+    border-radius: 10px;
+    padding: 11px 20px;
+    cursor: pointer;
+    border: none;
+    transition: transform 0.15s ease, background 0.2s ease, opacity 0.2s ease;
+}
+
+.ob-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.ob-btn--primary {
+    background: linear-gradient(135deg, var(--ob-navy-900), var(--ob-navy-700));
+    color: #fff;
+}
+
+.ob-btn--primary:hover:not(:disabled) {
+    transform: translateY(-1px);
+}
+
+.ob-btn--ghost {
+    background: transparent;
+    border: 1px solid var(--ob-line);
+    color: var(--ob-navy-900);
+}
+
+.ob-btn--text {
+    background: none;
+    color: var(--ob-ink-soft);
+    text-decoration: underline;
+    padding: 11px 4px;
+}
+
+.ob-final {
+    text-align: center;
+    padding: 20px 0 8px;
+}
+
+.ob-final__stamp {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.ob-final__stamp .ob-stamp {
+    width: 64px;
+    height: 64px;
+}
+
+.ob-final__stamp .ob-stamp svg {
+    stroke: var(--ob-gold-500);
+}
+
+.ob-final__title {
+    font-family: "Sora", sans-serif;
+    font-size: 24px;
+    color: var(--ob-navy-900);
+    margin: 0 0 10px;
+}
+
+.ob-final__text {
+    color: var(--ob-ink-soft);
+    font-size: 14px;
+    max-width: 420px;
+    margin: 0 auto 28px;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 860px) {
+    .ob-shell {
+        grid-template-columns: 1fr;
+    }
+    .ob-rail {
+        position: static;
+        height: auto;
+        padding: 28px 24px;
+    }
+    .ob-rail__steps {
+        flex-direction: row;
+        overflow-x: auto;
+        gap: 10px;
+        padding-bottom: 4px;
+    }
+    .ob-rail__step-text {
+        display: none;
+    }
+    .ob-content {
+        padding: 32px 16px 60px;
+    }
+    .ob-card {
+        padding: 28px 22px 24px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ob-card,
+    .ob-stamp svg,
+    .ob-rail__progress-fill {
+        animation: none !important;
+        transition: none !important;
+    }
+}

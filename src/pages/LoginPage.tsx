@@ -2,6 +2,7 @@ import { type FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { getMonCompte, PremiereConnexionRequiredError } from "../api/authService";
+import { getMonProfilCandidat } from "../api/profileService";
 import "./authPage.css";
 
 function LogoMark({ size = 36, light = false }: { size?: number; light?: boolean }) {
@@ -151,7 +152,18 @@ export function LoginPage() {
             } else if (authorities.includes("ROLE_RECRUTEUR")) {
                 navigate("/recruteur/offres");
             } else if (authorities.includes("ROLE_CANDIDAT")) {
-                navigate("/offres");
+                // Un candidat dont le profil n'a jamais été renseigné
+                // est envoyé vers l'onboarding avant d'accéder aux offres.
+                try {
+                    const profil = await getMonProfilCandidat();
+                    const premiereConnexion =
+                        !profil.titreProfessionnel && (profil.score?.percentage ?? 0) === 0;
+                    navigate(premiereConnexion ? "/onboarding/candidat" : "/offres");
+                } catch {
+                    // En cas d'échec de la récupération du profil, on ne bloque pas
+                    // la connexion : on envoie vers les offres par défaut.
+                    navigate("/offres");
+                }
             } else {
                 navigate("/");
             }
