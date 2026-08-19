@@ -45,7 +45,7 @@ export function ProfilWidget() {
                     <p>
                         Bonjour {currentUser.firstName} ! Un profil complet attire <strong>3x plus d'opportunités</strong> !{" "}
                         <Link
-                            to="/candidat/profil"
+                            to="/onboarding/candidat"
                             className="profil-widget-link"
                             onClick={() => setIsOpen(false)}
                         >
