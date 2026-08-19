@@ -150,7 +150,7 @@ export function UserDetailAdminPage() {
             return;
         }
 
-        async function charger() {
+        const charger = async () => {
             setLoading(true);
             setError(null);
 
@@ -162,14 +162,19 @@ export function UserDetailAdminPage() {
 
                 setActivite(act);
                 setProfil(prof);
-            } catch {
+            } catch (error) {
+                console.error(
+                    "Erreur lors du chargement de l'utilisateur :",
+                    error
+                );
+
                 setError(
                     "Impossible de charger les informations de cet utilisateur."
                 );
             } finally {
                 setLoading(false);
             }
-        }
+        };
 
         charger();
     }, [userId]);
