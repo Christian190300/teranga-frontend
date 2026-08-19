@@ -55,13 +55,27 @@ export function Sidebar() {
 
     const initials = currentUser ? `${currentUser.firstName[0] ?? ""}${currentUser.lastName[0] ?? ""}`.toUpperCase() : "AD";
 
+    /**
+     * Un lien reste actif sur ses sous-routes (ex: "/admin/utilisateurs" reste
+     * surligné quand on est sur "/admin/utilisateurs/abc-123", la fiche détail
+     * d'un utilisateur précis). Cas particulier pour "/admin" : il ne doit
+     * matcher que l'URL exacte, sinon il resterait actif sur toutes les pages
+     * admin (qui commencent toutes par /admin).
+     */
+    function estActif(to: string) {
+        if (to === "/admin") {
+            return location.pathname === "/admin";
+        }
+        return location.pathname === to || location.pathname.startsWith(`${to}/`);
+    }
+
     function renderLinks(links: typeof generalLinks) {
         return links.map((link) => (
             <Link
                 key={link.to}
                 to={link.to}
                 onClick={handleLinkClick}
-                className={`sidebar__link ${location.pathname === link.to ? "active" : ""}`}
+                className={`sidebar__link ${estActif(link.to) ? "active" : ""}`}
             >
                 {link.icon}
                 {link.label}

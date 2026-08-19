@@ -1,0 +1,315 @@
+/* ============================================================
+   USER DETAIL ADMIN — Talent Sénégal
+   ============================================================ */
+
+.udap-page {
+    --ud-navy: #14294d;
+    --ud-navy-soft: #eaf0fb;
+    --ud-gold: #c8951e;
+    --ud-gold-soft: #fbf0d9;
+    --ud-gold-text: #8a6414;
+    --ud-cream: #f7f4ec;
+    --ud-muted: #6b7280;
+    --ud-muted-light: #9aa1ac;
+    --ud-line: #e8e9ee;
+    --ud-success: #1a7f4b;
+    --ud-success-bg: #e6f4ea;
+
+    max-width: 880px;
+    width: 92%;
+    margin: 0 auto;
+    padding: 32px 0 90px;
+    font-family: 'Inter', -apple-system, sans-serif;
+}
+
+.udap-page * {
+    box-sizing: border-box;
+}
+
+.udap-loading,
+.udap-error {
+    text-align: center;
+    padding: 100px 20px;
+    color: var(--ud-muted);
+    font-size: 0.92rem;
+}
+
+.udap-back {
+    display: inline-block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--ud-muted);
+    text-decoration: none;
+    margin-bottom: 20px;
+}
+
+.udap-back:hover {
+    color: var(--ud-navy);
+}
+
+.udap-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    background: white;
+    border: 1px solid var(--ud-line);
+    border-radius: 16px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 2px rgba(20, 41, 77, 0.04);
+}
+
+.udap-badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--ud-navy-soft);
+    color: var(--ud-navy);
+    margin-bottom: 8px;
+}
+
+.udap-badge--recruteur {
+    background: var(--ud-gold-soft);
+    color: var(--ud-gold-text);
+}
+
+.udap-header h1 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--ud-navy);
+    margin: 0 0 4px;
+    letter-spacing: -0.01em;
+}
+
+.udap-userid {
+    font-size: 0.78rem;
+    color: var(--ud-muted-light);
+    margin: 0;
+    font-family: monospace;
+}
+
+.udap-score {
+    flex-shrink: 0;
+    text-align: center;
+    background: var(--ud-cream);
+    border-radius: 12px;
+    padding: 14px 22px;
+    min-width: 120px;
+}
+
+.udap-score--certifie {
+    background: var(--ud-success-bg);
+}
+
+.udap-score__cert {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--ud-success);
+    margin-bottom: 4px;
+}
+
+.udap-score__value {
+    display: block;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--ud-navy);
+    line-height: 1;
+}
+
+.udap-score__label {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--ud-muted);
+    margin-top: 4px;
+}
+
+.udap-card {
+    background: white;
+    border: 1px solid var(--ud-line);
+    border-radius: 16px;
+    padding: 24px 28px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 2px rgba(20, 41, 77, 0.04);
+}
+
+.udap-card h2 {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--ud-navy);
+    margin: 0 0 16px;
+    letter-spacing: -0.01em;
+}
+
+.udap-stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.udap-stat {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--ud-cream);
+    border-radius: 12px;
+    padding: 14px 16px;
+    color: var(--ud-navy);
+}
+
+.udap-stat strong {
+    display: block;
+    font-size: 1.15rem;
+    font-weight: 800;
+}
+
+.udap-stat span {
+    display: block;
+    font-size: 0.74rem;
+    color: var(--ud-muted);
+    margin-top: 1px;
+}
+
+.udap-subtitle {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--ud-navy);
+    margin: 18px 0 10px;
+}
+
+.udap-text {
+    font-size: 0.88rem;
+    color: var(--ud-muted);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.udap-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.udap-list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 1px solid var(--ud-line);
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--ud-navy);
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: background 0.15s ease;
+}
+
+.udap-list-item:hover {
+    background: var(--ud-navy-soft);
+}
+
+.udap-list-item__meta {
+    font-size: 0.76rem;
+    color: var(--ud-muted-light);
+    font-weight: 500;
+}
+
+.udap-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 20px;
+    margin: 0;
+}
+
+.udap-details dt {
+    font-size: 0.74rem;
+    color: var(--ud-muted-light);
+    margin-bottom: 2px;
+}
+
+.udap-details dd {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ud-navy);
+    margin: 0;
+}
+
+.udap-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.udap-tag {
+    background: var(--ud-navy-soft);
+    color: var(--ud-navy);
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 999px;
+}
+
+.udap-simple-list {
+    margin: 0;
+    padding-left: 18px;
+    font-size: 0.88rem;
+    color: var(--ud-muted);
+    line-height: 1.8;
+}
+
+.udap-documents {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.udap-doc-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 18px;
+    border-radius: 10px;
+    border: 1.5px solid var(--ud-line);
+    background: white;
+    color: var(--ud-navy);
+    font-size: 0.86rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.udap-doc-btn:hover {
+    background: var(--ud-navy-soft);
+    border-color: #cddcf5;
+}
+
+.udap-doc-btn--disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+@media (max-width: 640px) {
+    .udap-page {
+        width: 94%;
+        padding: 20px 0 60px;
+    }
+
+    .udap-header {
+        flex-direction: column;
+    }
+
+    .udap-stats-row {
+        grid-template-columns: 1fr;
+    }
+
+    .udap-details {
+        grid-template-columns: 1fr;
+    }
+}

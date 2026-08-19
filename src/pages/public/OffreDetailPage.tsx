@@ -13,6 +13,7 @@ import { aDejaPostule } from "../../api/candidatureService";
 import { useAuth } from "../../context/AuthContext";
 import { getCouleurContrat } from "../offres/offreColors";
 import "./offres.css";
+import { enregistrerOffreVue } from "../../api/trackingService";
 
 type EtapeCandidature = "idle" | "formulaire" | "succes";
 
@@ -68,6 +69,7 @@ export function OffreDetailPage() {
             }
         }
         charger();
+        enregistrerOffreVue(Number(id));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id, currentUser?.role]);
 

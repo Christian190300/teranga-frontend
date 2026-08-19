@@ -3,6 +3,7 @@ import { AuthProvider } from "./context/AuthContext";
 import AppLayout from "./components/layout/AppLayout";
 import { MaintenanceGuard } from "./components/layout/MaintenanceGuard";
 import { ScrollToTop } from "./components/layout/ScrollToTop";
+import { PageTracker } from "./components/layout/PageTracker";
 
 // --- PAGES PUBLIQUES ET AUTH ---
 import { HomePage } from "./pages/HomePage";
@@ -51,6 +52,7 @@ import { CandidaturesAdminPage } from "./pages/admin/CandidaturesAdminPage";
 import { ParametresAdminPage } from "./pages/admin/ParametresAdminPage";
 import { ImportOffresPage } from "./pages/admin/ImportOffresPage";
 import { EnvoyerAnnoncePage } from "./pages/admin/EnvoyerAnnoncePage";
+import { UserDetailAdminPage } from "./pages/admin/UserDetailAdminPage";
 
 // --- COMPOSANTS & WIDGETS ---
 import { ProfilWidget } from "./components/common/ProfilWidget";
@@ -60,6 +62,7 @@ export default function App() {
         <AuthProvider>
             <BrowserRouter>
                 <ScrollToTop />
+                <PageTracker />
                 <MaintenanceGuard>
                     <AppLayout>
                         <Routes>
@@ -114,6 +117,7 @@ export default function App() {
                             <Route path="/admin/parametres" element={<ParametresAdminPage />} />
                             <Route path="/admin/notifications" element={<NotificationsAdminPage />} />
                             <Route path="/admin/annonces" element={<EnvoyerAnnoncePage />} />
+                            <Route path="/admin/utilisateurs/:userId" element={<UserDetailAdminPage />} />
                         </Routes>
 
                         {/* Widget global d'incitation profil */}
