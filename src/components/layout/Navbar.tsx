@@ -43,7 +43,6 @@ const visiteurCandidatLinks: NavLinkItem[] = [
 
 const visiteurRecruteurLinks: NavLinkItem[] = [
     { to: "/espace-recruteur", label: "Je suis recruteur" },
-    { to: "/espace-recruteur", label: "Espace recruteur" },
     { to: "/connexion", label: "Connexion recruteur" },
     { to: "/inscription?role=recruteur", label: "Créer un compte recruteur" },
 ];
