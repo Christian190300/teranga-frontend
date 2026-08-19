@@ -179,21 +179,14 @@ export function UserDetailAdminPage() {
     const videoStatut = profil?.profilCandidat?.videoStatut;
 
     useEffect(() => {
-        if (!userId || videoStatut !== "DISPONIBLE") {
-            return;
-        }
-
+        if (!userId || videoStatut !== "DISPONIBLE") return;
         let urlCourante: string | null = null;
-
-        obtenirVideoUtilisateurUrl(userId).then((url) => {
+        obtenirVideoUtilisateurUrl(userId!).then((url) => {
             urlCourante = url;
             setVideoUrl(url);
         });
-
         return () => {
-            if (urlCourante) {
-                URL.revokeObjectURL(urlCourante);
-            }
+            if (urlCourante) URL.revokeObjectURL(urlCourante);
         };
     }, [userId, videoStatut]);
 
