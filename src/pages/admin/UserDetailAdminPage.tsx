@@ -145,6 +145,8 @@ export function UserDetailAdminPage() {
 
     useEffect(() => {
         if (!userId) {
+            setError("Identifiant utilisateur manquant.");
+            setLoading(false);
             return;
         }
 
