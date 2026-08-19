@@ -67,6 +67,7 @@
     position: relative;
     opacity: 0;
     visibility: hidden;
+    pointer-events: none; /* Empêche les clics dans la zone invisible */
     transform: translateY(10px) scale(0.95);
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -74,6 +75,7 @@
 .profil-widget-banner.is-open {
     opacity: 1;
     visibility: visible;
+    pointer-events: auto; /* Réactive les clics quand elle est ouverte */
     transform: translateY(0) scale(1);
 }
 

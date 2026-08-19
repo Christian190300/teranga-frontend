@@ -371,15 +371,24 @@ export function OnboardingCandidatPage() {
 
                     {currentStep.id === "parcours" && (
                         <div className="ob-form">
+                            {/* Formations */}
                             <div className="ob-field">
                                 <label>Formations</label>
-                                <div className="ob-tag-input">
+                                <div className="ob-tag-input" style={{ display: "flex", gap: "8px" }}>
                                     <input
+                                        style={{ flex: 1 }}
                                         value={formationInput}
                                         onChange={e => setFormationInput(e.target.value)}
                                         onKeyDown={e => e.key === "Enter" && (e.preventDefault(), ajouterTag(formationInput, formations, setFormations, () => setFormationInput("")))}
-                                        placeholder="Ex : Licence Informatique - UCAD, 2024 — puis Entrée"
+                                        placeholder="Ex : Licence Informatique - UCAD, 2024"
                                     />
+                                    <button
+                                        type="button"
+                                        className="ob-btn ob-btn--ghost"
+                                        onClick={() => ajouterTag(formationInput, formations, setFormations, () => setFormationInput(""))}
+                                    >
+                                        Ajouter
+                                    </button>
                                 </div>
                                 <div className="ob-tags">
                                     {formations.map((f, i) => (
@@ -387,15 +396,25 @@ export function OnboardingCandidatPage() {
                                     ))}
                                 </div>
                             </div>
+
+                            {/* Compétences */}
                             <div className="ob-field">
                                 <label>Compétences</label>
-                                <div className="ob-tag-input">
+                                <div className="ob-tag-input" style={{ display: "flex", gap: "8px" }}>
                                     <input
+                                        style={{ flex: 1 }}
                                         value={competenceInput}
                                         onChange={e => setCompetenceInput(e.target.value)}
                                         onKeyDown={e => e.key === "Enter" && (e.preventDefault(), ajouterTag(competenceInput, competences, setCompetences, () => setCompetenceInput("")))}
-                                        placeholder="Ex : React — puis Entrée"
+                                        placeholder="Ex : React"
                                     />
+                                    <button
+                                        type="button"
+                                        className="ob-btn ob-btn--ghost"
+                                        onClick={() => ajouterTag(competenceInput, competences, setCompetences, () => setCompetenceInput(""))}
+                                    >
+                                        Ajouter
+                                    </button>
                                 </div>
                                 <div className="ob-tags">
                                     {competences.map((c, i) => (
@@ -403,15 +422,25 @@ export function OnboardingCandidatPage() {
                                     ))}
                                 </div>
                             </div>
+
+                            {/* Langues */}
                             <div className="ob-field">
                                 <label>Langues</label>
-                                <div className="ob-tag-input">
+                                <div className="ob-tag-input" style={{ display: "flex", gap: "8px" }}>
                                     <input
+                                        style={{ flex: 1 }}
                                         value={langueInput}
                                         onChange={e => setLangueInput(e.target.value)}
                                         onKeyDown={e => e.key === "Enter" && (e.preventDefault(), ajouterTag(langueInput, langues, setLangues, () => setLangueInput("")))}
-                                        placeholder="Ex : Français - Courant — puis Entrée"
+                                        placeholder="Ex : Français - Courant"
                                     />
+                                    <button
+                                        type="button"
+                                        className="ob-btn ob-btn--ghost"
+                                        onClick={() => ajouterTag(langueInput, langues, setLangues, () => setLangueInput(""))}
+                                    >
+                                        Ajouter
+                                    </button>
                                 </div>
                                 <div className="ob-tags">
                                     {langues.map((l, i) => (

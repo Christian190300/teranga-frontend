@@ -471,6 +471,24 @@
     margin: 0 auto 28px;
 }
 
+/* Ajustement pour aligner l'input et le bouton "Ajouter" */
+.ob-tag-input {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.ob-tag-input input {
+    flex: 1;
+}
+
+/* Style spécifique pour le bouton d'ajout s'il a besoin d'ajustements de hauteur */
+.ob-tag-input .ob-btn {
+    white-space: nowrap;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
 /* ---------- Responsive ---------- */
 
 @media (max-width: 860px) {
