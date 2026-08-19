@@ -30,8 +30,7 @@ import { MesFormationsPage } from "./pages/candidat/MesFormationsPage";
 import { FormationLecteurPage } from "./pages/candidat/FormationLecteurPage";
 import { FormationQuizPage } from "./pages/candidat/FormationQuizPage";
 import { OffresRecommandeesPage } from "./pages/candidat/OffresRecommandeesPage";
-import { OnboardingCandidat } from "./pages/candidat/OnboardingCandidatPage";
-
+import { OnboardingCandidatPage as OnboardingCandidat } from "./pages/candidat/OnboardingCandidatPage";
 // --- PAGES RECRUTEUR ---
 import { ProfilRecruteurPage } from "./pages/recruteur/ProfilRecruteurPage";
 import { OffresRecruteurPage } from "./pages/recruteur/OffresRecruteurPage";
