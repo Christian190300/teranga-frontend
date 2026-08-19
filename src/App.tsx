@@ -94,7 +94,7 @@ export default function App() {
                             <Route path="/candidat/formation/:formationId" element={<FormationLecteurPage />} />
                             <Route path="/candidat/formation/:formationId/quiz/:quizId" element={<FormationQuizPage />} />
                             <Route path="/candidat/offres-recommandees" element={<OffresRecommandeesPage />} />
-                            <Route path="/candidat/onboarding/candidat" element={<OnboardingCandidat />} />
+                            <Route path="/onboarding/candidat" element={<OnboardingCandidat />} />
 
                             {/* Espace Recruteur */}
                             <Route path="/recruteur/entreprise" element={<ProfilRecruteurPage />} />
