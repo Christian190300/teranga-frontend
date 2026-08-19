@@ -401,6 +401,35 @@
     color: var(--ap-navy);
     background: transparent;
 }
+
+
+.admin-table__user--link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: inherit;
+}
+
+.admin-table__user--link:hover .admin-table__name {
+    text-decoration: underline;
+}
+
+.admin-table__voir {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.85rem;
+    color: var(--ts-primary, #2563eb);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.admin-table__voir:hover {
+    text-decoration: underline;
+}
+
+
 /* ============================================================
    RESPONSIVE MOBILE — scroll horizontal sur la table
    ============================================================ */
