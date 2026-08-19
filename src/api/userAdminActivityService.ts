@@ -95,3 +95,13 @@ export async function getProfilCompletUtilisateur(userId: string): Promise<Profi
     const response = await httpClient.get(`/admin/utilisateurs/${userId}/profil-complet`);
     return response.data;
 }
+
+/** Récupère la vidéo de présentation d'un candidat (vue admin) sous forme de Blob URL. */
+export async function obtenirVideoUtilisateurUrl(userId: string): Promise<string | null> {
+    try {
+        const response = await httpClient.get(`/admin/utilisateurs/${userId}/video`, { responseType: "blob" });
+        return URL.createObjectURL(response.data as Blob);
+    } catch {
+        return null;
+    }
+}
