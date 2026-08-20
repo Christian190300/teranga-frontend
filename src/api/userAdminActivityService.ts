@@ -105,3 +105,25 @@ export async function obtenirVideoUtilisateurUrl(userId: string): Promise<string
         return null;
     }
 }
+
+/** Télécharge le CV d'un candidat (vue admin). */
+export async function telechargerCvUtilisateurAdmin(userId: string, filename = "cv.pdf"): Promise<void> {
+    const response = await httpClient.get(`/admin/utilisateurs/${userId}/cv`, { responseType: "blob" });
+    const url = URL.createObjectURL(response.data as Blob);
+    const lien = document.createElement("a");
+    lien.href = url;
+    lien.download = filename;
+    lien.click();
+    URL.revokeObjectURL(url);
+}
+
+/** Télécharge la lettre de motivation d'un candidat (vue admin). */
+export async function telechargerLettreMotivationUtilisateurAdmin(userId: string, filename = "lettre-motivation.pdf"): Promise<void> {
+    const response = await httpClient.get(`/admin/utilisateurs/${userId}/lettre-motivation`, { responseType: "blob" });
+    const url = URL.createObjectURL(response.data as Blob);
+    const lien = document.createElement("a");
+    lien.href = url;
+    lien.download = filename;
+    lien.click();
+    URL.revokeObjectURL(url);
+}

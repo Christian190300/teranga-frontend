@@ -320,3 +320,12 @@
         grid-template-columns: 1fr;
     }
 }
+button.udap-doc-btn {
+    font-family: inherit;
+    cursor: pointer;
+    appearance: none;
+}
+
+button.udap-doc-btn:disabled {
+    cursor: not-allowed;
+}

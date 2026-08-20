@@ -5,6 +5,8 @@ import {
     getActiviteUtilisateur,
     getProfilCompletUtilisateur,
     obtenirVideoUtilisateurUrl,
+    telechargerCvUtilisateurAdmin,
+    telechargerLettreMotivationUtilisateurAdmin,
     type ProfilCompletAdminDTO,
     type UserActivityDTO,
 } from "../../api/userAdminActivityService";
@@ -612,53 +614,36 @@ export function UserDetailAdminPage() {
                             <h2>Documents</h2>
 
                             <div className="udap-documents">
+                                <button
+                                    type="button"
+                                    className={`udap-doc-btn${!profil.profilCandidat.cvPresent ? " udap-doc-btn--disabled" : ""}`}
+                                    disabled={!profil.profilCandidat.cvPresent}
+                                    onClick={() =>
+                                        telechargerCvUtilisateurAdmin(
+                                            profil.userId,
+                                            profil.profilCandidat?.cvOriginalFilename ?? "cv.pdf"
+                                        )
+                                    }
+                                >
+                                    <IconFile />
+                                    {profil.profilCandidat.cvPresent ? "Télécharger le CV" : "Aucun CV"}
+                                </button>
 
-                                <a
-                                    className={`udap-doc-btn${
-    !profil.profilCandidat.cvPresent
-        ? " udap-doc-btn--disabled"
-        : ""
-}`}
-                                    href={
-                                        profil.profilCandidat.cvPresent
-                                            ? `/api/admin/candidats/${profil.userId}/cv`
-: undefined
-}
-target="_blank"
-rel="noreferrer"
-    >
-    <IconFile />
-
-    {profil.profilCandidat.cvPresent
-            ? "Télécharger le CV"
-            : "Aucun CV"}
-</a>
-
-<a
-    className={`udap-doc-btn${
-        !profil.profilCandidat
-            .lettreMotivationPresente
-            ? " udap-doc-btn--disabled"
-            : ""
-    }`}
-    href={
-        profil.profilCandidat
-            .lettreMotivationPresente
-            ? `/api/admin/candidats/${profil.userId}/lettre-motivation`
-            : undefined
-    }
-    target="_blank"
-    rel="noreferrer"
->
-    <IconFile />
-
-    {profil.profilCandidat
-        .lettreMotivationPresente
-        ? "Télécharger la lettre"
-        : "Aucune lettre"}
-</a>
-
-</div>
+                                <button
+                                    type="button"
+                                    className={`udap-doc-btn${!profil.profilCandidat.lettreMotivationPresente ? " udap-doc-btn--disabled" : ""}`}
+                                    disabled={!profil.profilCandidat.lettreMotivationPresente}
+                                    onClick={() =>
+                                        telechargerLettreMotivationUtilisateurAdmin(
+                                            profil.userId,
+                                            profil.profilCandidat?.lettreMotivationOriginalFilename ?? "lettre-motivation.pdf"
+                                        )
+                                    }
+                                >
+                                    <IconFile />
+                                    {profil.profilCandidat.lettreMotivationPresente ? "Télécharger la lettre" : "Aucune lettre"}
+                                </button>
+                            </div>
 </div>
 
 {/* Vidéo de présentation */}
