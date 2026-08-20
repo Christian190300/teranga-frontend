@@ -26,74 +26,31 @@
     box-sizing: border-box;
 }
 
-/* -----------------------------------------------------------
-   États de chargement / erreur
------------------------------------------------------------ */
-
 .udap-loading,
 .udap-error {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 14px;
     text-align: center;
     padding: 100px 20px;
     color: var(--ud-muted);
     font-size: 0.92rem;
 }
 
-.udap-error {
-    background: white;
-    border: 1px solid var(--ud-line);
-    border-radius: 16px;
-}
-
-.udap-spinner {
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    border: 2.5px solid var(--ud-navy-soft);
-    border-top-color: var(--ud-navy);
-    animation: udap-spin 0.7s linear infinite;
-}
-
-@keyframes udap-spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-/* -----------------------------------------------------------
-   Retour
------------------------------------------------------------ */
-
 .udap-back {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+    display: inline-block;
     font-size: 0.85rem;
     font-weight: 600;
     color: var(--ud-muted);
     text-decoration: none;
     margin-bottom: 20px;
-    transition: color 0.15s ease, gap 0.15s ease;
 }
 
 .udap-back:hover {
     color: var(--ud-navy);
-    gap: 9px;
 }
-
-/* -----------------------------------------------------------
-   En-tête
------------------------------------------------------------ */
 
 .udap-header {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
-    flex-wrap: wrap;
     gap: 20px;
     background: white;
     border: 1px solid var(--ud-line);
@@ -101,32 +58,6 @@
     padding: 24px 28px;
     margin-bottom: 20px;
     box-shadow: 0 1px 2px rgba(20, 41, 77, 0.04);
-}
-
-.udap-header__identity {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    min-width: 0;
-}
-
-.udap-avatar {
-    flex-shrink: 0;
-    width: 52px;
-    height: 52px;
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, var(--ud-navy), #1f3a6e);
-    color: white;
-    font-weight: 800;
-    font-size: 1rem;
-    letter-spacing: 0.02em;
-}
-
-.udap-header__text {
-    min-width: 0;
 }
 
 .udap-badge {
@@ -153,7 +84,6 @@
     color: var(--ud-navy);
     margin: 0 0 4px;
     letter-spacing: -0.01em;
-    overflow-wrap: break-word;
 }
 
 .udap-userid {
@@ -161,7 +91,6 @@
     color: var(--ud-muted-light);
     margin: 0;
     font-family: monospace;
-    overflow-wrap: break-word;
 }
 
 .udap-score {
@@ -171,7 +100,6 @@
     border-radius: 12px;
     padding: 14px 22px;
     min-width: 120px;
-    margin-left: auto;
 }
 
 .udap-score--certifie {
@@ -201,10 +129,6 @@
     margin-top: 4px;
 }
 
-/* -----------------------------------------------------------
-   Cards
------------------------------------------------------------ */
-
 .udap-card {
     background: white;
     border: 1px solid var(--ud-line);
@@ -222,10 +146,6 @@
     letter-spacing: -0.01em;
 }
 
-/* -----------------------------------------------------------
-   Statistiques d'activité
------------------------------------------------------------ */
-
 .udap-stats-row {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -241,7 +161,6 @@
     border-radius: 12px;
     padding: 14px 16px;
     color: var(--ud-navy);
-    min-width: 0;
 }
 
 .udap-stat strong {
@@ -269,12 +188,7 @@
     color: var(--ud-muted);
     line-height: 1.6;
     margin: 0;
-    overflow-wrap: break-word;
 }
-
-/* -----------------------------------------------------------
-   Liste des candidatures récentes
------------------------------------------------------------ */
 
 .udap-list {
     display: flex;
@@ -302,15 +216,10 @@
 }
 
 .udap-list-item__meta {
-    flex-shrink: 0;
     font-size: 0.76rem;
     color: var(--ud-muted-light);
     font-weight: 500;
 }
-
-/* -----------------------------------------------------------
-   Détails clé/valeur
------------------------------------------------------------ */
 
 .udap-details {
     display: grid;
@@ -330,12 +239,7 @@
     font-weight: 600;
     color: var(--ud-navy);
     margin: 0;
-    overflow-wrap: break-word;
 }
-
-/* -----------------------------------------------------------
-   Tags / listes simples
------------------------------------------------------------ */
 
 .udap-tags {
     display: flex;
@@ -360,21 +264,12 @@
     line-height: 1.8;
 }
 
-/* -----------------------------------------------------------
-   Vidéo
------------------------------------------------------------ */
-
 .udap-video {
     width: 100%;
     max-width: 480px;
     border-radius: 8px;
     display: block;
-    background: #000;
 }
-
-/* -----------------------------------------------------------
-   Documents
------------------------------------------------------------ */
 
 .udap-documents {
     display: flex;
@@ -383,10 +278,8 @@
 }
 
 .udap-doc-btn {
-    flex: 1 1 220px;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
     gap: 8px;
     padding: 11px 18px;
     border-radius: 10px;
@@ -396,9 +289,6 @@
     font-size: 0.86rem;
     font-weight: 700;
     text-decoration: none;
-    font-family: inherit;
-    cursor: pointer;
-    appearance: none;
     transition: background 0.15s ease, border-color 0.15s ease;
 }
 
@@ -410,127 +300,32 @@
 .udap-doc-btn--disabled {
     opacity: 0.5;
     pointer-events: none;
-    cursor: not-allowed;
 }
 
-/* ============================================================
-   RESPONSIVITÉ
-   ============================================================ */
-
-/* Tablette */
-@media (max-width: 768px) {
+@media (max-width: 640px) {
     .udap-page {
         width: 94%;
-        padding: 24px 0 70px;
-    }
-
-    .udap-header {
-        padding: 20px;
-    }
-
-    .udap-card {
-        padding: 20px;
-    }
-
-    .udap-stats-row {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 8px;
-    }
-
-    .udap-stat {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-        padding: 12px;
-    }
-}
-
-/* Mobile */
-@media (max-width: 560px) {
-    .udap-page {
-        width: 100%;
-        padding: 16px 16px 60px;
+        padding: 20px 0 60px;
     }
 
     .udap-header {
         flex-direction: column;
-        align-items: stretch;
-        gap: 16px;
-        padding: 18px;
-    }
-
-    .udap-header__identity {
-        gap: 12px;
-    }
-
-    .udap-avatar {
-        width: 44px;
-        height: 44px;
-        font-size: 0.88rem;
-    }
-
-    .udap-header h1 {
-        font-size: 1.18rem;
-    }
-
-    .udap-score {
-        margin-left: 0;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        text-align: left;
-        padding: 12px 16px;
-    }
-
-    .udap-score__cert {
-        margin-bottom: 0;
-    }
-
-    .udap-score__value {
-        font-size: 1.3rem;
-    }
-
-    .udap-score__label {
-        margin-top: 0;
-    }
-
-    .udap-card {
-        padding: 18px 16px;
-        border-radius: 14px;
     }
 
     .udap-stats-row {
         grid-template-columns: 1fr;
-        gap: 8px;
-    }
-
-    .udap-stat {
-        flex-direction: row;
-        align-items: center;
     }
 
     .udap-details {
         grid-template-columns: 1fr;
-        gap: 12px;
     }
+}
+button.udap-doc-btn {
+    font-family: inherit;
+    cursor: pointer;
+    appearance: none;
+}
 
-    .udap-list-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 4px;
-    }
-
-    .udap-documents {
-        flex-direction: column;
-    }
-
-    .udap-doc-btn {
-        flex: 1 1 auto;
-        width: 100%;
-    }
-
-    .udap-video {
-        max-width: 100%;
-    }
+button.udap-doc-btn:disabled {
+    cursor: not-allowed;
 }
