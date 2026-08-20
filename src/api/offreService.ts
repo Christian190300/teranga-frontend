@@ -10,6 +10,10 @@ export interface FiltresOffres {
     secteurActivite?: string;
 }
 
+export interface StatistiquePublicationDTO {
+    periode: string; // "2026-08-20" | "2026-08" | "2026"
+    total: number;
+}
 
 export interface OffreDTO {
     id: number;
@@ -171,6 +175,24 @@ export async function fermerOffre(id: number): Promise<OffreDTO> {
 /** DELETE /api/offres/{id} — recruteur propriétaire ou admin. */
 export async function supprimerOffre(id: number): Promise<void> {
     await httpClient.delete(`/offres/${id}`);
+}
+
+/** GET /api/offres/statistiques/publications/jour — admin uniquement. */
+export async function obtenirStatistiquesPublicationsParJour(): Promise<StatistiquePublicationDTO[]> {
+    const response = await httpClient.get<StatistiquePublicationDTO[]>("/offres/statistiques/publications/jour");
+    return response.data;
+}
+
+/** GET /api/offres/statistiques/publications/mois — admin uniquement. */
+export async function obtenirStatistiquesPublicationsParMois(): Promise<StatistiquePublicationDTO[]> {
+    const response = await httpClient.get<StatistiquePublicationDTO[]>("/offres/statistiques/publications/mois");
+    return response.data;
+}
+
+/** GET /api/offres/statistiques/publications/annee — admin uniquement. */
+export async function obtenirStatistiquesPublicationsParAnnee(): Promise<StatistiquePublicationDTO[]> {
+    const response = await httpClient.get<StatistiquePublicationDTO[]>("/offres/statistiques/publications/annee");
+    return response.data;
 }
 
 // ---------------------------------------------------------------------------

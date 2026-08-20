@@ -7,6 +7,7 @@ import { listerEntreprises } from "../../api/entrepriseAdminService";
 import { listerToutesOffresAdmin, LABELS_STATUT_OFFRE } from "../../api/offreService";
 import type { SpringPage, OffreDTO, StatutOffre } from "../../api/offreService";
 import "./AdminDashboardPage.css";
+import { OffresPublicationsChart } from "../admin/OffresPublicationsChart";
 
 interface EtatDashboard {
     utilisateurs: UtilisateursStatistiques | null;
@@ -112,6 +113,9 @@ export function AdminDashboardPage() {
                     accent="navy"
                 />
             </section>
+
+            {/* ---------- Offres publiées dans le temps (jour / mois / année) ---------- */}
+            <OffresPublicationsChart />
 
             <div className="dashboard-grid">
                 {/* ---------- Répartition des offres ---------- */}
