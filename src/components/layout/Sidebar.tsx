@@ -43,17 +43,31 @@ export function Sidebar() {
     const location = useLocation();
     const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
 
     async function handleLogout() {
-        await logout();
-        navigate("/");
+        if (isLoggingOut) return;
+
+        setIsLoggingOut(true);
+        setIsOpen(false);
+
+        try {
+            await logout();
+        } catch (error) {
+            console.error("Erreur lors de la déconnexion :", error);
+        } finally {
+            navigate("/", { replace: true });
+            setIsLoggingOut(false);
+        }
     }
 
     function handleLinkClick() {
         setIsOpen(false);
     }
 
-    const initials = currentUser ? `${currentUser.firstName[0] ?? ""}${currentUser.lastName[0] ?? ""}`.toUpperCase() : "AD";
+    const initials = currentUser
+        ? `${currentUser.firstName?.[0] ?? ""}${currentUser.lastName?.[0] ?? ""}`.toUpperCase()
+        : "AD";
 
     /**
      * Un lien reste actif sur ses sous-routes (ex: "/admin/utilisateurs" reste
@@ -127,7 +141,13 @@ export function Sidebar() {
                         </div>
                         <div className="sidebar__profile-role">Administrateur</div>
                     </div>
-                    <button className="sidebar__logout-icon" onClick={handleLogout} aria-label="Se déconnecter">
+                    <button
+                        type="button"
+                        className="sidebar__logout-icon"
+                        onClick={handleLogout}
+                        disabled={isLoggingOut}
+                        aria-label="Se déconnecter"
+                    >
                         <IconLogOut />
                     </button>
                 </div>

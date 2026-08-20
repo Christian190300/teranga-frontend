@@ -268,6 +268,7 @@ export function Navbar() {
     const location = useLocation();
 
     const [menuOuvert, setMenuOuvert] = useState(false);
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
     const [activeVisitorMenu, setActiveVisitorMenu] = useState<string | null>(null);
     const [mobileVisitorMenu, setMobileVisitorMenu] = useState<string | null>(null);
     const visitorMenusRef = useRef<HTMLDivElement>(null);
@@ -346,9 +347,19 @@ export function Navbar() {
     }, [activeVisitorMenu]);
 
     async function handleDeconnexion() {
+        if (isLoggingOut) return;
+
+        setIsLoggingOut(true);
         setMenuOuvert(false);
-        await logout();
-        navigate("/");
+
+        try {
+            await logout();
+        } catch (error) {
+            console.error("Erreur lors de la déconnexion :", error);
+        } finally {
+            navigate("/", { replace: true });
+            setIsLoggingOut(false);
+        }
     }
 
     const scoreCompletion =
@@ -552,18 +563,10 @@ export function Navbar() {
                                 <button
                                     type="button"
                                     className="btn btn--ghost"
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                        void handleDeconnexion();
-                                    }}
-                                    onTouchEnd={(e) => {
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                        void handleDeconnexion();
-                                    }}
+                                    onClick={() => void handleDeconnexion()}
+                                    disabled={isLoggingOut}
                                 >
-                                    Se déconnecter
+                                    {isLoggingOut ? "Déconnexion..." : "Se déconnecter"}
                                 </button>
                             </>
                         ) : (
