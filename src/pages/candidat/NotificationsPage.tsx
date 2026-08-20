@@ -46,9 +46,11 @@ export function NotificationsPage() {
     const charger = useCallback(async (pageDemandee: number) => {
         setChargement(true);
         try {
-            const { content, totalPages: total } = await getMesNotifications(pageDemandee, TAILLE_PAGE);
-            setNotifications(content);
-            setTotalPages(total ?? 1);
+            const resultat = await getMesNotifications(pageDemandee, TAILLE_PAGE);
+            setNotifications(resultat.content);
+            // adapter selon le vrai nom du champ dans PageResult
+            const total = (resultat as any).totalPages ?? Math.ceil((resultat as any).totalElements / TAILLE_PAGE) ?? 1;
+            setTotalPages(total);
         } catch {
             setNotifications([]);
         } finally {
