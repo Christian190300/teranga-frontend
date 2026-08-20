@@ -50,8 +50,8 @@ export default function ContactPage() {
 
                                 <div className="contact-detail__content">
                                     <span>Email</span>
-                                    <a href="mailto:contact@talentsenegal.sn">
-                                        contact@talentsenegal.sn
+                                    <a href="mailto:contact@talentsenegal.com">
+                                        contact@talentsenegal.com
                                     </a>
                                 </div>
                             </div>

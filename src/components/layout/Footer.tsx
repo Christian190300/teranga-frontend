@@ -99,7 +99,7 @@ export function Footer() {
                     {/* CONTACT */}
                     <div className="footer__column footer__column--contact">
                         <h3>Contact</h3>
-                        <a href="mailto:contact@talentsenegal.sn">contact@talentsenegal.sn</a>
+                        <a href="mailto:contact@talentsenegal.com">contact@talentsenegal.com</a>
                         <a href="tel:+221777072424">+221 77 707 24 24</a>
                         <span>Nord Foire, Dakar, Sénégal</span>
                     </div>
