@@ -24,7 +24,6 @@ const LABELS_GRANULARITE: Record<Granularite, string> = {
     annee: "Par année",
 };
 
-/** Formate la période brute ("2026-08-20", "2026-08", "2026") en libellé FR lisible pour l'axe X. */
 function formaterPeriode(periode: string, granularite: Granularite): string {
     if (granularite === "annee") return periode;
 
@@ -34,15 +33,10 @@ function formaterPeriode(periode: string, granularite: Granularite): string {
         return date.toLocaleDateString("fr-FR", { month: "short", year: "2-digit" });
     }
 
-    // jour
     const date = new Date(periode);
     return date.toLocaleDateString("fr-FR", { day: "2-digit", month: "short" });
 }
 
-/**
- * Pour la vue "jour", on ne garde que les 30 derniers jours afin de garder
- * un graphique lisible (l'API renvoie tout l'historique).
- */
 function limiterDonnees(donnees: StatistiquePublicationDTO[], granularite: Granularite): StatistiquePublicationDTO[] {
     if (granularite === "jour") return donnees.slice(-30);
     if (granularite === "mois") return donnees.slice(-12);
@@ -60,7 +54,7 @@ export function OffresPublicationsChart() {
     const [erreur, setErreur] = useState<string | null>(null);
 
     useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect -- fetch au montage
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- fetch au montage, pattern standard
         (async () => {
             setChargement(true);
             setErreur(null);
@@ -135,7 +129,7 @@ export function OffresPublicationsChart() {
                                 <YAxis allowDecimals={false} tickLine={false} axisLine={false} fontSize={12} width={30} />
                                 <Tooltip
                                     cursor={{ fill: "rgba(0,0,0,0.04)" }}
-                                    formatter={(value: number) => [`${value} offre(s)`, "Publiées"]}
+                                    formatter={(value) => [`${value ?? 0} offre(s)`, "Publiées"]}
                                 />
                                 <Bar dataKey="total" fill="#0b3d2e" radius={[4, 4, 0, 0]} />
                             </BarChart>
