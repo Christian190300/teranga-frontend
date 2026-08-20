@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import {
     type CandidatureDTO,
+    type CandidatureStatistiquesDTO,
     LABELS_STATUT_CANDIDATURE,
     listerToutesCandidaturesAdmin,
+    obtenirStatistiquesCandidatures,
     telechargerCvCandidatureAdmin,
     telechargerLettreMotivationCandidatureAdmin,
 } from "../../api/candidatureService";
@@ -32,6 +34,9 @@ export function CandidaturesAdminPage() {
     const [ligneOuverte, setLigneOuverte] = useState<number | null>(null);
     const [telechargementEnCours, setTelechargementEnCours] = useState<string | null>(null);
 
+    const [stats, setStats] = useState<CandidatureStatistiquesDTO | null>(null);
+    const [chargementStats, setChargementStats] = useState(true);
+
     const charger = useCallback(async (pageDemandee: number) => {
         setChargement(true);
         setErreur(null);
@@ -50,6 +55,21 @@ export function CandidaturesAdminPage() {
         // eslint-disable-next-line react-hooks/set-state-in-effect -- fetch au montage, pattern standard
         charger(page);
     }, [page, charger]);
+
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- fetch au montage, pattern standard
+        (async () => {
+            setChargementStats(true);
+            try {
+                const resultat = await obtenirStatistiquesCandidatures();
+                setStats(resultat);
+            } catch {
+                // pas bloquant pour le reste de la page — les cards restent en skeleton
+            } finally {
+                setChargementStats(false);
+            }
+        })();
+    }, []);
 
     async function handleTelechargerCv(c: CandidatureDTO) {
         const cle = `cv-${c.id}`;
@@ -85,6 +105,59 @@ export function CandidaturesAdminPage() {
                         <h1 className="admin-page__title">Candidatures</h1>
                         <p className="admin-page__subtitle">
                             Toutes les candidatures envoyées sur la plateforme, tous recruteurs confondus.
+                        </p>
+                    </div>
+                </div>
+
+                <div className="candidature-stats-grid">
+                    <div className="candidature-stat-card">
+                        <p className="candidature-stat-card__label">Total candidatures</p>
+                        <p className="candidature-stat-card__value">
+                            {chargementStats || !stats ? (
+                                <span className="candidature-stat-card__skeleton" />
+                            ) : (
+                                stats.total.toLocaleString()
+                            )}
+                        </p>
+                    </div>
+                    <div className="candidature-stat-card">
+                        <p className="candidature-stat-card__label">Candidats uniques</p>
+                        <p className="candidature-stat-card__value">
+                            {chargementStats || !stats ? (
+                                <span className="candidature-stat-card__skeleton" />
+                            ) : (
+                                stats.candidatsUniques.toLocaleString()
+                            )}
+                        </p>
+                    </div>
+                    <div className="candidature-stat-card">
+                        <p className="candidature-stat-card__label">Aujourd'hui</p>
+                        <p className="candidature-stat-card__value">
+                            {chargementStats || !stats ? (
+                                <span className="candidature-stat-card__skeleton" />
+                            ) : (
+                                stats.aujourdHui.toLocaleString()
+                            )}
+                        </p>
+                    </div>
+                    <div className="candidature-stat-card">
+                        <p className="candidature-stat-card__label">Cette semaine</p>
+                        <p className="candidature-stat-card__value">
+                            {chargementStats || !stats ? (
+                                <span className="candidature-stat-card__skeleton" />
+                            ) : (
+                                stats.cetteSemaine.toLocaleString()
+                            )}
+                        </p>
+                    </div>
+                    <div className="candidature-stat-card">
+                        <p className="candidature-stat-card__label">Ce mois</p>
+                        <p className="candidature-stat-card__value">
+                            {chargementStats || !stats ? (
+                                <span className="candidature-stat-card__skeleton" />
+                            ) : (
+                                stats.ceMois.toLocaleString()
+                            )}
                         </p>
                     </div>
                 </div>

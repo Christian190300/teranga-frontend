@@ -83,3 +83,59 @@
         align-items: flex-start;
     }
 }
+
+.candidature-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.candidature-stat-card {
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 14px;
+    padding: 18px 20px;
+}
+
+.candidature-stat-card__label {
+    font-size: 0.78rem;
+    color: #6b7280;
+    margin: 0 0 6px;
+    font-weight: 500;
+}
+
+.candidature-stat-card__value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #14294d;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.candidature-stat-card__skeleton {
+    display: inline-block;
+    width: 60px;
+    height: 24px;
+    border-radius: 6px;
+    background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+    background-size: 200% 100%;
+    animation: candidature-stat-shimmer 1.4s infinite;
+}
+
+@keyframes candidature-stat-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+@media (max-width: 900px) {
+    .candidature-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .candidature-stats-grid {
+        grid-template-columns: 1fr;
+    }
+}

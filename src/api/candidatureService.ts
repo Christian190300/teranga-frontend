@@ -48,6 +48,14 @@ export interface ResultatCandidaturesAdmin {
     total: number;
 }
 
+export interface CandidatureStatistiquesDTO {
+    total: number;
+    candidatsUniques: number;
+    aujourdHui: number;
+    cetteSemaine: number;
+    ceMois: number;
+}
+
 /** POST /api/offres/{offreId}/candidatures — le candidat postule. */
 export async function postulerOffre(offreId: number, message?: string): Promise<CandidatureDTO> {
     const response = await httpClient.post<CandidatureDTO>(`/offres/${offreId}/candidatures`, message ? { message } : {});
@@ -86,6 +94,12 @@ export async function changerStatutCandidature(id: number, statut: StatutCandida
 /** GET /api/candidatures/recues — toutes les candidatures reçues (recruteur), toutes offres confondues. */
 export async function listerCandidaturesRecues(): Promise<CandidatureDTO[]> {
     const response = await httpClient.get<CandidatureDTO[]>("/candidatures/recues");
+    return response.data;
+}
+
+/** GET /api/candidatures/admin/statistiques — admin uniquement. */
+export async function obtenirStatistiquesCandidatures(): Promise<CandidatureStatistiquesDTO> {
+    const response = await httpClient.get<CandidatureStatistiquesDTO>("/candidatures/admin/statistiques");
     return response.data;
 }
 
