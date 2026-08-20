@@ -37,6 +37,17 @@ export interface PageOffres {
     size: number;
 }
 
+export interface InscriptionsParPeriode {
+    parJour: Record<string, number>;
+    parMois: Record<string, number>;
+    parAnnee: Record<string, number>;
+}
+
+export interface StatistiqueInscriptionDTO {
+    periode: string;
+    total: number;
+}
+
 // À vérifier contre KeycloakAdminService.ROLES_GERES côté backend.
 export const ROLES_GERES = [
     "ROLE_CANDIDAT",
@@ -103,6 +114,11 @@ export async function listerToutesOffresAdmin(page: number, size: number): Promi
 
 export async function obtenirStatistiquesUtilisateurs(): Promise<UtilisateursStatistiques> {
     const response = await httpClient.get<UtilisateursStatistiques>(`${BASE_URL}/statistiques`);
+    return response.data;
+}
+
+export async function obtenirStatistiquesInscriptions(): Promise<InscriptionsParPeriode> {
+    const response = await httpClient.get<InscriptionsParPeriode>(`${BASE_URL}/statistiques/inscriptions`);
     return response.data;
 }
 

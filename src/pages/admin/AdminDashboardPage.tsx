@@ -8,6 +8,7 @@ import { listerToutesOffresAdmin, LABELS_STATUT_OFFRE } from "../../api/offreSer
 import type { SpringPage, OffreDTO, StatutOffre } from "../../api/offreService";
 import "./AdminDashboardPage.css";
 import { OffresPublicationsChart } from "../admin/OffresPublicationsChart";
+import { InscriptionsUtilisateursChart } from "../admin/InscriptionsUtilisateursChart";
 
 interface EtatDashboard {
     utilisateurs: UtilisateursStatistiques | null;
@@ -113,6 +114,12 @@ export function AdminDashboardPage() {
                     accent="navy"
                 />
             </section>
+            <br/>
+            <br/>
+            <br/>
+
+            {/* ---------- Inscriptions utilisateurs dans le temps (jour / mois / année) ---------- */}
+            <InscriptionsUtilisateursChart />
             <br/>
             <br/>
             <br/>
