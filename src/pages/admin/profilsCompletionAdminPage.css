@@ -11,8 +11,8 @@
     --pc-danger: #b3261e;
     --pc-danger-bg: #fbeceb;
 
-    max-width: 880px;
-    width: 92%;
+    max-width: 1100px;
+    width: 94%;
     margin: 0 auto;
     padding: 32px 0 90px;
     font-family: 'Inter', -apple-system, sans-serif;
@@ -22,157 +22,291 @@
     box-sizing: border-box;
 }
 
+.pcap-head {
+    margin-bottom: 22px;
+}
+
 .pcap-title {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     font-weight: 800;
     color: var(--pc-navy);
-    margin: 0 0 20px;
+    margin: 0 0 4px;
     letter-spacing: -0.01em;
 }
+
+.pcap-subtitle {
+    font-size: 0.86rem;
+    color: var(--pc-muted);
+    margin: 0;
+}
+
+/* --- Stats --- */
 
 .pcap-stats-row {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 24px;
+    gap: 14px;
+    margin-bottom: 22px;
 }
 
 .pcap-stat {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 4px;
+    gap: 6px;
     background: white;
     border: 1.5px solid var(--pc-line);
-    border-radius: 14px;
-    padding: 18px 20px;
+    border-radius: 16px;
+    padding: 20px 22px;
     font-family: inherit;
-    cursor: default;
     text-align: left;
+    box-shadow: 0 1px 2px rgba(20, 41, 77, 0.04);
 }
 
-.pcap-stat strong {
-    font-size: 1.6rem;
+.pcap-stat__value {
+    font-size: 1.9rem;
     font-weight: 800;
     color: var(--pc-navy);
     line-height: 1;
 }
 
-.pcap-stat span {
-    font-size: 0.78rem;
+.pcap-stat__label {
+    font-size: 0.8rem;
     color: var(--pc-muted);
 }
 
 .pcap-stat--complet,
 .pcap-stat--incomplet {
     cursor: pointer;
-    transition: border-color 0.15s ease, background 0.15s ease;
+    transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
 }
 
 .pcap-stat--complet:hover,
 .pcap-stat--incomplet:hover {
+    transform: translateY(-1px);
     background: var(--pc-cream);
 }
 
-.pcap-stat--complet.pcap-stat--actif {
+.pcap-stat--complet.is-active {
     border-color: var(--pc-success);
     background: var(--pc-success-bg);
 }
 
-.pcap-stat--complet.pcap-stat--actif strong {
+.pcap-stat--complet.is-active .pcap-stat__value {
     color: var(--pc-success);
 }
 
-.pcap-stat--incomplet.pcap-stat--actif {
+.pcap-stat--incomplet.is-active {
     border-color: var(--pc-danger);
     background: var(--pc-danger-bg);
 }
 
-.pcap-stat--incomplet.pcap-stat--actif strong {
+.pcap-stat--incomplet.is-active .pcap-stat__value {
     color: var(--pc-danger);
 }
 
-.pcap-list {
+/* --- Toolbar --- */
+
+.pcap-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+}
+
+.pcap-search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    border: 1.5px solid var(--pc-line);
+    border-radius: 10px;
+    padding: 9px 14px;
+    color: var(--pc-muted-light);
+    flex: 1;
+    min-width: 220px;
+    max-width: 360px;
+}
+
+.pcap-search__input {
+    border: none;
+    outline: none;
+    font-size: 0.86rem;
+    color: var(--pc-navy);
+    width: 100%;
+    font-family: inherit;
+}
+
+.pcap-toolbar__count {
+    font-size: 0.8rem;
+    color: var(--pc-muted);
+    font-weight: 600;
+}
+
+.pcap-alert {
+    background: var(--pc-danger-bg);
+    color: var(--pc-danger);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 0.85rem;
+    margin-bottom: 14px;
+}
+
+/* --- Table --- */
+
+.pcap-table-wrap {
     background: white;
     border: 1px solid var(--pc-line);
     border-radius: 16px;
     overflow: hidden;
+    box-shadow: 0 1px 2px rgba(20, 41, 77, 0.04);
 }
 
-.pcap-empty {
-    padding: 48px 16px;
-    text-align: center;
-    color: var(--pc-muted);
-    font-size: 0.9rem;
+.pcap-table {
+    width: 100%;
+    border-collapse: collapse;
 }
 
-.pcap-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 16px 20px;
+.pcap-table thead th {
+    text-align: left;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--pc-muted-light);
+    padding: 14px 20px;
+    background: var(--pc-cream);
     border-bottom: 1px solid var(--pc-line);
-    text-decoration: none;
-    color: var(--pc-navy);
+}
+
+.pcap-table tbody tr {
+    border-bottom: 1px solid var(--pc-line);
     transition: background 0.15s ease;
 }
 
-.pcap-item:last-child {
+.pcap-table tbody tr:last-child {
     border-bottom: none;
 }
 
-.pcap-item:hover {
+.pcap-table tbody tr:hover {
     background: var(--pc-navy-soft);
 }
 
-.pcap-item__nom {
-    font-size: 0.9rem;
-    font-weight: 700;
-    flex: 1;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+.pcap-table td {
+    padding: 14px 20px;
+    font-size: 0.86rem;
+    color: var(--pc-navy);
+    vertical-align: middle;
 }
 
-.pcap-item__meta {
-    font-size: 0.74rem;
-    color: var(--pc-muted-light);
-    font-family: monospace;
+.pcap-table__empty {
+    text-align: center;
+    padding: 48px 16px;
+    color: var(--pc-muted);
 }
 
-.pcap-item__score {
-    font-size: 0.85rem;
-    font-weight: 800;
-    color: var(--pc-success);
-    background: var(--pc-success-bg);
-    padding: 4px 10px;
+.pcap-table__user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.pcap-table__avatar {
+    width: 34px;
+    height: 34px;
     border-radius: 999px;
+    background: var(--pc-navy);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.74rem;
+    font-weight: 700;
     flex-shrink: 0;
 }
 
-.pcap-item__score--faible {
+.pcap-table__name {
+    font-weight: 700;
+    color: var(--pc-navy);
+    font-size: 0.87rem;
+}
+
+.pcap-table__username {
+    font-size: 0.74rem;
+    color: var(--pc-muted-light);
+}
+
+.pcap-score-pill {
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--pc-success);
+    background: var(--pc-success-bg);
+    padding: 4px 12px;
+    border-radius: 999px;
+}
+
+.pcap-score-pill--faible {
     color: var(--pc-danger);
     background: var(--pc-danger-bg);
 }
 
-@media (max-width: 640px) {
-    .pcap-page {
-        width: 94%;
-        padding: 20px 0 60px;
-    }
+.pcap-table__voir {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--pc-gold);
+    text-decoration: none;
+}
 
+.pcap-table__voir:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 780px) {
     .pcap-stats-row {
         grid-template-columns: 1fr;
     }
 
-    .pcap-item {
-        flex-wrap: wrap;
+    .pcap-table thead {
+        display: none;
     }
 
-    .pcap-item__meta {
-        order: 3;
+    .pcap-table,
+    .pcap-table tbody,
+    .pcap-table tr,
+    .pcap-table td {
+        display: block;
         width: 100%;
+    }
+
+    .pcap-table tr {
+        padding: 14px 16px;
+    }
+
+    .pcap-table td {
+        padding: 6px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .pcap-table td[data-label]::before {
+        content: attr(data-label);
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--pc-muted-light);
+        text-transform: uppercase;
+    }
+
+    .pcap-table td[data-label="Candidat"]::before {
+        display: none;
     }
 }
