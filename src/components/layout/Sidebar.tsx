@@ -28,6 +28,7 @@ function IconHome() {
 const generalLinks = [
     { to: "/admin", label: "Tableau de bord", icon: <IconLayoutDashboard /> },
     { to: "/admin/utilisateurs", label: "Utilisateurs", icon: <IconUsers /> },
+    { to: "/admin/profils-completion", label: "Complétion des profils", icon: <IconUsers /> },
     { to: "/admin/entreprises", label: "Entreprises", icon: <IconBuilding /> },
     { to: "/admin/offres", label: "Offres", icon: <IconBriefcase /> },
     { to: "/admin/offres/import", label: "Import SENJOB", icon: <IconBriefcase /> },

@@ -53,6 +53,8 @@ import { ParametresAdminPage } from "./pages/admin/ParametresAdminPage";
 import { ImportOffresPage } from "./pages/admin/ImportOffresPage";
 import { EnvoyerAnnoncePage } from "./pages/admin/EnvoyerAnnoncePage";
 import { UserDetailAdminPage } from "./pages/admin/UserDetailAdminPage";
+import { ProfilsCompletionAdminPage } from "./pages/admin/ProfilsCompletionAdminPage";
+
 
 // --- COMPOSANTS & WIDGETS ---
 import { ProfilWidget } from "./components/common/ProfilWidget";
@@ -120,6 +122,7 @@ export default function App() {
                             <Route path="/admin/notifications" element={<NotificationsAdminPage />} />
                             <Route path="/admin/annonces" element={<EnvoyerAnnoncePage />} />
                             <Route path="/admin/utilisateurs/:userId" element={<UserDetailAdminPage />} />
+                            <Route path="/admin/profils-completion" element={<ProfilsCompletionAdminPage />} />
                         </Routes>
 
                         {/* Widget global d'incitation profil */}

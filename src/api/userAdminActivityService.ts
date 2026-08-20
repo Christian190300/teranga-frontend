@@ -1,4 +1,5 @@
 import { httpClient } from "./httpClient";
+import type { ProfilCandidatDTO } from "./profileService";
 
 export interface PageVisiteeDTO {
     pagePath: string;
@@ -9,6 +10,12 @@ export interface OffreVueResumeDTO {
     offreId: number;
     titreOffre: string | null;
     dateVue: string;
+}
+
+export interface ProfilCompletionStatistiquesDTO {
+    totalProfils: number;
+    profilsComplets: number;
+    profilsIncomplets: number;
 }
 
 export interface CandidatureResumeDTO {
@@ -126,4 +133,22 @@ export async function telechargerLettreMotivationUtilisateurAdmin(userId: string
     lien.download = filename;
     lien.click();
     URL.revokeObjectURL(url);
+}
+
+//** GET /api/admin/utilisateurs/profils/completion/statistiques */
+export async function getStatistiquesCompletionProfils(): Promise<ProfilCompletionStatistiquesDTO> {
+    const response = await httpClient.get(`/admin/utilisateurs/profils/completion/statistiques`);
+    return response.data;
+}
+
+/** GET /api/admin/utilisateurs/profils/completion/complets */
+export async function listerProfilsComplets(): Promise<ProfilCandidatDTO[]> {
+    const response = await httpClient.get(`/admin/utilisateurs/profils/completion/complets`);
+    return response.data;
+}
+
+/** GET /api/admin/utilisateurs/profils/completion/incomplets */
+export async function listerProfilsIncomplets(): Promise<ProfilCandidatDTO[]> {
+    const response = await httpClient.get(`/admin/utilisateurs/profils/completion/incomplets`);
+    return response.data;
 }
