@@ -30,6 +30,7 @@ import { MesFormationsPage } from "./pages/candidat/MesFormationsPage";
 import { FormationLecteurPage } from "./pages/candidat/FormationLecteurPage";
 import { FormationQuizPage } from "./pages/candidat/FormationQuizPage";
 import { OffresRecommandeesPage } from "./pages/candidat/OffresRecommandeesPage";
+import { NotificationsPage } from "./pages/candidat/NotificationsPage";
 import { OnboardingCandidatPage as OnboardingCandidat } from "./pages/candidat/OnboardingCandidatPage";
 // --- PAGES RECRUTEUR ---
 import { ProfilRecruteurPage } from "./pages/recruteur/ProfilRecruteurPage";
@@ -92,6 +93,7 @@ export default function App() {
                             <Route path="/candidat/formation/:formationId" element={<FormationLecteurPage />} />
                             <Route path="/candidat/formation/:formationId/quiz/:quizId" element={<FormationQuizPage />} />
                             <Route path="/candidat/offres-recommandees" element={<OffresRecommandeesPage />} />
+                            <Route path="/candidat/notifications" element={<NotificationsPage />} />
                             <Route path="/onboarding/candidat" element={<OnboardingCandidat />} />
 
                             {/* Espace Recruteur */}

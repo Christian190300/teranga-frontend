@@ -193,7 +193,7 @@ export function NotificationsBellCandidat() {
                     className="notif-cand-bell__footer"
                     onClick={() => {
                         setOuvert(false);
-                        navigate("/notifications");
+                        navigate("/candidat/notifications");
                     }}
                 >
                     Voir toutes mes notifications
