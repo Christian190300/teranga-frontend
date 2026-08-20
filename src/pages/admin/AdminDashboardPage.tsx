@@ -113,6 +113,9 @@ export function AdminDashboardPage() {
                     accent="navy"
                 />
             </section>
+            <br/>
+            <br/>
+            <br/>
 
             {/* ---------- Offres publiées dans le temps (jour / mois / année) ---------- */}
             <OffresPublicationsChart />
@@ -141,6 +144,9 @@ export function AdminDashboardPage() {
                         ))}
                     </div>
                 </section>
+                <br/>
+                <br/>
+                <br/>
 
                 {/* ---------- Actions rapides ---------- */}
                 <section className="dashboard-panel">
