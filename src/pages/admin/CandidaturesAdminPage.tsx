@@ -13,6 +13,56 @@ import "./CandidaturesAdminPage.css";
 
 const PAGE_SIZE = 20;
 
+function IconStatTotal() {
+    return (
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 6h16M4 12h16M4 18h10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+    );
+}
+
+function IconStatCandidats() {
+    return (
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="9" cy="8" r="3.2" stroke="currentColor" strokeWidth="2" />
+            <path d="M3.5 19c.6-3.4 3-5 5.5-5s4.9 1.6 5.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            <circle cx="17" cy="9" r="2.4" stroke="currentColor" strokeWidth="2" />
+            <path d="M15.5 12.3c1.9.4 3.3 1.7 3.8 4.2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+    );
+}
+
+function IconStatAujourdhui() {
+    return (
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="2" />
+            <path d="M12 8v4l3 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+    );
+}
+
+function IconStatSemaine() {
+    return (
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3.5" y="5.5" width="17" height="15" rx="2" stroke="currentColor" strokeWidth="2" />
+            <path d="M3.5 10h17" stroke="currentColor" strokeWidth="2" />
+            <path d="M8 3.5v4M16 3.5v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            <path d="M7.5 14h3M7.5 17h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+    );
+}
+
+function IconStatMois() {
+    return (
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3.5" y="5.5" width="17" height="15" rx="2" stroke="currentColor" strokeWidth="2" />
+            <path d="M3.5 10h17" stroke="currentColor" strokeWidth="2" />
+            <path d="M8 3.5v4M16 3.5v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            <path d="M7.5 14.2h1.6M11.2 14.2h1.6M14.9 14.2h1.6M7.5 17.2h1.6M11.2 17.2h1.6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+    );
+}
+
 function initiales(prenom: string | null, nom: string | null): string {
     return `${prenom?.[0] ?? ""}${nom?.[0] ?? ""}`.toUpperCase() || "?";
 }
@@ -111,34 +161,59 @@ export function CandidaturesAdminPage() {
 
                 <div className="candidature-stats-grid">
                     <div className="candidature-stat-card candidature-stat-card--navy">
-                        <p className="candidature-stat-card__label">Total candidatures</p>
-                        <p className="candidature-stat-card__value">
-                            {chargementStats || !stats ? <span className="candidature-stat-card__skeleton" /> : stats.total.toLocaleString()}
-                        </p>
+                        <span className="candidature-stat-card__icon">
+                            <IconStatTotal />
+                        </span>
+                        <div className="candidature-stat-card__text">
+                            <p className="candidature-stat-card__label">Total candidatures</p>
+                            <p className="candidature-stat-card__value">
+                                {chargementStats || !stats ? <span className="candidature-stat-card__skeleton" /> : stats.total.toLocaleString()}
+                            </p>
+                        </div>
                     </div>
                     <div className="candidature-stat-card candidature-stat-card--gold">
-                        <p className="candidature-stat-card__label">Candidats uniques</p>
-                        <p className="candidature-stat-card__value">
-                            {chargementStats || !stats ? <span className="candidature-stat-card__skeleton" /> : stats.candidatsUniques.toLocaleString()}
-                        </p>
+                        <span className="candidature-stat-card__icon">
+                            <IconStatCandidats />
+                        </span>
+                        <div className="candidature-stat-card__text">
+                            <p className="candidature-stat-card__label">Candidats uniques</p>
+                            <p className="candidature-stat-card__value">
+                                {chargementStats || !stats ? <span className="candidature-stat-card__skeleton" /> : stats.candidatsUniques.toLocaleString()}
+                            </p>
+                        </div>
                     </div>
                     <div className="candidature-stat-card candidature-stat-card--success">
-                        <p className="candidature-stat-card__label">Aujourd'hui</p>
-                        <p className="candidature-stat-card__value">
-                            {chargementStats || !stats ? <span className="candidature-stat-card__skeleton" /> : stats.aujourdHui.toLocaleString()}
-                        </p>
+                        <span className="candidature-stat-card__icon">
+                            <IconStatAujourdhui />
+                        </span>
+                        <div className="candidature-stat-card__text">
+                            <p className="candidature-stat-card__label">Aujourd'hui</p>
+                            <p className="candidature-stat-card__value">
+                                {chargementStats || !stats ? <span className="candidature-stat-card__skeleton" /> : stats.aujourdHui.toLocaleString()}
+                            </p>
+                        </div>
                     </div>
                     <div className="candidature-stat-card candidature-stat-card--navy">
-                        <p className="candidature-stat-card__label">Cette semaine</p>
-                        <p className="candidature-stat-card__value">
-                            {chargementStats || !stats ? <span className="candidature-stat-card__skeleton" /> : stats.cetteSemaine.toLocaleString()}
-                        </p>
+                        <span className="candidature-stat-card__icon">
+                            <IconStatSemaine />
+                        </span>
+                        <div className="candidature-stat-card__text">
+                            <p className="candidature-stat-card__label">Cette semaine</p>
+                            <p className="candidature-stat-card__value">
+                                {chargementStats || !stats ? <span className="candidature-stat-card__skeleton" /> : stats.cetteSemaine.toLocaleString()}
+                            </p>
+                        </div>
                     </div>
                     <div className="candidature-stat-card candidature-stat-card--gold">
-                        <p className="candidature-stat-card__label">Ce mois</p>
-                        <p className="candidature-stat-card__value">
-                            {chargementStats || !stats ? <span className="candidature-stat-card__skeleton" /> : stats.ceMois.toLocaleString()}
-                        </p>
+                        <span className="candidature-stat-card__icon">
+                            <IconStatMois />
+                        </span>
+                        <div className="candidature-stat-card__text">
+                            <p className="candidature-stat-card__label">Ce mois</p>
+                            <p className="candidature-stat-card__value">
+                                {chargementStats || !stats ? <span className="candidature-stat-card__skeleton" /> : stats.ceMois.toLocaleString()}
+                            </p>
+                        </div>
                     </div>
                 </div>
 

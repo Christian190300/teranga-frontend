@@ -15,6 +15,7 @@
     --ca-danger-soft: #fbeceb;
     --ca-muted: #6b7280;
     --ca-line: #e8e9ee;
+    --ca-cream: #fbfaf6;
 
     font-family: "Inter", -apple-system, sans-serif;
     color: var(--ca-navy);
@@ -92,7 +93,7 @@
 .candidature-stats-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 16px;
+    gap: 14px;
     margin-bottom: 28px;
 }
 
@@ -113,60 +114,93 @@
 }
 
 .candidature-stat-card {
-    background: #fff;
-    border: 1.5px solid var(--ca-line);
-    border-radius: 16px;
-    padding: 20px 22px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--ca-cream);
+    border: 1px solid var(--ca-line);
+    border-left: 3px solid transparent;
+    border-radius: 12px;
+    padding: 18px 18px;
     position: relative;
-    overflow: hidden;
-    box-shadow: 0 2px 6px rgba(20, 41, 77, 0.04);
-    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
 
 .candidature-stat-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 14px 28px -16px rgba(20, 41, 77, 0.2);
+    background: #fff;
+    box-shadow: 0 10px 24px -18px rgba(20, 41, 77, 0.28);
 }
 
-.candidature-stat-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
+.candidature-stat-card--navy {
+    border-left-color: var(--ca-navy);
+}
+.candidature-stat-card--gold {
+    border-left-color: var(--ca-gold);
+}
+.candidature-stat-card--success {
+    border-left-color: var(--ca-success);
 }
 
-.candidature-stat-card--navy::before { background: var(--ca-navy); }
-.candidature-stat-card--gold::before { background: var(--ca-gold); }
-.candidature-stat-card--success::before { background: var(--ca-success); }
+/* Icône badge circulaire, teintée selon la variante */
+.candidature-stat-card__icon {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-.candidature-stat-card--navy:hover { border-color: var(--ca-navy); }
-.candidature-stat-card--gold:hover { border-color: var(--ca-gold); }
-.candidature-stat-card--success:hover { border-color: var(--ca-success); }
+.candidature-stat-card__icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.candidature-stat-card--navy .candidature-stat-card__icon {
+    background: var(--ca-navy-soft);
+    color: var(--ca-navy);
+}
+.candidature-stat-card--gold .candidature-stat-card__icon {
+    background: var(--ca-gold-soft);
+    color: #8a6212;
+}
+.candidature-stat-card--success .candidature-stat-card__icon {
+    background: var(--ca-success-soft);
+    color: var(--ca-success);
+}
+
+.candidature-stat-card__text {
+    min-width: 0;
+}
 
 .candidature-stat-card__label {
-    font-size: 0.78rem;
+    font-size: 0.72rem;
     font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
     color: var(--ca-muted);
-    margin: 0 0 10px;
+    margin: 0 0 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .candidature-stat-card__value {
-    font-size: 1.9rem;
+    font-size: 1.65rem;
     font-weight: 800;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.01em;
     font-variant-numeric: tabular-nums;
     color: var(--ca-navy);
     margin: 0;
-    line-height: 1;
+    line-height: 1.1;
     min-height: 1.2em;
 }
 
 .candidature-stat-card__skeleton {
     display: inline-block;
-    width: 56px;
-    height: 1.5rem;
+    width: 52px;
+    height: 1.3rem;
     border-radius: 6px;
     background: linear-gradient(90deg, var(--ca-line) 0%, #f3f4f6 50%, var(--ca-line) 100%);
     background-size: 200% 100%;
@@ -181,6 +215,27 @@
 @media (prefers-reduced-motion: reduce) {
     .candidature-stat-card__skeleton {
         animation: none;
+    }
+    .candidature-stat-card {
+        transition: none;
+    }
+}
+
+@media (max-width: 640px) {
+    .candidature-stat-card {
+        padding: 14px;
+        gap: 10px;
+    }
+    .candidature-stat-card__icon {
+        width: 36px;
+        height: 36px;
+    }
+    .candidature-stat-card__icon svg {
+        width: 17px;
+        height: 17px;
+    }
+    .candidature-stat-card__value {
+        font-size: 1.35rem;
     }
 }
 
