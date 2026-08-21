@@ -304,24 +304,31 @@ export function Navbar() {
     }, [menuOuvert]);
 
     useEffect(() => {
+        // Si l'utilisateur n'est pas connecté ou n'est pas candidat, on réinitialise tout de suite
+        if (!isAuthenticated || currentUser?.role !== "CANDIDAT") {
+            setProfilCandidat(null);
+            setPhotoBlobUrl(null);
+            return;
+        }
+
         let isMounted = true;
         let objectUrlCreated: string | null = null;
 
         async function chargerProfil() {
-            if (isAuthenticated && currentUser?.role === "CANDIDAT") {
-                try {
-                    const data = await getMonProfilCandidat();
-                    if (!isMounted) return;
-                    setProfilCandidat(data);
+            try {
+                const data = await getMonProfilCandidat();
+                if (!isMounted) return;
+                setProfilCandidat(data);
 
-                    if (data.photoPresente) {
-                        const blobUrl = await obtenirPhotoCandidatUrl();
-                        if (isMounted && blobUrl) {
-                            objectUrlCreated = blobUrl;
-                            setPhotoBlobUrl(blobUrl);
-                        }
+                if (data.photoPresente) {
+                    const blobUrl = await obtenirPhotoCandidatUrl();
+                    if (isMounted && blobUrl) {
+                        objectUrlCreated = blobUrl;
+                        setPhotoBlobUrl(blobUrl);
                     }
-                } catch (e) {
+                }
+            } catch (e) {
+                if (isMounted) {
                     console.error("Erreur lors de la récupération du profil dans la Navbar", e);
                 }
             }
