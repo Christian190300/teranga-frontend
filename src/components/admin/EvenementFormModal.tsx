@@ -20,6 +20,23 @@ const VIDE: EvenementFormPayload = {
     type: "AUTRE",
 };
 
+function IconClose() {
+    return (
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+    );
+}
+
+function IconUpload() {
+    return (
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 15V4M12 4l-4 4M12 4l4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M4 15v3a2 2 0 002 2h12a2 2 0 002-2v-3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+    );
+}
+
 export function EvenementFormModal({ evenement, onFermer, onEnregistrer }: Props) {
     const [form, setForm] = useState<EvenementFormPayload>(VIDE);
     const [fichierImage, setFichierImage] = useState<File | null>(null);
@@ -96,9 +113,12 @@ export function EvenementFormModal({ evenement, onFermer, onEnregistrer }: Props
         <div className="evenement-modal__overlay" onClick={onFermer}>
             <div className="evenement-modal" onClick={(e) => e.stopPropagation()}>
                 <div className="evenement-modal__header">
-                    <h2>{evenement ? "Modifier l'événement" : "Créer un événement"}</h2>
-                    <button type="button" className="evenement-modal__close" onClick={onFermer}>
-                        ✕
+                    <div>
+                        <span className="evenement-modal__eyebrow">{evenement ? "Édition" : "Nouvel événement"}</span>
+                        <h2>{evenement ? "Modifier l'événement" : "Créer un événement"}</h2>
+                    </div>
+                    <button type="button" className="evenement-modal__close" onClick={onFermer} aria-label="Fermer">
+                        <IconClose />
                     </button>
                 </div>
 
@@ -107,24 +127,38 @@ export function EvenementFormModal({ evenement, onFermer, onEnregistrer }: Props
 
                     <label className="evenement-modal__field">
                         <span>Titre *</span>
-                        <input value={form.titre} onChange={(e) => champ("titre", e.target.value)} required />
+                        <input value={form.titre} onChange={(e) => champ("titre", e.target.value)} required placeholder="Ex. Forum emploi 2026" />
                     </label>
 
                     <label className="evenement-modal__field">
                         <span>Type</span>
-                        <select value={form.type} onChange={(e) => champ("type", e.target.value as TypeEvenement)}>
-                            {(Object.keys(LABELS_TYPE_EVENEMENT) as TypeEvenement[]).map((t) => (
-                                <option key={t} value={t}>
-                                    {LABELS_TYPE_EVENEMENT[t]}
-                                </option>
-                            ))}
-                        </select>
+                        <div className="evenement-modal__select-wrap">
+                            <select value={form.type} onChange={(e) => champ("type", e.target.value as TypeEvenement)}>
+                                {(Object.keys(LABELS_TYPE_EVENEMENT) as TypeEvenement[]).map((t) => (
+                                    <option key={t} value={t}>
+                                        {LABELS_TYPE_EVENEMENT[t]}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
                     </label>
 
                     <label className="evenement-modal__field">
                         <span>Image</span>
-                        {apercuUrl && <img src={apercuUrl} alt="Aperçu" className="evenement-modal__apercu" />}
-                        <input type="file" accept="image/*" onChange={handleFichierChange} />
+                        <label className="evenement-modal__dropzone">
+                            {apercuUrl ? (
+                                <img src={apercuUrl} alt="Aperçu" className="evenement-modal__apercu" />
+                            ) : (
+                                <span className="evenement-modal__dropzone-content">
+                                    <IconUpload />
+                                    <span className="evenement-modal__dropzone-text">
+                                        Choisir une image
+                                        <small>PNG, JPG — 5 Mo max</small>
+                                    </span>
+                                </span>
+                            )}
+                            <input type="file" accept="image/*" onChange={handleFichierChange} className="evenement-modal__file-input" />
+                        </label>
                     </label>
 
                     <div className="evenement-modal__row">
@@ -145,7 +179,7 @@ export function EvenementFormModal({ evenement, onFermer, onEnregistrer }: Props
 
                     <label className="evenement-modal__field">
                         <span>Lieu</span>
-                        <input value={form.lieu} onChange={(e) => champ("lieu", e.target.value)} />
+                        <input value={form.lieu} onChange={(e) => champ("lieu", e.target.value)} placeholder="Ex. Dakar, King Fahd Palace" />
                     </label>
 
                     <label className="evenement-modal__field">
