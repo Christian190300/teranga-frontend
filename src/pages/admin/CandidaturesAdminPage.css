@@ -1,40 +1,208 @@
+/* ============================================================
+   CANDIDATURES ADMIN — page, stats, liste
+   ============================================================ */
+
+.candidature-admin-page {
+    --ca-navy: #14294d;
+    --ca-navy-deep: #0d1c38;
+    --ca-navy-soft: #eaf0fb;
+    --ca-gold: #c8951e;
+    --ca-gold-light: #e8b84b;
+    --ca-gold-soft: #fbf0d9;
+    --ca-success: #1e7a4c;
+    --ca-success-soft: #eaf7f0;
+    --ca-danger: #b3261e;
+    --ca-danger-soft: #fbeceb;
+    --ca-muted: #6b7280;
+    --ca-line: #e8e9ee;
+
+    font-family: "Inter", -apple-system, sans-serif;
+    color: var(--ca-navy);
+    width: 100%;
+    padding: 0 0 48px;
+}
+
+.candidature-admin-page * {
+    box-sizing: border-box;
+}
+
+/* ---------- Badges statut ---------- */
 .statut-badge {
     display: inline-flex;
     align-items: center;
+    gap: 5px;
     font-size: 0.7rem;
     font-weight: 700;
     padding: 5px 12px;
     border-radius: 999px;
     white-space: nowrap;
-    letter-spacing: 0.01em;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+.statut-badge::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    flex-shrink: 0;
 }
 
 .statut-badge--envoyee {
-    background: #eaf0fb;
-    color: #14294d;
+    background: var(--ca-navy-soft);
+    color: var(--ca-navy);
+}
+.statut-badge--envoyee::before {
+    background: var(--ca-navy);
 }
 
 .statut-badge--vue {
-    background: #fbf0d9;
+    background: var(--ca-gold-soft);
     color: #8a6212;
+}
+.statut-badge--vue::before {
+    background: var(--ca-gold);
 }
 
 .statut-badge--acceptee {
-    background: #eaf7f0;
-    color: #1e7a4c;
+    background: var(--ca-success-soft);
+    color: var(--ca-success);
+}
+.statut-badge--acceptee::before {
+    background: var(--ca-success);
 }
 
 .statut-badge--refusee {
-    background: #fbeceb;
-    color: #b3261e;
+    background: var(--ca-danger-soft);
+    color: var(--ca-danger);
+}
+.statut-badge--refusee::before {
+    background: var(--ca-danger);
 }
 
 .statut-badge--retiree {
     background: #eef0f4;
-    color: #6b7280;
+    color: var(--ca-muted);
 }
+.statut-badge--retiree::before {
+    background: var(--ca-muted);
+}
+
+/* ---------- Cards statistiques ---------- */
+.candidature-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+@media (max-width: 1080px) {
+    .candidature-stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+@media (max-width: 640px) {
+    .candidature-stats-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+@media (max-width: 420px) {
+    .candidature-stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.candidature-stat-card {
+    background: #fff;
+    border: 1.5px solid var(--ca-line);
+    border-radius: 16px;
+    padding: 20px 22px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(20, 41, 77, 0.04);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.candidature-stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 28px -16px rgba(20, 41, 77, 0.2);
+}
+
+.candidature-stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+}
+
+.candidature-stat-card--navy::before { background: var(--ca-navy); }
+.candidature-stat-card--gold::before { background: var(--ca-gold); }
+.candidature-stat-card--success::before { background: var(--ca-success); }
+
+.candidature-stat-card--navy:hover { border-color: var(--ca-navy); }
+.candidature-stat-card--gold:hover { border-color: var(--ca-gold); }
+.candidature-stat-card--success:hover { border-color: var(--ca-success); }
+
+.candidature-stat-card__label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--ca-muted);
+    margin: 0 0 10px;
+}
+
+.candidature-stat-card__value {
+    font-size: 1.9rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    color: var(--ca-navy);
+    margin: 0;
+    line-height: 1;
+    min-height: 1.2em;
+}
+
+.candidature-stat-card__skeleton {
+    display: inline-block;
+    width: 56px;
+    height: 1.5rem;
+    border-radius: 6px;
+    background: linear-gradient(90deg, var(--ca-line) 0%, #f3f4f6 50%, var(--ca-line) 100%);
+    background-size: 200% 100%;
+    animation: candidature-stat-shimmer 1.3s ease-in-out infinite;
+}
+
+@keyframes candidature-stat-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .candidature-stat-card__skeleton {
+        animation: none;
+    }
+}
+
+/* ---------- Liste des candidatures ---------- */
 .candidature-admin-list {
-    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+.candidature-row {
+    background: #fff;
+    border: 1.5px solid var(--ca-line);
+    border-radius: 14px;
+    padding: 18px 20px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.candidature-row:hover {
+    border-color: rgba(20, 41, 77, 0.18);
+    box-shadow: 0 6px 18px -12px rgba(20, 41, 77, 0.18);
 }
 
 .candidature-admin-row__toggle {
@@ -49,93 +217,148 @@
     cursor: pointer;
     text-align: left;
     flex-wrap: wrap;
+    font: inherit;
+    color: inherit;
+}
+
+.candidat-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.candidat-card__avatar {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(150deg, var(--ca-navy) 0%, var(--ca-navy-deep) 100%);
+    color: var(--ca-gold-light);
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.02em;
+}
+
+.candidat-card__body {
+    min-width: 0;
+}
+
+.candidat-card__nom {
+    font-weight: 700;
+    font-size: 0.92rem;
+    margin: 0;
+    color: var(--ca-navy);
+}
+
+.candidat-card__titre {
+    font-size: 0.8rem;
+    color: var(--ca-muted);
+    margin: 2px 0 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .candidature-admin-row__meta {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 16px;
     flex-wrap: wrap;
 }
 
+.candidature-row__meta {
+    font-size: 0.82rem;
+    color: var(--ca-muted);
+    font-weight: 500;
+}
+
 .candidature-admin-row__chevron {
-    color: #9aa1ac;
-    transition: transform 0.15s ease;
-    font-size: 0.9rem;
+    color: #b6bcc7;
+    transition: transform 0.15s ease, color 0.15s ease;
+    font-size: 0.85rem;
+}
+
+.candidature-row:hover .candidature-admin-row__chevron {
+    color: var(--ca-gold);
 }
 
 .candidature-admin-row__chevron--open {
     transform: rotate(180deg);
+    color: var(--ca-gold);
 }
 
 .candidature-admin-row__details {
     margin-top: 16px;
     padding-top: 16px;
-    border-top: 1px solid #f0f1f4;
+    border-top: 1px solid var(--ca-line);
     display: flex;
     flex-direction: column;
+    gap: 12px;
+}
+
+.candidat-card__facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.candidat-card__fact {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--ca-navy);
+    background: var(--ca-navy-soft);
+    padding: 5px 11px;
+    border-radius: 999px;
+}
+
+.candidature-row__message {
+    font-size: 0.86rem;
+    color: var(--ca-navy);
+    background: #f8f9fb;
+    border-left: 3px solid var(--ca-gold);
+    padding: 12px 14px;
+    border-radius: 0 8px 8px 0;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.candidature-row__actions {
+    display: flex;
     gap: 10px;
+    flex-wrap: wrap;
+}
+
+.candidature-row__btn {
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 9px 16px;
+    border-radius: 8px;
+    border: 1.5px solid var(--ca-line);
+    background: #fff;
+    color: var(--ca-navy);
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+}
+
+.candidature-row__btn:hover:not(:disabled) {
+    border-color: var(--ca-gold);
+    background: var(--ca-gold-soft);
+    transform: translateY(-1px);
+}
+
+.candidature-row__btn:disabled {
+    color: #b6bcc7;
+    cursor: not-allowed;
+    opacity: 0.7;
 }
 
 @media (max-width: 640px) {
     .candidature-admin-row__toggle {
         flex-direction: column;
         align-items: flex-start;
-    }
-}
-
-.candidature-stats-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 14px;
-    margin-bottom: 20px;
-}
-
-.candidature-stat-card {
-    background: #fff;
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    border-radius: 14px;
-    padding: 18px 20px;
-}
-
-.candidature-stat-card__label {
-    font-size: 0.78rem;
-    color: #6b7280;
-    margin: 0 0 6px;
-    font-weight: 500;
-}
-
-.candidature-stat-card__value {
-    font-size: 1.6rem;
-    font-weight: 700;
-    color: #14294d;
-    margin: 0;
-    line-height: 1.2;
-}
-
-.candidature-stat-card__skeleton {
-    display: inline-block;
-    width: 60px;
-    height: 24px;
-    border-radius: 6px;
-    background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
-    background-size: 200% 100%;
-    animation: candidature-stat-shimmer 1.4s infinite;
-}
-
-@keyframes candidature-stat-shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-}
-
-@media (max-width: 900px) {
-    .candidature-stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 480px) {
-    .candidature-stats-grid {
-        grid-template-columns: 1fr;
     }
 }

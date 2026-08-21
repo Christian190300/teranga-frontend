@@ -110,54 +110,34 @@ export function CandidaturesAdminPage() {
                 </div>
 
                 <div className="candidature-stats-grid">
-                    <div className="candidature-stat-card">
+                    <div className="candidature-stat-card candidature-stat-card--navy">
                         <p className="candidature-stat-card__label">Total candidatures</p>
                         <p className="candidature-stat-card__value">
-                            {chargementStats || !stats ? (
-                                <span className="candidature-stat-card__skeleton" />
-                            ) : (
-                                stats.total.toLocaleString()
-                            )}
+                            {chargementStats || !stats ? <span className="candidature-stat-card__skeleton" /> : stats.total.toLocaleString()}
                         </p>
                     </div>
-                    <div className="candidature-stat-card">
+                    <div className="candidature-stat-card candidature-stat-card--gold">
                         <p className="candidature-stat-card__label">Candidats uniques</p>
                         <p className="candidature-stat-card__value">
-                            {chargementStats || !stats ? (
-                                <span className="candidature-stat-card__skeleton" />
-                            ) : (
-                                stats.candidatsUniques.toLocaleString()
-                            )}
+                            {chargementStats || !stats ? <span className="candidature-stat-card__skeleton" /> : stats.candidatsUniques.toLocaleString()}
                         </p>
                     </div>
-                    <div className="candidature-stat-card">
+                    <div className="candidature-stat-card candidature-stat-card--success">
                         <p className="candidature-stat-card__label">Aujourd'hui</p>
                         <p className="candidature-stat-card__value">
-                            {chargementStats || !stats ? (
-                                <span className="candidature-stat-card__skeleton" />
-                            ) : (
-                                stats.aujourdHui.toLocaleString()
-                            )}
+                            {chargementStats || !stats ? <span className="candidature-stat-card__skeleton" /> : stats.aujourdHui.toLocaleString()}
                         </p>
                     </div>
-                    <div className="candidature-stat-card">
+                    <div className="candidature-stat-card candidature-stat-card--navy">
                         <p className="candidature-stat-card__label">Cette semaine</p>
                         <p className="candidature-stat-card__value">
-                            {chargementStats || !stats ? (
-                                <span className="candidature-stat-card__skeleton" />
-                            ) : (
-                                stats.cetteSemaine.toLocaleString()
-                            )}
+                            {chargementStats || !stats ? <span className="candidature-stat-card__skeleton" /> : stats.cetteSemaine.toLocaleString()}
                         </p>
                     </div>
-                    <div className="candidature-stat-card">
+                    <div className="candidature-stat-card candidature-stat-card--gold">
                         <p className="candidature-stat-card__label">Ce mois</p>
                         <p className="candidature-stat-card__value">
-                            {chargementStats || !stats ? (
-                                <span className="candidature-stat-card__skeleton" />
-                            ) : (
-                                stats.ceMois.toLocaleString()
-                            )}
+                            {chargementStats || !stats ? <span className="candidature-stat-card__skeleton" /> : stats.ceMois.toLocaleString()}
                         </p>
                     </div>
                 </div>
