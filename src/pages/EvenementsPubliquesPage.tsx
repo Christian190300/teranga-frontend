@@ -194,7 +194,7 @@ export function EvenementsPubliquesPage() {
 
                             {evenementSelectionne.lien && (
 
-                                <a href={evenementSelectionne.lien}
+                               <a href={evenementSelectionne.lien}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="evenement-modal__lien"
