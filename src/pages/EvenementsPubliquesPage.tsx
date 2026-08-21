@@ -146,7 +146,7 @@ export function EvenementsPubliquesPage() {
                             ✕
                         </button>
 
-                        <div className="evenement-modal__image-wrap">
+                        <div className="evenement-modal__media">
                             {evenementSelectionne.imagePresente ? (
                                 <EvenementImage
                                     presente={evenementSelectionne.imagePresente}
@@ -158,51 +158,58 @@ export function EvenementsPubliquesPage() {
                             ) : (
                                 <div className="evenement-modal__image evenement-modal__image--placeholder" />
                             )}
-                            {evenementSelectionne.type && (
-                                <span className="evenement-card__type evenement-modal__type">
-                                    {LABELS_TYPE_EVENEMENT[evenementSelectionne.type]}
-                                </span>
-                            )}
+                            <div className="evenement-modal__scrim" />
+                            <div className="evenement-modal__media-content">
+                                {evenementSelectionne.type && (
+                                    <span className="evenement-modal__type-badge">
+                                        {LABELS_TYPE_EVENEMENT[evenementSelectionne.type]}
+                                    </span>
+                                )}
+                                <h2 id="evenement-modal-titre" className="evenement-modal__titre">
+                                    {evenementSelectionne.titre}
+                                </h2>
+                                <p className="evenement-modal__date">
+                                    {formatDate(evenementSelectionne.dateEvenement)}
+                                    {evenementSelectionne.heure ? ` · ${evenementSelectionne.heure}` : ""}
+                                </p>
+                            </div>
                         </div>
 
                         <div className="evenement-modal__body">
-                            <p className="evenement-modal__meta">
-                                {formatDate(evenementSelectionne.dateEvenement)}
-                                {evenementSelectionne.heure ? ` · ${evenementSelectionne.heure}` : ""}
-                            </p>
-                            <h2 id="evenement-modal-titre" className="evenement-modal__titre">
-                                {evenementSelectionne.titre}
-                            </h2>
-
-                            {evenementSelectionne.lieu && (
-                                <p className="evenement-modal__ligne-info">
-                                    <span className="evenement-modal__label">Lieu</span>
-                                    {evenementSelectionne.lieu}
-                                </p>
-                            )}
-
-                            {evenementSelectionne.organisateur && (
-                                <p className="evenement-modal__ligne-info">
-                                    <span className="evenement-modal__label">Organisateur</span>
-                                    {evenementSelectionne.organisateur}
-                                </p>
+                            {(evenementSelectionne.lieu || evenementSelectionne.organisateur) && (
+                                <div className="evenement-modal__chips">
+                                    {evenementSelectionne.lieu && (
+                                        <span className="evenement-modal__chip">
+                                            <span className="evenement-modal__chip-label">Lieu</span>
+                                            {evenementSelectionne.lieu}
+                                        </span>
+                                    )}
+                                    {evenementSelectionne.organisateur && (
+                                        <span className="evenement-modal__chip">
+                                            <span className="evenement-modal__chip-label">Organisateur</span>
+                                            {evenementSelectionne.organisateur}
+                                        </span>
+                                    )}
+                                </div>
                             )}
 
                             {evenementSelectionne.description && (
                                 <p className="evenement-modal__desc">{evenementSelectionne.description}</p>
                             )}
-
-                            {evenementSelectionne.lien && (
-
-                               <a href={evenementSelectionne.lien}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="evenement-modal__lien"
-                                >
-                                Voir le site de l'événement →
-                                </a>
-                                )}
                         </div>
+
+                        {evenementSelectionne.lien && (
+                            <div className="evenement-modal__footer">
+                                <a
+                                    href={evenementSelectionne.lien}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="evenement-modal__lien"
+                                >
+                                    Voir le site de l'événement →
+                                </a>
+                            </div>
+                        )}
                     </div>
                 </div>
             )}
