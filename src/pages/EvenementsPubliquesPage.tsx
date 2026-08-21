@@ -12,10 +12,16 @@ function formatDate(iso: string): string {
     return new Date(iso).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
 }
 
+function tronquer(texte: string, max: number): string {
+    if (texte.length <= max) return texte;
+    return `${texte.slice(0, max).trimEnd()}…`;
+}
+
 export function EvenementsPubliquesPage() {
     const [evenements, setEvenements] = useState<EvenementDTO[]>([]);
     const [chargement, setChargement] = useState(true);
     const [erreur, setErreur] = useState<string | null>(null);
+    const [evenementSelectionne, setEvenementSelectionne] = useState<EvenementDTO | null>(null);
 
     useEffect(() => {
         // eslint-disable-next-line react-hooks/set-state-in-effect -- fetch au montage, pattern standard
@@ -33,6 +39,21 @@ export function EvenementsPubliquesPage() {
         })();
     }, []);
 
+    // Empêche le scroll du body quand le modal est ouvert, et gère la touche Échap
+    useEffect(() => {
+        if (!evenementSelectionne) return;
+        const previousOverflow = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        const onKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "Escape") setEvenementSelectionne(null);
+        };
+        window.addEventListener("keydown", onKeyDown);
+        return () => {
+            document.body.style.overflow = previousOverflow;
+            window.removeEventListener("keydown", onKeyDown);
+        };
+    }, [evenementSelectionne]);
+
     return (
         <div className="evenements-page">
             <section className="evenements-hero">
@@ -46,7 +67,18 @@ export function EvenementsPubliquesPage() {
             {erreur && <div className="evenements-alert">{erreur}</div>}
 
             {chargement ? (
-                <p className="evenements-vide">Chargement…</p>
+                <div className="evenements-grid" aria-hidden="true">
+                    {[0, 1, 2].map((i) => (
+                        <div className="evenement-card evenement-card--skeleton" key={i}>
+                            <div className="evenement-card__image evenement-card__image--placeholder" />
+                            <div className="evenement-card__body">
+                                <div className="skeleton-ligne skeleton-ligne--titre" />
+                                <div className="skeleton-ligne skeleton-ligne--meta" />
+                                <div className="skeleton-ligne skeleton-ligne--desc" />
+                            </div>
+                        </div>
+                    ))}
+                </div>
             ) : evenements.length === 0 ? (
                 <p className="evenements-vide">Aucun événement publié pour le moment.</p>
             ) : (
@@ -69,23 +101,109 @@ export function EvenementsPubliquesPage() {
                             </div>
 
                             <div className="evenement-card__body">
-                                <h2 className="evenement-card__titre">{e.titre}</h2>
-                                <p className="evenement-card__meta">
+                                <p className="evenement-card__meta evenement-card__meta--date">
                                     {formatDate(e.dateEvenement)}
                                     {e.heure ? ` · ${e.heure}` : ""}
                                 </p>
+                                <h2 className="evenement-card__titre">{e.titre}</h2>
                                 {e.lieu && <p className="evenement-card__meta">{e.lieu}</p>}
-                                {e.description && <p className="evenement-card__desc">{e.description}</p>}
-                                {e.organisateur && <p className="evenement-card__organisateur">Organisé par {e.organisateur}</p>}
-
-                                {e.lien && (
-                                    <a href={e.lien} target="_blank" rel="noopener noreferrer" className="evenement-card__lien">
-                                        En savoir plus →
-                                    </a>
+                                {e.description && (
+                                    <p className="evenement-card__desc">{tronquer(e.description, 110)}</p>
                                 )}
+
+                                <button
+                                    type="button"
+                                    className="evenement-card__bouton"
+                                    onClick={() => setEvenementSelectionne(e)}
+                                >
+                                    Voir les détails
+                                </button>
                             </div>
                         </article>
                     ))}
+                </div>
+            )}
+
+            {evenementSelectionne && (
+                <div
+                    className="evenement-modal-overlay"
+                    onClick={() => setEvenementSelectionne(null)}
+                    role="presentation"
+                >
+                    <div
+                        className="evenement-modal"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="evenement-modal-titre"
+                        onClick={(ev) => ev.stopPropagation()}
+                    >
+                        <button
+                            type="button"
+                            className="evenement-modal__fermer"
+                            onClick={() => setEvenementSelectionne(null)}
+                            aria-label="Fermer"
+                        >
+                            ✕
+                        </button>
+
+                        <div className="evenement-modal__image-wrap">
+                            {evenementSelectionne.imagePresente ? (
+                                <EvenementImage
+                                    presente={evenementSelectionne.imagePresente}
+                                    chargerUrl={() => obtenirImageEvenementPubliqueUrl(evenementSelectionne.id)}
+                                    alt={evenementSelectionne.titre}
+                                    className="evenement-modal__image"
+                                    placeholderClassName="evenement-modal__image evenement-modal__image--placeholder"
+                                />
+                            ) : (
+                                <div className="evenement-modal__image evenement-modal__image--placeholder" />
+                            )}
+                            {evenementSelectionne.type && (
+                                <span className="evenement-card__type evenement-modal__type">
+                                    {LABELS_TYPE_EVENEMENT[evenementSelectionne.type]}
+                                </span>
+                            )}
+                        </div>
+
+                        <div className="evenement-modal__body">
+                            <p className="evenement-modal__meta">
+                                {formatDate(evenementSelectionne.dateEvenement)}
+                                {evenementSelectionne.heure ? ` · ${evenementSelectionne.heure}` : ""}
+                            </p>
+                            <h2 id="evenement-modal-titre" className="evenement-modal__titre">
+                                {evenementSelectionne.titre}
+                            </h2>
+
+                            {evenementSelectionne.lieu && (
+                                <p className="evenement-modal__ligne-info">
+                                    <span className="evenement-modal__label">Lieu</span>
+                                    {evenementSelectionne.lieu}
+                                </p>
+                            )}
+
+                            {evenementSelectionne.organisateur && (
+                                <p className="evenement-modal__ligne-info">
+                                    <span className="evenement-modal__label">Organisateur</span>
+                                    {evenementSelectionne.organisateur}
+                                </p>
+                            )}
+
+                            {evenementSelectionne.description && (
+                                <p className="evenement-modal__desc">{evenementSelectionne.description}</p>
+                            )}
+
+                            {evenementSelectionne.lien && (
+
+                                <a href={evenementSelectionne.lien}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="evenement-modal__lien"
+                                >
+                                Voir le site de l'événement →
+                                </a>
+                                )}
+                        </div>
+                    </div>
                 </div>
             )}
         </div>
