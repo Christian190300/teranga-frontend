@@ -24,6 +24,7 @@ const candidatLinks: NavLinkItem[] = [
     { to: "/candidat/offres-recommandees", label: "Recommandées pour vous" },
     { to: "/candidat/candidatures", label: "Mes candidatures" },
     { to: "/candidat/profil", label: "Mon profil" },
+    { to: "/evenements", label: "Événements" },
     { to: "/candidat/formation", label: "Formations" },
 ];
 
@@ -393,13 +394,6 @@ export function Navbar() {
                 </Link>
 
                 <nav className="navbar__menu navbar__desktop-only">
-                    <NavLink
-                        to="/evenements"
-                        className={({ isActive }) => `navbar__menu-link ${isActive ? "active" : ""}`}
-                    >
-                        Événements
-                    </NavLink>
-
                     {isAuthenticated &&
                         espaceLinks.map((link) => (
                             <NavLink
@@ -438,6 +432,13 @@ export function Navbar() {
                                     activeMenu={activeVisitorMenu}
                                     setActiveMenu={setActiveVisitorMenu}
                                 />
+                                <NavLink
+                                    to="/evenements"
+                                    className={({ isActive }) => `navbar__menu-link ${isActive ? "active" : ""}`}
+                                >
+                                    <IconCalendar />
+                                    Événements
+                                </NavLink>
                             </div>
 
                             <span className="navbar__auth-divider" aria-hidden="true" />
@@ -488,15 +489,6 @@ export function Navbar() {
                     )}
 
                     <nav className="navbar__mobile-links">
-                        <NavLink
-                            to="/evenements"
-                            className={({ isActive }) => `navbar__mobile-link ${isActive ? "active" : ""}`}
-                            onClick={() => setMenuOuvert(false)}
-                        >
-                            <IconCalendar className="navbar__icon" />
-                            Événements
-                        </NavLink>
-
                         {espaceLinks.map((link) => (
                             <NavLink
                                 key={link.to}
@@ -569,6 +561,15 @@ export function Navbar() {
                                     </div>
                                 )}
                             </div>
+
+                            <NavLink
+                                to="/evenements"
+                                className={({ isActive }) => `navbar__mobile-link ${isActive ? "active" : ""}`}
+                                onClick={() => setMenuOuvert(false)}
+                            >
+                                <IconCalendar className="navbar__icon" />
+                                Événements
+                            </NavLink>
                         </div>
                     )}
 
