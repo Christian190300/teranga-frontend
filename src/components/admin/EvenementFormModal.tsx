@@ -1,17 +1,16 @@
 import { useEffect, useState } from "react";
 import type { EvenementDTO, EvenementFormPayload, TypeEvenement } from "../../api/evenementService";
-import { LABELS_TYPE_EVENEMENT } from "../../api/evenementService";
+import { LABELS_TYPE_EVENEMENT, obtenirImageEvenementAdminUrl, uploaderImageEvenement } from "../../api/evenementService";
 import "./EvenementFormModal.css";
 
 interface Props {
     evenement: EvenementDTO | null; // null = création
     onFermer: () => void;
-    onEnregistrer: (payload: EvenementFormPayload) => Promise<void>;
+    onEnregistrer: (payload: EvenementFormPayload) => Promise<number>; // renvoie l'id (créé ou existant)
 }
 
 const VIDE: EvenementFormPayload = {
     titre: "",
-    imageUrl: "",
     dateEvenement: "",
     heure: "",
     lieu: "",
@@ -23,6 +22,8 @@ const VIDE: EvenementFormPayload = {
 
 export function EvenementFormModal({ evenement, onFermer, onEnregistrer }: Props) {
     const [form, setForm] = useState<EvenementFormPayload>(VIDE);
+    const [fichierImage, setFichierImage] = useState<File | null>(null);
+    const [apercuUrl, setApercuUrl] = useState<string | null>(null);
     const [enregistrement, setEnregistrement] = useState(false);
     const [erreur, setErreur] = useState<string | null>(null);
 
@@ -30,7 +31,6 @@ export function EvenementFormModal({ evenement, onFermer, onEnregistrer }: Props
         if (evenement) {
             setForm({
                 titre: evenement.titre,
-                imageUrl: evenement.imageUrl ?? "",
                 dateEvenement: evenement.dateEvenement,
                 heure: evenement.heure ?? "",
                 lieu: evenement.lieu ?? "",
@@ -39,13 +39,37 @@ export function EvenementFormModal({ evenement, onFermer, onEnregistrer }: Props
                 lien: evenement.lien ?? "",
                 type: evenement.type ?? "AUTRE",
             });
-        } else {
-            setForm(VIDE);
+
+            let urlCree: string | null = null;
+            let isMounted = true;
+            if (evenement.imagePresente) {
+                obtenirImageEvenementAdminUrl(evenement.id).then((url) => {
+                    if (isMounted && url) {
+                        urlCree = url;
+                        setApercuUrl(url);
+                    }
+                });
+            }
+            return () => {
+                isMounted = false;
+                if (urlCree) URL.revokeObjectURL(urlCree);
+            };
         }
+
+        setForm(VIDE);
+        setApercuUrl(null);
+        setFichierImage(null);
     }, [evenement]);
 
     function champ<K extends keyof EvenementFormPayload>(cle: K, valeur: EvenementFormPayload[K]) {
         setForm((f) => ({ ...f, [cle]: valeur }));
+    }
+
+    function handleFichierChange(e: React.ChangeEvent<HTMLInputElement>) {
+        const fichier = e.target.files?.[0];
+        if (!fichier) return;
+        setFichierImage(fichier);
+        setApercuUrl(URL.createObjectURL(fichier));
     }
 
     async function handleSubmit(e: React.FormEvent) {
@@ -57,7 +81,10 @@ export function EvenementFormModal({ evenement, onFermer, onEnregistrer }: Props
         setErreur(null);
         setEnregistrement(true);
         try {
-            await onEnregistrer(form);
+            const id = await onEnregistrer(form);
+            if (fichierImage) {
+                await uploaderImageEvenement(id, fichierImage);
+            }
         } catch {
             setErreur("Impossible d'enregistrer l'événement. Réessaie dans un instant.");
         } finally {
@@ -95,8 +122,9 @@ export function EvenementFormModal({ evenement, onFermer, onEnregistrer }: Props
                     </label>
 
                     <label className="evenement-modal__field">
-                        <span>Image (URL)</span>
-                        <input value={form.imageUrl} onChange={(e) => champ("imageUrl", e.target.value)} placeholder="https://..." />
+                        <span>Image</span>
+                        {apercuUrl && <img src={apercuUrl} alt="Aperçu" className="evenement-modal__apercu" />}
+                        <input type="file" accept="image/*" onChange={handleFichierChange} />
                     </label>
 
                     <div className="evenement-modal__row">

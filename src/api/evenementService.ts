@@ -6,7 +6,8 @@ export type TypeEvenement = "DIPLOME" | "STAGE" | "AUTRE";
 export interface EvenementDTO {
     id: number;
     titre: string;
-    imageUrl: string | null;
+    imagePresente: boolean;
+    imageNomOriginal: string | null;
     dateEvenement: string; // yyyy-MM-dd
     heure: string | null; // "HH:mm"
     lieu: string | null;
@@ -21,7 +22,6 @@ export interface EvenementDTO {
 
 export interface EvenementFormPayload {
     titre: string;
-    imageUrl?: string;
     dateEvenement: string;
     heure?: string;
     lieu?: string;
@@ -57,6 +57,16 @@ export async function obtenirEvenementPublic(id: number): Promise<EvenementDTO> 
     return response.data;
 }
 
+/** GET /api/evenements/{id}/image — retourne une blob URL à libérer via URL.revokeObjectURL. */
+export async function obtenirImageEvenementPubliqueUrl(id: number): Promise<string | null> {
+    try {
+        const response = await httpClient.get(`/evenements/${id}/image`, { responseType: "blob" });
+        return URL.createObjectURL(response.data as Blob);
+    } catch {
+        return null;
+    }
+}
+
 // ---------- Admin ----------
 
 const BASE_ADMIN = "/admin/evenements";
@@ -74,6 +84,26 @@ export async function creerEvenement(payload: EvenementFormPayload): Promise<Eve
 export async function modifierEvenement(id: number, payload: EvenementFormPayload): Promise<EvenementDTO> {
     const response = await httpClient.put<EvenementDTO>(`${BASE_ADMIN}/${id}`, payload);
     return response.data;
+}
+
+/** POST /api/admin/evenements/{id}/image — upload direct depuis la galerie photo du device. */
+export async function uploaderImageEvenement(id: number, fichier: File): Promise<EvenementDTO> {
+    const formData = new FormData();
+    formData.append("fichier", fichier);
+    const response = await httpClient.post<EvenementDTO>(`${BASE_ADMIN}/${id}/image`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+    });
+    return response.data;
+}
+
+/** GET /api/admin/evenements/{id}/image — retourne une blob URL à libérer via URL.revokeObjectURL. */
+export async function obtenirImageEvenementAdminUrl(id: number): Promise<string | null> {
+    try {
+        const response = await httpClient.get(`${BASE_ADMIN}/${id}/image`, { responseType: "blob" });
+        return URL.createObjectURL(response.data as Blob);
+    } catch {
+        return null;
+    }
 }
 
 export async function changerStatutEvenement(id: number, statut: StatutEvenement): Promise<EvenementDTO> {

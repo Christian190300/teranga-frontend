@@ -9,9 +9,11 @@ import {
     creerEvenement,
     listerEvenementsAdmin,
     modifierEvenement,
+    obtenirImageEvenementAdminUrl,
     supprimerEvenement,
 } from "../../api/evenementService";
 import { EvenementFormModal } from "../../components/admin/EvenementFormModal";
+import { EvenementImage } from "../../components/EvenementImage";
 import "./UserAdminPage.css";
 import "./EvenementsAdminPage.css";
 
@@ -58,14 +60,24 @@ export function EvenementsAdminPage() {
         setModalOuvert(true);
     }
 
-    async function handleEnregistrer(payload: EvenementFormPayload) {
+    /**
+     * Enregistre les champs texte puis (si un fichier a été choisi dans le modal)
+     * l'image, via EvenementFormModal qui gère l'upload lui-même. Cette fonction
+     * doit renvoyer l'id de l'événement créé/modifié pour que le modal puisse
+     * ensuite uploader l'image dessus.
+     */
+    async function handleEnregistrer(payload: EvenementFormPayload): Promise<number> {
+        let id: number;
         if (evenementEnEdition) {
-            await modifierEvenement(evenementEnEdition.id, payload);
+            const maj = await modifierEvenement(evenementEnEdition.id, payload);
+            id = maj.id;
         } else {
-            await creerEvenement(payload);
+            const cree = await creerEvenement(payload);
+            id = cree.id;
         }
         setModalOuvert(false);
         await charger();
+        return id;
     }
 
     async function handleChangerStatut(id: number, statut: StatutEvenement) {
@@ -118,7 +130,15 @@ export function EvenementsAdminPage() {
                     <div className="evenement-admin-list">
                         {evenements.map((e) => (
                             <div className="evenement-admin-card" key={e.id}>
-                                {e.imageUrl && <img src={e.imageUrl} alt={e.titre} className="evenement-admin-card__image" />}
+                                {e.imagePresente && (
+                                    <EvenementImage
+                                        presente={e.imagePresente}
+                                        chargerUrl={() => obtenirImageEvenementAdminUrl(e.id)}
+                                        alt={e.titre}
+                                        className="evenement-admin-card__image"
+                                        placeholderClassName="evenement-admin-card__image"
+                                    />
+                                )}
                                 <div className="evenement-admin-card__body">
                                     <div className="evenement-admin-card__head">
                                         <h3 className="evenement-admin-card__titre">{e.titre}</h3>

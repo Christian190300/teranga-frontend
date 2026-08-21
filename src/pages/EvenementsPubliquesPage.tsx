@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import { type EvenementDTO, LABELS_TYPE_EVENEMENT, listerEvenementsPublics } from "../api/evenementService";
+import {
+    type EvenementDTO,
+    LABELS_TYPE_EVENEMENT,
+    listerEvenementsPublics,
+    obtenirImageEvenementPubliqueUrl,
+} from "../api/evenementService";
+import { EvenementImage } from "../components/EvenementImage";
 import "./EvenementsPubliquesPage.css";
 
 function formatDate(iso: string): string {
@@ -48,8 +54,14 @@ export function EvenementsPubliquesPage() {
                     {evenements.map((e) => (
                         <article className="evenement-card" key={e.id}>
                             <div className="evenement-card__image-wrap">
-                                {e.imageUrl ? (
-                                    <img src={e.imageUrl} alt={e.titre} className="evenement-card__image" />
+                                {e.imagePresente ? (
+                                    <EvenementImage
+                                        presente={e.imagePresente}
+                                        chargerUrl={() => obtenirImageEvenementPubliqueUrl(e.id)}
+                                        alt={e.titre}
+                                        className="evenement-card__image"
+                                        placeholderClassName="evenement-card__image evenement-card__image--placeholder"
+                                    />
                                 ) : (
                                     <div className="evenement-card__image evenement-card__image--placeholder" />
                                 )}
