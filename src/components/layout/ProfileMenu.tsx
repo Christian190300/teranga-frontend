@@ -20,29 +20,40 @@ export function ProfileMenu() {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    async function handleLogout() {
-        await logout();
-        navigate("/");
+    // Si l'utilisateur n'est plus connecté, on ne rend rien ou un fragment vide pour éviter les crashs de transition
+    if (!currentUser) {
+        return null;
     }
 
-    const initials = currentUser ? `${currentUser.firstName[0] ?? ""}${currentUser.lastName[0] ?? ""}`.toUpperCase() : "";
+    async function handleLogout() {
+        setOpen(false);
+        try {
+            await logout();
+        } catch (error) {
+            console.error("Erreur déconnexion:", error);
+        } finally {
+            navigate("/", { replace: true });
+        }
+    }
+
+    const initials = `${currentUser.firstName?.[0] ?? ""}${currentUser.lastName?.[0] ?? ""}`.toUpperCase();
 
     const profilePath =
-        currentUser?.role === "ADMIN"
+        currentUser.role === "ADMIN"
             ? "/admin/profil"
-            : currentUser?.role === "RECRUTEUR"
+            : currentUser.role === "RECRUTEUR"
                 ? "/recruteur/entreprise"
                 : "/candidat/profil";
 
     return (
         <div className="profile-menu" ref={ref}>
             <button className="profile-menu__trigger" onClick={() => setOpen((v) => !v)}>
-                {currentUser?.photoUrl ? (
+                {currentUser.photoUrl ? (
                     <img src={currentUser.photoUrl} alt="" className="profile-menu__avatar profile-menu__avatar--img" />
                 ) : (
                     <span className="profile-menu__avatar">{initials}</span>
                 )}
-                <span className="profile-menu__name">{currentUser?.firstName}</span>
+                <span className="profile-menu__name">{currentUser.firstName}</span>
                 <IconChevronDown />
             </button>
 
@@ -50,9 +61,9 @@ export function ProfileMenu() {
                 <div className="profile-menu__dropdown">
                     <div className="profile-menu__dropdown-header">
                         <span className="profile-menu__dropdown-name">
-                            {currentUser?.firstName} {currentUser?.lastName}
+                            {currentUser.firstName} {currentUser.lastName}
                         </span>
-                        <span className="profile-menu__dropdown-email">{currentUser?.email}</span>
+                        <span className="profile-menu__dropdown-email">{currentUser.email}</span>
                     </div>
                     <Link to={profilePath} className="profile-menu__item" onClick={() => setOpen(false)}>
                         <IconUserCircle /> Mon profil
