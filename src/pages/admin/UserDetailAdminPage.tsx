@@ -10,8 +10,7 @@ import {
     type ProfilCompletAdminDTO,
     type UserActivityDTO,
 } from "../../api/userAdminActivityService";
-import { formaterDerniereConnexion } from "../../api/userAdminService";
-
+import { formaterDerniereConnexion } from "../../api/adminUserService";
 import "./userDetailAdminPage.css";
 
 // -----------------------------------------------------------------------------
