@@ -10,6 +10,7 @@ import {
     type ProfilCompletAdminDTO,
     type UserActivityDTO,
 } from "../../api/userAdminActivityService";
+import { formaterDerniereConnexion } from "../../api/userAdminService";
 
 import "./userDetailAdminPage.css";
 
@@ -260,16 +261,16 @@ export function UserDetailAdminPage() {
                         {profil.typeProfil === "CANDIDAT"
                             ? "Candidat"
                             : profil.typeProfil === "RECRUTEUR"
-                              ? "Recruteur"
-                              : "Type inconnu"}
+                                ? "Recruteur"
+                                : "Type inconnu"}
                     </span>
 
                     <h1>
                         {profil.typeProfil === "RECRUTEUR"
                             ? profil.profilRecruteur?.nomEntreprise ??
-                              "Entreprise sans nom"
+                            "Entreprise sans nom"
                             : profil.profilCandidat?.titreProfessionnel ??
-                              "Profil candidat"}
+                            "Profil candidat"}
                     </h1>
 
                     <p className="udap-userid">
@@ -280,10 +281,10 @@ export function UserDetailAdminPage() {
                 {score !== null && (
                     <div
                         className={`udap-score${
-    estCertifie
-        ? " udap-score--certifie"
-        : ""
-}`}
+                            estCertifie
+                                ? " udap-score--certifie"
+                                : ""
+                        }`}
                     >
                         {estCertifie && (
                             <span className="udap-score__cert">
@@ -309,6 +310,10 @@ export function UserDetailAdminPage() {
             {activite && (
                 <div className="udap-card">
                     <h2>Activité</h2>
+
+                    <p className="udap-subtitle" style={{ marginTop: 0 }}>
+                        Dernière connexion : {formaterDerniereConnexion(activite.derniereConnexion)}
+                    </p>
 
                     <div className="udap-stats-row">
 
@@ -538,13 +543,13 @@ export function UserDetailAdminPage() {
                                 <div className="udap-tags">
                                     {profil.profilCandidat
                                         .competences!.map((competence) => (
-                                            <span
-                                                key={competence}
-                                                className="udap-tag"
-                                            >
+                                        <span
+                                            key={competence}
+                                            className="udap-tag"
+                                        >
                                                 {competence}
                                             </span>
-                                        ))}
+                                    ))}
                                 </div>
                             </div>
                         )}
@@ -559,13 +564,13 @@ export function UserDetailAdminPage() {
                                 <div className="udap-tags">
                                     {profil.profilCandidat
                                         .langues!.map((langue) => (
-                                            <span
-                                                key={langue}
-                                                className="udap-tag"
-                                            >
+                                        <span
+                                            key={langue}
+                                            className="udap-tag"
+                                        >
                                                 {langue}
                                             </span>
-                                        ))}
+                                    ))}
                                 </div>
                             </div>
                         )}
@@ -580,10 +585,10 @@ export function UserDetailAdminPage() {
                                 <ul className="udap-simple-list">
                                     {profil.profilCandidat
                                         .formations!.map((formation) => (
-                                            <li key={formation}>
-                                                {formation}
-                                            </li>
-                                        ))}
+                                        <li key={formation}>
+                                            {formation}
+                                        </li>
+                                    ))}
                                 </ul>
                             </div>
                         )}
@@ -598,12 +603,12 @@ export function UserDetailAdminPage() {
                                 <ul className="udap-simple-list">
                                     {profil.profilCandidat
                                         .certifications!.map(
-                                            (certification) => (
-                                                <li key={certification}>
-                                                    {certification}
-                                                </li>
-                                            )
-                                        )}
+                                        (certification) => (
+                                            <li key={certification}>
+                                                {certification}
+                                            </li>
+                                        )
+                                    )}
                                 </ul>
                             </div>
                         )}
@@ -644,123 +649,123 @@ export function UserDetailAdminPage() {
                                     {profil.profilCandidat.lettreMotivationPresente ? "Télécharger la lettre" : "Aucune lettre"}
                                 </button>
                             </div>
-</div>
+                        </div>
 
-{/* Vidéo de présentation */}
+                        {/* Vidéo de présentation */}
 
-{videoStatut &&
-videoStatut !== "EN_ATTENTE" && (
-    <div className="udap-card">
-        <h2>
-            Vidéo de présentation
-        </h2>
+                        {videoStatut &&
+                            videoStatut !== "EN_ATTENTE" && (
+                                <div className="udap-card">
+                                    <h2>
+                                        Vidéo de présentation
+                                    </h2>
 
-        {videoStatut === "DISPONIBLE" &&
-            videoUrl && (
-                <>
-                    <video
-                        src={videoUrl}
-                        controls
-                        className="udap-video"
-                    />
+                                    {videoStatut === "DISPONIBLE" &&
+                                        videoUrl && (
+                                            <>
+                                                <video
+                                                    src={videoUrl}
+                                                    controls
+                                                    className="udap-video"
+                                                />
 
-                    {profil.profilCandidat
-                        .videoDureeSecondes && (
-                        <p className="udap-subtitle">
-                            Durée :{" "}
-                            {
-                                profil
-                                    .profilCandidat
-                                    .videoDureeSecondes
-                            }
-                            s
-                        </p>
-                    )}
-                </>
-            )}
+                                                {profil.profilCandidat
+                                                    .videoDureeSecondes && (
+                                                    <p className="udap-subtitle">
+                                                        Durée :{" "}
+                                                        {
+                                                            profil
+                                                                .profilCandidat
+                                                                .videoDureeSecondes
+                                                        }
+                                                        s
+                                                    </p>
+                                                )}
+                                            </>
+                                        )}
 
-        {videoStatut === "DISPONIBLE" &&
-            !videoUrl && (
-                <p className="udap-text">
-                    Chargement de la vidéo...
-                </p>
-            )}
+                                    {videoStatut === "DISPONIBLE" &&
+                                        !videoUrl && (
+                                            <p className="udap-text">
+                                                Chargement de la vidéo...
+                                            </p>
+                                        )}
 
-        {videoStatut === "EN_COURS" && (
-            <p className="udap-text">
-                Traitement en cours...
-            </p>
-        )}
+                                    {videoStatut === "EN_COURS" && (
+                                        <p className="udap-text">
+                                            Traitement en cours...
+                                        </p>
+                                    )}
 
-        {videoStatut === "ECHEC" && (
-            <p className="udap-text">
-                Échec du traitement de la vidéo.
-            </p>
-        )}
-    </div>
-)}
+                                    {videoStatut === "ECHEC" && (
+                                        <p className="udap-text">
+                                            Échec du traitement de la vidéo.
+                                        </p>
+                                    )}
+                                </div>
+                            )}
 
-{/* Réseaux sociaux */}
+                        {/* Réseaux sociaux */}
 
-<div className="udap-card">
-    <h2>Réseaux</h2>
+                        <div className="udap-card">
+                            <h2>Réseaux</h2>
 
-    <dl className="udap-details">
-        <div>
-            <dt>LinkedIn</dt>
-            <dd>
-                {profil.profilCandidat
-                    .linkedin ?? "—"}
-            </dd>
-        </div>
+                            <dl className="udap-details">
+                                <div>
+                                    <dt>LinkedIn</dt>
+                                    <dd>
+                                        {profil.profilCandidat
+                                            .linkedin ?? "—"}
+                                    </dd>
+                                </div>
 
-        <div>
-            <dt>GitHub</dt>
-            <dd>
-                {profil.profilCandidat
-                    .github ?? "—"}
-            </dd>
-        </div>
+                                <div>
+                                    <dt>GitHub</dt>
+                                    <dd>
+                                        {profil.profilCandidat
+                                            .github ?? "—"}
+                                    </dd>
+                                </div>
 
-        <div>
-            <dt>Portfolio</dt>
-            <dd>
-                {profil.profilCandidat
-                    .portfolio ?? "—"}
-            </dd>
-        </div>
-    </dl>
-</div>
+                                <div>
+                                    <dt>Portfolio</dt>
+                                    <dd>
+                                        {profil.profilCandidat
+                                            .portfolio ?? "—"}
+                                    </dd>
+                                </div>
+                            </dl>
+                        </div>
 
-{/* Informations du compte */}
+                        {/* Informations du compte */}
 
-<div className="udap-card">
-    <h2>Compte</h2>
+                        <div className="udap-card">
+                            <h2>Compte</h2>
 
-    <dl className="udap-details">
-        <div>
-            <dt>Membre depuis</dt>
-            <dd>
-                {formatDate(
-                    profil.profilCandidat
-                        .dateCreation
+                            <dl className="udap-details">
+                                <div>
+                                    <dt>Membre depuis</dt>
+                                    <dd>
+                                        {formatDate(
+                                            profil.profilCandidat
+                                                .dateCreation
+                                        )}
+                                    </dd>
+                                </div>
+
+                                <div>
+                                    <dt>Dernière mise à jour</dt>
+                                    <dd>
+                                        {formatDate(
+                                            profil.profilCandidat
+                                                .dateMaj
+                                        )}
+                                    </dd>
+                                </div>
+                            </dl>
+                        </div>
+                    </>
                 )}
-            </dd>
         </div>
-
-        <div>
-            <dt>Dernière mise à jour</dt>
-            <dd>
-                {formatDate(
-                    profil.profilCandidat
-                        .dateMaj
-                )}
-            </dd>
-        </div>
-    </dl>
-</div>
-</>
-)}
-</div>
-);
+    );
 }

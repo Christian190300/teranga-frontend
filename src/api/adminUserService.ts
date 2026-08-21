@@ -11,6 +11,7 @@ export interface AdminUtilisateur {
     lastName: string;
     enabled: boolean;
     roles: string[];
+    derniereConnexion: string | null;
 }
 
 export interface CreerUtilisateurAdmin {
@@ -122,3 +123,24 @@ export async function obtenirStatistiquesInscriptions(): Promise<InscriptionsPar
     return response.data;
 }
 
+/** Formate une date de dernière connexion en relatif (ex: "il y a 3 jours"), ou "Jamais connecté" si null. */
+export function formaterDerniereConnexion(derniereConnexion: string | null): string {
+    if (!derniereConnexion) {
+        return "Jamais connecté";
+    }
+
+    const date = new Date(derniereConnexion);
+    const maintenant = new Date();
+    const diffMs = maintenant.getTime() - date.getTime();
+    const diffMinutes = Math.floor(diffMs / 60000);
+    const diffHeures = Math.floor(diffMinutes / 60);
+    const diffJours = Math.floor(diffHeures / 24);
+
+    if (diffMinutes < 1) return "À l'instant";
+    if (diffMinutes < 60) return `Il y a ${diffMinutes} min`;
+    if (diffHeures < 24) return `Il y a ${diffHeures} h`;
+    if (diffJours === 1) return "Hier";
+    if (diffJours < 30) return `Il y a ${diffJours} j`;
+
+    return date.toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" });
+}

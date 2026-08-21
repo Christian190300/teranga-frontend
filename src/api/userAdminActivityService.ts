@@ -34,6 +34,7 @@ export interface UserActivityDTO {
     offresVues: OffreVueResumeDTO[];
     nombreCandidatures: number;
     candidatures: CandidatureResumeDTO[];
+    derniereConnexion: string | null;
 }
 
 /** Champs connus de ProfilRecruteurDTO — étends si tu en as d'autres, le reste est ignoré sans casser le typage. */
