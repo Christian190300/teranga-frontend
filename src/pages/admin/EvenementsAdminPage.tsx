@@ -11,7 +11,7 @@ import {
     modifierEvenement,
     supprimerEvenement,
 } from "../../api/evenementService";
-import { EvenementFormModal } from "../admin/EvenementFormModal";
+import { EvenementFormModal } from "../../components/admin/EvenementFormModal";
 import "./UserAdminPage.css";
 import "./EvenementsAdminPage.css";
 
