@@ -25,6 +25,16 @@ function IconHome() {
     );
 }
 
+function IconCalendar() {
+    return (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" strokeWidth="2" />
+            <path d="M3 10h18" stroke="currentColor" strokeWidth="2" />
+            <path d="M8 3v4M16 3v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+    );
+}
+
 const generalLinks = [
     { to: "/admin", label: "Tableau de bord", icon: <IconLayoutDashboard /> },
     { to: "/admin/utilisateurs", label: "Utilisateurs", icon: <IconUsers /> },
@@ -33,6 +43,7 @@ const generalLinks = [
     { to: "/admin/offres", label: "Offres", icon: <IconBriefcase /> },
     { to: "/admin/offres/import", label: "Import SENJOB", icon: <IconBriefcase /> },
     { to: "/admin/candidatures", label: "Candidatures", icon: <IconBriefcase /> },
+    { to: "/admin/evenements", label: "Événements", icon: <IconCalendar /> },
     { to: "/admin/formations", label: "Creer Formation", icon: <IconBriefcase /> },
     { to: "/admin/annonces", label: "Envoyer une annonce", icon: <IconUsers /> },
 ];

@@ -21,6 +21,7 @@ import { OffreDetailPage } from "./pages/public/OffreDetailPage";
 import { FormationsPubliquesPage } from "./pages/public/FormationsPubliquesPage";
 import { EspaceCandidatPage } from "./pages/candidat/EspaceCandidatPage";
 import { EspaceRecruteurPage } from "./pages/recruteur/EspaceRecruteurPage";
+import { EvenementsPubliquesPage } from "./pages/EvenementsPubliquesPage";
 
 
 // --- PAGES CANDIDAT ---
@@ -54,6 +55,7 @@ import { ImportOffresPage } from "./pages/admin/ImportOffresPage";
 import { EnvoyerAnnoncePage } from "./pages/admin/EnvoyerAnnoncePage";
 import { UserDetailAdminPage } from "./pages/admin/UserDetailAdminPage";
 import { ProfilsCompletionAdminPage } from "./pages/admin/ProfilsCompletionAdminPage";
+import { EvenementsAdminPage } from "./pages/admin/EvenementsAdminPage";
 
 
 // --- COMPOSANTS & WIDGETS ---
@@ -79,6 +81,7 @@ export default function App() {
                             <Route path="/formations" element={<FormationsPubliquesPage />} />
                             <Route path="/espace-candidat" element={<EspaceCandidatPage />} />
                             <Route path="/espace-recruteur" element={<EspaceRecruteurPage />} />
+                            <Route path="/evenements" element={<EvenementsPubliquesPage />} />
 
 
                             {/* Auth & Vérification */}
@@ -123,6 +126,7 @@ export default function App() {
                             <Route path="/admin/annonces" element={<EnvoyerAnnoncePage />} />
                             <Route path="/admin/utilisateurs/:userId" element={<UserDetailAdminPage />} />
                             <Route path="/admin/profils-completion" element={<ProfilsCompletionAdminPage />} />
+                            <Route path="/admin/evenements" element={<EvenementsAdminPage />} />
                         </Routes>
 
                         {/* Widget global d'incitation profil */}

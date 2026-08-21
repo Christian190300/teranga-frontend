@@ -86,6 +86,16 @@ function IconRecruiterCircle({ className = "navbar__bottom-icon" }: IconProps) {
     );
 }
 
+function IconCalendar({ className = "navbar__icon" }: IconProps) {
+    return (
+        <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" strokeWidth="2" />
+            <path d="M3 10h18" stroke="currentColor" strokeWidth="2" />
+            <path d="M8 3v4M16 3v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+    );
+}
+
 function IconChevron() {
     return (
         <svg className="navbar__visitor-chevron" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -397,6 +407,13 @@ export function Navbar() {
                     </nav>
                 )}
 
+                <NavLink
+                    to="/evenements"
+                    className={({ isActive }) => `navbar__menu-link navbar__desktop-only ${isActive ? "active" : ""}`}
+                >
+                    Événements
+                </NavLink>
+
                 <nav className="navbar__links">
                     {isAuthenticated ? (
                         <div className="navbar__desktop-only" style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -470,6 +487,17 @@ export function Navbar() {
                             <NotificationsBellCandidat />
                         </div>
                     )}
+
+                    <nav className="navbar__mobile-links">
+                        <NavLink
+                            to="/evenements"
+                            className={({ isActive }) => `navbar__mobile-link ${isActive ? "active" : ""}`}
+                            onClick={() => setMenuOuvert(false)}
+                        >
+                            <IconCalendar className="navbar__icon" />
+                            Événements
+                        </NavLink>
+                    </nav>
 
                     {espaceLinks.length > 0 && (
                         <nav className="navbar__mobile-links">
