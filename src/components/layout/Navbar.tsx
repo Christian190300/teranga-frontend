@@ -392,9 +392,16 @@ export function Navbar() {
                     Talent<span>Sénégal</span>
                 </Link>
 
-                {isAuthenticated && espaceLinks.length > 0 && (
-                    <nav className="navbar__menu navbar__desktop-only">
-                        {espaceLinks.map((link) => (
+                <nav className="navbar__menu navbar__desktop-only">
+                    <NavLink
+                        to="/evenements"
+                        className={({ isActive }) => `navbar__menu-link ${isActive ? "active" : ""}`}
+                    >
+                        Événements
+                    </NavLink>
+
+                    {isAuthenticated &&
+                        espaceLinks.map((link) => (
                             <NavLink
                                 key={link.to}
                                 to={link.to}
@@ -404,15 +411,7 @@ export function Navbar() {
                                 {link.label}
                             </NavLink>
                         ))}
-                    </nav>
-                )}
-
-                <NavLink
-                    to="/evenements"
-                    className={({ isActive }) => `navbar__menu-link navbar__desktop-only ${isActive ? "active" : ""}`}
-                >
-                    Événements
-                </NavLink>
+                </nav>
 
                 <nav className="navbar__links">
                     {isAuthenticated ? (
@@ -497,23 +496,19 @@ export function Navbar() {
                             <IconCalendar className="navbar__icon" />
                             Événements
                         </NavLink>
-                    </nav>
 
-                    {espaceLinks.length > 0 && (
-                        <nav className="navbar__mobile-links">
-                            {espaceLinks.map((link) => (
-                                <NavLink
-                                    key={link.to}
-                                    to={link.to}
-                                    end={link.to === "/recruteur/offres"}
-                                    className={({ isActive }) => `navbar__mobile-link ${isActive ? "active" : ""}`}
-                                    onClick={() => setMenuOuvert(false)}
-                                >
-                                    {link.label}
-                                </NavLink>
-                            ))}
-                        </nav>
-                    )}
+                        {espaceLinks.map((link) => (
+                            <NavLink
+                                key={link.to}
+                                to={link.to}
+                                end={link.to === "/recruteur/offres"}
+                                className={({ isActive }) => `navbar__mobile-link ${isActive ? "active" : ""}`}
+                                onClick={() => setMenuOuvert(false)}
+                            >
+                                {link.label}
+                            </NavLink>
+                        ))}
+                    </nav>
 
                     {!isAuthenticated && (
                         <div className="navbar__mobile-visitor-menus">
