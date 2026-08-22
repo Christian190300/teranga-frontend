@@ -3,6 +3,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
     obtenirOffre,
     LABELS_TYPE_CONTRAT,
+    enregistrerVueOffre,
     LABELS_NIVEAU_EXPERIENCE,
     LABELS_NIVEAU_ETUDE,
     type OffreDTO,
@@ -70,6 +71,7 @@ export function OffreDetailPage() {
         }
         charger();
         enregistrerOffreVue(Number(id));
+        enregistrerVueOffre(Number(id));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id, currentUser?.role]);
 
