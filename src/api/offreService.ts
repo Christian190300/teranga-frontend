@@ -63,6 +63,9 @@ export interface OffreDTO {
     secteurActiviteEntreprise: string | null;
     logoPresent: boolean;
 
+    /** Nombre de vues de l'offre. Visible pour le recruteur propriétaire et l'admin ; null côté public. */
+    nombreVues: number | null;
+
     // ... champs existants
     source: string | null;
     urlSource: string | null;
@@ -175,6 +178,19 @@ export async function fermerOffre(id: number): Promise<OffreDTO> {
 /** DELETE /api/offres/{id} — recruteur propriétaire ou admin. */
 export async function supprimerOffre(id: number): Promise<void> {
     await httpClient.delete(`/offres/${id}`);
+}
+
+/**
+ * POST /api/offres/{id}/vue — incrémente le compteur de vues de l'offre.
+ * À appeler une seule fois à l'ouverture de la page/modale de détail public.
+ * Volontairement silencieux en cas d'échec : ne doit jamais bloquer l'affichage de l'offre.
+ */
+export async function enregistrerVueOffre(id: number): Promise<void> {
+    try {
+        await httpClient.post(`/offres/${id}/vue`);
+    } catch {
+        // Ignoré intentionnellement — le compteur de vues n'est pas critique pour l'utilisateur.
+    }
 }
 
 /** GET /api/offres/statistiques/publications/jour — admin uniquement. */

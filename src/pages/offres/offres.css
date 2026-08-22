@@ -111,6 +111,12 @@
     min-width: 200px;
 }
 
+.offre-tile__tag--vues,
+.offre-card__meta-item--vues {
+    color: #6b7280;
+    background: #f3f4f6;
+}
+
 .offres-filtres__select {
     width: 100%;
     appearance: none;

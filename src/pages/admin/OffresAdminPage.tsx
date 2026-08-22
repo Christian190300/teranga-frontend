@@ -90,7 +90,11 @@ export function OffresAdminPage() {
                                     <p className="offre-tile__lieu">{lieu || "Lieu non précisé"}</p>
 
                                     <div className="offre-tile__tags">
-                                        <span className="offre-tile__tag">{LABELS_TYPE_CONTRAT[offre.typeContrat]}</span>{offre.source && (<span className="offre-tile__tag offre-tile__tag--gold">Importée · {offre.source}</span>)}
+                                        <span className="offre-tile__tag">{LABELS_TYPE_CONTRAT[offre.typeContrat]}</span>
+                                        {offre.source && (<span className="offre-tile__tag offre-tile__tag--gold">Importée · {offre.source}</span>)}
+                                        <span className="offre-tile__tag offre-tile__tag--vues">
+                                            👁 {(offre.nombreVues ?? 0).toLocaleString()} vue{(offre.nombreVues ?? 0) > 1 ? "s" : ""}
+                                        </span>
                                     </div>
 
                                     <div className="offre-tile__footer">

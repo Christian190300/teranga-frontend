@@ -116,6 +116,11 @@ export function OffresRecruteurPage() {
                                 {offre.teletravail && <span className="offre-card__meta-item">Télétravail</span>}
                                 {offre.hybride && <span className="offre-card__meta-item">Hybride</span>}
                                 {salaire && <span className="offre-card__meta-item">{salaire}</span>}
+                                {offre.statut === "PUBLIEE" && (
+                                    <span className="offre-card__meta-item offre-card__meta-item--vues">
+                                        👁 {(offre.nombreVues ?? 0).toLocaleString()} vue{(offre.nombreVues ?? 0) > 1 ? "s" : ""}
+                                    </span>
+                                )}
                             </div>
 
                             <div className="offre-card__actions">

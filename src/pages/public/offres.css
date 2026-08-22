@@ -127,6 +127,12 @@
     transition: border-color 0.18s var(--ease), background 0.18s var(--ease), box-shadow 0.18s var(--ease);
 }
 
+.offre-tile__tag--vues,
+.offre-card__meta-item--vues {
+    color: #6b7280;
+    background: #f3f4f6;
+}
+
 .offres-filtres__select:focus {
     outline: none;
     border-color: var(--gold);
