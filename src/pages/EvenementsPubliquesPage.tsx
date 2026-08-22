@@ -196,7 +196,18 @@ export function EvenementsPubliquesPage() {
                                 )}
 
                                 {evenementSelectionne.description && (
-                                    <p className="evenement-modal__desc">{evenementSelectionne.description}</p>
+                                    <div className="evenement-modal__section">
+                                        <p className="evenement-modal__section-label">À propos</p>
+                                        {evenementSelectionne.description
+                                            .split("\n")
+                                            .map((ligne) => ligne.trim())
+                                            .filter((ligne) => ligne.length > 0)
+                                            .map((ligne, index) => (
+                                                <p className="evenement-modal__desc" key={index}>
+                                                    {ligne}
+                                                </p>
+                                            ))}
+                                    </div>
                                 )}
                             </div>
                         </div>
