@@ -6,6 +6,15 @@ import "../offres/offres.css";
 
 const TAILLE_PAGE = 9;
 
+const OPTIONS_TRI = [
+    { valeur: "dateCreation,desc", label: "Plus récentes d'abord" },
+    { valeur: "dateCreation,asc", label: "Plus anciennes d'abord" },
+    { valeur: "titre,asc", label: "Titre (A → Z)" },
+    { valeur: "titre,desc", label: "Titre (Z → A)" },
+    { valeur: "nombreVues,desc", label: "Plus vues d'abord" },
+    { valeur: "nombreVues,asc", label: "Moins vues d'abord" },
+] as const;
+
 function initiales(nom: string | null): string {
     if (!nom) return "?";
     return nom.slice(0, 2).toUpperCase();
@@ -20,10 +29,23 @@ export function OffresAdminPage() {
     const [error, setError] = useState<string | null>(null);
     const [suppressionEnCours, setSuppressionEnCours] = useState<number | null>(null);
 
-    async function charger(p: number) {
+    const [recherche, setRecherche] = useState("");
+    const [rechercheDebattue, setRechercheDebattue] = useState("");
+    const [tri, setTri] = useState<string>(OPTIONS_TRI[0].valeur);
+
+    // Débounce de la recherche : on attend que l'admin arrête de taper avant de relancer l'appel réseau.
+    useEffect(() => {
+        const handle = setTimeout(() => setRechercheDebattue(recherche.trim()), 350);
+        return () => clearTimeout(handle);
+    }, [recherche]);
+
+    async function charger(p: number, rechercheActuelle: string, triActuel: string) {
         setLoading(true);
         try {
-            const data = await listerToutesOffresAdmin(p, TAILLE_PAGE);
+            const data = await listerToutesOffresAdmin(p, TAILLE_PAGE, {
+                recherche: rechercheActuelle || undefined,
+                sort: triActuel,
+            });
             setOffres(data.content);
             setTotalPages(data.totalPages);
             setTotalElements(data.totalElements);
@@ -34,11 +56,19 @@ export function OffresAdminPage() {
         }
     }
 
+    // Recherche ou tri modifié : on repart de la page 0 (le useEffect ci-dessous se charge de recharger).
     useEffect(() => {
         // eslint-disable-next-line react-hooks/set-state-in-effect
-        charger(page);
+        setPage(0);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [page]);
+    }, [rechercheDebattue, tri]);
+
+    // Seul point d'appel réseau : se déclenche à chaque changement de page, recherche ou tri.
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        charger(page, rechercheDebattue, tri);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [page, rechercheDebattue, tri]);
 
     async function handleSupprimer(e: React.MouseEvent, id: number) {
         e.preventDefault();
@@ -65,12 +95,28 @@ export function OffresAdminPage() {
                 </div>
             </div>
 
+            <div className="offres-admin__filtres">
+                <input
+                    className="offres-admin__recherche"
+                    placeholder="Rechercher par titre ou ville..."
+                    value={recherche}
+                    onChange={(e) => setRecherche(e.target.value)}
+                />
+                <select className="offres-admin__tri" value={tri} onChange={(e) => setTri(e.target.value)}>
+                    {OPTIONS_TRI.map((option) => (
+                        <option key={option.valeur} value={option.valeur}>
+                            {option.label}
+                        </option>
+                    ))}
+                </select>
+            </div>
+
             {error && <div className="offre-message--error">{error}</div>}
 
             {loading ? (
                 <div className="offres-page__loading">Chargement des offres...</div>
             ) : offres.length === 0 ? (
-                <div className="offres-page__empty">Aucune offre pour le moment.</div>
+                <div className="offres-page__empty">Aucune offre ne correspond à ta recherche.</div>
             ) : (
                 <>
                     <div className="offres-grid">

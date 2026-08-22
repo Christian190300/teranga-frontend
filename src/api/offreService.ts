@@ -113,6 +113,12 @@ export interface SpringPage<T> {
     size: number;
 }
 
+export interface OptionsListeAdmin {
+    recherche?: string;
+    /** Format Spring : "champ,direction" — ex. "titre,asc", "nombreVues,desc", "dateCreation,desc". */
+    sort?: string;
+}
+
 /** GET /api/offres — liste publique, uniquement les offres publiées. */
 export async function listerOffresPubliques(
     page = 0,
@@ -133,9 +139,17 @@ export async function listerSecteursDisponibles(): Promise<string[]> {
     return response.data;
 }
 
-/** GET /api/offres/toutes — admin uniquement, tous statuts, tous recruteurs. */
-export async function listerToutesOffresAdmin(page = 0, size = 20): Promise<SpringPage<OffreDTO>> {
-    const response = await httpClient.get<SpringPage<OffreDTO>>("/offres/toutes", { params: { page, size } });
+/** GET /api/offres/toutes — admin uniquement, tous statuts, tous recruteurs, recherche et tri optionnels. */
+export async function listerToutesOffresAdmin(
+    page = 0,
+    size = 9,
+    options: OptionsListeAdmin = {}
+): Promise<SpringPage<OffreDTO>> {
+    const params: Record<string, string | number> = { page, size };
+    if (options.recherche) params.recherche = options.recherche;
+    if (options.sort) params.sort = options.sort;
+
+    const response = await httpClient.get<SpringPage<OffreDTO>>("/offres/toutes", { params });
     return response.data;
 }
 
@@ -270,3 +284,4 @@ export const LABELS_STATUT_OFFRE: Record<StatutOffre, string> = {
     FERMEE: "Fermée",
     EXPIREE: "Expirée",
 };
+
