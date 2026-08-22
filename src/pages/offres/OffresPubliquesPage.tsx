@@ -51,7 +51,6 @@ function extraireTexteDescription(job: OffreDTO): string {
 
     if (!sourceTexte) return "";
 
-    // Supprime le HTML/Markdown simple
     return sourceTexte.replace(/<[^>]*>?/gm, "").trim();
 }
 
@@ -72,6 +71,7 @@ export function OffresPubliquesPage() {
     const [rechercheAppliquee, setRechercheAppliquee] = useState("");
     const [secteurs, setSecteurs] = useState<string[]>([]);
     const [secteurSelectionne, setSecteurSelectionne] = useState("");
+    const [triSelectionne, setTriSelectionne] = useState<"recent" | "ancien">("recent");
 
     const estCandidat = currentUser?.role === "CANDIDAT";
     const filtresActifs = rechercheAppliquee !== "" || secteurSelectionne !== "";
@@ -92,6 +92,7 @@ export function OffresPubliquesPage() {
                 const data = await listerOffresPubliques(page, TAILLE_PAGE, {
                     recherche: rechercheAppliquee,
                     secteurActivite: secteurSelectionne,
+                    tri: triSelectionne,
                 });
                 setOffres(data.content ?? []);
                 setTotalPages(data.totalPages ?? 0);
@@ -104,7 +105,7 @@ export function OffresPubliquesPage() {
             }
         }
         charger();
-    }, [page, rechercheAppliquee, secteurSelectionne]);
+    }, [page, rechercheAppliquee, secteurSelectionne, triSelectionne]);
 
     // Remonte en haut de page à chaque changement de page (pagination)
     useEffect(() => {
@@ -123,10 +124,16 @@ export function OffresPubliquesPage() {
         setPage(0);
     }
 
+    function handleChangerTri(e: React.ChangeEvent<HTMLSelectElement>) {
+        setTriSelectionne(e.target.value as "recent" | "ancien");
+        setPage(0);
+    }
+
     function reinitialiserFiltres() {
         setRechercheInput("");
         setRechercheAppliquee("");
         setSecteurSelectionne("");
+        setTriSelectionne("recent");
         setPage(0);
     }
 
@@ -151,7 +158,6 @@ export function OffresPubliquesPage() {
     return (
         <main className="home-page page-transition">
             <div className="home-container">
-                {/* HERO BANNER & EN-TÊTE */}
                 <br />
 
                 <section className="offres-hero">
@@ -195,6 +201,20 @@ export function OffresPubliquesPage() {
                                 </svg>
                             </div>
 
+                            <div className="offres-filterbar__pill offres-filterbar__pill--select">
+                                <select
+                                    value={triSelectionne}
+                                    onChange={handleChangerTri}
+                                    className="offres-filterbar__pill-select"
+                                >
+                                    <option value="recent">Plus récentes</option>
+                                    <option value="ancien">Plus anciennes</option>
+                                </select>
+                                <svg className="offres-filterbar__pill-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M6 9L12 15L18 9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                            </div>
+
                             <button type="submit" className="offres-filterbar__submit" aria-label="Rechercher">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                     <circle cx="11" cy="11" r="7" strokeWidth="2.2" />
@@ -215,14 +235,12 @@ export function OffresPubliquesPage() {
                     </div>
                 </section>
 
-                {/* GESTION DES ERREURS */}
                 {error && (
                     <div className="offres-alert offres-alert--error" role="alert">
                         <span>{error}</span>
                     </div>
                 )}
 
-                {/* LISTE DES OFFRES */}
                 <section className="offres-section">
                     {loading ? (
                         <div className="home-jobs-grid">
@@ -304,7 +322,6 @@ export function OffresPubliquesPage() {
                                                 </div>
                                             </div>
 
-                                            {/* EXTRAIT DE DESCRIPTION SUR 1 LIGNE */}
                                             {descriptionPropre ? (
                                                 <p className="job-pass__description">
                                                     {descriptionPropre}
@@ -316,7 +333,6 @@ export function OffresPubliquesPage() {
                                             )}
 
                                             <div className="job-pass__tags">
-                                                {/* BADGE PRINCIPAL EN BLANC */}
                                                 <span
                                                     className="job-pass__tag job-pass__tag--solid"
                                                     style={{
@@ -378,7 +394,6 @@ export function OffresPubliquesPage() {
                                 })}
                             </div>
 
-                            {/* PAGINATION */}
                             {totalPages > 1 && (
                                 <nav className="offres-pagination" aria-label="Navigation des pages">
                                     <button

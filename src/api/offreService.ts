@@ -10,6 +10,12 @@ export interface FiltresOffres {
     secteurActivite?: string;
 }
 
+export interface FiltresOffres {
+    recherche?: string;
+    secteurActivite?: string;
+    tri?: "recent" | "ancien";
+}
+
 export interface StatistiquePublicationDTO {
     periode: string; // "2026-08-20" | "2026-08" | "2026"
     total: number;
@@ -128,6 +134,7 @@ export async function listerOffresPubliques(
     const params: Record<string, string | number> = { page, size };
     if (filtres.recherche) params.recherche = filtres.recherche;
     if (filtres.secteurActivite) params.secteurActivite = filtres.secteurActivite;
+    if (filtres.tri) params.tri = filtres.tri;
 
     const response = await httpClient.get<SpringPage<OffreDTO>>("/offres", { params });
     return response.data;
