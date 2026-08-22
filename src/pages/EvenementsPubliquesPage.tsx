@@ -146,56 +146,58 @@ export function EvenementsPubliquesPage() {
                             ✕
                         </button>
 
-                        <div className="evenement-modal__media">
-                            {evenementSelectionne.imagePresente ? (
-                                <EvenementImage
-                                    presente={evenementSelectionne.imagePresente}
-                                    chargerUrl={() => obtenirImageEvenementPubliqueUrl(evenementSelectionne.id)}
-                                    alt={evenementSelectionne.titre}
-                                    className="evenement-modal__image"
-                                    placeholderClassName="evenement-modal__image evenement-modal__image--placeholder"
-                                />
-                            ) : (
-                                <div className="evenement-modal__image evenement-modal__image--placeholder" />
-                            )}
-                            <div className="evenement-modal__scrim" />
-                            <div className="evenement-modal__media-content">
-                                {evenementSelectionne.type && (
-                                    <span className="evenement-modal__type-badge">
-                                        {LABELS_TYPE_EVENEMENT[evenementSelectionne.type]}
-                                    </span>
+                        <div className="evenement-modal__scroll">
+                            <div className="evenement-modal__media">
+                                {evenementSelectionne.imagePresente ? (
+                                    <EvenementImage
+                                        presente={evenementSelectionne.imagePresente}
+                                        chargerUrl={() => obtenirImageEvenementPubliqueUrl(evenementSelectionne.id)}
+                                        alt={evenementSelectionne.titre}
+                                        className="evenement-modal__image"
+                                        placeholderClassName="evenement-modal__image evenement-modal__image--placeholder"
+                                    />
+                                ) : (
+                                    <div className="evenement-modal__image evenement-modal__image--placeholder" />
                                 )}
-                                <h2 id="evenement-modal-titre" className="evenement-modal__titre">
-                                    {evenementSelectionne.titre}
-                                </h2>
-                                <p className="evenement-modal__date">
-                                    {formatDate(evenementSelectionne.dateEvenement)}
-                                    {evenementSelectionne.heure ? ` · ${evenementSelectionne.heure}` : ""}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="evenement-modal__body">
-                            {(evenementSelectionne.lieu || evenementSelectionne.organisateur) && (
-                                <div className="evenement-modal__chips">
-                                    {evenementSelectionne.lieu && (
-                                        <span className="evenement-modal__chip">
-                                            <span className="evenement-modal__chip-label">Lieu</span>
-                                            {evenementSelectionne.lieu}
+                                <div className="evenement-modal__scrim" />
+                                <div className="evenement-modal__media-content">
+                                    {evenementSelectionne.type && (
+                                        <span className="evenement-modal__type-badge">
+                                            {LABELS_TYPE_EVENEMENT[evenementSelectionne.type]}
                                         </span>
                                     )}
-                                    {evenementSelectionne.organisateur && (
-                                        <span className="evenement-modal__chip">
-                                            <span className="evenement-modal__chip-label">Organisateur</span>
-                                            {evenementSelectionne.organisateur}
-                                        </span>
-                                    )}
+                                    <h2 id="evenement-modal-titre" className="evenement-modal__titre">
+                                        {evenementSelectionne.titre}
+                                    </h2>
+                                    <p className="evenement-modal__date">
+                                        {formatDate(evenementSelectionne.dateEvenement)}
+                                        {evenementSelectionne.heure ? ` · ${evenementSelectionne.heure}` : ""}
+                                    </p>
                                 </div>
-                            )}
+                            </div>
 
-                            {evenementSelectionne.description && (
-                                <p className="evenement-modal__desc">{evenementSelectionne.description}</p>
-                            )}
+                            <div className="evenement-modal__body">
+                                {(evenementSelectionne.lieu || evenementSelectionne.organisateur) && (
+                                    <div className="evenement-modal__chips">
+                                        {evenementSelectionne.lieu && (
+                                            <span className="evenement-modal__chip">
+                                                <span className="evenement-modal__chip-label">Lieu</span>
+                                                {evenementSelectionne.lieu}
+                                            </span>
+                                        )}
+                                        {evenementSelectionne.organisateur && (
+                                            <span className="evenement-modal__chip">
+                                                <span className="evenement-modal__chip-label">Organisateur</span>
+                                                {evenementSelectionne.organisateur}
+                                            </span>
+                                        )}
+                                    </div>
+                                )}
+
+                                {evenementSelectionne.description && (
+                                    <p className="evenement-modal__desc">{evenementSelectionne.description}</p>
+                                )}
+                            </div>
                         </div>
 
                         {evenementSelectionne.lien && (

@@ -48,6 +48,10 @@
     padding: 60px 0;
 }
 
+/* ==========================================================================
+   Grille de cartes
+   ========================================================================== */
+
 .evenements-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -127,25 +131,6 @@
     line-height: 1.5;
 }
 
-.evenement-card__organisateur {
-    font-size: 0.8rem;
-    color: #9ca3af;
-    margin: 6px 0 0;
-}
-
-.evenement-card__lien {
-    display: inline-block;
-    margin-top: 14px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: #c8951e;
-    text-decoration: none;
-}
-
-.evenement-card__lien:hover {
-    text-decoration: underline;
-}
-
 .evenement-card__bouton {
     display: inline-flex;
     align-items: center;
@@ -215,26 +200,20 @@
 
 /* ==========================================================================
    Modal de détails
-   Desktop : boîte centrée, titre en overlay sur la photo, pied collant
+   Structure : bouton fermer (fixe) > zone scrollable (photo + corps) > pied collant
+   Desktop : boîte centrée avec titre en overlay sur la photo
    Mobile  : feuille plein écran qui glisse depuis le bas
    ========================================================================== */
 
 .evenement-modal-overlay {
     position: fixed;
-    top: 94px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-
+    inset: 0;
     background: rgba(11, 29, 58, 0.6);
     backdrop-filter: blur(3px);
-
     display: flex;
     align-items: center;
     justify-content: center;
-
-    padding: 20px 24px 24px;
-
+    padding: 24px;
     z-index: 1000;
     animation: evenement-fade-in 0.15s ease;
 }
@@ -253,15 +232,12 @@
     border-radius: 24px;
     max-width: 640px;
     width: 100%;
-    max-height: calc(100vh - 130px);
-
+    max-height: 86vh;
     display: flex;
     flex-direction: column;
     position: relative;
     overflow: hidden;
-
     box-shadow: 0 30px 60px -20px rgba(11, 29, 58, 0.5);
-
     animation: evenement-modal-in 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -276,6 +252,7 @@
     }
 }
 
+/* Bouton fermer : flotte au-dessus de tout, ne scrolle pas */
 .evenement-modal__fermer {
     position: absolute;
     top: 16px;
@@ -303,17 +280,18 @@
     outline-offset: 2px;
 }
 
-/* --- Zone photo avec titre en overlay --- */
-.evenement-modal__body {
-    padding: 22px 24px;
-    overflow-y: auto;
-    flex: 1;
-}
-
+/* Conteneur scrollable : photo + corps défilent ensemble, le pied reste fixe */
 .evenement-modal__scroll {
     overflow-y: auto;
     flex: 1;
     min-height: 0;
+}
+
+/* --- Zone photo avec titre en overlay --- */
+.evenement-modal__media {
+    position: relative;
+    height: 260px;
+    flex-shrink: 0;
 }
 
 .evenement-modal__image {
@@ -340,7 +318,6 @@
     right: 0;
     bottom: 0;
     padding: 20px 24px;
-    z-index: 2;
 }
 
 .evenement-modal__type-badge {
@@ -370,11 +347,9 @@
     margin: 0;
 }
 
-/* --- Corps scrollable --- */
+/* --- Corps --- */
 .evenement-modal__body {
     padding: 22px 24px;
-    overflow-y: auto;
-    flex: 1;
 }
 
 .evenement-modal__chips {
