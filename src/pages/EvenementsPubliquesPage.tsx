@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import {
     type EvenementDTO,
     LABELS_TYPE_EVENEMENT,
@@ -124,7 +125,7 @@ export function EvenementsPubliquesPage() {
                 </div>
             )}
 
-            {evenementSelectionne && (
+            {evenementSelectionne && createPortal(
                 <div
                     className="evenement-modal-overlay"
                     onClick={() => setEvenementSelectionne(null)}
@@ -213,7 +214,8 @@ export function EvenementsPubliquesPage() {
                             </div>
                         )}
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </div>
     );
