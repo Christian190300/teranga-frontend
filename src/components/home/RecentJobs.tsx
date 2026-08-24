@@ -44,6 +44,7 @@ export function RecentJobs() {
     const [jobs, setJobs] = useState<OffreDTO[]>([]);
     const [loading, setLoading] = useState(true);
     const [hasError, setHasError] = useState(false);
+    const [favoris, setFavoris] = useState<Set<number>>(new Set());
 
     const chargerOffres = async () => {
         setLoading(true);
@@ -75,6 +76,17 @@ export function RecentJobs() {
         e.stopPropagation();
         // Redirige vers la connexion en conservant l'intention d'action
         navigate(`/connexion?redirect=/offres/${jobId}`);
+    }
+
+    function toggleFavori(e: React.MouseEvent, jobId: number) {
+        e.preventDefault();
+        e.stopPropagation();
+        setFavoris((prev) => {
+            const next = new Set(prev);
+            if (next.has(jobId)) next.delete(jobId);
+            else next.add(jobId);
+            return next;
+        });
     }
 
     return (
@@ -122,9 +134,41 @@ export function RecentJobs() {
                                 <article
                                     key={job.id}
                                     className="job-pass"
-                                    style={{ "--job-color": couleur?.bar ?? "#0b1d3a" } as React.CSSProperties}
+                                    style={{ "--job-color": couleur?.bar ?? "#0b1d3a", position: "relative" } as React.CSSProperties}
                                 >
                                     {estRecente && <span className="job-pass__new">Nouveau</span>}
+
+                                    <button
+                                        type="button"
+                                        onClick={(e) => toggleFavori(e, job.id)}
+                                        aria-label="Ajouter aux favoris"
+                                        style={{
+                                            position: "absolute",
+                                            top: 12,
+                                            right: 12,
+                                            background: "white",
+                                            border: "1px solid #e2e2df",
+                                            borderRadius: "50%",
+                                            width: 32,
+                                            height: 32,
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            cursor: "pointer",
+                                            zIndex: 2,
+                                        }}
+                                    >
+                                        <svg
+                                            width="16"
+                                            height="16"
+                                            viewBox="0 0 24 24"
+                                            fill={favoris.has(job.id) ? "#c59b27" : "none"}
+                                            stroke="#c59b27"
+                                            strokeWidth="2"
+                                        >
+                                            <path d="M6 3h12v18l-6-4-6 4V3z" strokeLinejoin="round" />
+                                        </svg>
+                                    </button>
 
                                     <div className="job-pass__top">
                                         <LogoEntreprise
