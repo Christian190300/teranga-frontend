@@ -82,6 +82,7 @@ LOGO
 
     text-decoration: none;
     white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .navbar__brand span {
@@ -186,6 +187,7 @@ BOUTONS
 
     transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
     white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .btn--ghost {
@@ -401,6 +403,7 @@ HAMBURGER MOBILE
     background: white;
     cursor: pointer;
     transition: background 0.15s ease;
+    flex-shrink: 0;
 }
 
 .navbar__burger-btn:hover {
@@ -688,13 +691,12 @@ MENU MOBILE TIROIR
 .navbar__mobile-actions {
     display: flex;
     flex-direction: column;
-    align-items: stretch; /* Force les boutons à prendre toute la largeur s'ils sont en bloc, ou "flex-start" s'ils doivent s'aligner à gauche comme le texte du menu */
-    gap: 12px; /* Espace propre entre les boutons */
+    align-items: stretch;
+    gap: 12px;
 }
 
-/* Si les liens/boutons du menu mobile sont alignés à gauche : */
 .navbar__mobile-actions .btn {
-    justify-content: flex-start; /* Aligne le contenu (icône + texte) à gauche si le bouton est un flex container */
+    justify-content: flex-start;
     text-align: left;
 }
 
@@ -716,18 +718,55 @@ RESPONSIVE
     }
 }
 
-@media (max-width: 480px) {
+/* ---- Resserre logo + boutons Connexion/Inscription + hamburger
+        pour qu'ils tiennent tous sur une ligne sans être coupés ---- */
+@media (max-width: 640px) {
     .navbar {
-        padding: 0 20px;
+        padding: 0 14px;
+        gap: 8px;
     }
 
     .navbar__brand {
-        font-size: 1.1rem;
+        font-size: 1.05rem;
     }
 
-    .btn {
-        padding: 9px 16px;
-        font-size: .85rem;
+    .navbar__links {
+        gap: 8px;
+    }
+
+    .navbar__auth-links {
+        gap: 6px;
+    }
+
+    .navbar__auth-links .btn {
+        padding: 7px 12px;
+        font-size: 0.78rem;
+        gap: 0;
+    }
+
+    /* Masque les icônes dans Se connecter / S'inscrire sur mobile pour gagner de la place */
+    .navbar__auth-links .btn .navbar__icon {
+        display: none;
+    }
+
+    .navbar__burger-btn {
+        width: 34px;
+        height: 34px;
+    }
+}
+
+@media (max-width: 380px) {
+    .navbar {
+        padding: 0 10px;
+    }
+
+    .navbar__brand {
+        font-size: 0.95rem;
+    }
+
+    .navbar__auth-links .btn {
+        padding: 6px 9px;
+        font-size: 0.72rem;
     }
 }
 
