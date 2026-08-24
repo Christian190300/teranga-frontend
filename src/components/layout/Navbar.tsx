@@ -421,8 +421,12 @@ export function Navbar() {
                             <ProfileMenu />
                         </div>
                     ) : (
-                        <div className="navbar__auth-links navbar__desktop-only">
-                            <div className="navbar__visitor-menus" ref={visitorMenusRef}>
+                        /* Visible sur desktop ET mobile : les boutons Connexion/Inscription restent
+                           accessibles en permanence, hors du menu hamburger. Seuls les menus
+                           déroulants Candidat/Recruteur (avec sous-liens) restent réservés au
+                           desktop, car ils ont leur propre équivalent dans le tiroir mobile. */
+                        <div className="navbar__auth-links">
+                            <div className="navbar__visitor-menus navbar__desktop-only" ref={visitorMenusRef}>
                                 <VisitorDropdown
                                     id="candidat"
                                     label="Candidat"
@@ -448,15 +452,15 @@ export function Navbar() {
                                 </NavLink>
                             </div>
 
-                            <span className="navbar__auth-divider" aria-hidden="true" />
+                            <span className="navbar__auth-divider navbar__desktop-only" aria-hidden="true" />
 
                             <Link to="/connexion" className="btn btn--ghost">
                                 <IconLogin />
-                                Connexion
+                                Se connecter
                             </Link>
-                            <Link to="/inscription" className="btn btn--ghost">
+                            <Link to="/inscription" className="btn btn--primary">
                                 <IconUserPlus />
-                                Inscription
+                                S'inscrire
                             </Link>
                         </div>
                     )}
@@ -600,26 +604,7 @@ export function Navbar() {
                                     {isLoggingOut ? "Déconnexion..." : "Se déconnecter"}
                                 </button>
                             </>
-                        ) : (
-                            <>
-                                <Link
-                                    to="/connexion"
-                                    className="btn btn--ghost"
-                                    onClick={() => setMenuOuvert(false)}
-                                >
-                                    <IconLogin />
-                                    Connexion
-                                </Link>
-                                <Link
-                                    to="/inscription"
-                                    className="btn btn--ghost"
-                                    onClick={() => setMenuOuvert(false)}
-                                >
-                                    <IconUserPlus />
-                                    Inscription
-                                </Link>
-                            </>
-                        )}
+                        ) : null}
                     </div>
                 </div>
             </header>
