@@ -421,12 +421,8 @@ export function Navbar() {
                             <ProfileMenu />
                         </div>
                     ) : (
-                        /* Visible sur desktop ET mobile : les boutons Connexion/Inscription restent
-                           accessibles en permanence, hors du menu hamburger. Seuls les menus
-                           déroulants Candidat/Recruteur (avec sous-liens) restent réservés au
-                           desktop, car ils ont leur propre équivalent dans le tiroir mobile. */
-                        <div className="navbar__auth-links">
-                            <div className="navbar__visitor-menus navbar__desktop-only" ref={visitorMenusRef}>
+                        <div className="navbar__auth-links navbar__desktop-only">
+                            <div className="navbar__visitor-menus" ref={visitorMenusRef}>
                                 <VisitorDropdown
                                     id="candidat"
                                     label="Candidat"
@@ -452,15 +448,15 @@ export function Navbar() {
                                 </NavLink>
                             </div>
 
-                            <span className="navbar__auth-divider navbar__desktop-only" aria-hidden="true" />
+                            <span className="navbar__auth-divider" aria-hidden="true" />
 
                             <Link to="/connexion" className="btn btn--ghost">
                                 <IconLogin />
-                                Se connecter
+                                Connexion
                             </Link>
                             <Link to="/inscription" className="btn btn--ghost">
                                 <IconUserPlus />
-                                S'inscrire
+                                Inscription
                             </Link>
                         </div>
                     )}
@@ -604,7 +600,26 @@ export function Navbar() {
                                     {isLoggingOut ? "Déconnexion..." : "Se déconnecter"}
                                 </button>
                             </>
-                        ) : null}
+                        ) : (
+                            <>
+                                <Link
+                                    to="/connexion"
+                                    className="btn btn--ghost"
+                                    onClick={() => setMenuOuvert(false)}
+                                >
+                                    <IconLogin />
+                                    Connexion
+                                </Link>
+                                <Link
+                                    to="/inscription"
+                                    className="btn btn--ghost"
+                                    onClick={() => setMenuOuvert(false)}
+                                >
+                                    <IconUserPlus />
+                                    Inscription
+                                </Link>
+                            </>
+                        )}
                     </div>
                 </div>
             </header>
