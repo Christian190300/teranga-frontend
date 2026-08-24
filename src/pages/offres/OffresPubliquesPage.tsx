@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LogoEntreprise } from "../../components/common/LogoEntreprise";
 import { IconCoin, IconMapPin } from "../../components/home/icons";
 import { getCouleurContrat } from "./offreColors";
@@ -42,6 +42,7 @@ function formatSalaire(offre: OffreDTO): string {
     return `${(offre.salaireMin ?? offre.salaireMax)?.toLocaleString()} ${devise}`;
 }
 
+/** Nettoie le texte et gère les replis (description -> profilRecherche -> missions) */
 function extraireTexteDescription(job: OffreDTO): string {
     const sourceTexte =
         job.description ||
@@ -56,8 +57,8 @@ function extraireTexteDescription(job: OffreDTO): string {
 export function OffresPubliquesPage() {
     const { currentUser } = useAuth();
     const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
 
+    // --- États des données ---
     const [offres, setOffres] = useState<OffreDTO[]>([]);
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
@@ -65,6 +66,7 @@ export function OffresPubliquesPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+    // --- Filtres ---
     const [rechercheInput, setRechercheInput] = useState("");
     const [rechercheAppliquee, setRechercheAppliquee] = useState("");
     const [secteurs, setSecteurs] = useState<string[]>([]);
@@ -74,20 +76,14 @@ export function OffresPubliquesPage() {
     const estCandidat = currentUser?.role === "CANDIDAT";
     const filtresActifs = rechercheAppliquee !== "" || secteurSelectionne !== "";
 
-    // Reprend le terme de recherche transmis par l'accueil (?recherche=...)
-    useEffect(() => {
-        const fromUrl = searchParams.get("recherche") ?? "";
-        setRechercheInput(fromUrl);
-        setRechercheAppliquee(fromUrl);
-        setPage(0);
-    }, [searchParams]);
-
+    // Chargement des secteurs
     useEffect(() => {
         listerSecteursDisponibles()
             .then(setSecteurs)
             .catch(() => setSecteurs([]));
     }, []);
 
+    // Chargement des offres
     useEffect(() => {
         async function charger() {
             setLoading(true);
@@ -111,10 +107,12 @@ export function OffresPubliquesPage() {
         charger();
     }, [page, rechercheAppliquee, secteurSelectionne, triSelectionne]);
 
+    // Remonte en haut de page à chaque changement de page (pagination)
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: "smooth" });
     }, [page]);
 
+    // Handlers
     function lancerRecherche(e: React.FormEvent) {
         e.preventDefault();
         setPage(0);
