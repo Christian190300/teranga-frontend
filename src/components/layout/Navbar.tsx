@@ -154,6 +154,49 @@ function IconHamburger({ ouvert }: { ouvert: boolean }) {
     );
 }
 
+interface VisitorDropdownProps {
+    label: string;
+    icon: React.ReactNode;
+    links: NavLinkItem[];
+    id: string;
+    activeMenu: string | null;
+    setActiveMenu: (id: string | null) => void;
+}
+
+function VisitorDropdown({ label, icon, links, id, activeMenu, setActiveMenu }: VisitorDropdownProps) {
+    const estOuvert = activeMenu === id;
+
+    return (
+        <div className="navbar__visitor-dropdown">
+            <button
+                type="button"
+                className={`navbar__visitor-trigger${estOuvert ? " navbar__visitor-trigger--open" : ""}`}
+                onClick={() => setActiveMenu(estOuvert ? null : id)}
+                aria-expanded={estOuvert}
+                aria-haspopup="true"
+            >
+                {icon}
+                {label}
+                <IconChevron />
+            </button>
+            {estOuvert && (
+                <div className="navbar__visitor-panel">
+                    {links.map((link) => (
+                        <Link
+                            key={link.label}
+                            to={link.to}
+                            className="navbar__visitor-panel-link"
+                            onClick={() => setActiveMenu(null)}
+                        >
+                            {link.label}
+                        </Link>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+}
+
 /* ---------- Composant Avatar SVG avec bordure & badge dynamique ---------- */
 function CircularScoreAvatar({
                                  photoUrl,
@@ -237,6 +280,7 @@ export function Navbar() {
 
     const [menuOuvert, setMenuOuvert] = useState(false);
     const [isLoggingOut, setIsLoggingOut] = useState(false);
+    const [activeVisitorMenu, setActiveVisitorMenu] = useState<string | null>(null);
     const [mobileVisitorMenu, setMobileVisitorMenu] = useState<string | null>(null);
     const visitorMenusRef = useRef<HTMLDivElement>(null);
 
@@ -248,6 +292,7 @@ export function Navbar() {
 
     useEffect(() => {
         setMenuOuvert(false);
+        setActiveVisitorMenu(null);
         setMobileVisitorMenu(null);
     }, [location.pathname]);
 
@@ -299,6 +344,26 @@ export function Navbar() {
         };
     }, [isAuthenticated, currentUser]);
 
+    useEffect(() => {
+        if (!activeVisitorMenu) return;
+
+        function handleClickDehors(e: MouseEvent) {
+            if (visitorMenusRef.current && !visitorMenusRef.current.contains(e.target as Node)) {
+                setActiveVisitorMenu(null);
+            }
+        }
+        function handleEscape(e: KeyboardEvent) {
+            if (e.key === "Escape") setActiveVisitorMenu(null);
+        }
+
+        document.addEventListener("mousedown", handleClickDehors);
+        document.addEventListener("keydown", handleEscape);
+        return () => {
+            document.removeEventListener("mousedown", handleClickDehors);
+            document.removeEventListener("keydown", handleEscape);
+        };
+    }, [activeVisitorMenu]);
+
     async function handleDeconnexion() {
         if (isLoggingOut) return;
 
@@ -335,10 +400,6 @@ export function Navbar() {
                     Talent<span>Sénégal</span>
                 </Link>
 
-                {/* Menu desktop réservé aux utilisateurs CONNECTÉS (candidat/recruteur) :
-                    les liens visiteur (Candidat/Recruteur/Événements) ne sont plus dans
-                    la barre, ils vivent uniquement dans le tiroir hamburger désormais,
-                    conformément à la maquette. */}
                 <nav className="navbar__menu navbar__desktop-only">
                     {isAuthenticated &&
                         espaceLinks.map((link) => (
@@ -360,10 +421,39 @@ export function Navbar() {
                             <ProfileMenu />
                         </div>
                     ) : (
-                        /* Barre visible : uniquement Se connecter / S'inscrire, comme la maquette.
-                           Candidat / Recruteur / Événements sont accessibles via le hamburger,
-                           qui reste désormais visible en permanence (mobile ET desktop). */
+                        /* Visible sur desktop ET mobile : les boutons Connexion/Inscription restent
+                           accessibles en permanence, hors du menu hamburger. Seuls les menus
+                           déroulants Candidat/Recruteur (avec sous-liens) restent réservés au
+                           desktop, car ils ont leur propre équivalent dans le tiroir mobile. */
                         <div className="navbar__auth-links">
+                            <div className="navbar__visitor-menus navbar__desktop-only" ref={visitorMenusRef}>
+                                <VisitorDropdown
+                                    id="candidat"
+                                    label="Candidat"
+                                    icon={<IconUser />}
+                                    links={visiteurCandidatLinks}
+                                    activeMenu={activeVisitorMenu}
+                                    setActiveMenu={setActiveVisitorMenu}
+                                />
+                                <VisitorDropdown
+                                    id="recruteur"
+                                    label="Recruteur"
+                                    icon={<IconBriefcase />}
+                                    links={visiteurRecruteurLinks}
+                                    activeMenu={activeVisitorMenu}
+                                    setActiveMenu={setActiveVisitorMenu}
+                                />
+                                <NavLink
+                                    to="/evenements"
+                                    className={({ isActive }) => `navbar__menu-link ${isActive ? "active" : ""}`}
+                                >
+                                    <IconCalendar />
+                                    Événements
+                                </NavLink>
+                            </div>
+
+                            <span className="navbar__auth-divider navbar__desktop-only" aria-hidden="true" />
+
                             <Link to="/connexion" className="btn btn--ghost">
                                 <IconLogin />
                                 Se connecter
@@ -386,7 +476,7 @@ export function Navbar() {
                     </button>
                 </nav>
 
-                {/* ---------- Menu tiroir (mobile ET desktop) ---------- */}
+                {/* ---------- Menu tiroir mobile ---------- */}
                 <div
                     className={`navbar__mobile-overlay${menuOuvert ? " navbar__mobile-overlay--open" : ""}`}
                     onClick={() => setMenuOuvert(false)}
@@ -424,7 +514,7 @@ export function Navbar() {
                     </nav>
 
                     {!isAuthenticated && (
-                        <div className="navbar__mobile-visitor-menus" ref={visitorMenusRef}>
+                        <div className="navbar__mobile-visitor-menus">
                             <div className="navbar__mobile-visitor-group">
                                 <button
                                     type="button"

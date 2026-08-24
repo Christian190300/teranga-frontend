@@ -90,7 +90,7 @@ LOGO
 }
 
 /* ============================================================
-MENU DESKTOP (utilisateurs connectés uniquement)
+MENU DESKTOP
 ============================================================ */
 
 .navbar__menu {
@@ -147,6 +147,14 @@ ZONE DROITE
     align-items: center;
     gap: 10px;
     flex-shrink: 0;
+    min-width: 0;
+}
+
+.navbar__auth-divider {
+    width: 1px;
+    height: 24px;
+    background: #e2e5ec;
+    margin: 0 2px;
 }
 
 /* Icônes réutilisables */
@@ -278,11 +286,112 @@ PROFILE DROPDOWN
 }
 
 /* ============================================================
-HAMBURGER — visible en permanence (mobile ET desktop)
+MENUS DÉROULANTS VISITEURS (Candidat / Recruteur) — desktop
+============================================================ */
+
+.navbar__visitor-menus {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.navbar__visitor-dropdown {
+    position: relative;
+}
+
+.navbar__visitor-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 9px 12px;
+    border-radius: 8px;
+    border: 1.5px solid transparent;
+    background: transparent;
+
+    font-family: 'Inter', sans-serif;
+    font-size: 0.87rem;
+    font-weight: 600;
+    color: #475569;
+
+    cursor: pointer;
+    transition: color .15s ease, background .15s ease, border-color .15s ease;
+    white-space: nowrap;
+}
+
+.navbar__visitor-trigger:hover {
+    color: #14294d;
+    background: #f4f7fc;
+}
+
+.navbar__visitor-trigger--open {
+    color: #14294d;
+    background: #eaf0fb;
+    border-color: #dce6f7;
+}
+
+.navbar__visitor-chevron {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+    color: #94a3b8;
+    transition: transform .2s ease;
+}
+
+.navbar__visitor-trigger--open .navbar__visitor-chevron {
+    transform: rotate(180deg);
+    color: #14294d;
+}
+
+.navbar__visitor-panel {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+
+    min-width: 250px;
+
+    background: white;
+    border: 1px solid #e8e9ee;
+    border-radius: 12px;
+
+    box-shadow: 0 18px 38px rgba(11, 29, 58, 0.14);
+
+    padding: 8px;
+
+    z-index: 1500;
+
+    animation: dropdown .2s ease;
+}
+
+.navbar__visitor-panel-link {
+    display: flex;
+    align-items: center;
+
+    padding: 11px 12px;
+    border-radius: 8px;
+
+    color: #1e293b;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.87rem;
+    font-weight: 500;
+
+    text-decoration: none;
+    white-space: nowrap;
+
+    transition: background .15s ease, color .15s ease;
+}
+
+.navbar__visitor-panel-link:hover {
+    background: #f4f7fc;
+    color: #14294d;
+}
+
+/* ============================================================
+HAMBURGER MOBILE
 ============================================================ */
 
 .navbar__burger-btn {
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
 
@@ -345,7 +454,7 @@ HAMBURGER — visible en permanence (mobile ET desktop)
 }
 
 /* ============================================================
-CARTE PROFIL CIRCULAIRE (SCORE COMPLETION EN HAUT DU MENU)
+CARTE PROFIL CIRCULAIRE (SCORE COMPLETION EN HAUT DU MENU MOBILE)
 ============================================================ */
 
 .navbar-profile-avatar {
@@ -430,7 +539,7 @@ CARTE PROFIL CIRCULAIRE (SCORE COMPLETION EN HAUT DU MENU)
 }
 
 /* ============================================================
-MENU TIROIR (mobile ET desktop désormais)
+MENU MOBILE TIROIR
 ============================================================ */
 
 .navbar__mobile-overlay {
@@ -480,23 +589,6 @@ MENU TIROIR (mobile ET desktop désormais)
     overflow-y: auto;
 }
 
-/* Sur desktop, le tiroir s'affiche comme un panneau centré plutôt qu'en pleine largeur */
-@media (min-width: 861px) {
-    .navbar__mobile-panel {
-        left: auto;
-        right: 32px;
-        width: 320px;
-        border: 1px solid #e8e9ee;
-        border-radius: 12px;
-        box-shadow: 0 18px 38px rgba(11, 29, 58, 0.14);
-        top: 82px;
-    }
-
-    .navbar__mobile-overlay {
-        inset: 0;
-    }
-}
-
 .navbar__mobile-links {
     display: flex;
     flex-direction: column;
@@ -520,7 +612,7 @@ MENU TIROIR (mobile ET desktop désormais)
     padding-left: 6px;
 }
 
-/* ---------- Sous-menus visiteurs (dans le tiroir) ---------- */
+/* ---------- Sous-menus visiteurs mobile ---------- */
 
 .navbar__mobile-visitor-menus {
     display: flex;
@@ -564,14 +656,6 @@ MENU TIROIR (mobile ET desktop désormais)
     color: #64748b;
 }
 
-.navbar__visitor-chevron {
-    width: 13px;
-    height: 13px;
-    flex-shrink: 0;
-    color: #94a3b8;
-    transition: transform .2s ease;
-}
-
 .navbar__mobile-visitor-trigger .navbar__visitor-chevron {
     color: #94a3b8;
     transition: transform 0.2s ease;
@@ -610,7 +694,6 @@ MENU TIROIR (mobile ET desktop désormais)
     flex-direction: column;
     align-items: stretch;
     gap: 12px;
-    padding: 0 20px 20px;
 }
 
 .navbar__mobile-actions .btn {
@@ -627,13 +710,19 @@ RESPONSIVE
         display: none;
     }
 
+    .navbar__burger-btn {
+        display: flex;
+    }
+
     .navbar__desktop-only {
         display: none;
     }
 }
 
-/* ---- Resserre logo + boutons sur mobile pour que tout tienne
-        sur une ligne (logo, Se connecter, S'inscrire, hamburger) ---- */
+/* ---- Correctif mobile : logo + Se connecter + S'inscrire + hamburger doivent
+        TOUS rester visibles. On autorise les boutons à se comprimer (avec
+        troncature "..." en dernier recours) plutôt que de déborder hors
+        écran et disparaître. Le hamburger, lui, ne se comprime jamais. ---- */
 @media (max-width: 640px) {
     .navbar {
         padding: 0 12px;
@@ -642,19 +731,31 @@ RESPONSIVE
 
     .navbar__brand {
         font-size: 0.95rem;
+        flex-shrink: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .navbar__links {
         gap: 6px;
+        flex-shrink: 1;
+        min-width: 0;
     }
 
     .navbar__auth-links {
         gap: 6px;
+        flex-shrink: 1;
+        min-width: 0;
     }
 
     .navbar__auth-links .btn {
+        flex-shrink: 1;
+        min-width: 0;
         padding: 7px 10px;
         font-size: 0.74rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     /* Masque les icônes dans Se connecter / S'inscrire sur mobile pour gagner de la place */
@@ -665,6 +766,7 @@ RESPONSIVE
     .navbar__burger-btn {
         width: 34px;
         height: 34px;
+        flex-shrink: 0;
     }
 }
 
@@ -685,7 +787,9 @@ RESPONSIVE
 
 /* ---------- Focus visible (accessibilité) ---------- */
 .btn:focus-visible,
+.navbar__visitor-trigger:focus-visible,
 .navbar__mobile-visitor-trigger:focus-visible,
+.navbar__visitor-panel-link:focus-visible,
 .navbar__mobile-visitor-sublink:focus-visible,
 .navbar__burger-btn:focus-visible {
     outline: 2px solid #c8951e;
