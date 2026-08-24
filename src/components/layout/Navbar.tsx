@@ -458,7 +458,7 @@ export function Navbar() {
                                 <IconLogin />
                                 Se connecter
                             </Link>
-                            <Link to="/inscription" className="btn btn--primary">
+                            <Link to="/inscription" className="btn btn--ghost">
                                 <IconUserPlus />
                                 S'inscrire
                             </Link>
