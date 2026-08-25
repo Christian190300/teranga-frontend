@@ -5,6 +5,7 @@ import talent2 from "../../assets/talent-2.jpg";
 import talent3 from "../../assets/talent-3.jpg";
 import { IconUsers, IconBriefcase, IconGlobe, IconShieldCheck } from "./icons";
 import { listerOffresPubliques } from "../../api/offreService";
+import "./Hero.css";
 
 interface Slide {
     image: string;
@@ -17,37 +18,31 @@ const slides: Slide[] = [
         image: talent1,
         title: (
             <>
-                Révélez votre <span>potentiel</span>.
-                <br />
-                Trouvez l'<span>excellence</span>.
+                Trouvez votre prochain <span>emploi</span>
             </>
         ),
         subtitle:
-            "Connectez-vous avec les entreprises les plus innovantes et les talents les plus prometteurs du Sénégal.",
+            "Des centaines d'opportunités vérifiées vous attendent au Sénégal.",
     },
     {
         image: talent2,
         title: (
             <>
-                Construisez votre <span>carrière</span>.
-                <br />
-                Rejoignez les meilleurs <span>talents</span>.
+                Construisez votre <span>carrière</span>
             </>
         ),
         subtitle:
-            "Des centaines d'offres vérifiées, publiées par des entreprises qui recrutent activement.",
+            "Rejoignez les entreprises qui recrutent activement les meilleurs talents.",
     },
     {
         image: talent3,
         title: (
             <>
-                Recrutez plus <span>vite</span>.
-                <br />
-                Recrutez plus <span>juste</span>.
+                Recrutez plus vite, recrutez plus <span>juste</span>
             </>
         ),
         subtitle:
-            "Accédez à un vivier de profils qualifiés et vérifiés, prêts à rejoindre votre équipe.",
+            "Accédez à un vivier de profils qualifiés, prêts à rejoindre votre équipe.",
     },
 ];
 
@@ -57,7 +52,6 @@ export function Hero() {
     const [index, setIndex] = useState(0);
     const [totalOffres, setTotalOffres] = useState<number | null>(null);
 
-    // Carrousel auto-play
     useEffect(() => {
         const timer = setInterval(() => {
             setIndex((current) => (current + 1) % slides.length);
@@ -65,7 +59,6 @@ export function Hero() {
         return () => clearInterval(timer);
     }, []);
 
-    // Chargement du nombre total d'offres
     useEffect(() => {
         listerOffresPubliques(0, 1)
             .then((data) => {
@@ -76,12 +69,8 @@ export function Hero() {
             });
     }, []);
 
-    function goToPrevious() {
-        setIndex((current) => (current - 1 + slides.length) % slides.length);
-    }
-
-    function goToNext() {
-        setIndex((current) => (current + 1) % slides.length);
+    function goTo(i: number) {
+        setIndex(i);
     }
 
     const current = slides[index];
@@ -89,63 +78,66 @@ export function Hero() {
     return (
         <>
             <section className="home-hero">
-                <div className="home-hero__slides">
-                    {slides.map((slide, i) => (
-                        <div
-                            key={slide.image}
-                            className={`home-hero__slide ${i === index ? "is-active" : ""}`}
-                            style={{ backgroundImage: `url(${slide.image})` }}
-                        />
-                    ))}
-                    <div className="home-hero__overlay" />
-                </div>
+                <div className="home-hero__container home-container">
+                    {/* Colonne texte */}
+                    <div className="home-hero__text-col">
+                        <span className="home-hero__eyebrow">Talent Sénégal</span>
 
-                <button
-                    type="button"
-                    className="home-hero__arrow home-hero__arrow--prev"
-                    onClick={goToPrevious}
-                    aria-label="Image précédente"
-                >
-                    ‹
-                </button>
-                <button
-                    type="button"
-                    className="home-hero__arrow home-hero__arrow--next"
-                    onClick={goToNext}
-                    aria-label="Image suivante"
-                >
-                    ›
-                </button>
+                        <div className="home-hero__text-block" key={index}>
+                            <h1 className="home-hero__title">{current.title}</h1>
+                            <p className="home-hero__subtitle">{current.subtitle}</p>
+                        </div>
 
-                <div className="home-hero__content home-container">
-                    <div className="home-hero__text-block" key={index}>
-                        <h1 className="home-hero__title">{current.title}</h1>
-                        <p className="home-hero__subtitle">{current.subtitle}</p>
                         <div className="home-hero__actions">
-                            <Link to="/inscription?role=candidat" className="home-btn home-btn--gold">
-                                Créer mon profil
+                            <Link to="/inscription?role=candidat" className="home-btn home-btn--primary">
+                                Trouver un emploi
                             </Link>
-                            <Link to="/offres" className="home-btn home-btn--outline">
-                                Découvrir les offres
+                            <Link to="/inscription?role=recruteur" className="home-btn home-btn--secondary">
+                                <IconBriefcase />
+                                Publier une offre
                             </Link>
+                        </div>
+
+                        <div className="home-hero__dots">
+                            {slides.map((slide, i) => (
+                                <button
+                                    key={slide.image}
+                                    type="button"
+                                    className={`home-hero__dot ${i === index ? "is-active" : ""}`}
+                                    onClick={() => goTo(i)}
+                                    aria-label={`Aller à l'image ${i + 1}`}
+                                />
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Colonne photo */}
+                    <div className="home-hero__media-col">
+                        <div className="home-hero__frame">
+                            {slides.map((slide, i) => (
+                                <div
+                                    key={slide.image}
+                                    className={`home-hero__photo ${i === index ? "is-active" : ""}`}
+                                    style={{ backgroundImage: `url(${slide.image})` }}
+                                />
+                            ))}
+                            <div className="home-hero__frame-accent" aria-hidden="true" />
+
+                            <div className="home-hero__badge">
+                                <div className="home-hero__badge-icon">
+                                    <IconUsers />
+                                </div>
+                                <div>
+                                    <div className="home-hero__badge-value">500+</div>
+                                    <div className="home-hero__badge-label">Talents inscrits</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <div className="home-hero__dots">
-                    {slides.map((slide, i) => (
-                        <button
-                            key={slide.image}
-                            type="button"
-                            className={`home-hero__dot ${i === index ? "is-active" : ""}`}
-                            onClick={() => setIndex(i)}
-                            aria-label={`Aller à l'image ${i + 1}`}
-                        />
-                    ))}
-                </div>
             </section>
 
-            {/* Chiffres clés — panneau unique qui chevauche le bas du hero */}
+            {/* Chiffres clés */}
             <section className="home-stats-section home-container">
                 <div className="home-stats-panel">
                     <div className="home-stats-panel__item">
