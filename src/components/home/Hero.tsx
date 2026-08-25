@@ -50,63 +50,60 @@ export function Hero() {
                     </div>
                 </div>
 
-                {/* Colonne photo */}
+                {/* Colonne photo — bleed jusqu'au bord de l'écran, aucune zone morte possible */}
                 <div className="ts-hero__media-col">
-                    <div className="ts-hero__silhouettes" aria-hidden="true">
-                        <span className="ts-hero__silhouette ts-hero__silhouette--a" />
-                        <span className="ts-hero__silhouette ts-hero__silhouette--b" />
-                        <span className="ts-hero__silhouette ts-hero__silhouette--c" />
-                    </div>
                     <img src={talent1} alt="Professionnelle sénégalaise" className="ts-hero__photo" />
                 </div>
             </div>
 
-            {/* Carte de stats — chevauche le bas du hero */}
+            {/* Carte de stats — chevauche le bas du hero, reste dans un conteneur centré */}
             <div className="ts-stats">
-                <div className="ts-stats__grid">
-                    <div className="ts-stats__item">
-                        <div className="ts-stats__icon">
-                            <IconUsers />
-                        </div>
-                        <div>
-                            <div className="ts-stats__value">500+</div>
-                            <div className="ts-stats__label">Talents inscrits</div>
-                            <div className="ts-stats__desc">Des professionnels prêts à l'emploi</div>
-                        </div>
-                    </div>
-
-                    <div className="ts-stats__item">
-                        <div className="ts-stats__icon">
-                            <IconBriefcase />
-                        </div>
-                        <div>
-                            <div className="ts-stats__value">
-                                {totalOffres !== null ? totalOffres : "—"}
+                <div className="ts-stats__inner">
+                    <div className="ts-stats__grid">
+                        <div className="ts-stats__item">
+                            <div className="ts-stats__icon">
+                                <IconUsers />
                             </div>
-                            <div className="ts-stats__label">Offres actives</div>
-                            <div className="ts-stats__desc">Des opportunités à saisir</div>
+                            <div>
+                                <div className="ts-stats__value">500+</div>
+                                <div className="ts-stats__label">Talents inscrits</div>
+                                <div className="ts-stats__desc">Des professionnels prêts à l'emploi</div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div className="ts-stats__item">
-                        <div className="ts-stats__icon">
-                            <IconGlobe />
+                        <div className="ts-stats__item">
+                            <div className="ts-stats__icon">
+                                <IconBriefcase />
+                            </div>
+                            <div>
+                                <div className="ts-stats__value">
+                                    {totalOffres !== null ? totalOffres : "—"}
+                                </div>
+                                <div className="ts-stats__label">Offres actives</div>
+                                <div className="ts-stats__desc">Des opportunités à saisir</div>
+                            </div>
                         </div>
-                        <div>
-                            <div className="ts-stats__value">50+</div>
-                            <div className="ts-stats__label">Entreprises</div>
-                            <div className="ts-stats__desc">Nous font confiance au quotidien</div>
-                        </div>
-                    </div>
 
-                    <div className="ts-stats__item">
-                        <div className="ts-stats__icon">
-                            <IconShieldCheck />
+                        <div className="ts-stats__item">
+                            <div className="ts-stats__icon">
+                                <IconGlobe />
+                            </div>
+                            <div>
+                                <div className="ts-stats__value">50+</div>
+                                <div className="ts-stats__label">Entreprises</div>
+                                <div className="ts-stats__desc">Nous font confiance au quotidien</div>
+                            </div>
                         </div>
-                        <div>
-                            <div className="ts-stats__value">98%</div>
-                            <div className="ts-stats__label">Taux de satisfaction</div>
-                            <div className="ts-stats__desc">Des recruteurs satisfaits de nos services</div>
+
+                        <div className="ts-stats__item">
+                            <div className="ts-stats__icon">
+                                <IconShieldCheck />
+                            </div>
+                            <div>
+                                <div className="ts-stats__value">98%</div>
+                                <div className="ts-stats__label">Taux de satisfaction</div>
+                                <div className="ts-stats__desc">Des recruteurs satisfaits de nos services</div>
+                            </div>
                         </div>
                     </div>
                 </div>
