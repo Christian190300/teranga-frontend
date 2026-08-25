@@ -1,19 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import talent1 from "../../assets/talent-1.jpg";
 import { IconUsers, IconBriefcase, IconGlobe, IconShieldCheck } from "./icons";
 import { listerOffresPubliques } from "../../api/offreService";
 import "./Hero.css";
-
-const TICKER_ITEMS = [
-    "Développeur Full-Stack — Dakar",
-    "Comptable Senior — Thiès",
-    "Chef de Projet Digital — Dakar",
-    "Ingénieur Génie Civil — Saint-Louis",
-    "Chargé(e) de Recrutement — Dakar",
-    "Responsable Marketing — Mbour",
-    "Data Analyst — Dakar",
-    "Technicien Réseaux — Ziguinchor",
-];
 
 export function Hero() {
     const [totalOffres, setTotalOffres] = useState<number | null>(null);
@@ -29,27 +19,28 @@ export function Hero() {
     }, []);
 
     return (
-        <>
-            <section className="ts-hero">
-                <div className="ts-hero__inner">
-                    <span className="ts-hero__eyebrow">
-                        <span className="ts-hero__eyebrow-line" />
-                        Talent Sénégal
-                    </span>
-
+        <section className="ts-hero">
+            <div className="ts-hero__top">
+                {/* Colonne texte */}
+                <div className="ts-hero__text-col">
                     <h1 className="ts-hero__title">
-                        Le talent sénégalais,
+                        Trouvez
                         <br />
-                        <span className="ts-hero__title-accent">directement au bon endroit.</span>
+                        votre prochain
+                        <br />
+                        <span className="ts-hero__title-accent">emploi</span>
                     </h1>
+                    <span className="ts-hero__underline" />
 
                     <p className="ts-hero__subtitle">
-                        Des profils vérifiés, des offres vérifiées, et une mise en relation
-                        pensée pour aller vite — que vous recrutiez ou que vous cherchiez.
+                        Des centaines d'opportunités
+                        <br />
+                        vous attendent au Sénégal.
                     </p>
 
                     <div className="ts-hero__actions">
                         <Link to="/inscription?role=candidat" className="ts-btn ts-btn--primary">
+                            <IconUsers />
                             Trouver un emploi
                         </Link>
                         <Link to="/inscription?role=recruteur" className="ts-btn ts-btn--secondary">
@@ -58,23 +49,21 @@ export function Hero() {
                         </Link>
                     </div>
                 </div>
-            </section>
 
-            {/* Bandeau d'offres — signature vivante de la plateforme */}
-            <div className="ts-ticker">
-                <div className="ts-ticker__track">
-                    {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, i) => (
-                        <span className="ts-ticker__item" key={i}>
-                            <span className="ts-ticker__dot" />
-                            {item}
-                        </span>
-                    ))}
+                {/* Colonne photo */}
+                <div className="ts-hero__media-col">
+                    <div className="ts-hero__silhouettes" aria-hidden="true">
+                        <span className="ts-hero__silhouette ts-hero__silhouette--a" />
+                        <span className="ts-hero__silhouette ts-hero__silhouette--b" />
+                        <span className="ts-hero__silhouette ts-hero__silhouette--c" />
+                    </div>
+                    <img src={talent1} alt="Professionnelle sénégalaise" className="ts-hero__photo" />
                 </div>
             </div>
 
-            {/* Chiffres clés */}
-            <section className="ts-stats">
-                <div className="ts-stats__panel">
+            {/* Carte de stats — chevauche le bas du hero */}
+            <div className="ts-stats">
+                <div className="ts-stats__grid">
                     <div className="ts-stats__item">
                         <div className="ts-stats__icon">
                             <IconUsers />
@@ -82,6 +71,7 @@ export function Hero() {
                         <div>
                             <div className="ts-stats__value">500+</div>
                             <div className="ts-stats__label">Talents inscrits</div>
+                            <div className="ts-stats__desc">Des professionnels prêts à l'emploi</div>
                         </div>
                     </div>
 
@@ -94,6 +84,7 @@ export function Hero() {
                                 {totalOffres !== null ? totalOffres : "—"}
                             </div>
                             <div className="ts-stats__label">Offres actives</div>
+                            <div className="ts-stats__desc">Des opportunités à saisir</div>
                         </div>
                     </div>
 
@@ -104,6 +95,7 @@ export function Hero() {
                         <div>
                             <div className="ts-stats__value">50+</div>
                             <div className="ts-stats__label">Entreprises</div>
+                            <div className="ts-stats__desc">Nous font confiance au quotidien</div>
                         </div>
                     </div>
 
@@ -114,10 +106,11 @@ export function Hero() {
                         <div>
                             <div className="ts-stats__value">98%</div>
                             <div className="ts-stats__label">Taux de satisfaction</div>
+                            <div className="ts-stats__desc">Des recruteurs satisfaits de nos services</div>
                         </div>
                     </div>
                 </div>
-            </section>
-        </>
+            </div>
+        </section>
     );
 }
