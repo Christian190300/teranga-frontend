@@ -1,7 +1,7 @@
 /* ============================================================
-   Hero.css — Talent Sénégal (v7, image réduite et recadrée)
-   Classes namespaced "ts-" — supprime tout ancien bloc
-   .home-hero / .home-stats-panel avant d'ajouter celui-ci.
+   Hero.css — Talent Sénégal (v8, rendu unifié mobile + desktop)
+   Layout unique : texte en haut → photo pleine largeur → stats
+   plates. Plus de bascule en 2 colonnes sur desktop.
    ============================================================ */
 
 .ts-hero {
@@ -20,13 +20,11 @@
     font-family: "Inter", sans-serif;
 }
 
-/* Grille : hauteur maîtrisée pour que la photo ne soit plus
-   géante ni trop zoomée. */
+/* Layout unique : empilé (texte puis photo), quelle que soit
+   la taille d'écran — pas de grille 2 colonnes. */
 .ts-hero__top {
-    display: grid;
-    grid-template-columns: minmax(320px, 620px) 1fr;
-    align-items: stretch;
-    height: 460px;
+    display: flex;
+    flex-direction: column;
 }
 
 /* ---------- Text column ---------- */
@@ -34,13 +32,16 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 40px clamp(24px, 5vw, 72px) 40px clamp(24px, 6vw, 88px);
+    padding: 32px clamp(20px, 6vw, 64px) 36px;
+    max-width: 720px;
+    margin: 0 auto;
+    width: 100%;
 }
 
 .ts-hero__title {
     margin: 0;
     font-weight: 800;
-    font-size: clamp(2rem, 4vw, 2.7rem);
+    font-size: clamp(2rem, 5vw, 2.6rem);
     line-height: 1.08;
     letter-spacing: -0.01em;
     text-transform: uppercase;
@@ -64,22 +65,25 @@
     font-size: 1rem;
     line-height: 1.55;
     color: var(--c-slate);
-    margin: 0 0 26px;
+    margin: 0 0 24px;
     font-weight: 400;
 }
 
-/* ---------- Buttons ---------- */
+/* ---------- Buttons — empilés, pleine largeur, partout ---------- */
 .ts-hero__actions {
     display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    max-width: 360px;
 }
 
 .ts-btn {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 9px;
-    padding: 13px 22px;
+    padding: 15px 22px;
     border-radius: 10px;
     font-size: 0.86rem;
     font-weight: 700;
@@ -118,11 +122,13 @@
     transform: translateY(-2px);
 }
 
-/* ---------- Media column — image contenue, plus de zoom excessif ---------- */
+/* ---------- Media column — photo pleine largeur, cadrée épaules ---------- */
 .ts-hero__media-col {
     position: relative;
     overflow: hidden;
     background: #f4f5f8;
+    width: 100%;
+    height: 340px;
 }
 
 .ts-hero__photo {
@@ -131,51 +137,58 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center 12%;
+    object-position: center 15%;
 }
 
 /* ============================================================
-   STATS CARD — chevauche légèrement le bas du hero
+   STATS — bandeau plat, 3 colonnes, identique partout
    ============================================================ */
 
 .ts-stats {
     position: relative;
     z-index: 2;
-    padding: 0 clamp(16px, 4vw, 48px);
-    margin-top: -40px;
+    margin-top: 0;
+    padding: 0;
 }
 
 .ts-stats__inner {
-    max-width: 1180px;
-    margin: 0 auto;
+    max-width: none;
+    margin: 0;
 }
 
 .ts-stats__grid {
-    background: #ffffff;
-    border-radius: 20px;
-    box-shadow: 0 24px 50px rgba(12, 26, 51, 0.10);
+    background: var(--c-stats-bg);
+    border-radius: 0;
+    box-shadow: none;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
 }
 
 .ts-stats__item {
     display: flex;
-    align-items: flex-start;
-    gap: 16px;
-    padding: 28px 24px;
-    border-right: 1px solid var(--c-line);
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+    padding: 22px 12px;
+    border-right: 1px solid #e2e4ea;
 }
 
-.ts-stats__item:last-child {
+.ts-stats__item:nth-child(3) {
     border-right: none;
+}
+
+/* 4e stat (taux de satisfaction) masquée, comme sur la capture */
+.ts-stats__item:nth-child(4) {
+    display: none;
 }
 
 .ts-stats__icon {
     flex-shrink: 0;
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     border-radius: 12px;
-    background: var(--c-icon-bg);
+    background: #ffffff;
     color: var(--c-navy);
     display: flex;
     align-items: center;
@@ -189,129 +202,47 @@
 
 .ts-stats__value {
     font-weight: 800;
-    font-size: 1.45rem;
+    font-size: 1.3rem;
     color: var(--c-navy-dark);
     line-height: 1.2;
 }
 
 .ts-stats__label {
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: var(--c-navy-dark);
-    margin: 2px 0 4px;
+    margin: 0;
 }
 
+/* Description masquée partout, comme sur la capture */
 .ts-stats__desc {
-    font-size: 0.78rem;
-    color: var(--c-slate);
-    line-height: 1.4;
+    display: none;
 }
 
-/* ---------- Responsive : tablette ---------- */
-@media (max-width: 900px) {
-    .ts-hero__top {
-        grid-template-columns: 1fr;
-        height: auto;
-    }
-    .ts-hero__media-col {
-        order: -1;
-        height: 280px;
-    }
+/* ---------- Ajustements écrans larges : on garde le même rendu,
+   juste un peu plus d'air et une photo un peu plus haute ---------- */
+@media (min-width: 640px) {
     .ts-hero__text-col {
-        padding: 32px clamp(20px, 6vw, 48px) 40px;
-    }
-    .ts-stats {
-        margin-top: 32px;
-    }
-    .ts-stats__grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    .ts-stats__item {
-        border-right: 1px solid var(--c-line);
-        border-bottom: 1px solid var(--c-line);
-    }
-    .ts-stats__item:nth-child(2n) {
-        border-right: none;
-    }
-    .ts-stats__item:nth-child(3),
-    .ts-stats__item:nth-child(4) {
-        border-bottom: none;
-    }
-}
-
-/* ---------- Responsive : téléphone (fidèle à la capture) ---------- */
-@media (max-width: 560px) {
-    /* Ordre : titre → image → bandeau stats */
-    .ts-hero__media-col {
-        order: 2;
-        height: 340px;
-    }
-    .ts-hero__photo {
-        object-position: center 15%;
-    }
-    .ts-hero__text-col {
-        order: 1;
-        padding: 24px 20px 32px;
-    }
-    .ts-hero__title {
-        font-size: 2rem;
-    }
-    .ts-hero__subtitle {
-        font-size: 0.92rem;
-        margin-bottom: 20px;
-    }
-
-    /* Boutons pleine largeur, empilés */
-    .ts-hero__actions {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
-    }
-    .ts-btn {
-        justify-content: center;
-        padding: 15px 20px;
-    }
-
-    /* Bandeau stats : plat, 3 colonnes, plus de carte flottante */
-    .ts-stats {
-        margin-top: 0;
-        padding: 0;
-    }
-    .ts-stats__inner {
-        max-width: none;
-    }
-    .ts-stats__grid {
-        background: var(--c-stats-bg);
-        border-radius: 0;
-        box-shadow: none;
-        grid-template-columns: repeat(3, 1fr);
-    }
-    .ts-stats__item {
-        flex-direction: column;
-        align-items: center;
+        padding: 48px clamp(20px, 6vw, 64px) 44px;
         text-align: center;
-        gap: 8px;
-        padding: 20px 10px;
-        border-right: 1px solid #e2e4ea;
+        align-items: center;
     }
-    .ts-stats__item:nth-child(3) {
-        border-right: none;
+    .ts-hero__media-col {
+        height: 460px;
     }
-    .ts-stats__item:nth-child(4) {
-        display: none;
-    }
-    .ts-stats__icon {
-        width: 38px;
-        height: 38px;
+    .ts-stats__item {
+        padding: 32px 20px;
     }
     .ts-stats__value {
-        font-size: 1.25rem;
+        font-size: 1.5rem;
     }
     .ts-stats__label {
-        font-size: 0.8rem;
-        margin: 0;
+        font-size: 0.92rem;
     }
-    .ts-stats__desc {
-        display: none;
+}
+
+@media (min-width: 1024px) {
+    .ts-hero__media-col {
+        height: 560px;
     }
 }
