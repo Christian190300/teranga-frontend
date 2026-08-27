@@ -1,5 +1,5 @@
 /* ============================================================
-   Hero.css — Talent Sénégal (v11, Boutons compacts & Photo bien visible)
+   Hero.css — Talent Sénégal (v12, Visage de la fille bien visible)
    ============================================================ */
 
 .ts-hero {
@@ -27,7 +27,7 @@
     background: #f4f5f8;
 }
 
-/* ---------- Media column — La photo à droite, parfaitement visible ---------- */
+/* ---------- Media column — La photo prend toute la place à droite ---------- */
 .ts-hero__media-col {
     position: absolute;
     inset: 0;
@@ -40,18 +40,18 @@
     position: absolute;
     top: 0;
     right: 0;
-    width: 55%;
+    width: 50%; /* L'image occupe la moitié droite */
     height: 100%;
     object-fit: cover;
-    object-position: center 15%;
+    object-position: 25% center; /* Centre intelligemment sur le visage de la fille */
 }
 
-/* Dégradé très léger uniquement à gauche pour que le texte reste lisible sans cacher la fille */
+/* Dégradé discret pour le texte à gauche */
 .ts-hero__top::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.7) 55%, rgba(255, 255, 255, 0) 100%);
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.75) 60%, rgba(255, 255, 255, 0.2) 100%);
     z-index: 2;
 }
 
@@ -63,7 +63,7 @@
     flex-direction: column;
     justify-content: center;
     width: 100%;
-    max-width: 600px;
+    max-width: 580px;
     padding: 30px clamp(16px, 4vw, 48px);
 }
 
@@ -98,12 +98,12 @@
     font-weight: 500;
 }
 
-/* ---------- Buttons (Réduits et plus compacts) ---------- */
+/* ---------- Buttons (Compactés) ---------- */
 .ts-hero__actions {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    max-width: 320px;
+    max-width: 300px;
 }
 
 .ts-btn {
@@ -111,9 +111,9 @@
     align-items: center;
     justify-content: center;
     gap: 6px;
-    padding: 9px 14px; /* Boutons plus petits et élégants */
+    padding: 9px 14px;
     border-radius: 8px;
-    font-size: 0.75rem; /* Texte réduit */
+    font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.02em;
     text-transform: uppercase;
@@ -124,7 +124,7 @@
 }
 
 .ts-btn svg {
-    width: 14px; /* Icônes réduites proportionnellement */
+    width: 14px;
     height: 14px;
     flex-shrink: 0;
 }
@@ -236,16 +236,21 @@
         padding: 11px 18px;
         font-size: 0.82rem;
     }
+    .ts-hero__photo {
+        width: 50%;
+        object-position: center top;
+    }
 }
 
 /* ---------- Responsive : Téléphones ---------- */
 @media (max-width: 767px) {
     .ts-hero__photo {
-        width: 62%; /* Laisse bien voir la fille sur la droite */
+        width: 55%; /* Laisse une bonne place pour voir la fille clairement */
+        object-position: 30% 20%; /* Cible son visage précisément */
     }
     .ts-hero__text-col {
         padding: 24px 14px;
-        max-width: 70%; /* Empêche le texte de s'étaler sur toute la photo */
+        max-width: 68%; /* Empêche le texte de recouvrir son visage */
     }
 
     /* Stats sur mobile compact */
