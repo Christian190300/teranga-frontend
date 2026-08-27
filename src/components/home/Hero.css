@@ -1,5 +1,5 @@
 /* ============================================================
-   Hero.css — Talent Sénégal (v12, Visage de la fille bien visible)
+   Hero.css — Talent Sénégal (v13, Grille propre 2 colonnes sans masquage)
    ============================================================ */
 
 .ts-hero {
@@ -19,58 +19,28 @@
     overflow: hidden;
 }
 
+/* Grille principale : 2 colonnes strictes (Texte à gauche, Photo à droite) */
 .ts-hero__top {
-    position: relative;
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     align-items: center;
-    min-height: 440px;
     background: #f4f5f8;
+    min-height: 420px;
 }
 
-/* ---------- Media column — La photo prend toute la place à droite ---------- */
-.ts-hero__media-col {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-}
-
-.ts-hero__photo {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 50%; /* L'image occupe la moitié droite */
-    height: 100%;
-    object-fit: cover;
-    object-position: 25% center; /* Centre intelligemment sur le visage de la fille */
-}
-
-/* Dégradé discret pour le texte à gauche */
-.ts-hero__top::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.75) 60%, rgba(255, 255, 255, 0.2) 100%);
-    z-index: 2;
-}
-
-/* ---------- Text column ---------- */
+/* ---------- Text column (À gauche) ---------- */
 .ts-hero__text-col {
-    position: relative;
-    z-index: 3;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 100%;
-    max-width: 580px;
-    padding: 30px clamp(16px, 4vw, 48px);
+    padding: 30px 16px 30px 24px;
+    z-index: 2;
 }
 
 .ts-hero__title {
     margin: 0;
     font-weight: 800;
-    font-size: clamp(1.4rem, 3.5vw, 2.5rem);
+    font-size: clamp(1.3rem, 3.5vw, 2.5rem);
     line-height: 1.08;
     letter-spacing: -0.01em;
     text-transform: uppercase;
@@ -91,10 +61,10 @@
 }
 
 .ts-hero__subtitle {
-    font-size: clamp(0.85rem, 1.8vw, 0.95rem);
+    font-size: clamp(0.82rem, 1.8vw, 0.95rem);
     line-height: 1.4;
     color: var(--c-slate);
-    margin: 0 0 18px;
+    margin: 0 0 16px;
     font-weight: 500;
 }
 
@@ -103,7 +73,7 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    max-width: 300px;
+    max-width: 280px;
 }
 
 .ts-btn {
@@ -111,9 +81,9 @@
     align-items: center;
     justify-content: center;
     gap: 6px;
-    padding: 9px 14px;
+    padding: 9px 12px;
     border-radius: 8px;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.02em;
     text-transform: uppercase;
@@ -121,6 +91,7 @@
     border: 1.5px solid transparent;
     cursor: pointer;
     transition: transform 0.18s ease, box-shadow 0.18s ease;
+    white-space: nowrap;
 }
 
 .ts-btn svg {
@@ -148,6 +119,24 @@
 .ts-btn--secondary:hover {
     background: rgba(20, 41, 77, 0.05);
     transform: translateY(-2px);
+}
+
+/* ---------- Media column — La photo à droite dans sa propre colonne ---------- */
+.ts-hero__media-col {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 320px;
+    overflow: hidden;
+}
+
+.ts-hero__photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 15%;
 }
 
 /* ============================================================
@@ -228,6 +217,9 @@
     .ts-hero__top {
         min-height: 460px;
     }
+    .ts-hero__text-col {
+        padding: 40px clamp(24px, 5vw, 72px) 40px clamp(24px, 6vw, 88px);
+    }
     .ts-hero__actions {
         flex-direction: row;
         max-width: none;
@@ -236,21 +228,24 @@
         padding: 11px 18px;
         font-size: 0.82rem;
     }
-    .ts-hero__photo {
-        width: 50%;
-        object-position: center top;
+    .ts-hero__media-col {
+        height: 460px;
     }
 }
 
 /* ---------- Responsive : Téléphones ---------- */
 @media (max-width: 767px) {
-    .ts-hero__photo {
-        width: 55%; /* Laisse une bonne place pour voir la fille clairement */
-        object-position: 30% 20%; /* Cible son visage précisément */
+    .ts-hero__top {
+        grid-template-columns: 1.1fr 0.9fr; /* Donne un peu plus de place au texte tout en gardant l'image visible à droite */
+    }
+    .ts-hero__media-col {
+        min-height: 260px;
     }
     .ts-hero__text-col {
-        padding: 24px 14px;
-        max-width: 68%; /* Empêche le texte de recouvrir son visage */
+        padding: 20px 10px 20px 14px;
+    }
+    .ts-hero__actions {
+        max-width: 100%;
     }
 
     /* Stats sur mobile compact */
