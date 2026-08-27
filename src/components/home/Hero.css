@@ -1,5 +1,5 @@
 /* ============================================================
-   Hero.css — Talent Sénégal (v6, + mobile fidèle à la capture)
+   Hero.css — Talent Sénégal (v7, image réduite et recadrée)
    Classes namespaced "ts-" — supprime tout ancien bloc
    .home-hero / .home-stats-panel avant d'ajouter celui-ci.
    ============================================================ */
@@ -20,14 +20,13 @@
     font-family: "Inter", sans-serif;
 }
 
-/* Grille pleine largeur : la colonne texte est confortablement
-   paddée, la colonne photo va jusqu'au bord de l'écran — aucune
-   colonne ne peut donc laisser un vide "flottant" au milieu. */
+/* Grille : hauteur maîtrisée pour que la photo ne soit plus
+   géante ni trop zoomée. */
 .ts-hero__top {
     display: grid;
     grid-template-columns: minmax(320px, 620px) 1fr;
     align-items: stretch;
-    min-height: 560px;
+    height: 460px;
 }
 
 /* ---------- Text column ---------- */
@@ -35,13 +34,13 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 48px clamp(24px, 5vw, 72px) 48px clamp(24px, 6vw, 88px);
+    padding: 40px clamp(24px, 5vw, 72px) 40px clamp(24px, 6vw, 88px);
 }
 
 .ts-hero__title {
     margin: 0;
     font-weight: 800;
-    font-size: clamp(2.1rem, 4.4vw, 3rem);
+    font-size: clamp(2rem, 4vw, 2.7rem);
     line-height: 1.08;
     letter-spacing: -0.01em;
     text-transform: uppercase;
@@ -58,14 +57,14 @@
     height: 3px;
     background: var(--c-gold);
     border-radius: 2px;
-    margin: 18px 0 20px;
+    margin: 16px 0 18px;
 }
 
 .ts-hero__subtitle {
-    font-size: 1.02rem;
+    font-size: 1rem;
     line-height: 1.55;
     color: var(--c-slate);
-    margin: 0 0 28px;
+    margin: 0 0 26px;
     font-weight: 400;
 }
 
@@ -80,9 +79,9 @@
     display: inline-flex;
     align-items: center;
     gap: 9px;
-    padding: 14px 24px;
+    padding: 13px 22px;
     border-radius: 10px;
-    font-size: 0.88rem;
+    font-size: 0.86rem;
     font-weight: 700;
     letter-spacing: 0.03em;
     text-transform: uppercase;
@@ -119,10 +118,11 @@
     transform: translateY(-2px);
 }
 
-/* ---------- Media column — bleed jusqu'au bord droit du viewport ---------- */
+/* ---------- Media column — image contenue, plus de zoom excessif ---------- */
 .ts-hero__media-col {
     position: relative;
     overflow: hidden;
+    background: #f4f5f8;
 }
 
 .ts-hero__photo {
@@ -131,18 +131,18 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center 22%;
+    object-position: center 12%;
 }
 
 /* ============================================================
-   STATS CARD — chevauche le bas du hero, grille 2x2
+   STATS CARD — chevauche légèrement le bas du hero
    ============================================================ */
 
 .ts-stats {
     position: relative;
     z-index: 2;
     padding: 0 clamp(16px, 4vw, 48px);
-    margin-top: -56px;
+    margin-top: -40px;
 }
 
 .ts-stats__inner {
@@ -162,7 +162,7 @@
     display: flex;
     align-items: flex-start;
     gap: 16px;
-    padding: 30px 26px;
+    padding: 28px 24px;
     border-right: 1px solid var(--c-line);
 }
 
@@ -172,8 +172,8 @@
 
 .ts-stats__icon {
     flex-shrink: 0;
-    width: 46px;
-    height: 46px;
+    width: 44px;
+    height: 44px;
     border-radius: 12px;
     background: var(--c-icon-bg);
     color: var(--c-navy);
@@ -183,26 +183,26 @@
 }
 
 .ts-stats__icon svg {
-    width: 21px;
-    height: 21px;
+    width: 20px;
+    height: 20px;
 }
 
 .ts-stats__value {
     font-weight: 800;
-    font-size: 1.55rem;
+    font-size: 1.45rem;
     color: var(--c-navy-dark);
     line-height: 1.2;
 }
 
 .ts-stats__label {
     font-weight: 600;
-    font-size: 0.94rem;
+    font-size: 0.9rem;
     color: var(--c-navy-dark);
     margin: 2px 0 4px;
 }
 
 .ts-stats__desc {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     color: var(--c-slate);
     line-height: 1.4;
 }
@@ -211,11 +211,11 @@
 @media (max-width: 900px) {
     .ts-hero__top {
         grid-template-columns: 1fr;
-        min-height: 0;
+        height: auto;
     }
     .ts-hero__media-col {
         order: -1;
-        height: 320px;
+        height: 280px;
     }
     .ts-hero__text-col {
         padding: 32px clamp(20px, 6vw, 48px) 40px;
@@ -244,18 +244,21 @@
     /* Ordre : titre → image → bandeau stats */
     .ts-hero__media-col {
         order: 2;
-        height: 420px;
+        height: 340px;
+    }
+    .ts-hero__photo {
+        object-position: center 15%;
     }
     .ts-hero__text-col {
         order: 1;
         padding: 24px 20px 32px;
     }
     .ts-hero__title {
-        font-size: 2.1rem;
+        font-size: 2rem;
     }
     .ts-hero__subtitle {
-        font-size: 0.95rem;
-        margin-bottom: 22px;
+        font-size: 0.92rem;
+        margin-bottom: 20px;
     }
 
     /* Boutons pleine largeur, empilés */
@@ -288,28 +291,26 @@
         align-items: center;
         text-align: center;
         gap: 8px;
-        padding: 22px 10px;
+        padding: 20px 10px;
         border-right: 1px solid #e2e4ea;
     }
     .ts-stats__item:nth-child(3) {
         border-right: none;
     }
-    /* 4e stat (taux de satisfaction) masquée sur mobile, comme sur la capture */
     .ts-stats__item:nth-child(4) {
         display: none;
     }
     .ts-stats__icon {
-        width: 40px;
-        height: 40px;
+        width: 38px;
+        height: 38px;
     }
     .ts-stats__value {
-        font-size: 1.3rem;
+        font-size: 1.25rem;
     }
     .ts-stats__label {
-        font-size: 0.82rem;
+        font-size: 0.8rem;
         margin: 0;
     }
-    /* Description masquée sur mobile, comme sur la capture */
     .ts-stats__desc {
         display: none;
     }
