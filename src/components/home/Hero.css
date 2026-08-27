@@ -1,5 +1,5 @@
 /* ============================================================
-   Hero.css — Talent Sénégal (v5, fidèle à la maquette fournie)
+   Hero.css — Talent Sénégal (v6, + mobile fidèle à la capture)
    Classes namespaced "ts-" — supprime tout ancien bloc
    .home-hero / .home-stats-panel avant d'ajouter celui-ci.
    ============================================================ */
@@ -13,6 +13,7 @@
     --c-icon-bg: #edeffb;
     --c-slate: #6b7280;
     --c-line: #eef0f6;
+    --c-stats-bg: #f5f6f9;
 
     position: relative;
     background: var(--c-bg);
@@ -206,7 +207,7 @@
     line-height: 1.4;
 }
 
-/* ---------- Responsive ---------- */
+/* ---------- Responsive : tablette ---------- */
 @media (max-width: 900px) {
     .ts-hero__top {
         grid-template-columns: 1fr;
@@ -238,24 +239,78 @@
     }
 }
 
+/* ---------- Responsive : téléphone (fidèle à la capture) ---------- */
 @media (max-width: 560px) {
+    /* Ordre : titre → image → bandeau stats */
     .ts-hero__media-col {
-        height: 260px;
+        order: 2;
+        height: 420px;
     }
     .ts-hero__text-col {
-        padding: 28px 20px 36px;
+        order: 1;
+        padding: 24px 20px 32px;
     }
     .ts-hero__title {
-        font-size: 1.9rem;
+        font-size: 2.1rem;
     }
+    .ts-hero__subtitle {
+        font-size: 0.95rem;
+        margin-bottom: 22px;
+    }
+
+    /* Boutons pleine largeur, empilés */
     .ts-hero__actions {
         flex-direction: column;
         align-items: stretch;
+        gap: 10px;
     }
     .ts-btn {
         justify-content: center;
+        padding: 15px 20px;
+    }
+
+    /* Bandeau stats : plat, 3 colonnes, plus de carte flottante */
+    .ts-stats {
+        margin-top: 0;
+        padding: 0;
+    }
+    .ts-stats__inner {
+        max-width: none;
+    }
+    .ts-stats__grid {
+        background: var(--c-stats-bg);
+        border-radius: 0;
+        box-shadow: none;
+        grid-template-columns: repeat(3, 1fr);
     }
     .ts-stats__item {
-        padding: 22px 16px;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 8px;
+        padding: 22px 10px;
+        border-right: 1px solid #e2e4ea;
+    }
+    .ts-stats__item:nth-child(3) {
+        border-right: none;
+    }
+    /* 4e stat (taux de satisfaction) masquée sur mobile, comme sur la capture */
+    .ts-stats__item:nth-child(4) {
+        display: none;
+    }
+    .ts-stats__icon {
+        width: 40px;
+        height: 40px;
+    }
+    .ts-stats__value {
+        font-size: 1.3rem;
+    }
+    .ts-stats__label {
+        font-size: 0.82rem;
+        margin: 0;
+    }
+    /* Description masquée sur mobile, comme sur la capture */
+    .ts-stats__desc {
+        display: none;
     }
 }
