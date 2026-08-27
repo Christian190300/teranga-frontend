@@ -67,7 +67,6 @@ export function Hero() {
                             <div>
                                 <div className="ts-stats__value">500+</div>
                                 <div className="ts-stats__label">Talents inscrits</div>
-                                <div className="ts-stats__desc">Des professionnels prêts à l'emploi</div>
                             </div>
                         </div>
 
@@ -80,7 +79,6 @@ export function Hero() {
                                     {totalOffres !== null ? totalOffres : "—"}
                                 </div>
                                 <div className="ts-stats__label">Offres actives</div>
-                                <div className="ts-stats__desc">Des opportunités à saisir</div>
                             </div>
                         </div>
 
@@ -91,7 +89,6 @@ export function Hero() {
                             <div>
                                 <div className="ts-stats__value">50+</div>
                                 <div className="ts-stats__label">Entreprises</div>
-                                <div className="ts-stats__desc">Nous font confiance au quotidien</div>
                             </div>
                         </div>
 
@@ -102,7 +99,6 @@ export function Hero() {
                             <div>
                                 <div className="ts-stats__value">98%</div>
                                 <div className="ts-stats__label">Taux de satisfaction</div>
-                                <div className="ts-stats__desc">Des recruteurs satisfaits de nos services</div>
                             </div>
                         </div>
                     </div>

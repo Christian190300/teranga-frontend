@@ -311,7 +311,7 @@
 /* ---------- Responsive : Téléphones ---------- */
 @media (max-width: 767px) {
     .ts-hero {
-        padding-bottom: 32px;
+        padding-bottom: 24px;
     }
     .ts-hero__top {
         grid-template-columns: 1.1fr 0.9fr;
@@ -330,9 +330,9 @@
         max-width: 100%;
     }
 
-    /* Stats sur mobile compact */
+    /* Stats sur mobile compact — remontée pour chevaucher la coupe de la photo */
     .ts-stats {
-        margin-top: 20px;
+        margin-top: -28px;
         padding: 0 10px;
     }
     .ts-stats__grid {
