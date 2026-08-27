@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import talent1 from "../../assets/talent-4.jpg";
+import talent1 from "../../assets/talent-44.png";
 import { IconUsers, IconBriefcase, IconGlobe, IconShieldCheck } from "./icons";
 import { listerOffresPubliques } from "../../api/offreService";
 import "./Hero.css";
