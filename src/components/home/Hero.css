@@ -12,8 +12,10 @@
     --c-slate: #475569;
     --c-light-bg: #f8fafc;
     --c-border: #e2e8f0;
-    --c-divider: rgba(232, 184, 75, 0.22);
-    --c-label-muted: rgba(226, 232, 240, 0.55);
+    --c-divider: #edf0f4;
+    --c-label-muted: #94a3b8;
+    --c-icon-tint: #fbf3e2;
+    --c-field-hover: #f8fafc;
 }
 
 .desktop-only {
@@ -133,7 +135,7 @@
 }
 
 /* ============================================================
-   SEARCH BAR — panneau navy avec séparateurs dorés
+   SEARCH BAR — carte blanche, pastilles dorées, ligne d'accent
    ============================================================ */
 .ts-searchbar-wrap {
     max-width: 1120px;
@@ -144,35 +146,37 @@
 }
 
 .ts-searchbar {
-    background: var(--c-navy);
+    background: #ffffff;
     border-radius: 16px;
-    box-shadow: 0 20px 40px -12px rgba(15, 23, 42, 0.35);
+    box-shadow: 0 20px 44px -16px rgba(15, 23, 42, 0.18);
     padding: 10px;
     display: grid;
     grid-template-columns: 1.3fr 1fr 1fr auto;
     align-items: stretch;
     position: relative;
-    border-top: 2px solid var(--c-gold);
+    border: 1px solid var(--c-border);
+    border-top: 3px solid var(--c-gold-deep);
 }
 
 .ts-searchbar__title-mobile {
     display: none;
     font-size: 1rem;
     font-weight: 700;
-    color: #ffffff;
+    color: var(--c-navy);
     margin: 0 0 12px 0;
 }
 
 .ts-search-field {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 14px 18px;
+    gap: 12px;
+    padding: 10px 16px;
     position: relative;
+    border-radius: 10px;
     transition: background 0.2s ease;
 }
 
-/* séparateurs verticaux dorés entre les champs (pas sur le premier) */
+/* séparateurs verticaux fins et neutres entre les champs (pas sur le premier) */
 .ts-search-field + .ts-search-field::before {
     content: "";
     position: absolute;
@@ -183,16 +187,29 @@
     background: var(--c-divider);
 }
 
+.ts-search-field:hover {
+    background: var(--c-field-hover);
+}
+
 .ts-search-field:focus-within {
-    background: var(--c-navy-soft);
-    border-radius: 10px;
+    background: var(--c-icon-tint);
+}
+
+.ts-search-field:focus-within::before,
+.ts-search-field:focus-within + .ts-search-field::before {
+    background: transparent;
 }
 
 .ts-search-field__icon {
-    color: var(--c-gold);
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    background: var(--c-icon-tint);
+    color: var(--c-gold-deep);
     display: flex;
     align-items: center;
-    flex-shrink: 0;
+    justify-content: center;
 }
 
 .ts-search-field__body {
@@ -215,13 +232,13 @@
     background: transparent;
     font-size: 0.9rem;
     font-weight: 600;
-    color: #ffffff;
+    color: var(--c-navy);
     padding: 0;
     width: 100%;
 }
 
 .ts-search-field input::placeholder {
-    color: rgba(255, 255, 255, 0.35);
+    color: #b0b8c4;
     font-weight: 500;
 }
 
@@ -246,7 +263,7 @@
 
 .ts-searchbar__submit:hover {
     filter: brightness(1.05);
-    box-shadow: 0 8px 20px -4px rgba(200, 149, 30, 0.45);
+    box-shadow: 0 8px 20px -4px rgba(200, 149, 30, 0.4);
 }
 
 /* ============================================================
@@ -333,7 +350,6 @@
         grid-template-columns: 1fr;
         padding: 16px;
         gap: 4px;
-        border-top-width: 3px;
     }
 
     .ts-searchbar__title-mobile {
@@ -341,7 +357,7 @@
     }
 
     .ts-search-field {
-        padding: 12px 4px;
+        padding: 12px 6px;
     }
 
     /* séparateurs horizontaux au lieu de verticaux en pile */
