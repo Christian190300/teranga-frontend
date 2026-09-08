@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import talent1 from "../../assets/img.png";
 import {
     IconUsers,
@@ -12,6 +12,53 @@ import {
 import { listerOffresPubliques } from "../../api/offreService";
 import "./Hero.css";
 
+/* ============================================================
+   Hook : useCountUp
+   Anime un nombre de 0 jusqu'à `end`, en conservant un préfixe/suffixe
+   (ex: "500+" -> anime 0..500 puis réaffiche "500+", "98%" -> "0%".."98%")
+   ============================================================ */
+function useCountUp(end: number | null, options?: { duration?: number; start?: boolean; suffix?: string }) {
+    const duration = options?.duration ?? 1500;
+    const shouldStart = options?.start ?? true;
+    const suffix = options?.suffix ?? "";
+
+    const [value, setValue] = useState(0);
+    const frameRef = useRef<number | null>(null);
+    const startedRef = useRef(false);
+
+    useEffect(() => {
+        if (!shouldStart || end === null || startedRef.current) return;
+        startedRef.current = true;
+
+        const startTime = performance.now();
+        const from = 0;
+
+        const animate = (now: number) => {
+            const elapsed = now - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            // easing "ease-out" pour un rendu plus naturel
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const current = Math.floor(from + (end - from) * eased);
+
+            setValue(current);
+
+            if (progress < 1) {
+                frameRef.current = requestAnimationFrame(animate);
+            } else {
+                setValue(end);
+            }
+        };
+
+        frameRef.current = requestAnimationFrame(animate);
+
+        return () => {
+            if (frameRef.current) cancelAnimationFrame(frameRef.current);
+        };
+    }, [end, shouldStart, duration]);
+
+    return `${value}${suffix}`;
+}
+
 export function Hero() {
     const [totalOffres, setTotalOffres] = useState<number | null>(null);
 
@@ -19,6 +66,10 @@ export function Hero() {
     const [keyword, setKeyword] = useState("");
     const [ville, setVille] = useState("");
     const [contrat, setContrat] = useState("");
+
+    // Déclenchement de l'animation quand la section stats devient visible
+    const statsRef = useRef<HTMLDivElement | null>(null);
+    const [statsVisible, setStatsVisible] = useState(false);
 
     useEffect(() => {
         listerOffresPubliques(0, 1)
@@ -29,6 +80,30 @@ export function Hero() {
                 console.error("Erreur lors de la récupération du nombre d'offres :", err);
             });
     }, []);
+
+    useEffect(() => {
+        const node = statsRef.current;
+        if (!node) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setStatsVisible(true);
+                    observer.disconnect();
+                }
+            },
+            { threshold: 0.3 }
+        );
+
+        observer.observe(node);
+        return () => observer.disconnect();
+    }, []);
+
+    // Compteurs animés
+    const talentsCount = useCountUp(500, { start: statsVisible, suffix: "+" });
+    const offresCount = useCountUp(totalOffres, { start: statsVisible && totalOffres !== null });
+    const entreprisesCount = useCountUp(50, { start: statsVisible, suffix: "+" });
+    const satisfactionCount = useCountUp(98, { start: statsVisible, suffix: "%" });
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
@@ -133,7 +208,7 @@ export function Hero() {
             </div>
 
             {/* --- STATISTIQUES --- */}
-            <div className="ts-stats">
+            <div className="ts-stats" ref={statsRef}>
                 <div className="ts-stats__inner">
                     <div className="ts-stats__grid">
                         <div className="ts-stats__item">
@@ -141,7 +216,7 @@ export function Hero() {
                                 <IconUsers />
                             </div>
                             <div>
-                                <div className="ts-stats__value">500+</div>
+                                <div className="ts-stats__value">{talentsCount}</div>
                                 <div className="ts-stats__label">Talents inscrits</div>
                             </div>
                         </div>
@@ -152,7 +227,7 @@ export function Hero() {
                             </div>
                             <div>
                                 <div className="ts-stats__value">
-                                    {totalOffres !== null ? totalOffres : "—"}
+                                    {totalOffres !== null ? offresCount : "—"}
                                 </div>
                                 <div className="ts-stats__label">Offres actives</div>
                             </div>
@@ -163,7 +238,7 @@ export function Hero() {
                                 <IconGlobe />
                             </div>
                             <div>
-                                <div className="ts-stats__value">50+</div>
+                                <div className="ts-stats__value">{entreprisesCount}</div>
                                 <div className="ts-stats__label">Entreprises</div>
                             </div>
                         </div>
@@ -173,7 +248,7 @@ export function Hero() {
                                 <IconShieldCheck />
                             </div>
                             <div>
-                                <div className="ts-stats__value">98%</div>
+                                <div className="ts-stats__value">{satisfactionCount}</div>
                                 <div className="ts-stats__label">Taux de satisfaction</div>
                             </div>
                         </div>
