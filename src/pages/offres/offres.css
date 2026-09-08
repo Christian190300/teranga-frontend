@@ -116,7 +116,12 @@
     color: #6b7280;
     background: #f3f4f6;
 }
-
+.job-pass__date-publication {
+    font-size: 0.78rem;
+    color: var(--hp-text-muted, #8a8f98);
+    margin: 4px 0 0;
+    text-align: right;
+}
 .offres-admin__filtres {
     display: flex;
     gap: 12px;

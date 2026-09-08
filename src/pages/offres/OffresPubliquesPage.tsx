@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { LogoEntreprise } from "../../components/common/LogoEntreprise";
 import { IconCoin, IconMapPin } from "../../components/home/icons";
 import { getCouleurContrat } from "./offreColors";
@@ -31,6 +31,17 @@ function formatAnciennete(jours: number | null): string {
     return `Il y a ${jours}j`;
 }
 
+function formatDatePubliee(iso: string | null): string {
+    if (!iso) return "";
+    const date = new Date(iso);
+    if (isNaN(date.getTime())) return "";
+    return date.toLocaleDateString("fr-FR", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+    });
+}
+
 function formatSalaire(offre: OffreDTO): string {
     if (!offre.salaireVisible || (!offre.salaireMin && !offre.salaireMax)) {
         return "Sur demande";
@@ -57,24 +68,62 @@ function extraireTexteDescription(job: OffreDTO): string {
 export function OffresPubliquesPage() {
     const { currentUser } = useAuth();
     const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    // --- Valeurs initiales lues depuis l'URL ---
+    const pageInitiale = Math.max(0, Number(searchParams.get("page") ?? 0) || 0);
+    const rechercheInitiale = searchParams.get("q") ?? "";
+    const secteurInitial = searchParams.get("secteur") ?? "";
+    const triInitial = (searchParams.get("tri") as "recent" | "ancien") === "ancien" ? "ancien" : "recent";
 
     // --- États des données ---
     const [offres, setOffres] = useState<OffreDTO[]>([]);
-    const [page, setPage] = useState(0);
+    const [page, setPage] = useState(pageInitiale);
     const [totalPages, setTotalPages] = useState(0);
     const [totalElements, setTotalElements] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     // --- Filtres ---
-    const [rechercheInput, setRechercheInput] = useState("");
-    const [rechercheAppliquee, setRechercheAppliquee] = useState("");
+    const [rechercheInput, setRechercheInput] = useState(rechercheInitiale);
+    const [rechercheAppliquee, setRechercheAppliquee] = useState(rechercheInitiale);
     const [secteurs, setSecteurs] = useState<string[]>([]);
-    const [secteurSelectionne, setSecteurSelectionne] = useState("");
-    const [triSelectionne, setTriSelectionne] = useState<"recent" | "ancien">("recent");
+    const [secteurSelectionne, setSecteurSelectionne] = useState(secteurInitial);
+    const [triSelectionne, setTriSelectionne] = useState<"recent" | "ancien">(triInitial);
 
     const estCandidat = currentUser?.role === "CANDIDAT";
     const filtresActifs = rechercheAppliquee !== "" || secteurSelectionne !== "";
+
+    // Évite de scroller en haut lors du tout premier rendu (retour depuis le détail d'une offre)
+    const premierRendu = useRef(true);
+
+    // Met à jour l'URL sans recharger la page ni polluer l'historique
+    function majParamsUrl(next: {
+        page?: number;
+        recherche?: string;
+        secteur?: string;
+        tri?: string;
+    }) {
+        const params = new URLSearchParams(searchParams);
+        const p = next.page ?? page;
+        const r = next.recherche ?? rechercheAppliquee;
+        const s = next.secteur ?? secteurSelectionne;
+        const t = next.tri ?? triSelectionne;
+
+        if (p > 0) params.set("page", String(p));
+        else params.delete("page");
+
+        if (r) params.set("q", r);
+        else params.delete("q");
+
+        if (s) params.set("secteur", s);
+        else params.delete("secteur");
+
+        if (t !== "recent") params.set("tri", t);
+        else params.delete("tri");
+
+        setSearchParams(params, { replace: true });
+    }
 
     // Chargement des secteurs
     useEffect(() => {
@@ -107,26 +156,37 @@ export function OffresPubliquesPage() {
         charger();
     }, [page, rechercheAppliquee, secteurSelectionne, triSelectionne]);
 
-    // Remonte en haut de page à chaque changement de page (pagination)
+    // Remonte en haut de page à chaque changement de page (pagination),
+    // sauf au tout premier rendu (ex: retour depuis la page détail d'une offre)
     useEffect(() => {
+        if (premierRendu.current) {
+            premierRendu.current = false;
+            return;
+        }
         window.scrollTo({ top: 0, behavior: "smooth" });
     }, [page]);
 
     // Handlers
     function lancerRecherche(e: React.FormEvent) {
         e.preventDefault();
+        const valeur = rechercheInput.trim();
         setPage(0);
-        setRechercheAppliquee(rechercheInput.trim());
+        setRechercheAppliquee(valeur);
+        majParamsUrl({ page: 0, recherche: valeur });
     }
 
     function handleChangerSecteur(e: React.ChangeEvent<HTMLSelectElement>) {
-        setSecteurSelectionne(e.target.value);
+        const valeur = e.target.value;
+        setSecteurSelectionne(valeur);
         setPage(0);
+        majParamsUrl({ page: 0, secteur: valeur });
     }
 
     function handleChangerTri(e: React.ChangeEvent<HTMLSelectElement>) {
-        setTriSelectionne(e.target.value as "recent" | "ancien");
+        const valeur = e.target.value as "recent" | "ancien";
+        setTriSelectionne(valeur);
         setPage(0);
+        majParamsUrl({ page: 0, tri: valeur });
     }
 
     function reinitialiserFiltres() {
@@ -135,6 +195,7 @@ export function OffresPubliquesPage() {
         setSecteurSelectionne("");
         setTriSelectionne("recent");
         setPage(0);
+        setSearchParams({}, { replace: true });
     }
 
     function handlePostuler(e: React.MouseEvent, jobId: number | string) {
@@ -148,11 +209,15 @@ export function OffresPubliquesPage() {
     }
 
     function allerPagePrecedente() {
-        setPage((p) => p - 1);
+        const p = page - 1;
+        setPage(p);
+        majParamsUrl({ page: p });
     }
 
     function allerPageSuivante() {
-        setPage((p) => p + 1);
+        const p = page + 1;
+        setPage(p);
+        majParamsUrl({ page: p });
     }
 
     return (
@@ -371,6 +436,12 @@ export function OffresPubliquesPage() {
                                                     {formatSalaire(job)}
                                                 </span>
                                             </div>
+
+                                            {job.datePublication && (
+                                                <p className="job-pass__date-publication">
+                                                    Publié le {formatDatePubliee(job.datePublication)}
+                                                </p>
+                                            )}
 
                                             <div className="job-pass__actions">
                                                 <Link
