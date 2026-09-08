@@ -5,12 +5,15 @@
 :root {
     --c-navy: #0f172a;
     --c-navy-light: #1e293b;
+    --c-navy-soft: #17233b;
     --c-gold: #e8b84b;
     --c-gold-deep: #c8951e;
     --c-bg-gradient: linear-gradient(180deg, #f0f4f9 0%, #ffffff 100%);
     --c-slate: #475569;
     --c-light-bg: #f8fafc;
     --c-border: #e2e8f0;
+    --c-divider: rgba(232, 184, 75, 0.22);
+    --c-label-muted: rgba(226, 232, 240, 0.55);
 }
 
 .desktop-only {
@@ -130,33 +133,33 @@
 }
 
 /* ============================================================
-   SEARCH BAR
+   SEARCH BAR — panneau navy avec séparateurs dorés
    ============================================================ */
 .ts-searchbar-wrap {
     max-width: 1120px;
-    margin: 20px auto 0;
+    margin: -32px auto 0;
     padding: 0 32px;
     position: relative;
     z-index: 5;
 }
 
 .ts-searchbar {
-    background: #ffffff;
+    background: var(--c-navy);
     border-radius: 16px;
-    box-shadow: 0 12px 32px -8px rgba(15, 23, 42, 0.08);
-    padding: 8px 12px;
+    box-shadow: 0 20px 40px -12px rgba(15, 23, 42, 0.35);
+    padding: 10px;
     display: grid;
     grid-template-columns: 1.3fr 1fr 1fr auto;
-    gap: 12px;
-    align-items: center;
-    border: 1px solid var(--c-border);
+    align-items: stretch;
+    position: relative;
+    border-top: 2px solid var(--c-gold);
 }
 
 .ts-searchbar__title-mobile {
     display: none;
     font-size: 1rem;
     font-weight: 700;
-    color: var(--c-navy);
+    color: #ffffff;
     margin: 0 0 12px 0;
 }
 
@@ -164,15 +167,32 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 8px 12px;
+    padding: 14px 18px;
+    position: relative;
+    transition: background 0.2s ease;
+}
+
+/* séparateurs verticaux dorés entre les champs (pas sur le premier) */
+.ts-search-field + .ts-search-field::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    bottom: 10px;
+    width: 1px;
+    background: var(--c-divider);
+}
+
+.ts-search-field:focus-within {
+    background: var(--c-navy-soft);
     border-radius: 10px;
-    background: var(--c-light-bg);
 }
 
 .ts-search-field__icon {
-    color: #94a3b8;
+    color: var(--c-gold);
     display: flex;
     align-items: center;
+    flex-shrink: 0;
 }
 
 .ts-search-field__body {
@@ -182,11 +202,9 @@
 }
 
 .ts-search-field__label {
-    font-size: 0.65rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: #64748b;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--c-label-muted);
     margin-bottom: 2px;
 }
 
@@ -195,15 +213,26 @@
     border: none;
     outline: none;
     background: transparent;
-    font-size: 0.88rem;
+    font-size: 0.9rem;
     font-weight: 600;
-    color: var(--c-navy);
+    color: #ffffff;
     padding: 0;
     width: 100%;
 }
 
+.ts-search-field input::placeholder {
+    color: rgba(255, 255, 255, 0.35);
+    font-weight: 500;
+}
+
+.ts-search-field select option {
+    color: var(--c-navy);
+    background: #ffffff;
+}
+
 .ts-searchbar__submit {
-    padding: 14px 28px;
+    padding: 0 32px;
+    margin: 6px;
     border: none;
     border-radius: 10px;
     background: linear-gradient(135deg, var(--c-gold) 0%, var(--c-gold-deep) 100%);
@@ -216,8 +245,8 @@
 }
 
 .ts-searchbar__submit:hover {
-    background: var(--c-gold-deep);
-    box-shadow: 0 4px 12px rgba(200, 149, 30, 0.3);
+    filter: brightness(1.05);
+    box-shadow: 0 8px 20px -4px rgba(200, 149, 30, 0.45);
 }
 
 /* ============================================================
@@ -285,29 +314,50 @@
         gap: 24px;
     }
 
+    /* la phrase d'accroche disparaît en mobile */
+    .ts-hero__subtitle {
+        display: none;
+    }
+
     .ts-hero__photo {
         height: 280px;
     }
 
-    /* Barre de recherche responsive Mobile */
+    /* Barre de recherche responsive Mobile : pile verticale, plus d'overlap */
     .ts-searchbar-wrap {
         padding: 0 16px;
-        margin-top: 16px;
+        margin: 20px auto 0;
     }
 
     .ts-searchbar {
         grid-template-columns: 1fr;
-        padding: 20px 16px;
-        gap: 12px;
+        padding: 16px;
+        gap: 4px;
+        border-top-width: 3px;
     }
 
     .ts-searchbar__title-mobile {
         display: block;
     }
 
+    .ts-search-field {
+        padding: 12px 4px;
+    }
+
+    /* séparateurs horizontaux au lieu de verticaux en pile */
+    .ts-search-field + .ts-search-field::before {
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: auto;
+        width: auto;
+        height: 1px;
+    }
+
     .ts-searchbar__submit {
         width: 100%;
-        margin-top: 8px;
+        margin: 10px 0 0;
+        padding: 14px 28px;
     }
 
     /* Stats responsive Mobile */
