@@ -27,6 +27,17 @@ function formatAnciennete(jours: number | null): string {
     return `Publiée il y a ${jours} j`;
 }
 
+function formatDatePubliee(iso: string | null): string {
+    if (!iso) return "";
+    const date = new Date(iso);
+    if (isNaN(date.getTime())) return "";
+    return date.toLocaleDateString("fr-FR", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+    });
+}
+
 /** Extraire et nettoyer la description avec fallback (description -> profilRecherche -> missions) */
 function extraireTexteDescription(job: OffreDTO): string {
     const sourceTexte =
@@ -197,6 +208,12 @@ export function RecentJobs() {
                                                 : "Sur demande"}
                                         </span>
                                     </div>
+
+                                    {job.datePublication && (
+                                        <p className="job-pass__date-publication">
+                                            Publié le {formatDatePubliee(job.datePublication)}
+                                        </p>
+                                    )}
 
                                     <div className="job-pass__actions">
                                         <Link

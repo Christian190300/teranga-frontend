@@ -17,8 +17,10 @@
     border-radius: 20px;
     padding: 40px;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
     overflow: hidden;
     transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
@@ -37,7 +39,8 @@
 }
 
 .ts-cta-card__content {
-    max-width: 60%;
+    flex: 1 1 auto;
+    min-width: 0; /* permet au texte de se réduire/wrapper sans pousser l'image */
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -106,12 +109,10 @@
 }
 
 .ts-cta-card__media {
-    position: absolute;
-    right: 28px;
-    top: 50%;
-    transform: translateY(-50%);
+    flex: 0 0 auto;
     width: 38%;
     max-width: 220px;
+    min-width: 140px;
     border-radius: 14px;
     overflow: hidden;
     box-shadow: 0 12px 24px -8px rgba(15, 23, 42, 0.2);
@@ -136,15 +137,12 @@
 
     .ts-cta-card {
         padding: 28px;
-    }
-
-    .ts-cta-card__content {
-        max-width: 58%;
+        gap: 16px;
     }
 
     .ts-cta-card__media {
-        right: 16px;
         width: 34%;
+        min-width: 110px;
     }
 
     .ts-cta-card__media img {
@@ -158,6 +156,8 @@
 
 @media (max-width: 560px) {
     .ts-cta-card {
+        flex-direction: column;
+        align-items: stretch;
         padding: 24px;
     }
 
@@ -166,11 +166,9 @@
     }
 
     .ts-cta-card__media {
-        position: static;
-        transform: none;
         width: 100%;
         max-width: none;
-        margin-top: 20px;
+        margin-top: 4px;
     }
 
     .ts-cta-card__media img {
