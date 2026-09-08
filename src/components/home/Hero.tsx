@@ -1,12 +1,24 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import talent1 from "../../assets/talent-6.jpg";
-import { IconUsers, IconBriefcase, IconGlobe, IconShieldCheck } from "./icons";
+import talent1 from "../../assets/img.png";
+import {
+    IconUsers,
+    IconBriefcase,
+    IconGlobe,
+    IconShieldCheck,
+    IconSearch,
+    IconMapPin,
+    IconDocument
+} from "./icons";
 import { listerOffresPubliques } from "../../api/offreService";
 import "./Hero.css";
 
 export function Hero() {
     const [totalOffres, setTotalOffres] = useState<number | null>(null);
+
+    // États du formulaire de recherche
+    const [keyword, setKeyword] = useState("");
+    const [ville, setVille] = useState("");
+    const [contrat, setContrat] = useState("");
 
     useEffect(() => {
         listerOffresPubliques(0, 1)
@@ -18,45 +30,109 @@ export function Hero() {
             });
     }, []);
 
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault();
+        console.log({ keyword, ville, contrat });
+    };
+
     return (
         <section className="ts-hero">
+            {/* --- HAUT DE PAGE : TITRE & PHOTO --- */}
             <div className="ts-hero__top">
-                {/* Colonne texte */}
+                {/* Textes */}
                 <div className="ts-hero__text-col">
+                    <span className="ts-hero__eyebrow">Emploi au Sénégal</span>
+
                     <h1 className="ts-hero__title">
-                        Trouvez
-                        <br />
-                        votre prochain
-                        <br />
-                        <span className="ts-hero__title-accent">emploi</span>
+                        Trouvez l'emploi qui vous correspond <span className="ts-hero__title-accent">au Sénégal</span>
                     </h1>
-                    <span className="ts-hero__underline" />
 
                     <p className="ts-hero__subtitle">
-                        Des centaines d'opportunités
-                        <br />
-                        vous attendent au Sénégal.
+                        Des opportunités réelles auprès des entreprises qui recrutent.
+                        <br className="desktop-only" />
+                        Construisez aujourd'hui le demain de votre carrière.
                     </p>
-
-                    <div className="ts-hero__actions">
-                        <Link to="/inscription?role=candidat" className="ts-btn ts-btn--primary">
-                            <IconUsers />
-                            Trouver un emploi
-                        </Link>
-                        <Link to="/inscription?role=recruteur" className="ts-btn ts-btn--secondary">
-                            <IconBriefcase />
-                            Publier une offre
-                        </Link>
-                    </div>
                 </div>
 
-                {/* Colonne photo — bleed jusqu'au bord de l'écran, aucune zone morte possible */}
+                {/* Photo & Badge flottant */}
                 <div className="ts-hero__media-col">
-                    <img src={talent1} alt="Professionnelle sénégalaise" className="ts-hero__photo" />
+                    <div className="ts-hero__photo-frame">
+                        <img src={talent1} alt="Professionnel au travail" className="ts-hero__photo" />
+
+                        <div className="ts-hero__floating-badge">
+                            <div className="ts-hero__floating-badge-icon">
+                                <IconBriefcase />
+                            </div>
+                            <div className="ts-hero__floating-badge-text">
+                                Des centaines d'opportunités vous attendent !
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            {/* Carte de stats — chevauche le bas du hero, reste dans un conteneur centré */}
+            {/* --- BARRE DE RECHERCHE --- */}
+            <div className="ts-searchbar-wrap">
+                <form className="ts-searchbar" onSubmit={handleSearch}>
+                    <h3 className="ts-searchbar__title-mobile">Rechercher un emploi</h3>
+
+                    {/* Mot-clé */}
+                    <div className="ts-search-field">
+                        <div className="ts-search-field__icon">
+                            <IconSearch />
+                        </div>
+                        <div className="ts-search-field__body">
+                            <label className="ts-search-field__label">Métier, compétence ou mot-clé</label>
+                            <input
+                                type="text"
+                                placeholder="Commercial, Comptable..."
+                                value={keyword}
+                                onChange={(e) => setKeyword(e.target.value)}
+                            />
+                        </div>
+                    </div>
+
+                    {/* Ville */}
+                    <div className="ts-search-field">
+                        <div className="ts-search-field__icon">
+                            <IconMapPin />
+                        </div>
+                        <div className="ts-search-field__body">
+                            <label className="ts-search-field__label">Ville</label>
+                            <input
+                                type="text"
+                                placeholder="Dakar, Thiès..."
+                                value={ville}
+                                onChange={(e) => setVille(e.target.value)}
+                            />
+                        </div>
+                    </div>
+
+                    {/* Type de contrat */}
+                    <div className="ts-search-field">
+                        <div className="ts-search-field__icon">
+                            <IconDocument />
+                        </div>
+                        <div className="ts-search-field__body">
+                            <label className="ts-search-field__label">Type de contrat</label>
+                            <select value={contrat} onChange={(e) => setContrat(e.target.value)}>
+                                <option value="">Tous les contrats</option>
+                                <option value="cdi">CDI</option>
+                                <option value="cdd">CDD</option>
+                                <option value="stage">Stage</option>
+                                <option value="freelance">Freelance</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    {/* Bouton */}
+                    <button type="submit" className="ts-searchbar__submit">
+                        Rechercher
+                    </button>
+                </form>
+            </div>
+
+            {/* --- STATISTIQUES --- */}
             <div className="ts-stats">
                 <div className="ts-stats__inner">
                     <div className="ts-stats__grid">
