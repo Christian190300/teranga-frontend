@@ -1,5 +1,5 @@
 /* ============================================================
-   Hero.css — Couleurs : Bleu Nuit (#0f172a / #14294d) & Gold (#e8b84b / #c8951e)
+   Hero.css — Design Premium Compact Sans Scroll
    ============================================================ */
 
 :root {
@@ -7,34 +7,44 @@
     --c-navy-light: #1e293b;
     --c-gold: #e8b84b;
     --c-gold-deep: #c8951e;
-    --c-bg-gradient: linear-gradient(180deg, #f0f4f9 0%, #ffffff 100%);
+    --c-gold-light: #fef8ec;
+    --c-bg: #f8fafc;
     --c-slate: #475569;
-    --c-light-bg: #f8fafc;
+    --c-slate-light: #64748b;
     --c-border: #e2e8f0;
 }
 
-.desktop-only {
-    display: inline;
-}
-
+/* --- Section globale verrouillée pour un affichage pleine hauteur sans scroll sur PC --- */
 .ts-hero {
     position: relative;
-    background: var(--c-bg-gradient);
-    font-family: "Inter", sans-serif;
-    padding-bottom: 48px;
+    background: linear-gradient(135deg, #f8fafc 0%, #eef2f6 100%);
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+    min-height: calc(100vh - 70px); /* Ajuster selon la hauteur de votre Navbar */
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    box-sizing: border-box;
 }
 
-/* ---------- Top Section (Grid 2 Colonnes) ---------- */
+.ts-hero__container {
+    max-width: 1180px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+/* ---------- Partie Haute : Grid 2 Colonnes ---------- */
 .ts-hero__top {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 0.85fr;
     align-items: center;
-    gap: 40px;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 60px 32px 30px;
+    gap: 32px;
 }
 
+/* Textes */
 .ts-hero__text-col {
     display: flex;
     flex-direction: column;
@@ -42,39 +52,54 @@
 }
 
 .ts-hero__eyebrow {
-    display: inline-block;
-    padding: 6px 14px;
-    margin-bottom: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px;
+    margin-bottom: 12px;
     border-radius: 999px;
-    background: #e0e7ff;
+    background: #ffffff;
+    border: 1px solid var(--c-border);
     color: var(--c-navy);
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 700;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+}
+
+.ts-hero__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--c-gold-deep);
 }
 
 .ts-hero__title {
     margin: 0;
-    font-size: clamp(2rem, 3.2vw, 3rem);
+    font-size: clamp(1.8rem, 2.6vw, 2.6rem);
     font-weight: 800;
-    line-height: 1.2;
+    line-height: 1.15;
     color: var(--c-navy);
+    letter-spacing: -0.02em;
 }
 
 .ts-hero__title-accent {
     color: var(--c-gold-deep);
+    position: relative;
+    display: inline-block;
 }
 
 .ts-hero__subtitle {
-    font-size: 1rem;
-    line-height: 1.6;
+    font-size: clamp(0.88rem, 1.1vw, 0.98rem);
+    line-height: 1.5;
     color: var(--c-slate);
-    margin: 16px 0 0;
+    margin: 12px 0 0;
     font-weight: 400;
+    max-width: 500px;
 }
 
-/* ---------- Colonne Media ---------- */
+/* Image & Frame Compact */
 .ts-hero__media-col {
     position: relative;
     width: 100%;
@@ -82,40 +107,41 @@
 
 .ts-hero__photo-frame {
     position: relative;
-    border-radius: 20px;
-    overflow: visible;
+    border-radius: 16px;
 }
 
 .ts-hero__photo {
     display: block;
     width: 100%;
-    height: 380px;
+    height: clamp(210px, 26vw, 270px);
     object-fit: cover;
-    border-radius: 20px;
+    border-radius: 16px;
+    box-shadow: 0 12px 28px -8px rgba(15, 23, 42, 0.12);
 }
 
-/* Badge flottant sur la photo */
+/* Badge flottant compact */
 .ts-hero__floating-badge {
     position: absolute;
-    right: 20px;
-    bottom: 20px;
+    right: 12px;
+    bottom: -12px;
     background: #ffffff;
     border-radius: 12px;
-    padding: 10px 16px;
+    padding: 8px 12px;
     display: flex;
     align-items: center;
-    gap: 12px;
-    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.15);
-    max-width: 240px;
+    gap: 10px;
+    box-shadow: 0 8px 20px -4px rgba(15, 23, 42, 0.15);
+    border: 1px solid var(--c-border);
+    max-width: 220px;
     z-index: 2;
 }
 
 .ts-hero__floating-badge-icon {
     flex-shrink: 0;
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
     border-radius: 8px;
-    background: var(--c-gold-deep);
+    background: linear-gradient(135deg, var(--c-gold) 0%, var(--c-gold-deep) 100%);
     color: white;
     display: flex;
     align-items: center;
@@ -123,56 +149,47 @@
 }
 
 .ts-hero__floating-badge-text {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 600;
     color: var(--c-navy);
-    line-height: 1.3;
+    line-height: 1.25;
 }
 
-/* ============================================================
-   SEARCH BAR
-   ============================================================ */
+/* ---------- Barre de Recherche Compacte ---------- */
 .ts-searchbar-wrap {
-    max-width: 1120px;
-    margin: 20px auto 0;
-    padding: 0 32px;
-    position: relative;
-    z-index: 5;
+    width: 100%;
 }
 
 .ts-searchbar {
     background: #ffffff;
-    border-radius: 16px;
-    box-shadow: 0 12px 32px -8px rgba(15, 23, 42, 0.08);
-    padding: 8px 12px;
+    border-radius: 14px;
+    box-shadow: 0 10px 25px -6px rgba(15, 23, 42, 0.08);
+    padding: 6px;
     display: grid;
-    grid-template-columns: 1.3fr 1fr 1fr auto;
-    gap: 12px;
+    grid-template-columns: 1.2fr 0.9fr 0.9fr auto;
+    gap: 8px;
     align-items: center;
     border: 1px solid var(--c-border);
 }
 
 .ts-searchbar__title-mobile {
     display: none;
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--c-navy);
-    margin: 0 0 12px 0;
 }
 
 .ts-search-field {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 8px 12px;
-    border-radius: 10px;
-    background: var(--c-light-bg);
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: var(--c-bg);
 }
 
 .ts-search-field__icon {
-    color: #94a3b8;
+    color: var(--c-gold-deep);
     display: flex;
     align-items: center;
+    flex-shrink: 0;
 }
 
 .ts-search-field__body {
@@ -182,12 +199,11 @@
 }
 
 .ts-search-field__label {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: #64748b;
-    margin-bottom: 2px;
+    letter-spacing: 0.04em;
+    color: var(--c-slate-light);
 }
 
 .ts-search-field input,
@@ -195,142 +211,125 @@
     border: none;
     outline: none;
     background: transparent;
-    font-size: 0.88rem;
+    font-size: 0.82rem;
     font-weight: 600;
     color: var(--c-navy);
     padding: 0;
     width: 100%;
+    height: 20px;
 }
 
 .ts-searchbar__submit {
-    padding: 14px 28px;
+    padding: 10px 22px;
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     background: linear-gradient(135deg, var(--c-gold) 0%, var(--c-gold-deep) 100%);
     color: #ffffff;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
     white-space: nowrap;
 }
 
 .ts-searchbar__submit:hover {
-    background: var(--c-gold-deep);
-    box-shadow: 0 4px 12px rgba(200, 149, 30, 0.3);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(200, 149, 30, 0.35);
 }
 
-/* ============================================================
-   STATS (EN BAS)
-   ============================================================ */
+/* ---------- Statistiques en Bas ---------- */
 .ts-stats {
-    max-width: 1120px;
-    margin: 40px auto 0;
-    padding: 0 32px;
-}
-
-.ts-stats__inner {
-    background: #ffffff;
-    border-radius: 16px;
-    padding: 24px 32px;
-    border: 1px solid var(--c-border);
+    width: 100%;
 }
 
 .ts-stats__grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
+    gap: 12px;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 10px 16px;
+    border: 1px solid var(--c-border);
 }
 
 .ts-stats__item {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 10px;
 }
 
 .ts-stats__icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 10px;
-    background: #f1f5f9;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: var(--c-gold-light);
     color: var(--c-gold-deep);
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
+}
+
+.ts-stats__content {
+    display: flex;
+    flex-direction: column;
 }
 
 .ts-stats__value {
-    font-size: 1.25rem;
+    font-size: 1.05rem;
     font-weight: 800;
     color: var(--c-navy);
+    line-height: 1.1;
 }
 
 .ts-stats__label {
-    font-size: 0.8rem;
+    font-size: 0.72rem;
     color: var(--c-slate);
     font-weight: 500;
+    white-space: nowrap;
 }
 
 /* ============================================================
-   RESPONSIVE (MOBILE & TABLETTE)
+   RESPONSIVE MOBILE
    ============================================================ */
-@media (max-width: 900px) {
-    .desktop-only {
-        display: none;
+@media (max-width: 868px) {
+    .ts-hero {
+        min-height: auto;
+        padding: 12px 12px 24px;
     }
 
     .ts-hero__top {
         grid-template-columns: 1fr;
-        padding: 30px 16px 20px;
-        gap: 24px;
+        gap: 16px;
     }
 
     .ts-hero__photo {
-        height: 280px;
-    }
-
-    /* Barre de recherche responsive Mobile */
-    .ts-searchbar-wrap {
-        padding: 0 16px;
-        margin-top: 16px;
+        height: 180px;
     }
 
     .ts-searchbar {
         grid-template-columns: 1fr;
-        padding: 20px 16px;
-        gap: 12px;
+        padding: 12px;
+        gap: 8px;
     }
 
     .ts-searchbar__title-mobile {
         display: block;
-    }
-
-    .ts-searchbar__submit {
-        width: 100%;
-        margin-top: 8px;
-    }
-
-    /* Stats responsive Mobile */
-    .ts-stats {
-        padding: 0 16px;
-        margin-top: 24px;
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--c-navy);
+        margin: 0 0 4px 0;
     }
 
     .ts-stats__grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
+        gap: 10px;
+        padding: 10px;
     }
 
     .ts-hero__floating-badge {
-        left: 12px;
-        right: 12px;
-        bottom: 12px;
-        max-width: none;
-    }
-}
-
-@media (max-width: 480px) {
-    .ts-stats__grid {
-        grid-template-columns: 1fr;
+        right: 8px;
+        bottom: -8px;
+        padding: 6px 10px;
     }
 }
