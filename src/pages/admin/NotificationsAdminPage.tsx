@@ -5,6 +5,7 @@ import {
     marquerToutesNotificationsLues,
     type NotificationAdminDTO,
 } from "../../api/notificationAdminService";
+import { envoyerAnnonceLancement } from "../../api/adminMailService";
 import { LABELS_TYPE_NOTIFICATION, couleurNotification } from "./notificationConfig";
 import "./NotificationsAdminPage.css";
 
@@ -26,6 +27,11 @@ export function NotificationsAdminPage() {
     const [page, setPage] = useState(0);
     const [chargement, setChargement] = useState(true);
     const [erreur, setErreur] = useState<string | null>(null);
+
+    const [joursInactivite, setJoursInactivite] = useState(14);
+    const [envoiEnCours, setEnvoiEnCours] = useState(false);
+    const [resultatEnvoi, setResultatEnvoi] = useState<string | null>(null);
+    const [erreurEnvoi, setErreurEnvoi] = useState<string | null>(null);
 
     const charger = useCallback(async () => {
         setChargement(true);
@@ -64,6 +70,25 @@ export function NotificationsAdminPage() {
         }
     }
 
+    async function handleEnvoyerAnnonce() {
+        const confirmation = window.confirm(
+            `Envoyer l'email d'annonce à tous les utilisateurs inactifs depuis ${joursInactivite} jour(s) ? Cette action est irréversible.`
+        );
+        if (!confirmation) return;
+
+        setEnvoiEnCours(true);
+        setErreurEnvoi(null);
+        setResultatEnvoi(null);
+        try {
+            const resultat = await envoyerAnnonceLancement(joursInactivite);
+            setResultatEnvoi(`${resultat.mailsEnvoyes} email(s) envoyé(s) aux utilisateurs inactifs depuis ${resultat.joursInactivite} jour(s).`);
+        } catch {
+            setErreurEnvoi("Échec de l'envoi de l'annonce. Vérifie les logs backend.");
+        } finally {
+            setEnvoiEnCours(false);
+        }
+    }
+
     const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
     const nonLues = notifications.filter((n) => !n.lu).length;
 
@@ -81,6 +106,30 @@ export function NotificationsAdminPage() {
                         </button>
                     )}
                 </div>
+
+                <div className="annonce-card">
+                    <div>
+                        <h2 className="annonce-card__title">Annonce de lancement</h2>
+                        <p className="annonce-card__subtitle">
+                            Envoie l'email d'annonce aux utilisateurs inactifs depuis un certain nombre de jours.
+                        </p>
+                        <label className="annonce-card__field">
+                            Inactifs depuis (jours) :
+                            <input
+                                type="number"
+                                min={1}
+                                value={joursInactivite}
+                                onChange={(e) => setJoursInactivite(Number(e.target.value))}
+                            />
+                        </label>
+                    </div>
+                    <button className="admin-btn" onClick={handleEnvoyerAnnonce} disabled={envoiEnCours}>
+                        {envoiEnCours ? "Envoi en cours..." : "Envoyer l'annonce"}
+                    </button>
+                </div>
+
+                {resultatEnvoi && <div className="admin-alert admin-alert--success">{resultatEnvoi}</div>}
+                {erreurEnvoi && <div className="admin-alert">{erreurEnvoi}</div>}
 
                 {erreur && <div className="admin-alert">{erreur}</div>}
 

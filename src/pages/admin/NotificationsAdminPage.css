@@ -80,3 +80,50 @@
     align-self: center;
     white-space: nowrap;
 }
+.admin-alert--success {
+    background: #edf9f0;
+    border: 1px solid #b7e4c7;
+    color: #1e7a3d;
+}
+
+.annonce-card {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    background: white;
+    border: 1px solid #e6e8ee;
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.annonce-card__title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0b1d3a;
+    margin: 0 0 4px;
+}
+
+.annonce-card__subtitle {
+    font-size: 0.85rem;
+    color: #6b7385;
+    margin: 0 0 12px;
+    line-height: 1.5;
+}
+
+.annonce-card__field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: #333;
+}
+
+.annonce-card__field input {
+    width: 4rem;
+    padding: 6px 8px;
+    border: 1px solid #e6e8ee;
+    border-radius: 8px;
+    font-size: 0.85rem;
+}
