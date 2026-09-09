@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import "./EspaceRecruteurPage.css";
 
 // Ajuster les chemins relatifs selon l'emplacement de vos assets
-import heroRecruteur from "../../assets/talent-1.jpg";
+import heroRecruteur from "../../assets/img_1.png";
 import heroTalentSearch from "../../assets/talent-2.jpg";
 import heroEntreprise from "../../assets/talent-3.jpg";
 import heroSelection from "../../assets/candidats.jpg";
