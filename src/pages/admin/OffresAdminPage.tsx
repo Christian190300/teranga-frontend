@@ -136,47 +136,43 @@ export function OffresAdminPage() {
                 <div className="mod-state">Aucune offre ne correspond à ta recherche.</div>
             ) : (
                 <>
-                    <div className="mod-table">
-                        <div className="mod-table__header">
-                            <span className="mod-col-offre">Offre</span>
-                            <span className="mod-col-lieu">Lieu</span>
-                            <span className="mod-col-contrat">Contrat</span>
-                            <span className="mod-col-statut">Statut</span>
-                            <span className="mod-col-vues">Vues</span>
-                            <span className="mod-col-recruteur">Recruteur</span>
-                            <span className="mod-col-actions" />
-                        </div>
-
+                    <div className="mod-grid">
                         {offres.map((offre) => {
                             const lieu = [offre.ville, offre.pays].filter(Boolean).join(", ");
                             return (
-                                <Link to={`/offres/${offre.id}`} className="mod-row" key={offre.id}>
-                                    <span className="mod-col-offre mod-offre">
-                                        <span className="mod-offre__logo">{initiales(offre.nomEntreprise)}</span>
-                                        <span className="mod-offre__text">
-                                            <span className="mod-offre__titre">{offre.titre}</span>
-                                            <span className="mod-offre__entreprise">
+                                <Link to={`/offres/${offre.id}`} className="mod-card" key={offre.id}>
+                                    <div className="mod-card__top">
+                                        <span className="mod-card__logo">{initiales(offre.nomEntreprise)}</span>
+                                        <div className="mod-card__heading">
+                                            <span className="mod-card__titre">{offre.titre}</span>
+                                            <span className="mod-card__entreprise">
                                                 {offre.nomEntreprise ?? "Entreprise inconnue"}
-                                                {offre.source && <span className="mod-offre__source"> · importée ({offre.source})</span>}
+                                                {offre.source && <span className="mod-card__source"> · importée ({offre.source})</span>}
                                             </span>
-                                        </span>
-                                    </span>
-
-                                    <span className="mod-col-lieu">{lieu || "—"}</span>
-
-                                    <span className="mod-col-contrat">{LABELS_TYPE_CONTRAT[offre.typeContrat]}</span>
-
-                                    <span className="mod-col-statut">
+                                        </div>
                                         <StatutOffreBadge statut={offre.statut} />
-                                    </span>
+                                    </div>
 
-                                    <span className="mod-col-vues">{(offre.nombreVues ?? 0).toLocaleString()}</span>
+                                    <div className="mod-card__meta">
+                                        <span className="mod-card__meta-item">
+                                            <span className="mod-card__meta-label">Lieu</span>
+                                            {lieu || "—"}
+                                        </span>
+                                        <span className="mod-card__meta-item">
+                                            <span className="mod-card__meta-label">Contrat</span>
+                                            {LABELS_TYPE_CONTRAT[offre.typeContrat]}
+                                        </span>
+                                        <span className="mod-card__meta-item">
+                                            <span className="mod-card__meta-label">Vues</span>
+                                            {(offre.nombreVues ?? 0).toLocaleString()}
+                                        </span>
+                                        <span className="mod-card__meta-item">
+                                            <span className="mod-card__meta-label">Recruteur</span>
+                                            {offre.recruteurId ? `${offre.recruteurId.slice(0, 8)}…` : "Import auto"}
+                                        </span>
+                                    </div>
 
-                                    <span className="mod-col-recruteur">
-                                        {offre.recruteurId ? `${offre.recruteurId.slice(0, 8)}…` : "Import auto"}
-                                    </span>
-
-                                    <span className="mod-col-actions">
+                                    <div className="mod-card__footer">
                                         <button
                                             className="mod-delete"
                                             disabled={suppressionEnCours === offre.id}
@@ -184,7 +180,7 @@ export function OffresAdminPage() {
                                         >
                                             {suppressionEnCours === offre.id ? "..." : "Supprimer"}
                                         </button>
-                                    </span>
+                                    </div>
                                 </Link>
                             );
                         })}
