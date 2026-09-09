@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import talent1 from "../../assets/img.png";
 import {
     IconUsers,
@@ -70,6 +71,7 @@ export function Hero() {
     // Déclenchement de l'animation quand la section stats devient visible
     const statsRef = useRef<HTMLDivElement | null>(null);
     const [statsVisible, setStatsVisible] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         listerOffresPubliques(0, 1)
@@ -107,7 +109,11 @@ export function Hero() {
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log({ keyword, ville, contrat });
+        const params = new URLSearchParams();
+        if (keyword.trim()) params.set("q", keyword.trim());
+        if (ville.trim()) params.set("ville", ville.trim());
+        if (contrat) params.set("typeContrat", contrat.toUpperCase());
+        navigate(`/offres${params.toString() ? `?${params.toString()}` : ""}`);
     };
 
     return (

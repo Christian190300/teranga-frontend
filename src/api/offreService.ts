@@ -8,6 +8,9 @@ export type NiveauEtude = "AUCUN" | "BAC" | "BAC_2" | "BAC_3" | "BAC_5" | "DOCTO
 export interface FiltresOffres {
     recherche?: string;
     secteurActivite?: string;
+    q?: string;
+    ville?: string;
+    typeContrat?: TypeContrat | "";
 }
 
 export interface FiltresOffres {
@@ -135,6 +138,9 @@ export async function listerOffresPubliques(
     if (filtres.recherche) params.recherche = filtres.recherche;
     if (filtres.secteurActivite) params.secteurActivite = filtres.secteurActivite;
     if (filtres.tri) params.tri = filtres.tri;
+    if (filtres.q) params.q = filtres.q;
+    if (filtres.ville) params.ville = filtres.ville;
+    if (filtres.typeContrat) params.typeContrat = filtres.typeContrat;
 
     const response = await httpClient.get<SpringPage<OffreDTO>>("/offres", { params });
     return response.data;
@@ -291,4 +297,3 @@ export const LABELS_STATUT_OFFRE: Record<StatutOffre, string> = {
     FERMEE: "Fermée",
     EXPIREE: "Expirée",
 };
-
