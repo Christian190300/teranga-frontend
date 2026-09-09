@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { listerToutesOffresAdmin, supprimerOffre, LABELS_TYPE_CONTRAT, type OffreDTO } from "../../api/offreService";
 import { StatutOffreBadge } from "../../components/common/StatutOffreBadge";
-import "../offres/offres.css";
+import "./offresAdmin.css";
 
-const TAILLE_PAGE = 9;
+const TAILLE_PAGE = 15;
 
 const OPTIONS_TRI = [
     { valeur: "dateCreation,desc", label: "Plus récentes d'abord" },
@@ -33,7 +33,6 @@ export function OffresAdminPage() {
     const [rechercheDebattue, setRechercheDebattue] = useState("");
     const [tri, setTri] = useState<string>(OPTIONS_TRI[0].valeur);
 
-    // Débounce de la recherche : on attend que l'admin arrête de taper avant de relancer l'appel réseau.
     useEffect(() => {
         const handle = setTimeout(() => setRechercheDebattue(recherche.trim()), 350);
         return () => clearTimeout(handle);
@@ -56,14 +55,12 @@ export function OffresAdminPage() {
         }
     }
 
-    // Recherche ou tri modifié : on repart de la page 0 (le useEffect ci-dessous se charge de recharger).
     useEffect(() => {
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setPage(0);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [rechercheDebattue, tri]);
 
-    // Seul point d'appel réseau : se déclenche à chaque changement de page, recherche ou tri.
     useEffect(() => {
         // eslint-disable-next-line react-hooks/set-state-in-effect
         charger(page, rechercheDebattue, tri);
@@ -86,23 +83,43 @@ export function OffresAdminPage() {
         }
     }
 
+    // Répartition par statut sur la page courante — repère rapide, pas un total exact
+    // (l'API ne renvoie pas de comptage global par statut pour l'instant).
+    const repartition = useMemo(() => {
+        const compte: Record<string, number> = {};
+        for (const o of offres) {
+            compte[o.statut] = (compte[o.statut] ?? 0) + 1;
+        }
+        return compte;
+    }, [offres]);
+
     return (
-        <div className="offres-page">
-            <div className="offres-page__header">
+        <div className="mod-page">
+            <div className="mod-page__head">
                 <div>
-                    <h1 className="offres-page__title">Modération des offres</h1>
-                    <p className="offres-page__subtitle">{totalElements} offre(s) au total, tous statuts confondus.</p>
+                    <h1 className="mod-page__title">Modération des offres</h1>
+                    <p className="mod-page__count">{totalElements} offre{totalElements > 1 ? "s" : ""} au total</p>
                 </div>
+                {offres.length > 0 && (
+                    <div className="mod-page__breakdown">
+                        {Object.entries(repartition).map(([statut, n]) => (
+                            <span key={statut} className="mod-page__breakdown-item">
+                                <span className={`mod-dot mod-dot--${statut.toLowerCase()}`} />
+                                {n} {statut.toLowerCase()}
+                            </span>
+                        ))}
+                    </div>
+                )}
             </div>
 
-            <div className="offres-admin__filtres">
+            <div className="mod-toolbar">
                 <input
-                    className="offres-admin__recherche"
+                    className="mod-toolbar__search"
                     placeholder="Rechercher par titre ou ville..."
                     value={recherche}
                     onChange={(e) => setRecherche(e.target.value)}
                 />
-                <select className="offres-admin__tri" value={tri} onChange={(e) => setTri(e.target.value)}>
+                <select className="mod-toolbar__sort" value={tri} onChange={(e) => setTri(e.target.value)}>
                     {OPTIONS_TRI.map((option) => (
                         <option key={option.valeur} value={option.valeur}>
                             {option.label}
@@ -111,62 +128,77 @@ export function OffresAdminPage() {
                 </select>
             </div>
 
-            {error && <div className="offre-message--error">{error}</div>}
+            {error && <div className="mod-alert">{error}</div>}
 
             {loading ? (
-                <div className="offres-page__loading">Chargement des offres...</div>
+                <div className="mod-state">Chargement des offres...</div>
             ) : offres.length === 0 ? (
-                <div className="offres-page__empty">Aucune offre ne correspond à ta recherche.</div>
+                <div className="mod-state">Aucune offre ne correspond à ta recherche.</div>
             ) : (
                 <>
-                    <div className="offres-grid">
+                    <div className="mod-table">
+                        <div className="mod-table__header">
+                            <span className="mod-col-offre">Offre</span>
+                            <span className="mod-col-lieu">Lieu</span>
+                            <span className="mod-col-contrat">Contrat</span>
+                            <span className="mod-col-statut">Statut</span>
+                            <span className="mod-col-vues">Vues</span>
+                            <span className="mod-col-recruteur">Recruteur</span>
+                            <span className="mod-col-actions" />
+                        </div>
+
                         {offres.map((offre) => {
                             const lieu = [offre.ville, offre.pays].filter(Boolean).join(", ");
                             return (
-                                <Link to={`/offres/${offre.id}`} className="offre-tile" key={offre.id}>
-                                    <div className="offre-tile__top">
-                                        <div className="offre-tile__logo">{initiales(offre.nomEntreprise)}</div>
-                                        <div className="offre-tile__entreprise" style={{ flex: 1 }}>
-                                            <p className="offre-tile__nom-entreprise">{offre.nomEntreprise ?? "Entreprise inconnue"}</p>
-                                            <p className="offre-tile__titre">{offre.titre}</p>
-                                        </div>
-                                        <StatutOffreBadge statut={offre.statut} />
-                                    </div>
-
-                                    <p className="offre-tile__lieu">{lieu || "Lieu non précisé"}</p>
-
-                                    <div className="offre-tile__tags">
-                                        <span className="offre-tile__tag">{LABELS_TYPE_CONTRAT[offre.typeContrat]}</span>
-                                        {offre.source && (<span className="offre-tile__tag offre-tile__tag--gold">Importée · {offre.source}</span>)}
-                                        <span className="offre-tile__tag offre-tile__tag--vues">
-                                            👁 {(offre.nombreVues ?? 0).toLocaleString()} vue{(offre.nombreVues ?? 0) > 1 ? "s" : ""}
+                                <Link to={`/offres/${offre.id}`} className="mod-row" key={offre.id}>
+                                    <span className="mod-col-offre mod-offre">
+                                        <span className="mod-offre__logo">{initiales(offre.nomEntreprise)}</span>
+                                        <span className="mod-offre__text">
+                                            <span className="mod-offre__titre">{offre.titre}</span>
+                                            <span className="mod-offre__entreprise">
+                                                {offre.nomEntreprise ?? "Entreprise inconnue"}
+                                                {offre.source && <span className="mod-offre__source"> · importée ({offre.source})</span>}
+                                            </span>
                                         </span>
-                                    </div>
+                                    </span>
 
-                                    <div className="offre-tile__footer">
-                                        <span className="offre-tile__date">Recruteur : {offre.recruteurId ? `${offre.recruteurId.slice(0, 8)}…` : "Import automatique"}</span>
+                                    <span className="mod-col-lieu">{lieu || "—"}</span>
+
+                                    <span className="mod-col-contrat">{LABELS_TYPE_CONTRAT[offre.typeContrat]}</span>
+
+                                    <span className="mod-col-statut">
+                                        <StatutOffreBadge statut={offre.statut} />
+                                    </span>
+
+                                    <span className="mod-col-vues">{(offre.nombreVues ?? 0).toLocaleString()}</span>
+
+                                    <span className="mod-col-recruteur">
+                                        {offre.recruteurId ? `${offre.recruteurId.slice(0, 8)}…` : "Import auto"}
+                                    </span>
+
+                                    <span className="mod-col-actions">
                                         <button
-                                            className="btn-secondary btn-danger"
+                                            className="mod-delete"
                                             disabled={suppressionEnCours === offre.id}
                                             onClick={(e) => handleSupprimer(e, offre.id)}
                                         >
-                                            Supprimer
+                                            {suppressionEnCours === offre.id ? "..." : "Supprimer"}
                                         </button>
-                                    </div>
+                                    </span>
                                 </Link>
                             );
                         })}
                     </div>
 
                     {totalPages > 1 && (
-                        <div className="offres-pagination">
-                            <button className="btn-secondary" disabled={page === 0} onClick={() => setPage((p) => p - 1)}>
+                        <div className="mod-pagination">
+                            <button className="mod-page-btn" disabled={page === 0} onClick={() => setPage((p) => p - 1)}>
                                 Précédent
                             </button>
-                            <span className="offres-pagination__info">
+                            <span className="mod-pagination__info">
                                 Page {page + 1} / {totalPages}
                             </span>
-                            <button className="btn-secondary" disabled={page + 1 >= totalPages} onClick={() => setPage((p) => p + 1)}>
+                            <button className="mod-page-btn" disabled={page + 1 >= totalPages} onClick={() => setPage((p) => p + 1)}>
                                 Suivant
                             </button>
                         </div>
