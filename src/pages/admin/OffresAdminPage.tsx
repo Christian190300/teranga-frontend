@@ -141,38 +141,43 @@ export function OffresAdminPage() {
                             const lieu = [offre.ville, offre.pays].filter(Boolean).join(", ");
                             return (
                                 <Link to={`/offres/${offre.id}`} className="mod-card" key={offre.id}>
-                                    <div className="mod-card__top">
-                                        <span className="mod-card__logo">{initiales(offre.nomEntreprise)}</span>
-                                        <div className="mod-card__heading">
-                                            <span className="mod-card__titre">{offre.titre}</span>
-                                            <span className="mod-card__entreprise">
-                                                {offre.nomEntreprise ?? "Entreprise inconnue"}
-                                                {offre.source && <span className="mod-card__source"> · importée ({offre.source})</span>}
+                                    <div className="mod-card__body">
+                                        <div className="mod-card__identity">
+                                            <span className="mod-card__avatar">{initiales(offre.nomEntreprise)}</span>
+                                            <div className="mod-card__heading">
+                                                <span className="mod-card__titre">{offre.titre}</span>
+                                                <span className="mod-card__entreprise">
+                                                    {offre.nomEntreprise ?? "Entreprise inconnue"}
+                                                </span>
+                                            </div>
+                                            <StatutOffreBadge statut={offre.statut} />
+                                        </div>
+
+                                        {offre.source && (
+                                            <span className="mod-card__import-tag">Import {offre.source}</span>
+                                        )}
+
+                                        <div className="mod-card__meta">
+                                            <span className="mod-card__meta-item">
+                                                <span className="mod-card__meta-label">Lieu</span>
+                                                {lieu || "—"}
+                                            </span>
+                                            <span className="mod-card__meta-item">
+                                                <span className="mod-card__meta-label">Contrat</span>
+                                                {LABELS_TYPE_CONTRAT[offre.typeContrat]}
+                                            </span>
+                                            <span className="mod-card__meta-item">
+                                                <span className="mod-card__meta-label">Recruteur</span>
+                                                {offre.recruteurId ? `${offre.recruteurId.slice(0, 8)}…` : "Import auto"}
                                             </span>
                                         </div>
-                                        <StatutOffreBadge statut={offre.statut} />
                                     </div>
 
-                                    <div className="mod-card__meta">
-                                        <span className="mod-card__meta-item">
-                                            <span className="mod-card__meta-label">Lieu</span>
-                                            {lieu || "—"}
-                                        </span>
-                                        <span className="mod-card__meta-item">
-                                            <span className="mod-card__meta-label">Contrat</span>
-                                            {LABELS_TYPE_CONTRAT[offre.typeContrat]}
-                                        </span>
-                                        <span className="mod-card__meta-item">
-                                            <span className="mod-card__meta-label">Vues</span>
+                                    <div className="mod-card__stub">
+                                        <span className="mod-card__stub-number">
                                             {(offre.nombreVues ?? 0).toLocaleString()}
                                         </span>
-                                        <span className="mod-card__meta-item">
-                                            <span className="mod-card__meta-label">Recruteur</span>
-                                            {offre.recruteurId ? `${offre.recruteurId.slice(0, 8)}…` : "Import auto"}
-                                        </span>
-                                    </div>
-
-                                    <div className="mod-card__footer">
+                                        <span className="mod-card__stub-label">vues</span>
                                         <button
                                             className="mod-delete"
                                             disabled={suppressionEnCours === offre.id}
