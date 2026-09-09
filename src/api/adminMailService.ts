@@ -7,7 +7,7 @@ export interface ResultatEnvoiAnnonceDTO {
 
 export async function envoyerAnnonceLancement(joursInactivite: number): Promise<ResultatEnvoiAnnonceDTO> {
     const response = await httpClient.post<ResultatEnvoiAnnonceDTO>(
-        `/api/admin/mails/annonce-lancement?joursInactivite=${joursInactivite}`
+        `/admin/mails/annonce-lancement?joursInactivite=${joursInactivite}`
     );
     return response.data;
 }
