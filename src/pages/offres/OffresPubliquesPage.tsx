@@ -94,8 +94,11 @@ export function OffresPubliquesPage() {
     const estCandidat = currentUser?.role === "CANDIDAT";
     const filtresActifs = rechercheAppliquee !== "" || secteurSelectionne !== "";
 
-    // Évite de scroller en haut lors du tout premier rendu (retour depuis le détail d'une offre)
+    // Évite de scroller lors du tout premier rendu (retour depuis le détail d'une offre)
     const premierRendu = useRef(true);
+
+    // Référence vers la section des offres, pour scroller jusqu'à la première offre
+    const refSectionOffres = useRef<HTMLDivElement>(null);
 
     // Met à jour l'URL sans recharger la page ni polluer l'historique
     function majParamsUrl(next: {
@@ -156,15 +159,15 @@ export function OffresPubliquesPage() {
         charger();
     }, [page, rechercheAppliquee, secteurSelectionne, triSelectionne]);
 
-    // Remonte en haut de page à chaque changement de page (pagination),
+    // Scroll jusqu'à la première offre à chaque changement de page ou de filtre,
     // sauf au tout premier rendu (ex: retour depuis la page détail d'une offre)
     useEffect(() => {
         if (premierRendu.current) {
             premierRendu.current = false;
             return;
         }
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    }, [page]);
+        refSectionOffres.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, [page, rechercheAppliquee, secteurSelectionne, triSelectionne]);
 
     // Handlers
     function lancerRecherche(e: React.FormEvent) {
@@ -306,7 +309,7 @@ export function OffresPubliquesPage() {
                     </div>
                 )}
 
-                <section className="offres-section">
+                <section className="offres-section" ref={refSectionOffres}>
                     {loading ? (
                         <div className="home-jobs-grid">
                             {Array.from({ length: TAILLE_PAGE }).map((_, i) => (
