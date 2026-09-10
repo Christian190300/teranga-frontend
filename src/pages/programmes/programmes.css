@@ -1,3 +1,73 @@
+.prog-bloc {
+    margin-top: 10px;
+}
+
+.prog-bloc__titre {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--navy-ink);
+    margin: 0 0 10px;
+}
+
+.prog-bloc__etapes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin: 16px 0;
+}
+
+.prog-bloc__etape {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-width: 90px;
+    padding: 12px 16px;
+    background: var(--bg-soft);
+    border-radius: var(--radius-sm);
+}
+
+.prog-bloc__etape-titre {
+    font-weight: 800;
+    font-size: 0.88rem;
+    color: var(--navy-ink);
+    letter-spacing: 0.02em;
+}
+
+.prog-bloc__etape-sous {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+.prog-bloc__points {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin-top: 10px;
+}
+
+.prog-bloc__point {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+}
+
+.prog-bloc__point h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--navy-ink);
+    margin: 0 0 6px;
+}
+
+.prog-bloc__point p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.5;
+}
 .prog-page {
     max-width: 1200px;
     width: 94%;
@@ -40,10 +110,15 @@
 }
 
 @media (max-width: 1000px) {
-    .prog-grid { grid-template-columns: repeat(2, 1fr); }
+    .prog-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
+
 @media (max-width: 640px) {
-    .prog-grid { grid-template-columns: 1fr; }
+    .prog-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .prog-tile {
@@ -96,4 +171,96 @@
     object-fit: cover;
     border-radius: var(--radius-md);
     margin-bottom: 20px;
+}
+
+/* ==========================================================================
+   BLOCS LE CONSTAT / LE PROGRAMME — page détail publique
+   ========================================================================== */
+
+.prog-bloc {
+    margin-top: 10px;
+}
+
+.prog-bloc--accent {
+    margin-top: 30px;
+    padding-top: 26px;
+    border-top: 1px solid var(--bg-soft);
+}
+
+.prog-bloc__titre {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--navy-ink);
+    margin: 0 0 10px;
+}
+
+.prog-bloc__etapes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin: 16px 0;
+}
+
+.prog-bloc__etape {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-width: 90px;
+    padding: 12px 16px;
+    background: var(--bg-soft);
+    border-radius: var(--radius-sm);
+}
+
+.prog-bloc__etape-titre {
+    font-weight: 800;
+    font-size: 0.88rem;
+    color: var(--navy-ink);
+    letter-spacing: 0.02em;
+}
+
+.prog-bloc__etape-sous {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+.prog-bloc__points {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin-top: 10px;
+}
+
+.prog-bloc__point {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+}
+
+.prog-bloc__point h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--navy-ink);
+    margin: 0 0 6px;
+}
+
+.prog-bloc__point p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.5;
+}
+
+@media (max-width: 640px) {
+    .prog-bloc__etapes {
+        gap: 10px;
+    }
+
+    .prog-bloc__etape {
+        min-width: 76px;
+        padding: 10px 12px;
+    }
 }

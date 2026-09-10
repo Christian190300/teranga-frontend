@@ -2,6 +2,16 @@ import { httpClient } from "./httpClient";
 
 export type StatutProgramme = "BROUILLON" | "PUBLIEE";
 
+export interface EtapeProgrammeDTO {
+    titre: string;
+    sousTitre: string | null;
+}
+
+export interface PointProgrammeDTO {
+    titre: string;
+    description: string | null;
+}
+
 export interface ProgrammeDTO {
     id: number;
     titre: string;
@@ -12,6 +22,17 @@ export interface ProgrammeDTO {
     dateDebut: string; // LocalDate ISO "2026-09-10"
     dateFin: string | null;
     lien: string | null;
+
+    constatTitre: string | null;
+    constatTexte: string | null;
+    constatEtapes: EtapeProgrammeDTO[];
+    constatPoints: PointProgrammeDTO[];
+
+    programmeTitre: string | null;
+    programmeTexte: string | null;
+    programmeEtapes: EtapeProgrammeDTO[];
+    programmeApports: PointProgrammeDTO[];
+
     statut: StatutProgramme;
     dateCreation: string;
     dateMaj: string | null;
@@ -24,6 +45,16 @@ export interface CreerModifierProgrammeDTO {
     dateDebut: string;
     dateFin: string | null;
     lien: string | null;
+
+    constatTitre: string | null;
+    constatTexte: string | null;
+    constatEtapes: EtapeProgrammeDTO[];
+    constatPoints: PointProgrammeDTO[];
+
+    programmeTitre: string | null;
+    programmeTexte: string | null;
+    programmeEtapes: EtapeProgrammeDTO[];
+    programmeApports: PointProgrammeDTO[];
 }
 
 // ---------- Public ----------

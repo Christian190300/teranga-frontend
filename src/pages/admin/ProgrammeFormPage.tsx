@@ -7,6 +7,8 @@ import {
     uploaderImageProgramme,
     urlImageProgrammeAdmin,
     type CreerModifierProgrammeDTO,
+    type EtapeProgrammeDTO,
+    type PointProgrammeDTO,
 } from "../../api/programmeService";
 import "./programmesAdmin.css";
 
@@ -17,7 +19,111 @@ const VIDE: CreerModifierProgrammeDTO = {
     dateDebut: "",
     dateFin: "",
     lien: "",
+    constatTitre: "",
+    constatTexte: "",
+    constatEtapes: [],
+    constatPoints: [],
+    programmeTitre: "",
+    programmeTexte: "",
+    programmeEtapes: [],
+    programmeApports: [],
 };
+
+/** Éditeur répétable pour une liste d'étapes (titre + sous-titre). */
+function EditeurEtapes({
+                           etapes,
+                           onChange,
+                       }: {
+    etapes: EtapeProgrammeDTO[];
+    onChange: (etapes: EtapeProgrammeDTO[]) => void;
+}) {
+    function ajouter() {
+        onChange([...etapes, { titre: "", sousTitre: "" }]);
+    }
+    function retirer(index: number) {
+        onChange(etapes.filter((_, i) => i !== index));
+    }
+    function modifier(index: number, champ: keyof EtapeProgrammeDTO, valeur: string) {
+        onChange(etapes.map((e, i) => (i === index ? { ...e, [champ]: valeur } : e)));
+    }
+
+    return (
+        <div className="prog-repetable-liste">
+            {etapes.map((etape, index) => (
+                <div className="prog-repetable-ligne" key={index}>
+                    <input
+                        type="text"
+                        placeholder="Titre (ex: ÉCOLE)"
+                        value={etape.titre}
+                        onChange={(e) => modifier(index, "titre", e.target.value)}
+                    />
+                    <input
+                        type="text"
+                        placeholder="Sous-titre (ex: Identifie)"
+                        value={etape.sousTitre ?? ""}
+                        onChange={(e) => modifier(index, "sousTitre", e.target.value)}
+                    />
+                    <button type="button" className="prog-repetable-retirer" onClick={() => retirer(index)}>
+                        ✕
+                    </button>
+                </div>
+            ))}
+            <button type="button" className="prog-repetable-ajouter" onClick={ajouter}>
+                + Ajouter une étape
+            </button>
+        </div>
+    );
+}
+
+/** Éditeur répétable pour une liste de points (titre + description). */
+function EditeurPoints({
+                           points,
+                           onChange,
+                           labelAjout,
+                       }: {
+    points: PointProgrammeDTO[];
+    onChange: (points: PointProgrammeDTO[]) => void;
+    labelAjout: string;
+}) {
+    function ajouter() {
+        onChange([...points, { titre: "", description: "" }]);
+    }
+    function retirer(index: number) {
+        onChange(points.filter((_, i) => i !== index));
+    }
+    function modifier(index: number, champ: keyof PointProgrammeDTO, valeur: string) {
+        onChange(points.map((p, i) => (i === index ? { ...p, [champ]: valeur } : p)));
+    }
+
+    return (
+        <div className="prog-repetable-liste">
+            {points.map((point, index) => (
+                <div className="prog-repetable-carte" key={index}>
+                    <div className="prog-repetable-carte-head">
+                        <input
+                            type="text"
+                            placeholder="Titre du point"
+                            value={point.titre}
+                            onChange={(e) => modifier(index, "titre", e.target.value)}
+                        />
+                        <button type="button" className="prog-repetable-retirer" onClick={() => retirer(index)}>
+                            ✕
+                        </button>
+                    </div>
+                    <textarea
+                        placeholder="Description"
+                        rows={2}
+                        value={point.description ?? ""}
+                        onChange={(e) => modifier(index, "description", e.target.value)}
+                    />
+                </div>
+            ))}
+            <button type="button" className="prog-repetable-ajouter" onClick={ajouter}>
+                + {labelAjout}
+            </button>
+        </div>
+    );
+}
 
 export function ProgrammeFormPage() {
     const { id } = useParams<{ id: string }>();
@@ -42,6 +148,14 @@ export function ProgrammeFormPage() {
                     dateDebut: p.dateDebut,
                     dateFin: p.dateFin ?? "",
                     lien: p.lien ?? "",
+                    constatTitre: p.constatTitre ?? "",
+                    constatTexte: p.constatTexte ?? "",
+                    constatEtapes: p.constatEtapes ?? [],
+                    constatPoints: p.constatPoints ?? [],
+                    programmeTitre: p.programmeTitre ?? "",
+                    programmeTexte: p.programmeTexte ?? "",
+                    programmeEtapes: p.programmeEtapes ?? [],
+                    programmeApports: p.programmeApports ?? [],
                 });
                 if (p.imagePresente) setImageActuelle(p.id);
             })
@@ -49,7 +163,7 @@ export function ProgrammeFormPage() {
             .finally(() => setChargement(false));
     }, [id]);
 
-    function handleChange(champ: keyof CreerModifierProgrammeDTO, valeur: string) {
+    function handleChange<K extends keyof CreerModifierProgrammeDTO>(champ: K, valeur: CreerModifierProgrammeDTO[K]) {
         setForm((prev) => ({ ...prev, [champ]: valeur }));
     }
 
@@ -64,6 +178,10 @@ export function ProgrammeFormPage() {
                 formateur: form.formateur || null,
                 dateFin: form.dateFin || null,
                 lien: form.lien || null,
+                constatTitre: form.constatTitre || null,
+                constatTexte: form.constatTexte || null,
+                programmeTitre: form.programmeTitre || null,
+                programmeTexte: form.programmeTexte || null,
             };
 
             const programme = estEdition ? await modifierProgramme(Number(id), dto) : await creerProgramme(dto);
@@ -131,6 +249,54 @@ export function ProgrammeFormPage() {
                         <img src={urlImageProgrammeAdmin(imageActuelle)} alt="" className="prog-admin-form__preview" />
                     )}
                     <input type="file" accept="image/*" onChange={(e) => setFichierImage(e.target.files?.[0] ?? null)} />
+                </div>
+
+                <hr className="prog-form-separateur" />
+                <h2 className="prog-form-section-titre">LE CONSTAT</h2>
+
+                <div className="offre-field">
+                    <label>Titre du constat</label>
+                    <input value={form.constatTitre ?? ""} onChange={(e) => handleChange("constatTitre", e.target.value)} />
+                </div>
+                <div className="offre-field">
+                    <label>Texte du constat</label>
+                    <textarea value={form.constatTexte ?? ""} onChange={(e) => handleChange("constatTexte", e.target.value)} />
+                </div>
+                <div className="offre-field">
+                    <label>Étapes du constat</label>
+                    <EditeurEtapes etapes={form.constatEtapes} onChange={(v) => handleChange("constatEtapes", v)} />
+                </div>
+                <div className="offre-field">
+                    <label>Points du constat</label>
+                    <EditeurPoints
+                        points={form.constatPoints}
+                        onChange={(v) => handleChange("constatPoints", v)}
+                        labelAjout="Ajouter un point"
+                    />
+                </div>
+
+                <hr className="prog-form-separateur" />
+                <h2 className="prog-form-section-titre">LE PROGRAMME</h2>
+
+                <div className="offre-field">
+                    <label>Titre du programme</label>
+                    <input value={form.programmeTitre ?? ""} onChange={(e) => handleChange("programmeTitre", e.target.value)} />
+                </div>
+                <div className="offre-field">
+                    <label>Texte du programme</label>
+                    <textarea value={form.programmeTexte ?? ""} onChange={(e) => handleChange("programmeTexte", e.target.value)} />
+                </div>
+                <div className="offre-field">
+                    <label>Étapes du programme</label>
+                    <EditeurEtapes etapes={form.programmeEtapes} onChange={(v) => handleChange("programmeEtapes", v)} />
+                </div>
+                <div className="offre-field">
+                    <label>Apports du programme</label>
+                    <EditeurPoints
+                        points={form.programmeApports}
+                        onChange={(v) => handleChange("programmeApports", v)}
+                        labelAjout="Ajouter un apport"
+                    />
                 </div>
 
                 <div className="offre-form-actions">

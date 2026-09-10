@@ -56,6 +56,66 @@ export function ProgrammeDetailPage() {
                 </div>
             )}
 
+            {programme.constatTitre && (
+                <div className="offre-detail__section prog-bloc">
+                    <h2 className="offre-detail__section-title">Le constat</h2>
+                    <h3 className="prog-bloc__titre">{programme.constatTitre}</h3>
+                    {programme.constatTexte && <p className="offre-detail__text">{programme.constatTexte}</p>}
+
+                    {programme.constatEtapes.length > 0 && (
+                        <div className="prog-bloc__etapes">
+                            {programme.constatEtapes.map((etape, i) => (
+                                <div className="prog-bloc__etape" key={i}>
+                                    <span className="prog-bloc__etape-titre">{etape.titre}</span>
+                                    {etape.sousTitre && <span className="prog-bloc__etape-sous">{etape.sousTitre}</span>}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {programme.constatPoints.length > 0 && (
+                        <div className="prog-bloc__points">
+                            {programme.constatPoints.map((point, i) => (
+                                <div className="prog-bloc__point" key={i}>
+                                    <h4>{point.titre}</h4>
+                                    {point.description && <p>{point.description}</p>}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {programme.programmeTitre && (
+                <div className="offre-detail__section prog-bloc prog-bloc--accent">
+                    <h2 className="offre-detail__section-title">Le programme</h2>
+                    <h3 className="prog-bloc__titre">{programme.programmeTitre}</h3>
+                    {programme.programmeTexte && <p className="offre-detail__text">{programme.programmeTexte}</p>}
+
+                    {programme.programmeEtapes.length > 0 && (
+                        <div className="prog-bloc__etapes">
+                            {programme.programmeEtapes.map((etape, i) => (
+                                <div className="prog-bloc__etape" key={i}>
+                                    <span className="prog-bloc__etape-titre">{etape.titre}</span>
+                                    {etape.sousTitre && <span className="prog-bloc__etape-sous">{etape.sousTitre}</span>}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {programme.programmeApports.length > 0 && (
+                        <div className="prog-bloc__points">
+                            {programme.programmeApports.map((point, i) => (
+                                <div className="prog-bloc__point" key={i}>
+                                    <h4>{point.titre}</h4>
+                                    {point.description && <p>{point.description}</p>}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            )}
+
             {programme.lien && (
                 <div className="offre-detail__cta">
                     <span className="offre-detail__cta-info">Pour en savoir plus ou candidater</span>
