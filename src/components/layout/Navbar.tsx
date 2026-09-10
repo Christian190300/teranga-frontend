@@ -25,6 +25,7 @@ const candidatLinks: NavLinkItem[] = [
     { to: "/candidat/candidatures", label: "Mes candidatures" },
     { to: "/candidat/profil", label: "Mon profil" },
     { to: "/evenements", label: "Événements" },
+    { to: "/programmes", label: "Programmes" },
     { to: "/candidat/formation", label: "Formations" },
 ];
 
@@ -63,6 +64,16 @@ function IconSearch({ className = "navbar__bottom-icon" }: IconProps) {
         <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2.8" />
             <path d="M16 16L21 21" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" />
+        </svg>
+    );
+}
+
+function IconRoute({ className = "navbar__icon" }: IconProps) {
+    return (
+        <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="6" cy="19" r="3" stroke="currentColor" strokeWidth="2" />
+            <circle cx="18" cy="5" r="3" stroke="currentColor" strokeWidth="2" />
+            <path d="M9 19h7a3 3 0 0 0 3-3v-1a3 3 0 0 0-3-3H8a3 3 0 0 1-3-3V8a3 3 0 0 1 3-3h1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
         </svg>
     );
 }
@@ -446,6 +457,14 @@ export function Navbar() {
                                     <IconCalendar />
                                     Événements
                                 </NavLink>
+
+                                <NavLink
+                                    to="/programmes"
+                                    className={({ isActive }) => `navbar__menu-link ${isActive ? "active" : ""}`}
+                                >
+                                    <IconRoute />
+                                    Programmes
+                                </NavLink>
                             </div>
 
                             <span className="navbar__auth-divider" aria-hidden="true" />
@@ -576,6 +595,14 @@ export function Navbar() {
                             >
                                 <IconCalendar className="navbar__icon" />
                                 Événements
+                            </NavLink>
+
+                            <NavLink
+                                to="/programmes"
+                                className={({ isActive }) => `navbar__mobile-link ${isActive ? "active" : ""}`}
+                            >
+                                <IconRoute />
+                                Programmes
                             </NavLink>
                         </div>
                     )}
