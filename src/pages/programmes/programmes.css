@@ -1,62 +1,97 @@
-/* ============================================================
-   PROGRAMMES — design pro, navy/or, autonome (liste + détail)
-   ============================================================ */
-
-:root {
-    --navy: #14294d;
-    --navy-ink: #14294d;
-    --navy-dark: #0c1a33;
-    --navy-light: #24427a;
-    --gold: #e8b84b;
-    --gold-deep: #c8951e;
-    --gold-soft: #fbf3e2;
-    --bg-page: #f5f6f9;
-    --bg-soft: #f7f8fb;
-    --border: #e6e8ee;
-    --text-muted: #6b7385;
-    --text-body: #263252;
-    --radius-lg: 16px;
-    --radius-md: 12px;
-    --radius-sm: 8px;
-    --shadow-card: 0 1px 2px rgba(11, 29, 58, 0.04);
-    --shadow-card-hover: 0 12px 28px rgba(11, 29, 58, 0.1);
-    --shadow-float: 0 24px 60px rgba(11, 29, 58, 0.28);
+.prog-bloc {
+    margin-top: 10px;
 }
 
-.prog-page,
-.prog-page *,
-.offre-detail,
-.offre-detail * {
-    box-sizing: border-box;
+.prog-bloc__titre {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--navy-ink);
+    margin: 0 0 10px;
 }
 
-/* ============================================================
-   PAGE LISTE
-   ============================================================ */
+.prog-bloc__etapes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin: 16px 0;
+}
 
+.prog-bloc__etape {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-width: 90px;
+    padding: 12px 16px;
+    background: var(--bg-soft);
+    border-radius: var(--radius-sm);
+}
+
+.prog-bloc__etape-titre {
+    font-weight: 800;
+    font-size: 0.88rem;
+    color: var(--navy-ink);
+    letter-spacing: 0.02em;
+}
+
+.prog-bloc__etape-sous {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+.prog-bloc__points {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin-top: 10px;
+}
+
+.prog-bloc__point {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+}
+
+.prog-bloc__point h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--navy-ink);
+    margin: 0 0 6px;
+}
+
+.prog-bloc__point p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.5;
+}
 .prog-page {
-    max-width: 1160px;
+    max-width: 1200px;
+    width: 94%;
     margin: 0 auto;
-    padding: 48px 24px 90px;
-    font-family: 'Inter', -apple-system, sans-serif;
+    padding: 48px 0 90px;
+    font-family: var(--font-body);
 }
 
 .prog-page__header {
-    margin-bottom: 36px;
-    padding-bottom: 24px;
-    border-bottom: 1px solid var(--border);
+    text-align: center;
+    margin-bottom: 40px;
 }
 
 .prog-page__title {
-    font-size: 1.7rem;
+    font-family: var(--font-display);
+    font-size: 1.9rem;
     font-weight: 800;
-    color: var(--navy);
-    margin: 0 0 6px;
-    letter-spacing: -0.015em;
+    color: var(--navy-ink);
+    margin: 0 0 10px;
+    letter-spacing: -0.02em;
 }
 
 .prog-page__subtitle {
-    font-size: 0.92rem;
+    font-size: 1rem;
     color: var(--text-muted);
     margin: 0;
 }
@@ -64,22 +99,17 @@
 .prog-page__loading,
 .prog-page__empty {
     text-align: center;
-    padding: 110px 0;
+    padding: 80px 0;
     color: var(--text-muted);
-    font-size: 0.92rem;
-    background: white;
-    border: 1px dashed var(--border);
-    border-radius: var(--radius-lg);
 }
 
-/* ---------- Grille de programmes ---------- */
 .prog-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    gap: 22px;
 }
 
-@media (max-width: 960px) {
+@media (max-width: 1000px) {
     .prog-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -101,320 +131,119 @@
     text-decoration: none;
     color: inherit;
     box-shadow: var(--shadow-card);
-    transition: box-shadow 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+    transition: box-shadow 0.25s var(--ease), transform 0.25s var(--ease);
 }
 
 .prog-tile:hover {
     box-shadow: var(--shadow-card-hover);
-    border-color: #d9dde6;
     transform: translateY(-3px);
 }
 
 .prog-tile__image {
-    width: 100%;
-    height: 170px;
+    height: 160px;
     background-color: var(--bg-soft);
     background-size: cover;
     background-position: center;
-    position: relative;
-}
-
-.prog-tile__image::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, transparent 60%, rgba(11, 29, 58, 0.18) 100%);
 }
 
 .prog-tile__body {
-    padding: 20px 22px 22px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    flex: 1;
+    padding: 18px 20px;
 }
 
 .prog-tile__titre {
-    font-size: 1.05rem;
+    font-family: var(--font-display);
+    font-size: 1.02rem;
     font-weight: 700;
-    color: var(--navy);
-    margin: 0;
-    line-height: 1.4;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    color: var(--navy-ink);
+    margin: 0 0 6px;
+    line-height: 1.35;
 }
 
 .prog-tile__meta {
     font-size: 0.82rem;
     color: var(--text-muted);
     margin: 0;
-    line-height: 1.5;
 }
 
-/* ============================================================
-   PAGE DÉTAIL — classes partagées "offre-detail__*"
-   (dupliquées ici pour que ProgrammeDetailPage fonctionne seule)
-   ============================================================ */
-
-.offre-detail {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 40px 24px 100px;
-    font-family: 'Inter', -apple-system, sans-serif;
-}
-
-.offre-detail__back {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: var(--text-muted);
-    font-size: 0.85rem;
-    font-weight: 500;
-    text-decoration: none;
-    margin-bottom: 24px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    transition: color 0.15s ease;
-}
-
-.offre-detail__back:hover {
-    color: var(--navy);
-}
-
-.offre-detail__header {
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 0 0 32px;
-    margin-bottom: 24px;
-    overflow: hidden;
-    box-shadow: var(--shadow-card);
-}
-
-.offre-detail__titre {
-    font-size: 1.55rem;
-    font-weight: 800;
-    margin: 0 0 10px;
-    letter-spacing: -0.015em;
-    line-height: 1.3;
-    padding: 0 32px;
-}
-
-.offre-detail__header > .offre-detail__titre:first-child {
-    padding-top: 28px;
-}
-
-.offre-detail__lieu {
-    font-size: 0.88rem;
-    color: var(--text-muted);
-    margin: 0;
-    padding: 0 32px;
-}
-
-.offre-detail__section {
-    background: white;
-    border: 1px solid var(--border);
+.prog-detail__cover {
+    width: 100%;
+    max-height: 320px;
+    object-fit: cover;
     border-radius: var(--radius-md);
-    padding: 26px 28px;
-    margin-bottom: 16px;
-    box-shadow: var(--shadow-card);
-}
-
-.offre-detail__section-title {
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin: 0 0 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.offre-detail__section-title::before {
-    content: "";
-    width: 4px;
-    height: 14px;
-    border-radius: 2px;
-    background: var(--gold-deep);
-    flex-shrink: 0;
-}
-
-.offre-detail__text {
-    font-size: 0.93rem;
-    color: var(--text-body);
-    line-height: 1.7;
-    white-space: pre-line;
-    margin: 0;
-}
-
-.offre-detail__cta {
-    position: sticky;
-    bottom: 24px;
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 20px 26px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    box-shadow: 0 14px 34px rgba(11, 29, 58, 0.14);
-}
-
-.offre-detail__cta-info {
-    font-size: 0.86rem;
-    font-weight: 600;
-    color: var(--navy);
-}
-
-.offre-detail__loading,
-.offre-detail__error {
-    text-align: center;
-    padding: 110px 24px;
-    color: var(--text-muted);
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.offre-message--error {
-    background: #fbe9e7;
-    color: #b3261e;
-    border: 1px solid #f2c1bd;
-    padding: 12px 14px;
-    border-radius: var(--radius-sm);
-    font-size: 0.86rem;
     margin-bottom: 20px;
 }
 
-.btn-gold {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 13px 28px;
-    border-radius: var(--radius-sm);
-    border: none;
-    background: var(--gold);
-    color: var(--navy);
-    font-size: 0.88rem;
-    font-weight: 700;
-    text-decoration: none;
-    cursor: pointer;
-    transition: background 0.15s ease, transform 0.1s ease;
-    white-space: nowrap;
-}
-
-.btn-gold:hover {
-    background: var(--gold-deep);
-    color: white;
-}
-
-.btn-gold:active {
-    transform: scale(0.98);
-}
-
-/* ============================================================
-   PROGRAMMES — blocs spécifiques (image de couverture, "constat", "programme")
-   ============================================================ */
-
-.prog-detail__cover {
-    display: block;
-    width: 100%;
-    height: 280px;
-    object-fit: cover;
-    margin-bottom: 22px;
-}
-
-.offre-detail__header .prog-detail__cover + .offre-detail__titre {
-    padding-top: 0;
-}
+/* ==========================================================================
+   BLOCS LE CONSTAT / LE PROGRAMME — page détail publique
+   ========================================================================== */
 
 .prog-bloc {
-    position: relative;
+    margin-top: 10px;
 }
 
 .prog-bloc--accent {
-    background: linear-gradient(180deg, var(--gold-soft) 0%, white 55%);
-    border-color: #f0dfb3;
+    margin-top: 30px;
+    padding-top: 26px;
+    border-top: 1px solid var(--bg-soft);
 }
 
 .prog-bloc__titre {
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: var(--navy);
-    margin: 0 0 12px;
-    letter-spacing: -0.01em;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--navy-ink);
+    margin: 0 0 10px;
 }
 
-/* ---------- Étapes (timeline horizontale) ---------- */
 .prog-bloc__etapes {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 20px;
+    gap: 14px;
+    margin: 16px 0;
 }
 
 .prog-bloc__etape {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    align-items: center;
+    text-align: center;
+    min-width: 90px;
+    padding: 12px 16px;
     background: var(--bg-soft);
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    padding: 9px 16px;
-}
-
-.prog-bloc--accent .prog-bloc__etape {
-    background: white;
-    border-color: #f0dfb3;
+    border-radius: var(--radius-sm);
 }
 
 .prog-bloc__etape-titre {
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: var(--navy);
+    font-weight: 800;
+    font-size: 0.88rem;
+    color: var(--navy-ink);
+    letter-spacing: 0.02em;
 }
 
 .prog-bloc__etape-sous {
-    font-size: 0.74rem;
+    font-size: 0.75rem;
     color: var(--text-muted);
+    margin-top: 4px;
 }
 
-/* ---------- Points / apports (grille de cartes) ---------- */
 .prog-bloc__points {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 14px;
-    margin-top: 20px;
-}
-
-@media (max-width: 560px) {
-    .prog-bloc__points {
-        grid-template-columns: 1fr;
-    }
+    margin-top: 10px;
 }
 
 .prog-bloc__point {
-    background: var(--bg-soft);
-    border-radius: var(--radius-sm);
-    padding: 16px 18px;
-}
-
-.prog-bloc--accent .prog-bloc__point {
     background: white;
-    border: 1px solid #f0dfb3;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
 }
 
 .prog-bloc__point h4 {
     font-size: 0.9rem;
     font-weight: 700;
-    color: var(--navy);
+    color: var(--navy-ink);
     margin: 0 0 6px;
 }
 
@@ -422,5 +251,16 @@
     font-size: 0.85rem;
     color: var(--text-muted);
     margin: 0;
-    line-height: 1.55;
+    line-height: 1.5;
+}
+
+@media (max-width: 640px) {
+    .prog-bloc__etapes {
+        gap: 10px;
+    }
+
+    .prog-bloc__etape {
+        min-width: 76px;
+        padding: 10px 12px;
+    }
 }
