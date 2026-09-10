@@ -1,5 +1,73 @@
-/* pages/programmes/programmes.css */
+.prog-bloc {
+    margin-top: 10px;
+}
 
+.prog-bloc__titre {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--navy-ink);
+    margin: 0 0 10px;
+}
+
+.prog-bloc__etapes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin: 16px 0;
+}
+
+.prog-bloc__etape {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-width: 90px;
+    padding: 12px 16px;
+    background: var(--bg-soft);
+    border-radius: var(--radius-sm);
+}
+
+.prog-bloc__etape-titre {
+    font-weight: 800;
+    font-size: 0.88rem;
+    color: var(--navy-ink);
+    letter-spacing: 0.02em;
+}
+
+.prog-bloc__etape-sous {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+.prog-bloc__points {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin-top: 10px;
+}
+
+.prog-bloc__point {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+}
+
+.prog-bloc__point h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--navy-ink);
+    margin: 0 0 6px;
+}
+
+.prog-bloc__point p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.5;
+}
 .prog-page {
     max-width: 1200px;
     width: 94%;
@@ -8,70 +76,37 @@
     font-family: var(--font-body);
 }
 
-/* --- Header --- */
 .prog-page__header {
     text-align: center;
-    margin-bottom: 48px;
-}
-
-.prog-page__eyebrow {
-    display: inline-block;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--gold, #c9a227);
-    margin-bottom: 10px;
+    margin-bottom: 40px;
 }
 
 .prog-page__title {
     font-family: var(--font-display);
-    font-size: 2rem;
+    font-size: 1.9rem;
     font-weight: 800;
     color: var(--navy-ink);
-    margin: 0 0 12px;
+    margin: 0 0 10px;
     letter-spacing: -0.02em;
 }
 
 .prog-page__subtitle {
     font-size: 1rem;
     color: var(--text-muted);
-    margin: 0 auto;
-    max-width: 520px;
-    line-height: 1.5;
+    margin: 0;
 }
 
-/* --- États : chargement / vide --- */
 .prog-page__loading,
 .prog-page__empty {
     text-align: center;
-    padding: 90px 0;
+    padding: 80px 0;
     color: var(--text-muted);
 }
 
-.prog-page__empty-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 56px;
-    height: 56px;
-    margin: 0 auto 16px;
-    border-radius: 50%;
-    background: var(--bg-soft);
-    color: var(--text-muted);
-}
-
-.prog-page__empty p {
-    margin: 0;
-    font-size: 0.95rem;
-}
-
-/* --- Grille --- */
 .prog-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    align-items: stretch;
+    gap: 22px;
 }
 
 @media (max-width: 1000px) {
@@ -83,11 +118,9 @@
 @media (max-width: 640px) {
     .prog-grid {
         grid-template-columns: 1fr;
-        gap: 18px;
     }
 }
 
-/* --- Carte programme --- */
 .prog-tile {
     display: flex;
     flex-direction: column;
@@ -98,140 +131,39 @@
     text-decoration: none;
     color: inherit;
     box-shadow: var(--shadow-card);
-    transition: box-shadow 0.25s var(--ease), transform 0.25s var(--ease), border-color 0.25s var(--ease);
+    transition: box-shadow 0.25s var(--ease), transform 0.25s var(--ease);
 }
 
 .prog-tile:hover {
     box-shadow: var(--shadow-card-hover);
-    transform: translateY(-4px);
-    border-color: rgba(201, 162, 39, 0.35);
+    transform: translateY(-3px);
 }
 
 .prog-tile__image {
-    position: relative;
-    aspect-ratio: 16 / 10;
+    height: 160px;
     background-color: var(--bg-soft);
     background-size: cover;
     background-position: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.prog-tile__image-fallback {
-    font-family: var(--font-display);
-    font-size: 2.4rem;
-    font-weight: 800;
-    color: rgba(15, 27, 61, 0.16);
-}
-
-.prog-tile__date-badge {
-    position: absolute;
-    left: 12px;
-    bottom: 12px;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 10px;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(4px);
-    border-radius: 999px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--navy-ink);
-    box-shadow: 0 2px 8px rgba(15, 27, 61, 0.12);
 }
 
 .prog-tile__body {
-    flex: 1;
-    padding: 18px 20px 4px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    padding: 18px 20px;
 }
 
 .prog-tile__titre {
     font-family: var(--font-display);
-    font-size: 1.05rem;
+    font-size: 1.02rem;
     font-weight: 700;
     color: var(--navy-ink);
-    margin: 0;
+    margin: 0 0 6px;
     line-height: 1.35;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
 }
 
 .prog-tile__meta {
-    display: flex;
-    align-items: center;
-    gap: 6px;
     font-size: 0.82rem;
     color: var(--text-muted);
     margin: 0;
 }
-
-.prog-tile__footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 14px 20px 18px;
-    margin-top: auto;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--gold, #c9a227);
-    opacity: 0;
-    transform: translateX(-4px);
-    transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
-}
-
-.prog-tile:hover .prog-tile__footer {
-    opacity: 1;
-    transform: translateX(0);
-}
-
-/* --- Squelette de chargement --- */
-.prog-tile--skeleton {
-    pointer-events: none;
-}
-
-.prog-tile__image--skeleton {
-    background: linear-gradient(90deg, var(--bg-soft) 25%, #eef0f4 37%, var(--bg-soft) 63%);
-    background-size: 400% 100%;
-    animation: prog-shimmer 1.4s ease infinite;
-}
-
-.skeleton-line {
-    border-radius: 4px;
-    background: linear-gradient(90deg, var(--bg-soft) 25%, #eef0f4 37%, var(--bg-soft) 63%);
-    background-size: 400% 100%;
-    animation: prog-shimmer 1.4s ease infinite;
-}
-
-.skeleton-line--title {
-    width: 80%;
-    height: 16px;
-    margin-bottom: 10px;
-}
-
-.skeleton-line--meta {
-    width: 50%;
-    height: 12px;
-}
-
-@keyframes prog-shimmer {
-    0% {
-        background-position: 100% 0;
-    }
-    100% {
-        background-position: -100% 0;
-    }
-}
-
-/* ==========================================================================
-   BLOCS LE CONSTAT / LE PROGRAMME — page détail publique (inchangé)
-   ========================================================================== */
 
 .prog-detail__cover {
     width: 100%;
@@ -240,6 +172,10 @@
     border-radius: var(--radius-md);
     margin-bottom: 20px;
 }
+
+/* ==========================================================================
+   BLOCS LE CONSTAT / LE PROGRAMME — page détail publique
+   ========================================================================== */
 
 .prog-bloc {
     margin-top: 10px;
