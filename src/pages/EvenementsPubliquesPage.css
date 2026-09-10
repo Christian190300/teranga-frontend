@@ -1,418 +1,291 @@
-.evenements-page {
-    max-width: 1920px;
+.prog-page {
+    max-width: 1200px;
     width: 94%;
     margin: 0 auto;
-    padding: 40px 0 90px;
-    font-family: "Inter", -apple-system, sans-serif;
+    padding: 48px 0 90px;
+    font-family: var(--font-body);
 }
 
-.evenements-hero {
+.prog-page__header {
     text-align: center;
     margin-bottom: 40px;
 }
 
-.evenements-hero__eyebrow {
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: #c8951e;
-    margin: 0 0 8px;
-}
-
-.evenements-hero__title {
-    font-family: "Sora", sans-serif;
-    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
-    color: #14294d;
+.prog-page__title {
+    font-family: var(--font-display);
+    font-size: 1.9rem;
+    font-weight: 800;
+    color: var(--navy-ink);
     margin: 0 0 10px;
+    letter-spacing: -0.02em;
 }
 
-.evenements-hero__subtitle {
-    color: #6b7280;
+.prog-page__subtitle {
     font-size: 1rem;
-    max-width: 560px;
-    margin: 0 auto;
+    color: var(--text-muted);
+    margin: 0;
 }
 
-.evenements-alert {
-    background: #fbeceb;
-    color: #b3261e;
-    padding: 12px 16px;
-    border-radius: 8px;
+.prog-page__loading,
+.prog-page__empty {
     text-align: center;
-    margin-bottom: 24px;
+    padding: 80px 0;
+    color: var(--text-muted);
 }
 
-.evenements-vide {
-    text-align: center;
-    color: #9ca3af;
-    padding: 60px 0;
-}
-
-/* ==========================================================================
-   Grille de cartes — pleine largeur
-   ========================================================================== */
-
-.evenements-grid {
+.prog-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
-}
-
-@media (max-width: 1400px) {
-    .evenements-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
 }
 
 @media (max-width: 1000px) {
-    .evenements-grid {
+    .prog-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media (max-width: 640px) {
-    .evenements-grid {
+    .prog-grid {
         grid-template-columns: 1fr;
     }
 }
 
-.evenement-card {
-    display: block;
-    background: #fff;
-    border: 1.5px solid #e8e9ee;
-    border-radius: 16px;
+.prog-tile {
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
     overflow: hidden;
     text-decoration: none;
     color: inherit;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: var(--shadow-card);
+    transition: box-shadow 0.25s var(--ease), transform 0.25s var(--ease);
 }
 
-.evenement-card:hover {
+.prog-tile:hover {
+    box-shadow: var(--shadow-card-hover);
     transform: translateY(-3px);
-    box-shadow: 0 16px 30px -18px rgba(20, 41, 77, 0.25);
 }
 
-.evenement-card__image-wrap {
-    position: relative;
+.prog-tile__image {
+    height: 160px;
+    background-color: var(--bg-soft);
+    background-size: cover;
+    background-position: center;
 }
 
-.evenement-card__image {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-    display: block;
+.prog-tile__body {
+    padding: 18px 20px;
 }
 
-.evenement-card__image--placeholder {
-    background: linear-gradient(150deg, #14294d 0%, #0b1d3a 100%);
-}
-
-.evenement-card__type {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    background: rgba(255, 255, 255, 0.92);
-    color: #14294d;
-    font-size: 0.7rem;
+.prog-tile__titre {
+    font-family: var(--font-display);
+    font-size: 1.02rem;
     font-weight: 700;
-    padding: 5px 12px;
-    border-radius: 999px;
-    letter-spacing: 0.02em;
+    color: var(--navy-ink);
+    margin: 0 0 6px;
+    line-height: 1.35;
 }
 
-.evenement-card__body {
-    padding: 18px 20px 20px;
-}
-
-.evenement-card__titre {
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: #14294d;
-    margin: 0 0 8px;
-}
-
-.evenement-card__meta {
-    font-size: 0.84rem;
-    color: #6b7280;
-    margin: 2px 0;
-}
-
-.evenement-card__meta--date {
-    color: #c8951e;
-    font-weight: 700;
-    font-size: 0.78rem;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-}
-
-.evenement-card__desc {
-    font-size: 0.88rem;
-    color: #374151;
-    margin: 10px 0;
-    line-height: 1.5;
-}
-
-.evenement-card__bouton {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 16px;
-    padding: 10px 18px;
-    background: #14294d;
-    color: #fdf8ee;
-    border-radius: 10px;
-    font-family: "Inter", sans-serif;
-    font-size: 0.85rem;
-    font-weight: 700;
-    transition: background 0.15s ease;
-}
-
-.evenement-card:hover .evenement-card__bouton {
-    background: #0b1d3a;
-}
-
-/* --- Squelette de chargement --- */
-.evenement-card--skeleton {
-    pointer-events: none;
-}
-
-.skeleton-ligne {
-    background: linear-gradient(90deg, #eceef2 25%, #f5f6f8 37%, #eceef2 63%);
-    background-size: 400% 100%;
-    animation: evenement-skeleton-shine 1.4s ease infinite;
-    border-radius: 6px;
-    margin: 8px 0;
-}
-
-.skeleton-ligne--titre {
-    height: 18px;
-    width: 70%;
-}
-
-.skeleton-ligne--meta {
-    height: 12px;
-    width: 45%;
-}
-
-.skeleton-ligne--desc {
-    height: 12px;
-    width: 90%;
-}
-
-@keyframes evenement-skeleton-shine {
-    0% {
-        background-position: 100% 0;
-    }
-    100% {
-        background-position: -100% 0;
-    }
-}
-
-/* ==========================================================================
-   Chips, section "À propos", badge de type, date, lien
-   Communs à la page détail (réutilisés depuis l'ancienne modale)
-   ========================================================================== */
-
-.evenement-modal__type-badge {
-    display: inline-block;
-    background: #c8951e;
-    color: #14294d;
-    font-size: 0.68rem;
-    font-weight: 700;
-    padding: 5px 13px;
-    border-radius: 999px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    margin-bottom: 12px;
-}
-
-.evenement-modal__date {
+.prog-tile__meta {
     font-size: 0.82rem;
-    font-weight: 600;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-    color: #e8d9b8;
+    color: var(--text-muted);
     margin: 0;
 }
 
-.evenement-modal__chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 16px;
-}
-
-.evenement-modal__chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: #f1ece0;
-    border: 1px solid #e6dcc4;
-    border-radius: 999px;
-    padding: 7px 14px;
-    font-size: 0.82rem;
-    color: #374151;
-}
-
-.evenement-modal__chip-label {
-    font-weight: 700;
-    color: #14294d;
-}
-
-.evenement-modal__section {
-    margin-top: 4px;
-}
-
-.evenement-modal__section-label {
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: #c8951e;
-    margin: 0 0 10px;
-}
-
-.evenement-modal__desc {
-    font-size: 0.96rem;
-    color: #374151;
-    line-height: 1.7;
-    margin: 0 0 14px;
-    letter-spacing: 0.005em;
-}
-
-.evenement-modal__desc:last-child {
-    margin-bottom: 0;
-}
-
-.evenement-modal__lien {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding: 13px 22px;
-    background: #14294d;
-    color: #fdf8ee;
-    border-radius: 12px;
-    font-size: 0.92rem;
-    font-weight: 700;
-    text-decoration: none;
-    transition: background 0.15s ease;
-}
-
-.evenement-modal__lien:hover {
-    background: #0b1d3a;
-}
-
-.evenement-modal__lien:focus-visible {
-    outline: 2px solid #c8951e;
-    outline-offset: 2px;
-}
-
 /* ==========================================================================
-   PAGE DÉTAIL — /evenements/:id
+   PAGE DÉTAIL — /programmes/:id
    ========================================================================== */
 
-.evenement-detail {
+.prog-detail {
     max-width: 900px;
     width: 94%;
     margin: 0 auto;
     padding: 32px 0 90px;
-    font-family: "Inter", -apple-system, sans-serif;
+    font-family: var(--font-body);
 }
 
-.evenement-detail__retour {
+.prog-detail__retour {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    color: #6b7280;
+    color: var(--text-muted);
     font-size: 0.88rem;
     font-weight: 600;
     text-decoration: none;
     margin-bottom: 20px;
-    transition: color 0.15s ease;
+    transition: color 0.15s var(--ease);
 }
 
-.evenement-detail__retour:hover {
-    color: #14294d;
+.prog-detail__retour:hover {
+    color: var(--navy-ink);
 }
 
-.evenement-detail__media {
+.prog-detail__media {
     position: relative;
-    height: 340px;
-    border-radius: 20px;
+    height: 380px;
+    border-radius: var(--radius-lg);
     overflow: hidden;
 }
 
-.evenement-detail__image {
+.prog-detail__image {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
 }
 
-.evenement-detail__image--placeholder {
-    background: linear-gradient(150deg, #14294d 0%, #0b1d3a 100%);
+.prog-detail__image--placeholder {
+    background: linear-gradient(150deg, var(--navy-light) 0%, var(--navy-ink) 100%);
 }
 
-.evenement-detail__scrim {
+.prog-detail__scrim {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(11, 29, 58, 0) 40%, rgba(11, 29, 58, 0.88) 100%);
+    background: linear-gradient(180deg, rgba(7, 17, 34, 0) 35%, rgba(7, 17, 34, 0.9) 100%);
     pointer-events: none;
 }
 
-.evenement-detail__media-content {
+.prog-detail__media-content {
     position: absolute;
     left: 0;
     right: 0;
     bottom: 0;
-    padding: 28px 32px;
+    padding: 32px 36px;
 }
 
-.evenement-detail__titre {
-    font-family: "Sora", sans-serif;
-    font-size: 1.9rem;
+.prog-detail__eyebrow {
+    font-size: 0.72rem;
     font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin: 0 0 10px;
+}
+
+.prog-detail__titre {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 800;
     color: #fdf8ee;
-    margin: 0 0 8px;
-    line-height: 1.25;
+    margin: 0 0 10px;
+    line-height: 1.22;
     letter-spacing: -0.01em;
 }
 
-.evenement-detail__body {
-    background: #fdf8ee;
-    border-radius: 0 0 20px 20px;
-    padding: 26px 32px 32px;
+.prog-detail__date {
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: #e8d9b8;
+    margin: 0;
 }
 
-.evenement-detail__cta {
+.prog-detail__body {
+    background: white;
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    padding: 30px 36px 36px;
+    box-shadow: var(--shadow-card);
+}
+
+.prog-detail__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.prog-detail__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--gold-soft);
+    border: 1px solid #f1e2bd;
+    border-radius: 999px;
+    padding: 7px 14px;
+    font-size: 0.82rem;
+    color: var(--text-body);
+}
+
+.prog-detail__chip-label {
+    font-weight: 700;
+    color: var(--navy);
+}
+
+.prog-detail__section {
+    margin-top: 4px;
+}
+
+.prog-detail__section-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--gold-deep);
+    margin: 0 0 12px;
+}
+
+.prog-detail__desc {
+    font-size: 0.96rem;
+    color: var(--text-body);
+    line-height: 1.75;
+    margin: 0 0 14px;
+}
+
+.prog-detail__desc:last-child {
+    margin-bottom: 0;
+}
+
+.prog-detail__cta {
     margin-top: 24px;
-    padding-top: 20px;
-    border-top: 1px solid #e6dcc4;
+    padding-top: 22px;
+    border-top: 1px solid var(--bg-soft);
 }
 
-.evenement-detail__loading {
+.prog-detail__lien {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 14px 22px;
+    background: var(--navy);
+    color: white;
+    border-radius: var(--radius-sm);
+    font-size: 0.92rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background 0.15s var(--ease);
+}
+
+.prog-detail__lien:hover {
+    background: var(--navy-lighter);
+}
+
+.prog-detail__loading {
     text-align: center;
     padding: 120px 24px;
-    color: #6b7280;
-    font-family: "Inter", -apple-system, sans-serif;
+    color: var(--text-muted);
+    font-family: var(--font-body);
 }
 
 @media (max-width: 640px) {
-    .evenement-detail__media {
-        height: 220px;
+    .prog-detail__media {
+        height: 240px;
     }
 
-    .evenement-detail__media-content {
-        padding: 20px;
+    .prog-detail__media-content {
+        padding: 22px 20px;
     }
 
-    .evenement-detail__titre {
+    .prog-detail__titre {
         font-size: 1.4rem;
     }
 
-    .evenement-detail__body {
-        padding: 20px;
+    .prog-detail__body {
+        padding: 22px 20px 26px;
     }
 }
