@@ -29,12 +29,12 @@ export interface CreerModifierProgrammeDTO {
 // ---------- Public ----------
 
 export async function listerProgrammesPublics(): Promise<ProgrammeDTO[]> {
-    const response = await httpClient.get<ProgrammeDTO[]>("/api/programmes");
+    const response = await httpClient.get<ProgrammeDTO[]>("/programmes");
     return response.data;
 }
 
 export async function obtenirProgrammePublic(id: number): Promise<ProgrammeDTO> {
-    const response = await httpClient.get<ProgrammeDTO>(`/api/programmes/${id}`);
+    const response = await httpClient.get<ProgrammeDTO>(`/programmes/${id}`);
     return response.data;
 }
 
@@ -45,43 +45,43 @@ export function urlImageProgrammePublique(id: number): string {
 // ---------- Admin ----------
 
 export async function listerProgrammesAdmin(): Promise<ProgrammeDTO[]> {
-    const response = await httpClient.get<ProgrammeDTO[]>("/api/admin/programmes");
+    const response = await httpClient.get<ProgrammeDTO[]>("/admin/programmes");
     return response.data;
 }
 
 export async function obtenirProgrammeAdmin(id: number): Promise<ProgrammeDTO> {
-    const response = await httpClient.get<ProgrammeDTO>(`/api/admin/programmes/${id}`);
+    const response = await httpClient.get<ProgrammeDTO>(`/admin/programmes/${id}`);
     return response.data;
 }
 
 export async function creerProgramme(dto: CreerModifierProgrammeDTO): Promise<ProgrammeDTO> {
-    const response = await httpClient.post<ProgrammeDTO>("/api/admin/programmes", dto);
+    const response = await httpClient.post<ProgrammeDTO>("/admin/programmes", dto);
     return response.data;
 }
 
 export async function modifierProgramme(id: number, dto: CreerModifierProgrammeDTO): Promise<ProgrammeDTO> {
-    const response = await httpClient.put<ProgrammeDTO>(`/api/admin/programmes/${id}`, dto);
+    const response = await httpClient.put<ProgrammeDTO>(`/admin/programmes/${id}`, dto);
     return response.data;
 }
 
 export async function changerStatutProgramme(id: number, statut: StatutProgramme): Promise<ProgrammeDTO> {
-    const response = await httpClient.put<ProgrammeDTO>(`/api/admin/programmes/${id}/statut`, { statut });
+    const response = await httpClient.put<ProgrammeDTO>(`/admin/programmes/${id}/statut`, { statut });
     return response.data;
 }
 
 export async function uploaderImageProgramme(id: number, fichier: File): Promise<ProgrammeDTO> {
     const formData = new FormData();
     formData.append("fichier", fichier);
-    const response = await httpClient.post<ProgrammeDTO>(`/api/admin/programmes/${id}/image`, formData, {
+    const response = await httpClient.post<ProgrammeDTO>(`/admin/programmes/${id}/image`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
     });
     return response.data;
 }
 
 export async function supprimerProgramme(id: number): Promise<void> {
-    await httpClient.delete(`/api/admin/programmes/${id}`);
+    await httpClient.delete(`/admin/programmes/${id}`);
 }
 
 export function urlImageProgrammeAdmin(id: number): string {
-    return `/api/admin/programmes/${id}/image`;
+    return `/admin/programmes/${id}/image`;
 }
