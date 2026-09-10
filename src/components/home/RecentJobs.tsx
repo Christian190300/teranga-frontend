@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { IconCoin, IconMapPin } from "./icons";
 import { LogoEntreprise } from "../common/LogoEntreprise";
 import { getCouleurContrat } from "../../pages/offres/offreColors";
+import { useAuth } from "../../context/AuthContext";
 
 import {
     LABELS_TYPE_CONTRAT,
@@ -52,9 +53,12 @@ function extraireTexteDescription(job: OffreDTO): string {
 
 export function RecentJobs() {
     const navigate = useNavigate();
+    const { currentUser } = useAuth();
     const [jobs, setJobs] = useState<OffreDTO[]>([]);
     const [loading, setLoading] = useState(true);
     const [hasError, setHasError] = useState(false);
+
+    const estCandidat = currentUser?.role === "CANDIDAT";
 
     const chargerOffres = async () => {
         setLoading(true);
@@ -84,8 +88,11 @@ export function RecentJobs() {
     function handlePostuler(e: React.MouseEvent, jobId: number | string) {
         e.preventDefault();
         e.stopPropagation();
-        // Redirige vers la connexion en conservant l'intention d'action
-        navigate(`/connexion?redirect=/offres/${jobId}`);
+        if (currentUser) {
+            navigate(`/offres/${jobId}`, { state: { ouvrirCandidature: true } });
+        } else {
+            navigate(`/connexion?redirect=/offres/${jobId}`);
+        }
     }
 
     return (
@@ -223,13 +230,15 @@ export function RecentJobs() {
                                         >
                                             Voir détail
                                         </Link>
-                                        <button
-                                            className="job-pass__btn job-pass__btn--gold"
-                                            style={{ border: "1px solid #c59b27" }}
-                                            onClick={(e) => handlePostuler(e, job.id)}
-                                        >
-                                            Postuler
-                                        </button>
+                                        {(!currentUser || estCandidat) && (
+                                            <button
+                                                className="job-pass__btn job-pass__btn--gold"
+                                                style={{ border: "1px solid #c59b27" }}
+                                                onClick={(e) => handlePostuler(e, job.id)}
+                                            >
+                                                Postuler
+                                            </button>
+                                        )}
                                     </div>
                                 </article>
                             );
