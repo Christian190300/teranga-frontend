@@ -22,6 +22,7 @@ import { FormationsPubliquesPage } from "./pages/public/FormationsPubliquesPage"
 import { EspaceCandidatPage } from "./pages/candidat/EspaceCandidatPage";
 import { EspaceRecruteurPage } from "./pages/recruteur/EspaceRecruteurPage";
 import { EvenementsPubliquesPage } from "./pages/EvenementsPubliquesPage";
+import { EvenementDetailPage } from "./pages/EvenementDetailPage";
 
 
 // --- PAGES CANDIDAT ---
@@ -86,6 +87,7 @@ export default function App() {
                             <Route path="/espace-candidat" element={<EspaceCandidatPage />} />
                             <Route path="/espace-recruteur" element={<EspaceRecruteurPage />} />
                             <Route path="/evenements" element={<EvenementsPubliquesPage />} />
+                            <Route path="/evenements/:id" element={<EvenementDetailPage />} />
                             <Route path="/programmes" element={<ProgrammesPage />} />
                             <Route path="/programmes/:id" element={<ProgrammeDetailPage />} />
 

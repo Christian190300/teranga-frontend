@@ -1,7 +1,8 @@
 .evenements-page {
-    max-width: 1200px;
+    max-width: 1920px;
+    width: 94%;
     margin: 0 auto;
-    padding: 40px 24px 80px;
+    padding: 40px 0 90px;
     font-family: "Inter", -apple-system, sans-serif;
 }
 
@@ -49,20 +50,41 @@
 }
 
 /* ==========================================================================
-   Grille de cartes
+   Grille de cartes — pleine largeur
    ========================================================================== */
 
 .evenements-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 24px;
 }
 
+@media (max-width: 1400px) {
+    .evenements-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 1000px) {
+    .evenements-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .evenements-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 .evenement-card {
+    display: block;
     background: #fff;
     border: 1.5px solid #e8e9ee;
     border-radius: 16px;
     overflow: hidden;
+    text-decoration: none;
+    color: inherit;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
@@ -139,26 +161,15 @@
     padding: 10px 18px;
     background: #14294d;
     color: #fdf8ee;
-    border: none;
     border-radius: 10px;
     font-family: "Inter", sans-serif;
     font-size: 0.85rem;
     font-weight: 700;
-    cursor: pointer;
-    transition: background 0.15s ease, transform 0.15s ease;
+    transition: background 0.15s ease;
 }
 
-.evenement-card__bouton:hover {
+.evenement-card:hover .evenement-card__bouton {
     background: #0b1d3a;
-}
-
-.evenement-card__bouton:active {
-    transform: scale(0.98);
-}
-
-.evenement-card__bouton:focus-visible {
-    outline: 2px solid #c8951e;
-    outline-offset: 2px;
 }
 
 /* --- Squelette de chargement --- */
@@ -199,126 +210,9 @@
 }
 
 /* ==========================================================================
-   Modal de détails
-   Structure : bouton fermer (fixe) > zone scrollable (photo + corps) > pied collant
-   Desktop : boîte centrée avec titre en overlay sur la photo
-   Mobile  : feuille plein écran qui glisse depuis le bas
+   Chips, section "À propos", badge de type, date, lien
+   Communs à la page détail (réutilisés depuis l'ancienne modale)
    ========================================================================== */
-
-.evenement-modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(11, 29, 58, 0.6);
-    backdrop-filter: blur(3px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-    z-index: 9999;
-    animation: evenement-fade-in 0.15s ease;
-}
-
-@keyframes evenement-fade-in {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-.evenement-modal {
-    background: #fdf8ee;
-    border-radius: 24px;
-    max-width: 640px;
-    width: 100%;
-    max-height: 86vh;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 30px 60px -20px rgba(11, 29, 58, 0.5);
-    animation: evenement-modal-in 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@keyframes evenement-modal-in {
-    from {
-        opacity: 0;
-        transform: translateY(16px) scale(0.97);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-/* Bouton fermer : flotte au-dessus de tout, ne scrolle pas */
-.evenement-modal__fermer {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border: none;
-    background: rgba(11, 29, 58, 0.45);
-    color: #fdf8ee;
-    font-size: 1rem;
-    line-height: 1;
-    cursor: pointer;
-    z-index: 3;
-    backdrop-filter: blur(4px);
-    transition: background 0.15s ease;
-}
-
-.evenement-modal__fermer:hover {
-    background: rgba(11, 29, 58, 0.7);
-}
-
-.evenement-modal__fermer:focus-visible {
-    outline: 2px solid #c8951e;
-    outline-offset: 2px;
-}
-
-/* Conteneur scrollable : photo + corps défilent ensemble, le pied reste fixe */
-.evenement-modal__scroll {
-    overflow-y: auto;
-    flex: 1;
-    min-height: 0;
-}
-
-/* --- Zone photo avec titre en overlay --- */
-.evenement-modal__media {
-    position: relative;
-    height: 260px;
-    flex-shrink: 0;
-}
-
-.evenement-modal__image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-
-.evenement-modal__image--placeholder {
-    background: linear-gradient(150deg, #14294d 0%, #0b1d3a 100%);
-}
-
-.evenement-modal__scrim {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(11, 29, 58, 0) 40%, rgba(11, 29, 58, 0.88) 100%);
-    pointer-events: none;
-}
-
-.evenement-modal__media-content {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding: 20px 24px;
-}
 
 .evenement-modal__type-badge {
     display: inline-block;
@@ -333,16 +227,6 @@
     margin-bottom: 12px;
 }
 
-.evenement-modal__titre {
-    font-family: "Sora", sans-serif;
-    font-size: 1.55rem;
-    font-weight: 600;
-    color: #fdf8ee;
-    margin: 0 0 8px;
-    line-height: 1.3;
-    letter-spacing: -0.01em;
-}
-
 .evenement-modal__date {
     font-size: 0.82rem;
     font-weight: 600;
@@ -350,11 +234,6 @@
     text-transform: uppercase;
     color: #e8d9b8;
     margin: 0;
-}
-
-/* --- Corps --- */
-.evenement-modal__body {
-    padding: 22px 24px;
 }
 
 .evenement-modal__chips {
@@ -406,14 +285,6 @@
     margin-bottom: 0;
 }
 
-/* --- Pied collant avec le lien --- */
-.evenement-modal__footer {
-    flex-shrink: 0;
-    padding: 16px 24px;
-    border-top: 1px solid #e6dcc4;
-    background: #fdf8ee;
-}
-
 .evenement-modal__lien {
     display: flex;
     align-items: center;
@@ -438,51 +309,110 @@
     outline-offset: 2px;
 }
 
-/* --- Mobile : feuille plein écran depuis le bas --- */
+/* ==========================================================================
+   PAGE DÉTAIL — /evenements/:id
+   ========================================================================== */
+
+.evenement-detail {
+    max-width: 900px;
+    width: 94%;
+    margin: 0 auto;
+    padding: 32px 0 90px;
+    font-family: "Inter", -apple-system, sans-serif;
+}
+
+.evenement-detail__retour {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #6b7280;
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-decoration: none;
+    margin-bottom: 20px;
+    transition: color 0.15s ease;
+}
+
+.evenement-detail__retour:hover {
+    color: #14294d;
+}
+
+.evenement-detail__media {
+    position: relative;
+    height: 340px;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.evenement-detail__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.evenement-detail__image--placeholder {
+    background: linear-gradient(150deg, #14294d 0%, #0b1d3a 100%);
+}
+
+.evenement-detail__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(11, 29, 58, 0) 40%, rgba(11, 29, 58, 0.88) 100%);
+    pointer-events: none;
+}
+
+.evenement-detail__media-content {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 28px 32px;
+}
+
+.evenement-detail__titre {
+    font-family: "Sora", sans-serif;
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: #fdf8ee;
+    margin: 0 0 8px;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+}
+
+.evenement-detail__body {
+    background: #fdf8ee;
+    border-radius: 0 0 20px 20px;
+    padding: 26px 32px 32px;
+}
+
+.evenement-detail__cta {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #e6dcc4;
+}
+
+.evenement-detail__loading {
+    text-align: center;
+    padding: 120px 24px;
+    color: #6b7280;
+    font-family: "Inter", -apple-system, sans-serif;
+}
+
 @media (max-width: 640px) {
-    .evenement-modal-overlay {
-        align-items: flex-end;
-        padding: 0;
+    .evenement-detail__media {
+        height: 220px;
     }
 
-    .evenement-modal {
-        max-width: 100%;
-        width: 100%;
-        max-height: 92dvh;
-        border-radius: 24px 24px 0 0;
-        animation: evenement-modal-in-mobile 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    .evenement-detail__media-content {
+        padding: 20px;
     }
 
-    @keyframes evenement-modal-in-mobile {
-        from {
-            opacity: 0;
-            transform: translateY(28px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    .evenement-detail__titre {
+        font-size: 1.4rem;
     }
 
-    .evenement-modal__media {
-        height: 200px;
-    }
-
-    .evenement-modal__titre {
-        font-size: 1.2rem;
-    }
-
-    .evenement-modal__body {
-        padding: 18px 20px;
-    }
-
-    .evenement-modal__chips {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-    }
-
-    .evenement-modal__footer {
-        padding: 14px 20px calc(14px + env(safe-area-inset-bottom, 0px));
+    .evenement-detail__body {
+        padding: 20px;
     }
 }

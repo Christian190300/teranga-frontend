@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
+import { Link } from "react-router-dom";
 import {
     type EvenementDTO,
     LABELS_TYPE_EVENEMENT,
@@ -22,7 +22,6 @@ export function EvenementsPubliquesPage() {
     const [evenements, setEvenements] = useState<EvenementDTO[]>([]);
     const [chargement, setChargement] = useState(true);
     const [erreur, setErreur] = useState<string | null>(null);
-    const [evenementSelectionne, setEvenementSelectionne] = useState<EvenementDTO | null>(null);
 
     useEffect(() => {
         // eslint-disable-next-line react-hooks/set-state-in-effect -- fetch au montage, pattern standard
@@ -40,21 +39,6 @@ export function EvenementsPubliquesPage() {
         })();
     }, []);
 
-    // Empêche le scroll du body quand le modal est ouvert, et gère la touche Échap
-    useEffect(() => {
-        if (!evenementSelectionne) return;
-        const previousOverflow = document.body.style.overflow;
-        document.body.style.overflow = "hidden";
-        const onKeyDown = (e: KeyboardEvent) => {
-            if (e.key === "Escape") setEvenementSelectionne(null);
-        };
-        window.addEventListener("keydown", onKeyDown);
-        return () => {
-            document.body.style.overflow = previousOverflow;
-            window.removeEventListener("keydown", onKeyDown);
-        };
-    }, [evenementSelectionne]);
-
     return (
         <div className="evenements-page">
             <section className="evenements-hero">
@@ -69,7 +53,7 @@ export function EvenementsPubliquesPage() {
 
             {chargement ? (
                 <div className="evenements-grid" aria-hidden="true">
-                    {[0, 1, 2].map((i) => (
+                    {[0, 1, 2, 3].map((i) => (
                         <div className="evenement-card evenement-card--skeleton" key={i}>
                             <div className="evenement-card__image evenement-card__image--placeholder" />
                             <div className="evenement-card__body">
@@ -85,7 +69,7 @@ export function EvenementsPubliquesPage() {
             ) : (
                 <div className="evenements-grid">
                     {evenements.map((e) => (
-                        <article className="evenement-card" key={e.id}>
+                        <Link to={`/evenements/${e.id}`} className="evenement-card" key={e.id}>
                             <div className="evenement-card__image-wrap">
                                 {e.imagePresente ? (
                                     <EvenementImage
@@ -111,122 +95,11 @@ export function EvenementsPubliquesPage() {
                                 {e.description && (
                                     <p className="evenement-card__desc">{tronquer(e.description, 110)}</p>
                                 )}
-
-                                <button
-                                    type="button"
-                                    className="evenement-card__bouton"
-                                    onClick={() => setEvenementSelectionne(e)}
-                                >
-                                    Voir les détails
-                                </button>
+                                <span className="evenement-card__bouton">Voir les détails</span>
                             </div>
-                        </article>
+                        </Link>
                     ))}
                 </div>
-            )}
-
-            {evenementSelectionne && createPortal(
-                <div
-                    className="evenement-modal-overlay"
-                    onClick={() => setEvenementSelectionne(null)}
-                    role="presentation"
-                >
-                    <div
-                        className="evenement-modal"
-                        role="dialog"
-                        aria-modal="true"
-                        aria-labelledby="evenement-modal-titre"
-                        onClick={(ev) => ev.stopPropagation()}
-                    >
-                        <button
-                            type="button"
-                            className="evenement-modal__fermer"
-                            onClick={() => setEvenementSelectionne(null)}
-                            aria-label="Fermer"
-                        >
-                            ✕
-                        </button>
-
-                        <div className="evenement-modal__scroll">
-                            <div className="evenement-modal__media">
-                                {evenementSelectionne.imagePresente ? (
-                                    <EvenementImage
-                                        presente={evenementSelectionne.imagePresente}
-                                        chargerUrl={() => obtenirImageEvenementPubliqueUrl(evenementSelectionne.id)}
-                                        alt={evenementSelectionne.titre}
-                                        className="evenement-modal__image"
-                                        placeholderClassName="evenement-modal__image evenement-modal__image--placeholder"
-                                    />
-                                ) : (
-                                    <div className="evenement-modal__image evenement-modal__image--placeholder" />
-                                )}
-                                <div className="evenement-modal__scrim" />
-                                <div className="evenement-modal__media-content">
-                                    {evenementSelectionne.type && (
-                                        <span className="evenement-modal__type-badge">
-                                            {LABELS_TYPE_EVENEMENT[evenementSelectionne.type]}
-                                        </span>
-                                    )}
-                                    <h2 id="evenement-modal-titre" className="evenement-modal__titre">
-                                        {evenementSelectionne.titre}
-                                    </h2>
-                                    <p className="evenement-modal__date">
-                                        {formatDate(evenementSelectionne.dateEvenement)}
-                                        {evenementSelectionne.heure ? ` · ${evenementSelectionne.heure}` : ""}
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div className="evenement-modal__body">
-                                {(evenementSelectionne.lieu || evenementSelectionne.organisateur) && (
-                                    <div className="evenement-modal__chips">
-                                        {evenementSelectionne.lieu && (
-                                            <span className="evenement-modal__chip">
-                                                <span className="evenement-modal__chip-label">Lieu</span>
-                                                {evenementSelectionne.lieu}
-                                            </span>
-                                        )}
-                                        {evenementSelectionne.organisateur && (
-                                            <span className="evenement-modal__chip">
-                                                <span className="evenement-modal__chip-label">Organisateur</span>
-                                                {evenementSelectionne.organisateur}
-                                            </span>
-                                        )}
-                                    </div>
-                                )}
-
-                                {evenementSelectionne.description && (
-                                    <div className="evenement-modal__section">
-                                        <p className="evenement-modal__section-label">À propos</p>
-                                        {evenementSelectionne.description
-                                            .split("\n")
-                                            .map((ligne) => ligne.trim())
-                                            .filter((ligne) => ligne.length > 0)
-                                            .map((ligne, index) => (
-                                                <p className="evenement-modal__desc" key={index}>
-                                                    {ligne}
-                                                </p>
-                                            ))}
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-
-                        {evenementSelectionne.lien && (
-                            <div className="evenement-modal__footer">
-                                <a
-                                    href={evenementSelectionne.lien}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="evenement-modal__lien"
-                                >
-                                    Voir le site de l'événement →
-                                </a>
-                            </div>
-                        )}
-                    </div>
-                </div>,
-                document.body
             )}
         </div>
     );
