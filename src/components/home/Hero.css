@@ -46,6 +46,11 @@
     align-items: flex-start;
 }
 
+.ts-search-field__body input,
+.ts-search-field__body select {
+    font-size: 16px; /* jamais en dessous de 16px sur mobile */
+}
+
 .ts-hero__eyebrow {
     display: inline-block;
     padding: 6px 14px;
