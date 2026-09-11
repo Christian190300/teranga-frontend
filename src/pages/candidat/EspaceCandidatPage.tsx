@@ -8,7 +8,7 @@ import heroCandidature from "../../assets/candidature.jpg";
 import heroFormation from "../../assets/formation-hero.jpg";
 import heroPhotoPro from "../../assets/photoPro.jpeg";
 import heroSendCv from "../../assets/sendCv.jpg";
-import heroTalent1 from "../../assets/talent-1.jpg";
+import heroTalent1 from "../../assets/img_1.png";
 import heroTalent2 from "../../assets/talent-2.jpg";
 import heroTalent3 from "../../assets/talent-3.jpg";
 
