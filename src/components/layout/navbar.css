@@ -40,16 +40,16 @@ BARRE PRINCIPALE
 
     gap: 24px;
 
-    height: 72px;
+    height: 80px;
 
     padding: 0 32px;
 
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 255, 255, 0.85);
 
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 
-    border-bottom: 1px solid #e8e9ee;
+    border-bottom: 1px solid #eef0f4;
 
     overflow: visible;
 }
@@ -72,11 +72,12 @@ LOGO
 
 .navbar__brand {
     display: inline-flex;
-    align-items: baseline;
+    align-items: center;
+    gap: 9px;
 
     font-family: 'Inter', sans-serif;
     font-weight: 800;
-    font-size: 1.3rem;
+    font-size: 1.35rem;
     letter-spacing: -0.02em;
     color: #14294d;
 
@@ -84,36 +85,58 @@ LOGO
     white-space: nowrap;
 }
 
+/* petite pastille décorative devant le nom, façon logo-mark */
+.navbar__brand::before {
+    content: "";
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    border-radius: 9px;
+    background: linear-gradient(135deg, #14294d 0%, #1d3f73 55%, #c8951e 100%);
+    box-shadow: 0 4px 10px rgba(20, 41, 77, 0.25);
+}
+
 .navbar__brand span {
     color: #c8951e;
 }
 
 /* ============================================================
-MENU DESKTOP
+MENU DESKTOP — pilule arrondie façon "segmented control"
 ============================================================ */
 
 .navbar__menu {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 28px;
+    gap: 2px;
     flex: 1;
     min-width: 0;
+
+    background: #f4f1ea;
+    border: 1px solid #ece7db;
+    border-radius: 999px;
+    padding: 6px;
+
+    max-width: fit-content;
+    margin: 0 auto;
 }
 
 .navbar__menu-link {
     position: relative;
-    padding: 8px 0;
+
+    padding: 10px 20px;
+    border-radius: 999px;
 
     font-family: 'Inter', sans-serif;
-    font-size: 0.9rem;
+    font-size: 0.87rem;
     font-weight: 600;
-    color: #475569;
+    color: #6b7280;
 
     text-decoration: none;
     white-space: nowrap;
 
-    transition: color 0.2s ease, font-weight 0.2s ease;
+    transition: color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 
 .navbar__menu-link:hover {
@@ -121,19 +144,15 @@ MENU DESKTOP
 }
 
 .navbar__menu-link.active {
-    color: #14294d;
+    background: #ffffff;
+    color: #c8951e;
     font-weight: 700;
+    box-shadow: 0 3px 10px rgba(20, 41, 77, 0.1);
 }
 
+/* on retire l'ancien soulignement, remplacé par la pastille */
 .navbar__menu-link.active::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -8px;
-    width: 100%;
-    height: 3px;
-    background: #c8951e;
-    border-radius: 999px;
+    content: none;
 }
 
 /* ============================================================
@@ -152,7 +171,7 @@ ZONE DROITE
     width: 1px;
     height: 24px;
     background: #e2e5ec;
-    margin: 0 2px;
+    margin: 0 4px;
 }
 
 /* Icônes réutilisables */
@@ -172,43 +191,47 @@ BOUTONS
     justify-content: center;
     gap: 7px;
 
-    padding: 9px 18px;
-    border-radius: 8px;
+    padding: 11px 22px;
+    border-radius: 999px;
 
     font-family: 'Inter', sans-serif;
     font-size: .87rem;
-    font-weight: 600;
+    font-weight: 700;
 
     text-decoration: none;
     cursor: pointer;
 
     border: 1.5px solid transparent;
 
-    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, color 0.2s ease;
     white-space: nowrap;
 }
 
+/* Boutons "ghost" (Connexion / Inscription) — sobres, discrets à côté du CTA */
 .btn--ghost {
     background: transparent;
     color: #14294d;
-    border-color: #e2e5ec;
+    border-color: transparent;
+    font-weight: 600;
+    padding: 11px 16px;
 }
 
 .btn--ghost:hover {
-    background: #f4f7fc;
-    border-color: #d7dcea;
+    background: #f4f1ea;
+    color: #14294d;
 }
 
+/* Bouton principal — pilule bleu nuit avec flèche, façon "Nous contacter" */
 .btn--primary {
-    background: linear-gradient(135deg, #14294d 0%, #1d3f73 100%);
+    background: #14294d;
     color: #ffffff;
     border-color: transparent;
-    box-shadow: 0 6px 16px rgba(20, 41, 77, 0.22);
+    box-shadow: 0 8px 18px rgba(20, 41, 77, 0.25);
 }
 
 .btn--primary:hover {
-    background: linear-gradient(135deg, #1d3f73 0%, #24427a 100%);
-    box-shadow: 0 8px 20px rgba(20, 41, 77, 0.3);
+    background: #1d3f73;
+    box-shadow: 0 10px 22px rgba(20, 41, 77, 0.32);
     transform: translateY(-1px);
 }
 
@@ -235,7 +258,7 @@ PROFILE DROPDOWN
 
     background: white;
     border: 1px solid #e8e9ee;
-    border-radius: 12px;
+    border-radius: 14px;
 
     box-shadow: 0 15px 35px rgba(0, 0, 0, .15);
 
@@ -253,7 +276,7 @@ PROFILE DROPDOWN
     align-items: center;
 
     padding: 12px;
-    border-radius: 8px;
+    border-radius: 10px;
 
     background: none;
     border: none;
@@ -268,7 +291,7 @@ PROFILE DROPDOWN
 
 .profile-menu__dropdown a:hover,
 .profile-menu__dropdown button:hover {
-    background: #f1f5f9;
+    background: #f4f1ea;
 }
 
 @keyframes dropdown {
@@ -284,12 +307,18 @@ PROFILE DROPDOWN
 
 /* ============================================================
 MENUS DÉROULANTS VISITEURS (Candidat / Recruteur) — desktop
+Regroupés dans la même pilule que le menu principal
 ============================================================ */
 
 .navbar__visitor-menus {
     display: flex;
     align-items: center;
     gap: 2px;
+
+    background: #f4f1ea;
+    border: 1px solid #ece7db;
+    border-radius: 999px;
+    padding: 6px;
 }
 
 .navbar__visitor-dropdown {
@@ -301,55 +330,54 @@ MENUS DÉROULANTS VISITEURS (Candidat / Recruteur) — desktop
     align-items: center;
     gap: 6px;
 
-    padding: 9px 12px;
-    border-radius: 8px;
+    padding: 10px 16px;
+    border-radius: 999px;
     border: 1.5px solid transparent;
     background: transparent;
 
     font-family: 'Inter', sans-serif;
     font-size: 0.87rem;
     font-weight: 600;
-    color: #475569;
+    color: #6b7280;
 
     cursor: pointer;
-    transition: color .15s ease, background .15s ease, border-color .15s ease;
+    transition: color .15s ease, background .15s ease, box-shadow .15s ease;
     white-space: nowrap;
 }
 
 .navbar__visitor-trigger:hover {
     color: #14294d;
-    background: #f4f7fc;
 }
 
 .navbar__visitor-trigger--open {
-    color: #14294d;
-    background: #eaf0fb;
-    border-color: #dce6f7;
+    color: #c8951e;
+    background: #ffffff;
+    box-shadow: 0 3px 10px rgba(20, 41, 77, 0.1);
 }
 
 .navbar__visitor-chevron {
     width: 13px;
     height: 13px;
     flex-shrink: 0;
-    color: #94a3b8;
+    color: #9ca3af;
     transition: transform .2s ease;
 }
 
 .navbar__visitor-trigger--open .navbar__visitor-chevron {
     transform: rotate(180deg);
-    color: #14294d;
+    color: #c8951e;
 }
 
 .navbar__visitor-panel {
     position: absolute;
-    top: calc(100% + 10px);
+    top: calc(100% + 12px);
     left: 0;
 
     min-width: 250px;
 
     background: white;
     border: 1px solid #e8e9ee;
-    border-radius: 12px;
+    border-radius: 14px;
 
     box-shadow: 0 18px 38px rgba(11, 29, 58, 0.14);
 
@@ -365,7 +393,7 @@ MENUS DÉROULANTS VISITEURS (Candidat / Recruteur) — desktop
     align-items: center;
 
     padding: 11px 12px;
-    border-radius: 8px;
+    border-radius: 10px;
 
     color: #1e293b;
     font-family: 'Inter', sans-serif;
@@ -379,8 +407,25 @@ MENUS DÉROULANTS VISITEURS (Candidat / Recruteur) — desktop
 }
 
 .navbar__visitor-panel-link:hover {
-    background: #f4f7fc;
+    background: #f4f1ea;
     color: #14294d;
+}
+
+/* Le lien "Programmes" partage la même pilule que les dropdowns visiteurs */
+.navbar__visitor-menus .navbar__menu-link {
+    background: transparent;
+    box-shadow: none;
+    padding: 10px 16px;
+}
+
+.navbar__visitor-menus .navbar__menu-link:hover {
+    color: #14294d;
+}
+
+.navbar__visitor-menus .navbar__menu-link.active {
+    background: #ffffff;
+    color: #c8951e;
+    box-shadow: 0 3px 10px rgba(20, 41, 77, 0.1);
 }
 
 /* ============================================================
@@ -392,19 +437,19 @@ HAMBURGER MOBILE
     align-items: center;
     justify-content: center;
 
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
 
-    border-radius: 8px;
-    border: 1.5px solid #e8e9ee;
+    border-radius: 999px;
+    border: 1.5px solid #ece7db;
 
-    background: white;
+    background: #f4f1ea;
     cursor: pointer;
     transition: background 0.15s ease;
 }
 
 .navbar__burger-btn:hover {
-    background: #f8fafc;
+    background: #ece7db;
 }
 
 .navbar__burger {
@@ -458,8 +503,8 @@ CARTE PROFIL CIRCULAIRE (SCORE COMPLETION EN HAUT DU MENU MOBILE)
     flex-direction: column;
     align-items: center;
     padding: 24px 16px 16px;
-    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-    border-bottom: 1px solid #e8e9ee;
+    background: linear-gradient(180deg, #ffffff 0%, #f4f1ea 100%);
+    border-bottom: 1px solid #ece7db;
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
@@ -492,7 +537,7 @@ CARTE PROFIL CIRCULAIRE (SCORE COMPLETION EN HAUT DU MENU MOBILE)
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #f1f5f9;
+    background-color: #f4f1ea;
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
 }
 
@@ -540,7 +585,7 @@ MENU MOBILE TIROIR
 
 .navbar__mobile-overlay {
     position: fixed;
-    inset: 72px 0 0;
+    inset: 80px 0 0;
 
     background: rgba(11, 29, 58, .4);
     backdrop-filter: blur(2px);
@@ -560,7 +605,7 @@ MENU MOBILE TIROIR
 
 .navbar__mobile-panel {
     position: fixed;
-    top: 72px;
+    top: 80px;
     left: 0;
     right: 0;
 
@@ -579,7 +624,7 @@ MENU MOBILE TIROIR
 }
 
 .navbar__mobile-panel--open {
-    max-height: calc(100vh - 72px);
+    max-height: calc(100vh - 80px);
     opacity: 1;
     transform: translateY(0);
     overflow-y: auto;
@@ -653,13 +698,13 @@ MENU MOBILE TIROIR
 }
 
 .navbar__mobile-visitor-trigger .navbar__visitor-chevron {
-    color: #94a3b8;
+    color: #9ca3af;
     transition: transform 0.2s ease;
 }
 
 .navbar__mobile-visitor-trigger--open .navbar__visitor-chevron {
     transform: rotate(180deg);
-    color: #14294d;
+    color: #c8951e;
 }
 
 .navbar__mobile-visitor-sublinks {
@@ -682,20 +727,26 @@ MENU MOBILE TIROIR
 }
 
 .navbar__mobile-visitor-sublink:hover {
-    color: #14294d;
+    color: #c8951e;
 }
 
 .navbar__mobile-actions {
     display: flex;
     flex-direction: column;
-    align-items: stretch; /* Force les boutons à prendre toute la largeur s'ils sont en bloc, ou "flex-start" s'ils doivent s'aligner à gauche comme le texte du menu */
-    gap: 12px; /* Espace propre entre les boutons */
+    align-items: stretch;
+    gap: 12px;
+    padding: 4px 20px 20px;
 }
 
-/* Si les liens/boutons du menu mobile sont alignés à gauche : */
 .navbar__mobile-actions .btn {
-    justify-content: flex-start; /* Aligne le contenu (icône + texte) à gauche si le bouton est un flex container */
-    text-align: left;
+    justify-content: center;
+    text-align: center;
+    border: 1.5px solid #ece7db;
+}
+
+.navbar__mobile-actions .btn--primary,
+.navbar__mobile-actions .btn:last-child {
+    border-color: transparent;
 }
 
 /* ============================================================
@@ -719,14 +770,20 @@ RESPONSIVE
 @media (max-width: 480px) {
     .navbar {
         padding: 0 20px;
+        height: 72px;
     }
 
     .navbar__brand {
         font-size: 1.1rem;
     }
 
+    .navbar__brand::before {
+        width: 26px;
+        height: 26px;
+    }
+
     .btn {
-        padding: 9px 16px;
+        padding: 10px 16px;
         font-size: .85rem;
     }
 }
@@ -769,7 +826,7 @@ body {
         right: 0;
         height: 76px;
         background-color: #ffffff;
-        border-top: 1.5px solid #e2e8f0;
+        border-top: 1.5px solid #ece7db;
         box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
         z-index: 999;
         justify-content: space-around;
@@ -788,7 +845,7 @@ body {
         justify-content: center;
         flex: 1;
         text-decoration: none;
-        color: #0d4b82;
+        color: #14294d;
         font-size: 0.95rem;
         font-weight: 600;
         gap: 3px;
@@ -801,7 +858,7 @@ body {
     }
 
     .navbar__bottom-item.active {
-        color: #d1790a;
+        color: #c8951e;
         font-weight: 700;
     }
 }
