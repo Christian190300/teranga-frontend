@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { obtenirStatistiquesUtilisateurs } from "../../api/adminUserService";
-import type { UtilisateursStatistiques } from "../../api/adminUserService";
+import { obtenirStatistiquesUtilisateurs, obtenirStatistiquesVues } from "../../api/adminUserService";
+import type { UtilisateursStatistiques, VuesSiteParPeriode } from "../../api/adminUserService";
 import { listerEntreprises } from "../../api/entrepriseAdminService";
 import { listerToutesOffresAdmin, LABELS_STATUT_OFFRE } from "../../api/offreService";
 import type { SpringPage, OffreDTO, StatutOffre } from "../../api/offreService";
@@ -14,13 +14,19 @@ interface EtatDashboard {
     utilisateurs: UtilisateursStatistiques | null;
     totalEntreprises: number | null;
     offres: SpringPage<OffreDTO> | null;
+    vues: VuesSiteParPeriode | null;
 }
 
 const ORDRE_STATUTS: StatutOffre[] = ["PUBLIEE", "BROUILLON", "FERMEE", "EXPIREE"];
 
 export function AdminDashboardPage() {
     const { currentUser } = useAuth();
-    const [etat, setEtat] = useState<EtatDashboard>({ utilisateurs: null, totalEntreprises: null, offres: null });
+    const [etat, setEtat] = useState<EtatDashboard>({
+        utilisateurs: null,
+        totalEntreprises: null,
+        offres: null,
+        vues: null,
+    });
     const [chargement, setChargement] = useState(true);
     const [erreur, setErreur] = useState<string | null>(null);
 
@@ -30,15 +36,17 @@ export function AdminDashboardPage() {
             setChargement(true);
             setErreur(null);
             try {
-                const [utilisateurs, entreprises, offres] = await Promise.all([
+                const [utilisateurs, entreprises, offres, vues] = await Promise.all([
                     obtenirStatistiquesUtilisateurs(),
                     listerEntreprises(0, 1, ""),
                     listerToutesOffresAdmin(0, 500),
+                    obtenirStatistiquesVues(),
                 ]);
                 setEtat({
                     utilisateurs,
                     totalEntreprises: entreprises.total,
                     offres,
+                    vues,
                 });
             } catch {
                 setErreur("Impossible de charger les statistiques du tableau de bord.");
@@ -112,6 +120,13 @@ export function AdminDashboardPage() {
                     suffixe="%"
                     chargement={chargement}
                     accent="navy"
+                />
+                <KpiCard
+                    label="Vues du site"
+                    valeur={etat.vues?.total}
+                    chargement={chargement}
+                    accent="gold"
+                    detail="Total des pages vues"
                 />
             </section>
             <br/>
