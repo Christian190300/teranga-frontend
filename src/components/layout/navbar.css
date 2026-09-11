@@ -85,7 +85,7 @@ LOGO
     white-space: nowrap;
 }
 
-/* petite pastille décorative devant le nom, façon logo-mark */
+/* petite pastille décorative devant le nom, façon logo-mark
 .navbar__brand::before {
     content: "";
     display: inline-block;
@@ -95,7 +95,7 @@ LOGO
     border-radius: 9px;
     background: linear-gradient(135deg, #14294d 0%, #1d3f73 55%, #c8951e 100%);
     box-shadow: 0 4px 10px rgba(20, 41, 77, 0.25);
-}
+}*/
 
 .navbar__brand span {
     color: #c8951e;
