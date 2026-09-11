@@ -46,11 +46,6 @@
     align-items: flex-start;
 }
 
-.ts-search-field__body input,
-.ts-search-field__body select {
-    font-size: 16px; /* jamais en dessous de 16px sur mobile */
-}
-
 .ts-hero__eyebrow {
     display: inline-block;
     padding: 6px 14px;
@@ -235,7 +230,7 @@
     border: none;
     outline: none;
     background: transparent;
-    font-size: 0.9rem;
+    font-size: 16px; /* remonté depuis 0.9rem pour éviter le zoom auto sur mobile (iOS/Android) */
     font-weight: 600;
     color: var(--c-navy);
     padding: 0;
