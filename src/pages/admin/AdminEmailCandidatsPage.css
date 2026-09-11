@@ -1,0 +1,72 @@
+.admin-email-candidats {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 32px 16px;
+}
+
+.admin-email-candidats__title {
+    color: #14294d;
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin: 0 0 8px;
+}
+
+.admin-email-candidats__subtitle {
+    color: #64748b;
+    font-size: 0.9rem;
+    margin: 0 0 24px;
+}
+
+.admin-email-candidats__form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.admin-email-candidats__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.admin-email-candidats__field label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #14294d;
+}
+
+.admin-email-candidats__field input,
+.admin-email-candidats__field textarea {
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    font-size: 0.95rem;
+    font-family: inherit;
+}
+
+.admin-email-candidats__field textarea {
+    resize: vertical;
+}
+
+.admin-email-candidats__field input:focus,
+.admin-email-candidats__field textarea:focus {
+    outline: none;
+    border-color: #c8951e;
+    box-shadow: 0 0 0 3px rgba(200, 149, 30, 0.15);
+}
+
+.admin-email-candidats__error {
+    color: #dc2626;
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.admin-email-candidats__success {
+    color: #16a34a;
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.admin-email-candidats__form .btn {
+    align-self: flex-start;
+}

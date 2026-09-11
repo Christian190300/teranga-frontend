@@ -61,6 +61,7 @@ import { ProgrammesAdminPage } from "./pages/admin/ProgrammesAdminPage";
 import { ProgrammeFormPage  } from "./pages/admin/ProgrammeFormPage";
 import { ProgrammeDetailPage  } from "./pages/programmes/ProgrammeDetailPage";
 import { ProgrammesPage  } from "./pages/programmes/ProgrammesPage";
+import AdminEmailCandidatsPage from "./pages/admin/AdminEmailCandidatsPage";
 
 
 // --- COMPOSANTS & WIDGETS ---
@@ -138,6 +139,7 @@ export default function App() {
                             <Route path="/admin/programmes" element={<ProgrammesAdminPage />} />
                             <Route path="/admin/programmes/nouveau" element={<ProgrammeFormPage />} />
                             <Route path="/admin/programmes/:id/modifier" element={<ProgrammeFormPage />} />
+                            <Route path="/admin/emails/candidats" element={<AdminEmailCandidatsPage />} />
                         </Routes>
 
                         {/* Widget global d'incitation profil */}

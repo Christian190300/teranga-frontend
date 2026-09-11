@@ -102,9 +102,14 @@ export function UserAdminPage() {
                         <h1 className="admin-page__title">Utilisateurs</h1>
                         <p className="admin-page__subtitle">Gère les comptes, les rôles et l'accès à la plateforme.</p>
                     </div>
-                    <button className="admin-btn admin-btn--primary" onClick={() => setModalOuvert(true)}>
-                        + Ajouter un utilisateur
-                    </button>
+                    <div style={{ display: "flex", gap: 10 }}>
+                        <Link to="/admin/emails/candidats" className="admin-btn admin-btn--ghost">
+                            Envoyer un email aux candidats
+                        </Link>
+                        <button className="admin-btn admin-btn--primary" onClick={() => setModalOuvert(true)}>
+                            + Ajouter un utilisateur
+                        </button>
+                    </div>
                 </div>
 
                 <div className="admin-stats-row">
