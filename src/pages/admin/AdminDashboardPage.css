@@ -110,7 +110,7 @@
     border-radius: 16px;
     padding: 22px 24px;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
     box-shadow: 0 2px 6px rgba(20, 41, 77, 0.04);
     transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
 }
@@ -127,6 +127,7 @@
     left: 0;
     right: 0;
     height: 3px;
+    border-radius: 16px 16px 0 0;
 }
 
 .dashboard-kpi--navy::before {
@@ -153,7 +154,77 @@
     font-size: 0.8rem;
     font-weight: 600;
     color: var(--dp-muted);
-    margin: 0 0 10px;
+    margin: 0;
+}
+
+/* ---------- En-tête de carte : label + sélecteur de période ---------- */
+.dashboard-kpi__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.dashboard-kpi__periode {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.dashboard-kpi__periode-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    border: 1px solid var(--dp-line);
+    background: white;
+    color: var(--dp-muted);
+    cursor: pointer;
+    transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.dashboard-kpi__periode-btn:hover {
+    border-color: var(--dp-gold);
+    color: var(--dp-gold);
+}
+
+.dashboard-kpi__periode-menu {
+    position: absolute;
+    top: 28px;
+    right: 0;
+    background: white;
+    border: 1.5px solid var(--dp-line);
+    border-radius: 10px;
+    box-shadow: 0 10px 24px -8px rgba(20, 41, 77, 0.25);
+    overflow: hidden;
+    z-index: 10;
+    min-width: 120px;
+}
+
+.dashboard-kpi__periode-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 9px 12px;
+    border: none;
+    background: white;
+    color: var(--dp-navy);
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.12s ease;
+}
+
+.dashboard-kpi__periode-item:hover {
+    background: var(--dp-gold-soft);
+}
+
+.dashboard-kpi__periode-item.active {
+    background: var(--dp-navy);
+    color: white;
+    font-weight: 700;
 }
 
 .dashboard-kpi__value {

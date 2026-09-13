@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { obtenirStatistiquesUtilisateurs, obtenirStatistiquesVues } from "../../api/adminUserService";
@@ -18,7 +18,31 @@ interface EtatDashboard {
     vues: VuesSiteParPeriode | null;
 }
 
+type GranulariteVues = "jour" | "mois" | "annee";
+
 const ORDRE_STATUTS: StatutOffre[] = ["PUBLIEE", "BROUILLON", "FERMEE", "EXPIREE"];
+
+const OPTIONS_PERIODE: { valeur: GranulariteVues; label: string }[] = [
+    { valeur: "jour", label: "Par jour" },
+    { valeur: "mois", label: "Par mois" },
+    { valeur: "annee", label: "Par année" },
+];
+
+const LABELS_GRANULARITE: Record<GranulariteVues, string> = {
+    jour: "Aujourd'hui",
+    mois: "Ce mois-ci",
+    annee: "Cette année",
+};
+
+function cleAujourdHui(granularite: GranulariteVues): string {
+    const maintenant = new Date();
+    const annee = maintenant.getFullYear();
+    const mois = String(maintenant.getMonth() + 1).padStart(2, "0");
+    const jour = String(maintenant.getDate()).padStart(2, "0");
+    if (granularite === "jour") return `${annee}-${mois}-${jour}`;
+    if (granularite === "mois") return `${annee}-${mois}`;
+    return `${annee}`;
+}
 
 export function AdminDashboardPage() {
     const { currentUser } = useAuth();
@@ -30,6 +54,7 @@ export function AdminDashboardPage() {
     });
     const [chargement, setChargement] = useState(true);
     const [erreur, setErreur] = useState<string | null>(null);
+    const [granulariteVues, setGranulariteVues] = useState<GranulariteVues>("jour");
 
     useEffect(() => {
         // eslint-disable-next-line react-hooks/set-state-in-effect -- fetch au montage, pattern standard
@@ -67,6 +92,14 @@ export function AdminDashboardPage() {
 
     const heure = new Date().getHours();
     const salutation = heure < 12 ? "Bonjour" : heure < 18 ? "Bon après-midi" : "Bonsoir";
+
+    const valeurVuesPeriode = etat.vues
+        ? (granulariteVues === "jour"
+        ? etat.vues.parJour[cleAujourdHui("jour")]
+        : granulariteVues === "mois"
+            ? etat.vues.parMois[cleAujourdHui("mois")]
+            : etat.vues.parAnnee[cleAujourdHui("annee")]) ?? 0
+        : undefined;
 
     return (
         <div className="dashboard-page">
@@ -124,10 +157,15 @@ export function AdminDashboardPage() {
                 />
                 <KpiCard
                     label="Vues du site"
-                    valeur={etat.vues?.total}
+                    valeur={valeurVuesPeriode}
                     chargement={chargement}
                     accent="gold"
-                    detail="Total des pages vues"
+                    detail={etat.vues ? `${etat.vues.total.toLocaleString()} au total` : undefined}
+                    periodeSelecteur={{
+                        valeur: granulariteVues,
+                        onChange: setGranulariteVues,
+                        labelActuel: LABELS_GRANULARITE[granulariteVues],
+                    }}
                 />
             </section>
             <br/>
@@ -199,6 +237,22 @@ export function AdminDashboardPage() {
     );
 }
 
+interface PeriodeSelecteur {
+    valeur: GranulariteVues;
+    onChange: (v: GranulariteVues) => void;
+    labelActuel: string;
+}
+
+function IconCalendarSmall() {
+    return (
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" strokeWidth="2" />
+            <path d="M3 10h18" stroke="currentColor" strokeWidth="2" />
+            <path d="M8 3v4M16 3v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+    );
+}
+
 function KpiCard({
                      label,
                      valeur,
@@ -206,6 +260,7 @@ function KpiCard({
                      suffixe,
                      chargement,
                      accent,
+                     periodeSelecteur,
                  }: {
     label: string;
     valeur?: number;
@@ -213,10 +268,57 @@ function KpiCard({
     suffixe?: string;
     chargement: boolean;
     accent: "navy" | "gold" | "success";
+    periodeSelecteur?: PeriodeSelecteur;
 }) {
+    const [ouvert, setOuvert] = useState(false);
+    const ref = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (!ouvert) return;
+        function handleClickDehors(e: MouseEvent) {
+            if (ref.current && !ref.current.contains(e.target as Node)) setOuvert(false);
+        }
+        document.addEventListener("mousedown", handleClickDehors);
+        return () => document.removeEventListener("mousedown", handleClickDehors);
+    }, [ouvert]);
+
     return (
         <div className={`dashboard-kpi dashboard-kpi--${accent}`}>
-            <p className="dashboard-kpi__label">{label}</p>
+            <div className="dashboard-kpi__head">
+                <p className="dashboard-kpi__label">{label}</p>
+
+                {periodeSelecteur && (
+                    <div className="dashboard-kpi__periode" ref={ref}>
+                        <button
+                            type="button"
+                            className="dashboard-kpi__periode-btn"
+                            onClick={() => setOuvert((v) => !v)}
+                            aria-label="Changer la période"
+                            aria-expanded={ouvert}
+                        >
+                            <IconCalendarSmall />
+                        </button>
+                        {ouvert && (
+                            <div className="dashboard-kpi__periode-menu">
+                                {OPTIONS_PERIODE.map((o) => (
+                                    <button
+                                        key={o.valeur}
+                                        type="button"
+                                        className={`dashboard-kpi__periode-item${o.valeur === periodeSelecteur.valeur ? " active" : ""}`}
+                                        onClick={() => {
+                                            periodeSelecteur.onChange(o.valeur);
+                                            setOuvert(false);
+                                        }}
+                                    >
+                                        {o.label}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                )}
+            </div>
+
             <p className="dashboard-kpi__value">
                 {chargement || valeur === undefined ? (
                     <span className="dashboard-kpi__skeleton" />
@@ -227,7 +329,13 @@ function KpiCard({
                     </>
                 )}
             </p>
-            {detail && !chargement && <p className="dashboard-kpi__detail">{detail}</p>}
+            {periodeSelecteur && !chargement && (
+                <p className="dashboard-kpi__detail">
+                    {periodeSelecteur.labelActuel}
+                    {detail ? ` · ${detail}` : ""}
+                </p>
+            )}
+            {!periodeSelecteur && detail && !chargement && <p className="dashboard-kpi__detail">{detail}</p>}
         </div>
     );
 }
