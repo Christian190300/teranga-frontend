@@ -9,6 +9,7 @@ import type { SpringPage, OffreDTO, StatutOffre } from "../../api/offreService";
 import "./AdminDashboardPage.css";
 import { OffresPublicationsChart } from "../admin/OffresPublicationsChart";
 import { InscriptionsUtilisateursChart } from "../admin/InscriptionsUtilisateursChart";
+import { ConnexionsUtilisateursCard } from "../admin/ConnexionsUtilisateursCard";
 
 interface EtatDashboard {
     utilisateurs: UtilisateursStatistiques | null;
@@ -139,11 +140,14 @@ export function AdminDashboardPage() {
             <br/>
             <br/>
 
+            {/* ---------- Connexions utilisateurs dans le temps (jour / mois / année) ---------- */}
+            <ConnexionsUtilisateursCard />
+            <br/>
+            <br/>
+            <br/>
+
             {/* ---------- Offres publiées dans le temps (jour / mois / année) ---------- */}
             <OffresPublicationsChart />
-            <br/>
-            <br/>
-            <br/>
 
             <div className="dashboard-grid">
                 {/* ---------- Répartition des offres ---------- */}

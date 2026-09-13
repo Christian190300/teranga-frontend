@@ -56,6 +56,12 @@ export interface VuesSiteParPeriode {
     parAnnee: Record<string, number>;
 }
 
+export interface ConnexionsParPeriode {
+    parJour: Record<string, number>;
+    parMois: Record<string, number>;
+    parAnnee: Record<string, number>;
+}
+
 // À vérifier contre KeycloakAdminService.ROLES_GERES côté backend.
 export const ROLES_GERES = [
     "ROLE_CANDIDAT",
@@ -132,6 +138,11 @@ export async function obtenirStatistiquesInscriptions(): Promise<InscriptionsPar
 
 export async function obtenirStatistiquesVues(): Promise<VuesSiteParPeriode> {
     const response = await httpClient.get<VuesSiteParPeriode>(`${BASE_URL}/statistiques/vues`);
+    return response.data;
+}
+
+export async function obtenirStatistiquesConnexions(): Promise<ConnexionsParPeriode> {
+    const response = await httpClient.get<ConnexionsParPeriode>(`${BASE_URL}/statistiques/connexions`);
     return response.data;
 }
 
