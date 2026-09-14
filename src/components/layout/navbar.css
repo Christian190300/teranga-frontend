@@ -97,36 +97,6 @@ LOGO
     box-shadow: 0 4px 10px rgba(20, 41, 77, 0.25);
 }*/
 
-/* ============================================================
-   CLOCHE NOTIFICATIONS FLOTTANTE (candidat, mobile uniquement)
-   ============================================================ */
-
-.navbar__notif-float {
-    display: none;
-}
-
-@media (max-width: 860px) {
-    .navbar__notif-float {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        position: fixed;
-        bottom: 24px;
-        right: 20px;
-
-        width: 54px;
-        height: 54px;
-        border-radius: 50%;
-
-        background: #ffffff;
-        box-shadow: 0 8px 24px rgba(20, 41, 77, 0.25);
-        border: 1.5px solid #ece7db;
-
-        z-index: 1150;
-    }
-}
-
 .navbar__brand span {
     color: #c8951e;
 }

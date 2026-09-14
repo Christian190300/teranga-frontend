@@ -509,7 +509,7 @@ export function Navbar() {
                     )}
 
                     {isAuthenticated && currentUser?.role === "CANDIDAT" && (
-                        <div className="navbar__notif-float">
+                        <div style={{ display: "flex", justifyContent: "center", marginTop: -8, marginBottom: 12 }}>
                             <NotificationsBellCandidat />
                         </div>
                     )}
@@ -650,13 +650,6 @@ export function Navbar() {
                     </div>
                 </div>
             </header>
-
-            {/* ---------- Bottom Nav Mobile ---------- */}
-            {isAuthenticated && currentUser?.role === "CANDIDAT" && (
-                <div className="navbar__notif-float">
-                    <NotificationsBellCandidat />
-                </div>
-            )}
 
             {/* ---------- Bottom Nav Mobile ---------- */}
             {!isAuthenticated && (
