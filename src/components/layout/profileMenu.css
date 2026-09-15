@@ -107,3 +107,12 @@
     background: #fdecea;
     color: #b3261e;
 }
+@media (max-width: 640px) {
+    .profile-menu__name {
+        display: none;
+    }
+
+    .profile-menu__trigger {
+        padding: 6px;
+    }
+}
