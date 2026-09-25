@@ -65,8 +65,7 @@
 .prog-section__cover {
     display: block;
     width: 100%;
-    max-height: 420px;
-    object-fit: cover;
+    height: auto; /* image entière, taille/ratio réels, pas de recadrage ni de fond */
 }
 
 .prog-section__body {
@@ -256,8 +255,11 @@
 .prog-bloc__etapes {
     display: flex;
     flex-wrap: wrap;
-    gap: 14px;
-    margin: 16px 0;
+    align-items: flex-start;
+    gap: 0;
+    margin: 18px 0 6px;
+    padding: 0;
+    list-style: none;
 }
 
 .prog-bloc__etape {
@@ -265,23 +267,69 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    min-width: 90px;
-    padding: 12px 16px;
-    background: var(--bg-soft);
-    border-radius: var(--radius-sm);
+    flex: 1 1 110px;
+    min-width: 110px;
+    padding: 0 14px;
+    position: relative;
+}
+
+.prog-bloc__etape:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 15px;
+    left: calc(50% + 25px);
+    width: calc(100% - 20px);
+    height: 2px;
+    background: var(--border);
+}
+
+.prog-bloc__etape-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--prog-navy);
+    color: #ffffff;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    z-index: 1;
 }
 
 .prog-bloc__etape-titre {
     font-weight: 800;
-    font-size: 0.88rem;
+    font-size: 0.85rem;
     color: var(--navy-ink);
-    letter-spacing: 0.02em;
 }
 
 .prog-bloc__etape-sous {
     font-size: 0.75rem;
     color: var(--text-muted);
     margin-top: 4px;
+}
+
+@media (max-width: 640px) {
+    .prog-bloc__etapes {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 18px;
+    }
+    .prog-bloc__etape {
+        flex-direction: row;
+        text-align: left;
+        min-width: 0;
+        padding: 0;
+        gap: 12px;
+    }
+    .prog-bloc__etape-num {
+        margin-bottom: 0;
+        flex-shrink: 0;
+    }
+    .prog-bloc__etape:not(:last-child)::after {
+        display: none;
+    }
 }
 
 .prog-bloc__points {

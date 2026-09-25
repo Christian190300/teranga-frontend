@@ -54,14 +54,15 @@ function ProgrammeBloc({
             {texte && <p className="prog-section__text">{texte}</p>}
 
             {etapes.length > 0 && (
-                <div className="prog-bloc__etapes">
+                <ol className="prog-bloc__etapes">
                     {etapes.map((etape, i) => (
-                        <div className="prog-bloc__etape" key={i}>
+                        <li className="prog-bloc__etape" key={i}>
+                            <span className="prog-bloc__etape-num">{i + 1}</span>
                             <span className="prog-bloc__etape-titre">{etape.titre}</span>
                             {etape.sousTitre && <span className="prog-bloc__etape-sous">{etape.sousTitre}</span>}
-                        </div>
+                        </li>
                     ))}
-                </div>
+                </ol>
             )}
 
             {points.length > 0 && (
