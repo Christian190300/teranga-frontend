@@ -31,7 +31,7 @@ function StepPath({
                       steps,
                       orientation,
                   }: {
-    steps: { titre: string; sousTitre?: string }[];
+    steps: { titre: string; sousTitre?: string | null }[];
     orientation: "vertical" | "horizontal";
 }) {
     if (steps.length === 0) return null;
@@ -65,8 +65,7 @@ function StepPath({
     );
 }
 
-function PointsList({ points }: { points: { titre: string; description?: string }[] }) {
-    if (points.length === 0) return null;
+function PointsList({ points }: { points: { titre: string; description?: string | null }[] }) {    if (points.length === 0) return null;
     return (
         <div className="prog-points">
             {points.map((p, i) => (
