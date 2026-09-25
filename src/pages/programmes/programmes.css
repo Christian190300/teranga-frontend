@@ -397,6 +397,9 @@
     margin: 0 auto;
     padding: 90px 0;
 }
+.offre-detail__titre{
+    color: aliceblue;
+}
 
 .prog-skeleton__block {
     background: var(--bg-soft);
