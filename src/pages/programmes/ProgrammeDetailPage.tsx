@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { obtenirProgrammePublic, urlImageProgrammePublique, type ProgrammeDTO } from "../../api/programmeService";
 import "./programmes.css";
 
@@ -27,27 +27,32 @@ export function ProgrammeDetailPage() {
 
     return (
         <div className="offre-detail">
-            <Link to="/programmes" className="offre-detail__back">
-                ← Tous les programmes
-            </Link>
-
-            <div className="offre-detail__header">
-                {programme.imagePresente && (
+            {programme.imagePresente ? (
+                <div className="prog-detail__hero-wrap">
                     <img
                         src={urlImageProgrammePublique(programme.id)}
                         alt={programme.titre}
                         className="prog-detail__cover"
                     />
-                )}
-                <h1 className="offre-detail__titre" style={{ color: "var(--navy-ink)" }}>
-                    {programme.titre}
-                </h1>
-                <p className="offre-detail__lieu">
-                    Débute le {formatDate(programme.dateDebut)}
-                    {programme.dateFin && ` · jusqu'au ${formatDate(programme.dateFin)}`}
-                    {programme.formateur && ` · animé par ${programme.formateur}`}
-                </p>
-            </div>
+                    <div className="prog-detail__hero-overlay">
+                        <h1 className="prog-detail__hero-title">{programme.titre}</h1>
+                        <p className="prog-detail__hero-meta">
+                            Débute le {formatDate(programme.dateDebut)}
+                            {programme.dateFin && ` · jusqu'au ${formatDate(programme.dateFin)}`}
+                            {programme.formateur && ` · animé par ${programme.formateur}`}
+                        </p>
+                    </div>
+                </div>
+            ) : (
+                <div className="offre-detail__header">
+                    <h1 className="offre-detail__titre">{programme.titre}</h1>
+                    <p className="offre-detail__lieu">
+                        Débute le {formatDate(programme.dateDebut)}
+                        {programme.dateFin && ` · jusqu'au ${formatDate(programme.dateFin)}`}
+                        {programme.formateur && ` · animé par ${programme.formateur}`}
+                    </p>
+                </div>
+            )}
 
             {programme.description && (
                 <div className="offre-detail__section">

@@ -397,9 +397,6 @@
     margin: 0 auto;
     padding: 90px 0;
 }
-.offre-detail__titre{
-    color: aliceblue;
-}
 
 .prog-skeleton__block {
     background: var(--bg-soft);
@@ -436,99 +433,40 @@
 }
 
 /* ==========================================================================
-   PAGE DÉTAIL PUBLIQUE (inchangé — utilisé par ProgrammeDetailPage.tsx)
+   PAGE DÉTAIL PUBLIQUE — image en taille réelle, titre superposé en blanc
    ========================================================================== */
-.prog-detail__cover {
-    width: 100%;
-    max-height: 320px;
-    object-fit: cover;
+.prog-detail__hero-wrap {
+    position: relative;
+    margin-bottom: 24px;
     border-radius: var(--radius-md);
-    margin-bottom: 20px;
+    overflow: hidden;
+    line-height: 0; /* évite l'espace blanc sous l'image inline */
 }
 
-.prog-bloc {
-    margin-top: 10px;
+
+.prog-detail__hero-overlay {
+    position: absolute;
+    inset: auto 0 0 0;
+    padding: 32px 24px 20px;
+    background: linear-gradient(0deg, rgba(10, 24, 48, 0.88) 0%, rgba(10, 24, 48, 0.45) 60%, transparent 100%);
 }
 
-.prog-bloc--accent {
-    margin-top: 30px;
-    padding-top: 26px;
-    border-top: 1px solid var(--bg-soft);
-}
-
-.prog-bloc__titre {
+.prog-detail__hero-title {
     font-family: var(--font-display);
-    font-size: 1.2rem;
+    font-size: clamp(1.4rem, 3.2vw, 2.2rem);
     font-weight: 800;
-    color: var(--navy-ink);
-    margin: 0 0 10px;
+    color: #ffffff;
+    margin: 0 0 8px;
 }
 
-.prog-bloc__etapes {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 14px;
-    margin: 16px 0;
-}
-
-.prog-bloc__etape {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    min-width: 90px;
-    padding: 12px 16px;
-    background: var(--bg-soft);
-    border-radius: var(--radius-sm);
-}
-
-.prog-bloc__etape-titre {
-    font-weight: 800;
+.prog-detail__hero-meta {
+    color: rgba(255, 255, 255, 0.85);
     font-size: 0.88rem;
-    color: var(--navy-ink);
-    letter-spacing: 0.02em;
-}
-
-.prog-bloc__etape-sous {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    margin-top: 4px;
-}
-
-.prog-bloc__points {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 14px;
-    margin-top: 10px;
-}
-
-.prog-bloc__point {
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 14px 16px;
-}
-
-.prog-bloc__point h4 {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--navy-ink);
-    margin: 0 0 6px;
-}
-
-.prog-bloc__point p {
-    font-size: 0.85rem;
-    color: var(--text-muted);
     margin: 0;
-    line-height: 1.5;
 }
 
 @media (max-width: 640px) {
-    .prog-bloc__etapes {
-        gap: 10px;
-    }
-    .prog-bloc__etape {
-        min-width: 76px;
-        padding: 10px 12px;
+    .prog-detail__hero-overlay {
+        padding: 20px 16px 14px;
     }
 }
