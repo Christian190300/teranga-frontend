@@ -27,32 +27,22 @@ export function ProgrammeDetailPage() {
 
     return (
         <div className="offre-detail">
-            {programme.imagePresente ? (
-                <div className="prog-detail__hero-wrap">
-                    <img
-                        src={urlImageProgrammePublique(programme.id)}
-                        alt={programme.titre}
-                        className="prog-detail__cover"
-                    />
-                    <div className="prog-detail__hero-overlay">
-                        <h1 className="prog-detail__hero-title">{programme.titre}</h1>
-                        <p className="prog-detail__hero-meta">
-                            Débute le {formatDate(programme.dateDebut)}
-                            {programme.dateFin && ` · jusqu'au ${formatDate(programme.dateFin)}`}
-                            {programme.formateur && ` · animé par ${programme.formateur}`}
-                        </p>
-                    </div>
-                </div>
-            ) : (
-                <div className="offre-detail__header">
-                    <h1 className="offre-detail__titre">{programme.titre}</h1>
-                    <p className="offre-detail__lieu">
-                        Débute le {formatDate(programme.dateDebut)}
-                        {programme.dateFin && ` · jusqu'au ${formatDate(programme.dateFin)}`}
-                        {programme.formateur && ` · animé par ${programme.formateur}`}
-                    </p>
-                </div>
+            {programme.imagePresente && (
+                <img
+                    src={urlImageProgrammePublique(programme.id)}
+                    alt={programme.titre}
+                    className="prog-detail__cover"
+                />
             )}
+
+            <div className="offre-detail__header">
+                <h1 className="offre-detail__titre">{programme.titre}</h1>
+                <p className="offre-detail__lieu">
+                    Débute le {formatDate(programme.dateDebut)}
+                    {programme.dateFin && ` · jusqu'au ${formatDate(programme.dateFin)}`}
+                    {programme.formateur && ` · animé par ${programme.formateur}`}
+                </p>
+            </div>
 
             {programme.description && (
                 <div className="offre-detail__section">

@@ -433,40 +433,16 @@
 }
 
 /* ==========================================================================
-   PAGE DÉTAIL PUBLIQUE — image en taille réelle, titre superposé en blanc
+   PAGE DÉTAIL PUBLIQUE — photo au-dessus (taille réelle), titre en dessous
    ========================================================================== */
-.prog-detail__hero-wrap {
-    position: relative;
-    margin-bottom: 24px;
+.prog-detail__cover {
+    display: block;
+    width: 100%;
+    height: auto; /* taille/ratio réels, mobile et desktop, pas de recadrage */
     border-radius: var(--radius-md);
-    overflow: hidden;
-    line-height: 0; /* évite l'espace blanc sous l'image inline */
+    margin-bottom: 20px;
 }
 
-
-.prog-detail__hero-overlay {
-    position: absolute;
-    inset: auto 0 0 0;
-    padding: 32px 24px 20px;
-    background: linear-gradient(0deg, rgba(10, 24, 48, 0.88) 0%, rgba(10, 24, 48, 0.45) 60%, transparent 100%);
-}
-
-.prog-detail__hero-title {
-    font-family: var(--font-display);
-    font-size: clamp(1.4rem, 3.2vw, 2.2rem);
-    font-weight: 800;
-    color: #ffffff;
-    margin: 0 0 8px;
-}
-
-.prog-detail__hero-meta {
-    color: rgba(255, 255, 255, 0.85);
-    font-size: 0.88rem;
-    margin: 0;
-}
-
-@media (max-width: 640px) {
-    .prog-detail__hero-overlay {
-        padding: 20px 16px 14px;
-    }
+.offre-detail__titre {
+    color: var(--navy-ink);
 }
