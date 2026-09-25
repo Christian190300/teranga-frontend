@@ -1,358 +1,81 @@
 /* ==========================================================================
-   TOKENS locaux (héros / bandeau CTA)
+   TOKENS locaux
    ========================================================================== */
-.prog-page {
+.prog-page,
+.prog-list {
     --prog-navy: #14294d;
     --prog-navy-deep: #0a1830;
     --prog-gold: #c8951e;
     --prog-gold-light: #e8b84b;
-}
-
-/* ==========================================================================
-   STRUCTURE GÉNÉRALE
-   ========================================================================== */
-.prog-page {
     font-family: var(--font-body);
 }
 
-.prog-showcase + .prog-showcase {
-    border-top: 1px solid var(--border);
-}
-
 /* ==========================================================================
-   HERO
+   LISTE / CARTE PROGRAMME — photo visible en entier, pas de texte dessus
    ========================================================================== */
-.prog-hero {
-    position: relative;
-    background: linear-gradient(135deg, var(--prog-navy) 0%, var(--prog-navy-deep) 100%);
-    padding: 76px 0;
-    overflow: hidden;
-}
-
-.prog-hero--photo {
-    background-size: cover;
-    background-position: center;
-}
-
-.prog-hero--photo::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(115deg, var(--prog-navy) 0%, rgba(10, 24, 48, 0.88) 45%, rgba(10, 24, 48, 0.55) 100%);
-}
-
-.prog-hero__inner {
-    position: relative;
+.prog-list {
     max-width: 1200px;
     width: 94%;
     margin: 0 auto;
+    padding: 40px 0 64px;
     display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
-    gap: 56px;
-    align-items: center;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 28px;
 }
 
-.prog-hero__title {
+.prog-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md, 12px);
+    overflow: hidden;
+    background: #ffffff;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.prog-card:hover {
+    box-shadow: 0 8px 24px rgba(10, 24, 48, 0.12);
+    transform: translateY(-2px);
+}
+
+.prog-card__image {
+    display: block;
+    width: 100%;
+    height: auto; /* image entière, taille/ratio réels, mobile et desktop */
+}
+
+.prog-card__body {
+    padding: 18px 20px 22px;
+}
+
+.prog-card__title {
     font-family: var(--font-display);
-    font-size: clamp(2rem, 3.2vw, 2.7rem);
+    font-size: 1.2rem;
     font-weight: 800;
-    line-height: 1.15;
-    letter-spacing: -0.01em;
-    color: #ffffff;
-    margin: 0 0 16px;
-    max-width: 16ch;
+    color: var(--navy-ink);
+    margin: 0 0 8px;
 }
 
-.prog-hero__lede {
-    font-size: 1.02rem;
-    line-height: 1.65;
-    color: rgba(255, 255, 255, 0.75);
-    margin: 0 0 26px;
-    max-width: 46ch;
-}
-
-.prog-hero__meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px 22px;
-    margin-bottom: 30px;
-}
-
-.prog-hero__meta-item {
+.prog-card__meta {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.65);
-}
-
-.prog-hero__meta-item svg {
-    color: var(--prog-gold-light);
-    flex-shrink: 0;
-}
-
-.prog-hero__cta {
-    display: inline-block;
-}
-
-/* Parcours vertical dans le hero */
-.prog-hero__visual {
-    background: linear-gradient(160deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.02));
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    border-radius: var(--radius-lg, 18px);
-    padding: 30px 26px 8px;
-}
-
-.prog-hero__step {
-    display: flex;
-    gap: 16px;
-}
-
-.prog-hero__step-marker {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex-shrink: 0;
-}
-
-.prog-hero__step-num {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    border: 1.5px solid var(--prog-gold-light);
-    color: var(--prog-gold-light);
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 0.92rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.prog-hero__step-line {
-    width: 1.5px;
-    flex: 1;
-    min-height: 24px;
-    background: rgba(255, 255, 255, 0.18);
-    margin: 4px 0;
-}
-
-.prog-hero__step-text {
-    padding-bottom: 26px;
-}
-
-.prog-hero__step-text--last {
-    padding-bottom: 6px;
-}
-
-.prog-hero__step-title {
-    color: #ffffff;
-    font-weight: 700;
-    font-size: 0.92rem;
-    margin: 0 0 2px;
-}
-
-.prog-hero__step-sub {
-    color: rgba(255, 255, 255, 0.55);
-    font-size: 0.78rem;
-    margin: 0;
-}
-
-@media (max-width: 900px) {
-    .prog-hero__inner {
-        grid-template-columns: 1fr;
-        gap: 34px;
-    }
-    .prog-hero {
-        padding: 56px 0;
-    }
-}
-
-/* ==========================================================================
-   SECTIONS (Le constat / Le programme)
-   ========================================================================== */
-.prog-section {
-    padding: 64px 0;
-}
-
-.prog-section--alt {
-    background: var(--bg-soft);
-}
-
-.prog-section__inner {
-    max-width: 1200px;
-    width: 94%;
-    margin: 0 auto;
-}
-
-.prog-section__label {
-    display: block;
-    color: var(--prog-gold);
-    font-weight: 700;
-    font-size: 0.85rem;
-    margin: 0 0 10px;
-}
-
-.prog-section__title {
-    font-family: var(--font-display);
-    font-size: 1.65rem;
-    font-weight: 800;
-    color: var(--navy-ink);
-    letter-spacing: -0.01em;
-    margin: 0 0 14px;
-    max-width: 26ch;
-}
-
-.prog-section__body {
-    font-size: 0.98rem;
-    line-height: 1.7;
-    color: var(--text-muted);
-    margin: 0;
-    max-width: 66ch;
-}
-
-/* Parcours horizontal ("Le programme") */
-.prog-flow {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 28px 0;
-    margin: 36px 0 10px;
-}
-
-.prog-flow__step {
-    position: relative;
-    flex: 1 1 150px;
-    text-align: center;
-    padding: 0 10px;
-}
-
-.prog-flow__step:not(.prog-flow__step--last)::after {
-    content: "";
-    position: absolute;
-    top: 20px;
-    left: calc(50% + 22px);
-    width: calc(100% - 44px);
-    height: 1.5px;
-    background: var(--border);
-}
-
-.prog-flow__num {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    margin: 0 auto 12px;
-    border-radius: 50%;
-    background: var(--navy-ink);
-    color: #ffffff;
-    font-family: var(--font-display);
-    font-weight: 700;
-    position: relative;
-    z-index: 1;
-}
-
-.prog-flow__title {
-    font-weight: 700;
-    font-size: 0.85rem;
-    color: var(--navy-ink);
-    margin: 0 0 4px;
-}
-
-.prog-flow__sub {
-    font-size: 0.76rem;
-    color: var(--text-muted);
-    margin: 0;
-}
-
-@media (max-width: 640px) {
-    .prog-flow {
-        flex-direction: column;
-        gap: 20px;
-        align-items: flex-start;
-    }
-    .prog-flow__step {
-        text-align: left;
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        padding: 0;
-    }
-    .prog-flow__step::after {
-        display: none;
-    }
-    .prog-flow__num {
-        margin: 0;
-        flex-shrink: 0;
-    }
-}
-
-/* Liste éditoriale de points (constat / apports) */
-.prog-points {
-    margin-top: 30px;
-    border-top: 1px solid var(--border);
-}
-
-.prog-points__item {
-    display: flex;
-    gap: 22px;
-    padding: 20px 0;
-    border-bottom: 1px solid var(--border);
-}
-
-.prog-points__index {
-    flex-shrink: 0;
-    width: 30px;
-    padding-top: 2px;
-    font-family: var(--font-display);
-    font-weight: 700;
+    gap: 6px;
     font-size: 0.82rem;
-    color: var(--prog-gold);
-}
-
-.prog-points__body h4 {
-    margin: 0 0 6px;
-    font-size: 0.98rem;
-    font-weight: 700;
-    color: var(--navy-ink);
-}
-
-.prog-points__body p {
-    margin: 0;
-    font-size: 0.88rem;
-    line-height: 1.6;
     color: var(--text-muted);
-    max-width: 62ch;
+    margin-bottom: 12px;
 }
 
-/* ==========================================================================
-   CTA
-   ========================================================================== */
-.prog-cta {
-    background: linear-gradient(135deg, var(--prog-navy) 0%, var(--prog-navy-deep) 100%);
-    padding: 64px 0;
-    text-align: center;
+.prog-card__meta svg {
+    color: var(--prog-gold);
+    flex-shrink: 0;
 }
 
-.prog-cta__inner {
-    max-width: 620px;
-    width: 92%;
-    margin: 0 auto;
-}
-
-.prog-cta__title {
-    font-family: var(--font-display);
-    font-size: 1.55rem;
-    font-weight: 800;
-    color: #ffffff;
-    margin: 0 0 12px;
-}
-
-.prog-cta__text {
-    font-size: 0.96rem;
-    line-height: 1.65;
-    color: rgba(255, 255, 255, 0.7);
-    margin: 0 0 26px;
+.prog-card__link {
+    display: block;
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--prog-gold);
 }
 
 /* ==========================================================================
@@ -419,6 +142,7 @@
 .prog-skeleton__block--wide {
     height: 220px;
     width: 100%;
+    margin-bottom: 24px;
 }
 
 @keyframes prog-pulse {
@@ -445,4 +169,91 @@
 
 .offre-detail__titre {
     color: var(--navy-ink);
+}
+
+.prog-bloc {
+    margin-top: 10px;
+}
+
+.prog-bloc--accent {
+    margin-top: 30px;
+    padding-top: 26px;
+    border-top: 1px solid var(--bg-soft);
+}
+
+.prog-bloc__titre {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--navy-ink);
+    margin: 0 0 10px;
+}
+
+.prog-bloc__etapes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin: 16px 0;
+}
+
+.prog-bloc__etape {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-width: 90px;
+    padding: 12px 16px;
+    background: var(--bg-soft);
+    border-radius: var(--radius-sm);
+}
+
+.prog-bloc__etape-titre {
+    font-weight: 800;
+    font-size: 0.88rem;
+    color: var(--navy-ink);
+    letter-spacing: 0.02em;
+}
+
+.prog-bloc__etape-sous {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+.prog-bloc__points {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin-top: 10px;
+}
+
+.prog-bloc__point {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+}
+
+.prog-bloc__point h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--navy-ink);
+    margin: 0 0 6px;
+}
+
+.prog-bloc__point p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.5;
+}
+
+@media (max-width: 640px) {
+    .prog-bloc__etapes {
+        gap: 10px;
+    }
+    .prog-bloc__etape {
+        min-width: 76px;
+        padding: 10px 12px;
+    }
 }
