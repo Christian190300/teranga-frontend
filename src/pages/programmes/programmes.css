@@ -1,166 +1,257 @@
 /* ==========================================================================
-   TOKENS locaux
+   PROGRAMMES — Design Moderne Full-Width
    ========================================================================== */
-.prog-page,
-.prog-list {
-    --prog-navy: #14294d;
-    --prog-navy-deep: #0a1830;
-    --prog-gold: #c8951e;
-    --prog-gold-light: #e8b84b;
-    font-family: var(--font-body, system-ui, -apple-system, sans-serif);
-}
 
-/* ==========================================================================
-   PAGE
-   ========================================================================== */
 .prog-page {
     width: 100%;
-    min-height: 100dvh;
-    display: flex;
-    flex-direction: column;
+    min-height: 100vh;
+    padding: 32px 16px 80px;
+    background-color: var(--bg-soft, #f8fafc);
+    font-family: system-ui, -apple-system, sans-serif;
 }
 
-.prog-page__header {
-    max-width: 1400px;
-    width: 96%;
+.prog-page__container {
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 48px 0 8px;
+}
+
+/* --- Header --- */
+.prog-page__header {
+    margin-bottom: 32px;
 }
 
 .prog-page__title {
-    font-family: var(--font-display, system-ui, sans-serif);
-    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    font-size: clamp(2rem, 4vw, 2.6rem);
     font-weight: 800;
     color: var(--navy-ink, #0f1b3d);
-    margin: 0 0 8px;
+    margin: 0 0 6px;
 }
 
 .prog-page__lede {
-    font-size: 0.95rem;
+    font-size: 1rem;
     color: var(--text-muted, #64748b);
     margin: 0;
 }
 
-/* ==========================================================================
-   LISTE — empilée avec inversion alternée
-   ========================================================================== */
-.prog-list {
-    max-width: 1400px;
-    width: 96%;
-    margin: 0 auto;
-    padding: 24px 0 72px;
+/* --- Carte du Programme --- */
+.prog-card {
+    background: white;
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(15, 27, 61, 0.04);
+    margin-bottom: 48px;
+}
+
+/* --- Hero Banner (Image + Résumé) --- */
+.prog-hero {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 0;
+    background: white;
+    border-bottom: 1px solid var(--border, #e2e8f0);
+}
+
+.prog-hero__media {
+    width: 100%;
+    height: 100%;
+    min-height: 320px;
+    position: relative;
+}
+
+.prog-hero__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.prog-hero__body {
+    padding: 32px 36px;
     display: flex;
     flex-direction: column;
-    gap: 40px;
-    flex: 1;
+    justify-content: center;
 }
 
-.prog-section {
-    border: 1px solid var(--border, #e2e8f0);
-    border-radius: var(--radius-md, 12px);
-    overflow: hidden;
-    background: #ffffff;
-    display: flex;
-    align-items: flex-start;
-    box-shadow: 0 4px 12px rgba(15, 27, 61, 0.03);
-}
-
-.prog-section:nth-child(even) {
-    flex-direction: row-reverse;
-}
-
-.prog-section__cover {
-    display: block;
-    width: 44%;
-    flex: 0 0 44%;
-    height: auto;
-    max-height: 520px;
-    object-fit: cover;
-}
-
-.prog-section__body {
-    flex: 1;
-    min-width: 0;
-    padding: 32px clamp(20px, 3vw, 40px);
-}
-
-@media (max-width: 860px) {
-    .prog-section,
-    .prog-section:nth-child(even) {
-        flex-direction: column;
-    }
-
-    .prog-section__cover {
-        width: 100%;
-        flex: none;
-        max-height: 280px;
-    }
-
-    .prog-section__body {
-        padding: 22px 18px 28px;
-    }
-}
-
-.prog-section__header {
-    margin-bottom: 18px;
-}
-
-.prog-section__title {
-    font-family: var(--font-display, system-ui, sans-serif);
-    font-size: clamp(1.3rem, 2.4vw, 1.7rem);
+.prog-hero__title {
+    font-size: 2rem;
     font-weight: 800;
-    color: var(--navy-ink, #0f1b3d);
-    margin: 0 0 10px;
-}
-
-.prog-section__meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-}
-
-.prog-section__meta-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.85rem;
-    color: var(--text-muted, #64748b);
-}
-
-.prog-section__meta-item svg {
-    color: var(--prog-gold);
-    flex-shrink: 0;
-}
-
-.prog-section__text {
-    font-size: 0.95rem;
-    line-height: 1.65;
     color: var(--navy-ink, #0f1b3d);
     margin: 0 0 12px;
 }
 
-.prog-section__grid {
+.prog-hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 16px;
+    font-size: 0.88rem;
+    color: var(--text-muted, #64748b);
+}
+
+.prog-hero__meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.prog-hero__desc {
+    font-size: 0.98rem;
+    line-height: 1.65;
+    color: var(--navy-ink, #0f1b3d);
+    margin: 0 0 20px;
+}
+
+.prog-hero__cta {
+    align-self: flex-start;
+}
+
+/* --- Content Grid (Constat & Programme côte à côte ou pleine largeur) --- */
+.prog-content-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+    gap: 32px;
+    padding: 36px;
+}
+
+.prog-bloc {
+    background: #fcfdfe;
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 14px;
+    padding: 28px;
     display: flex;
     flex-direction: column;
-    gap: 24px;
-    margin-top: 28px;
-    padding-top: 28px;
+    gap: 20px;
+}
+
+.prog-bloc--accent {
+    background: rgba(200, 149, 30, 0.03);
+    border-color: rgba(200, 149, 30, 0.25);
+}
+
+.prog-bloc__header {
+    border-bottom: 2px solid var(--gold, #c8951e);
+    padding-bottom: 10px;
+}
+
+.prog-bloc__label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--gold, #c8951e);
+    margin-bottom: 4px;
+}
+
+.prog-bloc__titre {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--navy-ink, #0f1b3d);
+    margin: 0;
+}
+
+/* --- Grille d'Étapes --- */
+.prog-etapes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+.prog-etape-card {
+    background: white;
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+}
+
+.prog-etape-card__head {
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.prog-etape-card__num {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--navy-ink, #0f1b3d);
+    color: white;
+    font-weight: 800;
+    font-size: 0.78rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.prog-etape-card__text {
+    display: flex;
+    flex-direction: column;
+}
+
+.prog-etape-card__title {
+    font-size: 0.88rem;
+    font-weight: 800;
+    color: var(--navy-ink, #0f1b3d);
+}
+
+.prog-etape-card__sub {
+    font-size: 0.78rem;
+    color: var(--text-muted, #64748b);
+}
+
+.prog-etape-card__img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
     border-top: 1px solid var(--border, #e2e8f0);
 }
 
-.prog-section__cta {
-    margin-top: 28px;
+/* --- Grille de Points & Apports --- */
+.prog-points-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
 }
 
+.prog-point-card {
+    background: white;
+    border-left: 3px solid var(--gold, #c8951e);
+    border-top: 1px solid var(--border, #e2e8f0);
+    border-right: 1px solid var(--border, #e2e8f0);
+    border-bottom: 1px solid var(--border, #e2e8f0);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 14px;
+}
+
+.prog-point-card h4 {
+    font-size: 0.88rem;
+    font-weight: 800;
+    color: var(--navy-ink, #0f1b3d);
+    margin: 0 0 4px;
+}
+
+.prog-point-card p {
+    font-size: 0.82rem;
+    color: var(--text-muted, #64748b);
+    margin: 0;
+    line-height: 1.45;
+}
+
+/* --- Bouton Gold --- */
 .btn-gold {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     padding: 12px 24px;
-    background: var(--prog-gold);
+    background: var(--gold, #c8951e);
     color: white;
     font-weight: 700;
-    border-radius: var(--radius-md, 8px);
+    border-radius: 8px;
     text-decoration: none;
     transition: background 0.15s ease;
 }
@@ -170,195 +261,37 @@
 }
 
 /* ==========================================================================
-   BLOCS "LE CONSTAT" ET "LE PROGRAMME"
+   RESPONSIVE (Mobile & Tablette)
    ========================================================================== */
-.prog-bloc {
-    padding: 22px 24px 26px;
-    border-radius: var(--radius-md, 12px);
-    background: var(--bg-soft, #f8fafc);
-    border: 1px solid var(--border, #e2e8f0);
+@media (max-width: 992px) {
+    .prog-hero {
+        grid-template-columns: 1fr;
+    }
+
+    .prog-hero__media {
+        height: 260px;
+    }
+
+    .prog-content-grid {
+        grid-template-columns: 1fr;
+        padding: 20px;
+    }
 }
 
-.prog-bloc--accent {
-    background: rgba(200, 149, 30, 0.05);
-    border-color: rgba(200, 149, 30, 0.3);
-}
+@media (max-width: 576px) {
+    .prog-page {
+        padding: 16px 10px 40px;
+    }
 
-.prog-bloc__titre {
-    font-family: var(--font-display, system-ui, sans-serif);
-    font-size: 1.1rem;
-    font-weight: 800;
-    color: var(--navy-ink, #0f1b3d);
-    margin: 0 0 12px;
-}
+    .prog-hero__body {
+        padding: 20px 16px;
+    }
 
-/* --- Élément étape avec photo --- */
-.prog-bloc__etapes {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    margin: 18px 0;
-    padding: 0;
-    list-style: none;
-}
+    .prog-bloc {
+        padding: 16px;
+    }
 
-.prog-bloc__etape {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    background: white;
-    border: 1px solid var(--border, #e2e8f0);
-    border-radius: var(--radius-md, 8px);
-    padding: 14px 16px;
-}
-
-.prog-bloc__etape-main {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.prog-bloc__etape-num {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    flex-shrink: 0;
-    border-radius: 50%;
-    background: var(--prog-navy);
-    color: #ffffff;
-    font-size: 0.8rem;
-    font-weight: 800;
-}
-
-.prog-bloc__etape-text {
-    display: flex;
-    flex-direction: column;
-}
-
-.prog-bloc__etape-titre {
-    font-weight: 800;
-    font-size: 0.9rem;
-    color: var(--navy-ink, #0f1b3d);
-}
-
-.prog-bloc__etape-sous {
-    font-size: 0.8rem;
-    color: var(--text-muted, #64748b);
-    margin-top: 2px;
-}
-
-.prog-bloc__etape-img {
-    width: 100%;
-    max-height: 220px;
-    object-fit: cover;
-    border-radius: 6px;
-    border: 1px solid var(--border, #e2e8f0);
-}
-
-/* --- Grid de points / apports --- */
-.prog-bloc__points {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 14px;
-    margin-top: 14px;
-}
-
-.prog-bloc__point {
-    background: white;
-    border-left: 3px solid var(--prog-gold);
-    border-top: 1px solid var(--border, #e2e8f0);
-    border-right: 1px solid var(--border, #e2e8f0);
-    border-bottom: 1px solid var(--border, #e2e8f0);
-    border-radius: 0 8px 8px 0;
-    padding: 12px 14px;
-}
-
-.prog-bloc__point h4 {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--navy-ink, #0f1b3d);
-    margin: 0 0 4px;
-}
-
-.prog-bloc__point p {
-    font-size: 0.84rem;
-    color: var(--text-muted, #64748b);
-    margin: 0;
-    line-height: 1.5;
-}
-
-/* ==========================================================================
-   ÉTATS
-   ========================================================================== */
-.prog-message {
-    max-width: 1400px;
-    width: 96%;
-    margin: 60px auto;
-    text-align: center;
-    color: var(--text-muted, #64748b);
-}
-
-.prog-message--error {
-    color: #b3261e;
-}
-
-.prog-empty {
-    max-width: 1400px;
-    width: 96%;
-    margin: 0 auto;
-    padding: 110px 0;
-    text-align: center;
-    color: var(--text-muted, #64748b);
-    flex: 1;
-}
-
-.prog-empty__icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: var(--bg-soft, #f8fafc);
-    color: var(--text-muted, #64748b);
-    margin-bottom: 14px;
-}
-
-.prog-skeleton {
-    max-width: 1400px;
-    width: 96%;
-    margin: 0 auto;
-    padding: 90px 0;
-    flex: 1;
-}
-
-.prog-skeleton__block {
-    background: var(--bg-soft, #f8fafc);
-    border-radius: 8px;
-    animation: prog-pulse 1.4s ease-in-out infinite;
-}
-
-.prog-skeleton__block--title {
-    height: 40px;
-    width: 55%;
-    margin-bottom: 18px;
-}
-
-.prog-skeleton__block--lede {
-    height: 18px;
-    width: 40%;
-    margin-bottom: 40px;
-}
-
-.prog-skeleton__block--wide {
-    height: 220px;
-    width: 100%;
-    margin-bottom: 24px;
-}
-
-@keyframes prog-pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+    .prog-etapes-grid {
+        grid-template-columns: 1fr;
+    }
 }

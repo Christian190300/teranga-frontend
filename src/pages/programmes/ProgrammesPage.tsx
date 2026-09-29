@@ -1,4 +1,3 @@
-// pages/programmes/ProgrammesPage.tsx
 import { useEffect, useState } from "react";
 import {
     listerProgrammesPublics,
@@ -32,149 +31,141 @@ function UserIcon() {
     );
 }
 
-/**
- * Bloc réutilisable pour "Le constat" / "Le programme"
- * Affiche la liste des étapes (avec leur photo si présente) et la liste des points/apports.
- */
-function ProgrammeBloc({
-                           programmeId,
-                           section,
-                           titre,
-                           texte,
-                           etapes,
-                           points,
-                           accent,
-                       }: {
-    programmeId: number;
-    section: "constat" | "programme";
-    titre: string;
-    texte?: string | null;
-    etapes: EtapeProgrammeDTO[];
-    points: { titre: string; description?: string | null }[];
-    accent?: boolean;
-}) {
+function ProgrammeCard({ programme }: { programme: ProgrammeDTO }) {
     return (
-        <div className={`prog-bloc${accent ? " prog-bloc--accent" : ""}`}>
-            <h3 className="prog-bloc__titre">{titre}</h3>
-            {texte && <p className="prog-section__text">{texte}</p>}
-
-            {etapes.length > 0 && (
-                <ol className="prog-bloc__etapes">
-                    {etapes.map((etape, i) => (
-                        <li className="prog-bloc__etape" key={i}>
-                            <div className="prog-bloc__etape-main">
-                                <span className="prog-bloc__etape-num">{i + 1}</span>
-                                <div className="prog-bloc__etape-text">
-                                    <span className="prog-bloc__etape-titre">{etape.titre}</span>
-                                    {etape.sousTitre && <span className="prog-bloc__etape-sous">{etape.sousTitre}</span>}
-                                </div>
-                            </div>
-                            {etape.imagePresente && (
-                                <img
-                                    src={urlImageEtapePublique(programmeId, section, i)}
-                                    alt={etape.titre}
-                                    className="prog-bloc__etape-img"
-                                />
-                            )}
-                        </li>
-                    ))}
-                </ol>
-            )}
-
-            {points.length > 0 && (
-                <div className="prog-bloc__points">
-                    {points.map((point, i) => (
-                        <div className="prog-bloc__point" key={i}>
-                            <h4>{point.titre}</h4>
-                            {point.description && <p>{point.description}</p>}
-                        </div>
-                    ))}
-                </div>
-            )}
-        </div>
-    );
-}
-
-function ProgrammeSection({ programme }: { programme: ProgrammeDTO }) {
-    const aDesBlocs = Boolean(programme.constatTitre || programme.programmeTitre);
-
-    return (
-        <article className="prog-section">
-            {programme.imagePresente && (
-                <img
-                    src={urlImageProgrammePublique(programme.id)}
-                    alt={programme.titre}
-                    className="prog-section__cover"
-                />
-            )}
-
-            <div className="prog-section__body">
-                <header className="prog-section__header">
-                    <h2 className="prog-section__title">{programme.titre}</h2>
-                    <div className="prog-section__meta">
-                        <span className="prog-section__meta-item">
-                            <CalendarIcon />
-                            Débute le {formatDate(programme.dateDebut)}
+        <article className="prog-card">
+            {/* HERO BANNER (Image + Présentation) */}
+            <div className="prog-hero">
+                {programme.imagePresente && (
+                    <div className="prog-hero__media">
+                        <img
+                            src={urlImageProgrammePublique(programme.id)}
+                            alt={programme.titre}
+                            className="prog-hero__img"
+                        />
+                    </div>
+                )}
+                <div className="prog-hero__body">
+                    <h2 className="prog-hero__title">{programme.titre}</h2>
+                    <div className="prog-hero__meta">
+                        <span className="prog-hero__meta-item">
+                            <CalendarIcon /> Débute le {formatDate(programme.dateDebut)}
                             {programme.dateFin && ` · jusqu'au ${formatDate(programme.dateFin)}`}
                         </span>
                         {programme.formateur && (
-                            <span className="prog-section__meta-item">
-                                <UserIcon />
-                                {programme.formateur}
+                            <span className="prog-hero__meta-item">
+                                <UserIcon /> {programme.formateur}
                             </span>
                         )}
                     </div>
-                </header>
+                    {programme.description && <p className="prog-hero__desc">{programme.description}</p>}
+                    {programme.lien && (
+                        <div className="prog-hero__cta">
+                            <a href={programme.lien} target="_blank" rel="noopener noreferrer" className="btn-gold">
+                                Candidater à ce programme
+                            </a>
+                        </div>
+                    )}
+                </div>
+            </div>
 
-                {programme.description && <p className="prog-section__text">{programme.description}</p>}
+            {/* GRILLE DE CONTENU (CONSTAT & PROGRAMME) */}
+            <div className="prog-content-grid">
+                {/* LE CONSTAT */}
+                {programme.constatTitre && (
+                    <div className="prog-bloc">
+                        <div className="prog-bloc__header">
+                            <span className="prog-bloc__label">Analyse</span>
+                            <h3 className="prog-bloc__titre">{programme.constatTitre}</h3>
+                        </div>
+                        {programme.constatTexte && <p className="prog-hero__desc">{programme.constatTexte}</p>}
 
-                {aDesBlocs && (
-                    <div className="prog-section__grid">
-                        {programme.constatTitre && (
-                            <ProgrammeBloc
-                                programmeId={programme.id}
-                                section="constat"
-                                titre={programme.constatTitre}
-                                texte={programme.constatTexte}
-                                etapes={programme.constatEtapes}
-                                points={programme.constatPoints}
-                            />
+                        {/* Étapes du constat */}
+                        {programme.constatEtapes.length > 0 && (
+                            <div className="prog-etapes-grid">
+                                {programme.constatEtapes.map((etape, i) => (
+                                    <div className="prog-etape-card" key={i}>
+                                        <div className="prog-etape-card__head">
+                                            <span className="prog-etape-card__num">{i + 1}</span>
+                                            <div className="prog-etape-card__text">
+                                                <span className="prog-etape-card__title">{etape.titre}</span>
+                                                {etape.sousTitre && <span className="prog-etape-card__sub">{etape.sousTitre}</span>}
+                                            </div>
+                                        </div>
+                                        {etape.imagePresente && (
+                                            <img
+                                                src={urlImageEtapePublique(programme.id, "constat", i)}
+                                                alt={etape.titre}
+                                                className="prog-etape-card__img"
+                                            />
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
                         )}
-                        {programme.programmeTitre && (
-                            <ProgrammeBloc
-                                programmeId={programme.id}
-                                section="programme"
-                                titre={programme.programmeTitre}
-                                texte={programme.programmeTexte}
-                                etapes={programme.programmeEtapes}
-                                points={programme.programmeApports}
-                                accent
-                            />
+
+                        {/* Points du constat */}
+                        {programme.constatPoints.length > 0 && (
+                            <div className="prog-points-grid">
+                                {programme.constatPoints.map((pt, i) => (
+                                    <div className="prog-point-card" key={i}>
+                                        <h4>{pt.titre}</h4>
+                                        {pt.description && <p>{pt.description}</p>}
+                                    </div>
+                                ))}
+                            </div>
                         )}
                     </div>
                 )}
 
-                {programme.lien && (
-                    <div className="prog-section__cta">
-                        <a href={programme.lien} target="_blank" rel="noopener noreferrer" className="btn-gold">
-                            Candidater à ce programme
-                        </a>
+                {/* LE PROGRAMME */}
+                {programme.programmeTitre && (
+                    <div className="prog-bloc prog-bloc--accent">
+                        <div className="prog-bloc__header">
+                            <span className="prog-bloc__label">Solution</span>
+                            <h3 className="prog-bloc__titre">{programme.programmeTitre}</h3>
+                        </div>
+                        {programme.programmeTexte && <p className="prog-hero__desc">{programme.programmeTexte}</p>}
+
+                        {/* Étapes du programme */}
+                        {programme.programmeEtapes.length > 0 && (
+                            <div className="prog-etapes-grid">
+                                {programme.programmeEtapes.map((etape, i) => (
+                                    <div className="prog-etape-card" key={i}>
+                                        <div className="prog-etape-card__head">
+                                            <span className="prog-etape-card__num">{i + 1}</span>
+                                            <div className="prog-etape-card__text">
+                                                <span className="prog-etape-card__title">{etape.titre}</span>
+                                                {etape.sousTitre && <span className="prog-etape-card__sub">{etape.sousTitre}</span>}
+                                            </div>
+                                        </div>
+                                        {etape.imagePresente && (
+                                            <img
+                                                src={urlImageEtapePublique(programme.id, "programme", i)}
+                                                alt={etape.titre}
+                                                className="prog-etape-card__img"
+                                            />
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        {/* Apports du programme */}
+                        {programme.programmeApports.length > 0 && (
+                            <div className="prog-points-grid">
+                                {programme.programmeApports.map((pt, i) => (
+                                    <div className="prog-point-card" key={i}>
+                                        <h4>{pt.titre}</h4>
+                                        {pt.description && <p>{pt.description}</p>}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
         </article>
-    );
-}
-
-function ProgrammesSkeleton() {
-    return (
-        <div className="prog-page">
-            <div className="prog-skeleton">
-                <div className="prog-skeleton__block prog-skeleton__block--wide" />
-                <div className="prog-skeleton__block prog-skeleton__block--title" />
-                <div className="prog-skeleton__block prog-skeleton__block--lede" />
-            </div>
-        </div>
     );
 }
 
@@ -190,44 +181,26 @@ export function ProgrammesPage() {
             .finally(() => setLoading(false));
     }, []);
 
-    if (loading) return <ProgrammesSkeleton />;
-
-    if (error) {
-        return (
-            <div className="prog-page">
-                <div className="prog-message prog-message--error">{error}</div>
-            </div>
-        );
-    }
-
-    if (programmes.length === 0) {
-        return (
-            <div className="prog-page">
-                <div className="prog-empty">
-                    <div className="prog-empty__icon">
-                        <CalendarIcon />
-                    </div>
-                    <p>Aucun programme disponible pour le moment.</p>
-                </div>
-            </div>
-        );
-    }
+    if (loading) return <div className="prog-page"><div className="prog-page__container">Chargement...</div></div>;
+    if (error) return <div className="prog-page"><div className="prog-page__container">{error}</div></div>;
 
     return (
         <div className="prog-page">
-            <header className="prog-page__header">
-                <h1 className="prog-page__title">Nos programmes</h1>
-                <p className="prog-page__lede">
-                    {programmes.length > 1
-                        ? `${programmes.length} programmes disponibles actuellement.`
-                        : "1 programme disponible actuellement."}
-                </p>
-            </header>
+            <div className="prog-page__container">
+                <header className="prog-page__header">
+                    <h1 className="prog-page__title">Nos programmes</h1>
+                    <p className="prog-page__lede">
+                        {programmes.length > 1
+                            ? `${programmes.length} programmes disponibles actuellement.`
+                            : "1 programme disponible actuellement."}
+                    </p>
+                </header>
 
-            <div className="prog-list">
-                {programmes.map((p) => (
-                    <ProgrammeSection programme={p} key={p.id} />
-                ))}
+                <div>
+                    {programmes.map((p) => (
+                        <ProgrammeCard programme={p} key={p.id} />
+                    ))}
+                </div>
             </div>
         </div>
     );
