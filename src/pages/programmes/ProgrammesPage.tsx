@@ -3,7 +3,6 @@ import {
     listerProgrammesPublics,
     urlImageEtapePublique,
     urlImageProgrammePublique,
-    type EtapeProgrammeDTO,
     type ProgrammeDTO,
 } from "../../api/programmeService";
 import "./programmes.css";
@@ -34,7 +33,7 @@ function UserIcon() {
 function ProgrammeCard({ programme }: { programme: ProgrammeDTO }) {
     return (
         <article className="prog-card">
-            {/* HERO BANNER (Image + Présentation) */}
+            {/* HERO BANNER (Pleine largeur sur ordinateur et mobile) */}
             <div className="prog-hero">
                 {programme.imagePresente && (
                     <div className="prog-hero__media">
@@ -69,16 +68,16 @@ function ProgrammeCard({ programme }: { programme: ProgrammeDTO }) {
                 </div>
             </div>
 
-            {/* GRILLE DE CONTENU (CONSTAT & PROGRAMME) */}
+            {/* CONTENU PRINCIPAL (Grille responsive) */}
             <div className="prog-content-grid">
-                {/* LE CONSTAT */}
+                {/* BLOC 1 : LE CONSTAT */}
                 {programme.constatTitre && (
                     <div className="prog-bloc">
                         <div className="prog-bloc__header">
                             <span className="prog-bloc__label">Analyse</span>
                             <h3 className="prog-bloc__titre">{programme.constatTitre}</h3>
                         </div>
-                        {programme.constatTexte && <p className="prog-hero__desc">{programme.constatTexte}</p>}
+                        {programme.constatTexte && <p className="prog-bloc__desc">{programme.constatTexte}</p>}
 
                         {/* Étapes du constat */}
                         {programme.constatEtapes.length > 0 && (
@@ -104,7 +103,7 @@ function ProgrammeCard({ programme }: { programme: ProgrammeDTO }) {
                             </div>
                         )}
 
-                        {/* Points du constat */}
+                        {/* Points clés du constat */}
                         {programme.constatPoints.length > 0 && (
                             <div className="prog-points-grid">
                                 {programme.constatPoints.map((pt, i) => (
@@ -118,14 +117,14 @@ function ProgrammeCard({ programme }: { programme: ProgrammeDTO }) {
                     </div>
                 )}
 
-                {/* LE PROGRAMME */}
+                {/* BLOC 2 : LE PROGRAMME */}
                 {programme.programmeTitre && (
                     <div className="prog-bloc prog-bloc--accent">
                         <div className="prog-bloc__header">
-                            <span className="prog-bloc__label">Solution</span>
+                            <span className="prog-bloc__label">Dispositif</span>
                             <h3 className="prog-bloc__titre">{programme.programmeTitre}</h3>
                         </div>
-                        {programme.programmeTexte && <p className="prog-hero__desc">{programme.programmeTexte}</p>}
+                        {programme.programmeTexte && <p className="prog-bloc__desc">{programme.programmeTexte}</p>}
 
                         {/* Étapes du programme */}
                         {programme.programmeEtapes.length > 0 && (
@@ -196,7 +195,7 @@ export function ProgrammesPage() {
                     </p>
                 </header>
 
-                <div>
+                <div className="prog-list">
                     {programmes.map((p) => (
                         <ProgrammeCard programme={p} key={p.id} />
                     ))}

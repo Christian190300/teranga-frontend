@@ -1,5 +1,5 @@
 /* ==========================================================================
-   PROGRAMMES — Design Moderne Full-Width
+   PROGRAMMES — Design Pleine Largeur (Full-Width) & Responsive
    ========================================================================== */
 
 .prog-page {
@@ -11,17 +11,18 @@
 }
 
 .prog-page__container {
-    max-width: 1200px;
+    width: 100%;
+    max-width: 1320px;
     margin: 0 auto;
 }
 
 /* --- Header --- */
 .prog-page__header {
-    margin-bottom: 32px;
+    margin-bottom: 28px;
 }
 
 .prog-page__title {
-    font-size: clamp(2rem, 4vw, 2.6rem);
+    font-size: clamp(2rem, 4vw, 2.5rem);
     font-weight: 800;
     color: var(--navy-ink, #0f1b3d);
     margin: 0 0 6px;
@@ -34,29 +35,32 @@
 }
 
 /* --- Carte du Programme --- */
+.prog-list {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
 .prog-card {
-    background: white;
+    background: #ffffff;
     border: 1px solid var(--border, #e2e8f0);
     border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(15, 27, 61, 0.04);
-    margin-bottom: 48px;
+    box-shadow: 0 10px 25px rgba(15, 27, 61, 0.04);
 }
 
-/* --- Hero Banner (Image + Résumé) --- */
+/* --- Hero Banner (Présentation & Cover) --- */
 .prog-hero {
     display: grid;
-    grid-template-columns: 380px 1fr;
-    gap: 0;
-    background: white;
+    grid-template-columns: 420px 1fr;
+    background: #ffffff;
     border-bottom: 1px solid var(--border, #e2e8f0);
 }
 
 .prog-hero__media {
     width: 100%;
     height: 100%;
-    min-height: 320px;
-    position: relative;
+    min-height: 300px;
 }
 
 .prog-hero__img {
@@ -74,17 +78,17 @@
 }
 
 .prog-hero__title {
-    font-size: 2rem;
+    font-size: 1.85rem;
     font-weight: 800;
     color: var(--navy-ink, #0f1b3d);
-    margin: 0 0 12px;
+    margin: 0 0 10px;
 }
 
 .prog-hero__meta {
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
     font-size: 0.88rem;
     color: var(--text-muted, #64748b);
 }
@@ -96,7 +100,7 @@
 }
 
 .prog-hero__desc {
-    font-size: 0.98rem;
+    font-size: 0.96rem;
     line-height: 1.65;
     color: var(--navy-ink, #0f1b3d);
     margin: 0 0 20px;
@@ -106,16 +110,16 @@
     align-self: flex-start;
 }
 
-/* --- Content Grid (Constat & Programme côte à côte ou pleine largeur) --- */
+/* --- Grille de Contenu (Constat + Programme) --- */
 .prog-content-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
-    gap: 32px;
-    padding: 36px;
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding: 32px;
 }
 
 .prog-bloc {
-    background: #fcfdfe;
+    background: #fbfcfd;
     border: 1px solid var(--border, #e2e8f0);
     border-radius: 14px;
     padding: 28px;
@@ -140,7 +144,8 @@
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: var(--gold, #c8951e);
-    margin-bottom: 4px;
+    margin-bottom: 2px;
+    display: block;
 }
 
 .prog-bloc__titre {
@@ -150,7 +155,14 @@
     margin: 0;
 }
 
-/* --- Grille d'Étapes --- */
+.prog-bloc__desc {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--navy-ink, #0f1b3d);
+    margin: 0;
+}
+
+/* --- Grille des Étapes --- */
 .prog-etapes-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -158,13 +170,13 @@
 }
 
 .prog-etape-card {
-    background: white;
+    background: #ffffff;
     border: 1px solid var(--border, #e2e8f0);
     border-radius: 10px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
 }
 
 .prog-etape-card__head {
@@ -175,13 +187,13 @@
 }
 
 .prog-etape-card__num {
-    width: 26px;
-    height: 26px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     background: var(--navy-ink, #0f1b3d);
-    color: white;
+    color: #ffffff;
     font-weight: 800;
-    font-size: 0.78rem;
+    font-size: 0.8rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -206,20 +218,20 @@
 
 .prog-etape-card__img {
     width: 100%;
-    height: 140px;
+    height: 160px;
     object-fit: cover;
     border-top: 1px solid var(--border, #e2e8f0);
 }
 
-/* --- Grille de Points & Apports --- */
+/* --- Grille des Points/Apports --- */
 .prog-points-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
 }
 
 .prog-point-card {
-    background: white;
+    background: #ffffff;
     border-left: 3px solid var(--gold, #c8951e);
     border-top: 1px solid var(--border, #e2e8f0);
     border-right: 1px solid var(--border, #e2e8f0);
@@ -229,27 +241,27 @@
 }
 
 .prog-point-card h4 {
-    font-size: 0.88rem;
+    font-size: 0.9rem;
     font-weight: 800;
     color: var(--navy-ink, #0f1b3d);
     margin: 0 0 4px;
 }
 
 .prog-point-card p {
-    font-size: 0.82rem;
+    font-size: 0.84rem;
     color: var(--text-muted, #64748b);
     margin: 0;
     line-height: 1.45;
 }
 
-/* --- Bouton Gold --- */
+/* --- Bouton CTA --- */
 .btn-gold {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     padding: 12px 24px;
     background: var(--gold, #c8951e);
-    color: white;
+    color: #ffffff;
     font-weight: 700;
     border-radius: 8px;
     text-decoration: none;
@@ -261,7 +273,7 @@
 }
 
 /* ==========================================================================
-   RESPONSIVE (Mobile & Tablette)
+   RESPONSIVE (Tablette & Mobile)
    ========================================================================== */
 @media (max-width: 992px) {
     .prog-hero {
@@ -273,7 +285,6 @@
     }
 
     .prog-content-grid {
-        grid-template-columns: 1fr;
         padding: 20px;
     }
 }
