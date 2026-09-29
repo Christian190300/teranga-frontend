@@ -5,6 +5,8 @@ export type StatutProgramme = "BROUILLON" | "PUBLIEE";
 export interface EtapeProgrammeDTO {
     titre: string;
     sousTitre: string | null;
+    imagePresente?: boolean;
+    imageNomOriginal?: string | null;
 }
 
 export interface PointProgrammeDTO {
@@ -73,6 +75,10 @@ export function urlImageProgrammePublique(id: number): string {
     return `/api/programmes/${id}/image`;
 }
 
+export function urlImageEtapePublique(id: number, section: "constat" | "programme", index: number): string {
+    return `/api/programmes/${id}/etapes/${section}/${index}/image`;
+}
+
 // ---------- Admin ----------
 
 export async function listerProgrammesAdmin(): Promise<ProgrammeDTO[]> {
@@ -109,10 +115,32 @@ export async function uploaderImageProgramme(id: number, fichier: File): Promise
     return response.data;
 }
 
+export async function uploaderImageEtape(
+    id: number,
+    section: "constat" | "programme",
+    index: number,
+    fichier: File
+): Promise<ProgrammeDTO> {
+    const formData = new FormData();
+    formData.append("fichier", fichier);
+    const response = await httpClient.post<ProgrammeDTO>(
+        `/admin/programmes/${id}/etapes/${section}/${index}/image`,
+        formData,
+        {
+            headers: { "Content-Type": "multipart/form-data" },
+        }
+    );
+    return response.data;
+}
+
 export async function supprimerProgramme(id: number): Promise<void> {
     await httpClient.delete(`/admin/programmes/${id}`);
 }
 
 export function urlImageProgrammeAdmin(id: number): string {
-    return `/admin/programmes/${id}/image`;
+    return `/api/admin/programmes/${id}/image`;
+}
+
+export function urlImageEtapeAdmin(id: number, section: "constat" | "programme", index: number): string {
+    return `/api/admin/programmes/${id}/etapes/${section}/${index}/image`;
 }

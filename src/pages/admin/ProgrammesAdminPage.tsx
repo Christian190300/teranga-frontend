@@ -168,7 +168,7 @@ export function ProgrammesAdminPage() {
                     <h1 className="prog-admin-page__title">Programmes</h1>
                     <p className="prog-admin-page__subtitle">Gère les programmes affichés sur le site public.</p>
                 </div>
-                <Link to="/admin/programmes/nouveau" className="btn-primary">
+                <Link to="/admin/programmes/nouveau" className="prog-chip prog-chip--active">
                     <PlusIcon />
                     Nouveau programme
                 </Link>
@@ -239,16 +239,16 @@ export function ProgrammesAdminPage() {
                 </div>
             </div>
 
-            {error && <div className="mod-alert">{error}</div>}
+            {error && <div className="prog-modal">{error}</div>}
 
             {loading ? (
                 <div className="prog-admin-list">
                     {Array.from({ length: 4 }).map((_, i) => (
                         <div className="prog-admin-row prog-admin-row--skeleton" key={i}>
                             <div className="prog-admin-row__thumb prog-skel" />
-                            <div className="prog-admin-row__body">
-                                <div className="prog-skel prog-skel--line" style={{ width: "60%" }} />
-                                <div className="prog-skel prog-skel--line" style={{ width: "35%" }} />
+                            <div className="prog-admin-row__content">
+                                <div className="prog-skel prog-skel--line" style={{ width: "200px" }} />
+                                <div className="prog-skel prog-skel--line" style={{ width: "120px" }} />
                             </div>
                         </div>
                     ))}
@@ -265,7 +265,7 @@ export function ProgrammesAdminPage() {
                             : "Crée ton premier programme pour qu'il apparaisse ici."}
                     </p>
                     {!recherche && filtre === "TOUS" && (
-                        <Link to="/admin/programmes/nouveau" className="btn-primary">
+                        <Link to="/admin/programmes/nouveau" className="prog-chip prog-chip--active">
                             <PlusIcon />
                             Créer un programme
                         </Link>
@@ -275,47 +275,49 @@ export function ProgrammesAdminPage() {
                 <div className="prog-admin-list">
                     {programmesFiltres.map((p) => (
                         <div key={p.id} className="prog-admin-row">
-                            <div className="prog-admin-row__thumb">
-                                {p.imagePresente ? (
-                                    <img src={urlImageProgrammeAdmin(p.id)} alt="" />
-                                ) : (
-                                    <span className="prog-admin-row__thumb-empty">{p.titre.charAt(0)}</span>
-                                )}
-                            </div>
-
-                            <div className="prog-admin-row__body">
-                                <h3 className="prog-admin-row__titre">{p.titre}</h3>
-                                <div className="prog-admin-row__meta">
-                                    <span>
-                                        <CalendarIcon />
-                                        {formatDate(p.dateDebut)}
-                                    </span>
-                                    {p.formateur && (
-                                        <span>
-                                            <UserIcon />
-                                            {p.formateur}
-                                        </span>
+                            <div className="prog-admin-row__main">
+                                <div className="prog-admin-row__thumb">
+                                    {p.imagePresente ? (
+                                        <img src={urlImageProgrammeAdmin(p.id)} alt="" />
+                                    ) : (
+                                        <span className="prog-admin-row__thumb-empty">{p.titre.charAt(0)}</span>
                                     )}
+                                </div>
+
+                                <div className="prog-admin-row__content">
+                                    <h3 className="prog-admin-row__title">{p.titre}</h3>
+                                    <div className="prog-admin-row__meta">
+                                        <span>
+                                            <CalendarIcon />
+                                            {formatDate(p.dateDebut)}
+                                        </span>
+                                        {p.formateur && (
+                                            <span>
+                                                <UserIcon />
+                                                {p.formateur}
+                                            </span>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
 
-                            <span className={`statut-badge statut-badge--${p.statut === "PUBLIEE" ? "publiee" : "brouillon"}`}>
+                            <span className={`prog-badge prog-badge--${p.statut === "PUBLIEE" ? "published" : "draft"}`}>
                                 {p.statut === "PUBLIEE" ? "Publié" : "Brouillon"}
                             </span>
 
                             <div className="prog-admin-row__actions">
                                 <button
-                                    className="btn-secondary"
+                                    className="prog-chip"
                                     disabled={enCours === p.id}
                                     onClick={() => handlePublier(p.id, p.statut)}
                                 >
                                     {p.statut === "PUBLIEE" ? "Dépublier" : "Publier"}
                                 </button>
-                                <Link to={`/admin/programmes/${p.id}/modifier`} className="btn-secondary">
+                                <Link to={`/admin/programmes/${p.id}/modifier`} className="prog-chip">
                                     Modifier
                                 </Link>
                                 <button
-                                    className="btn-secondary btn-danger"
+                                    className="prog-chip"
                                     disabled={enCours === p.id}
                                     onClick={() => setASupprimer(p)}
                                 >
@@ -333,11 +335,11 @@ export function ProgrammesAdminPage() {
                         <h3>Supprimer ce programme ?</h3>
                         <p>« {aSupprimer.titre} » sera définitivement supprimé. Cette action est irréversible.</p>
                         <div className="prog-modal__actions">
-                            <button className="btn-secondary" onClick={() => setASupprimer(null)}>
+                            <button className="prog-chip" onClick={() => setASupprimer(null)}>
                                 Annuler
                             </button>
                             <button
-                                className="btn-secondary btn-danger"
+                                className="prog-chip prog-chip--active"
                                 disabled={enCours === aSupprimer.id}
                                 onClick={confirmerSuppression}
                             >

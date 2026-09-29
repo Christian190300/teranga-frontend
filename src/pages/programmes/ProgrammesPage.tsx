@@ -2,7 +2,9 @@
 import { useEffect, useState } from "react";
 import {
     listerProgrammesPublics,
+    urlImageEtapePublique,
     urlImageProgrammePublique,
+    type EtapeProgrammeDTO,
     type ProgrammeDTO,
 } from "../../api/programmeService";
 import "./programmes.css";
@@ -31,20 +33,23 @@ function UserIcon() {
 }
 
 /**
- * Bloc réutilisable pour "Le constat" / "Le programme" : reprend la
- * structure déjà utilisée sur la page de détail (mêmes classes prog-bloc*),
- * pour rester cohérent visuellement.
+ * Bloc réutilisable pour "Le constat" / "Le programme"
+ * Affiche la liste des étapes (avec leur photo si présente) et la liste des points/apports.
  */
 function ProgrammeBloc({
+                           programmeId,
+                           section,
                            titre,
                            texte,
                            etapes,
                            points,
                            accent,
                        }: {
+    programmeId: number;
+    section: "constat" | "programme";
     titre: string;
     texte?: string | null;
-    etapes: { titre: string; sousTitre?: string | null }[];
+    etapes: EtapeProgrammeDTO[];
     points: { titre: string; description?: string | null }[];
     accent?: boolean;
 }) {
@@ -57,9 +62,20 @@ function ProgrammeBloc({
                 <ol className="prog-bloc__etapes">
                     {etapes.map((etape, i) => (
                         <li className="prog-bloc__etape" key={i}>
-                            <span className="prog-bloc__etape-num">{i + 1}</span>
-                            <span className="prog-bloc__etape-titre">{etape.titre}</span>
-                            {etape.sousTitre && <span className="prog-bloc__etape-sous">{etape.sousTitre}</span>}
+                            <div className="prog-bloc__etape-main">
+                                <span className="prog-bloc__etape-num">{i + 1}</span>
+                                <div className="prog-bloc__etape-text">
+                                    <span className="prog-bloc__etape-titre">{etape.titre}</span>
+                                    {etape.sousTitre && <span className="prog-bloc__etape-sous">{etape.sousTitre}</span>}
+                                </div>
+                            </div>
+                            {etape.imagePresente && (
+                                <img
+                                    src={urlImageEtapePublique(programmeId, section, i)}
+                                    alt={etape.titre}
+                                    className="prog-bloc__etape-img"
+                                />
+                            )}
                         </li>
                     ))}
                 </ol>
@@ -116,6 +132,8 @@ function ProgrammeSection({ programme }: { programme: ProgrammeDTO }) {
                     <div className="prog-section__grid">
                         {programme.constatTitre && (
                             <ProgrammeBloc
+                                programmeId={programme.id}
+                                section="constat"
                                 titre={programme.constatTitre}
                                 texte={programme.constatTexte}
                                 etapes={programme.constatEtapes}
@@ -124,6 +142,8 @@ function ProgrammeSection({ programme }: { programme: ProgrammeDTO }) {
                         )}
                         {programme.programmeTitre && (
                             <ProgrammeBloc
+                                programmeId={programme.id}
+                                section="programme"
                                 titre={programme.programmeTitre}
                                 texte={programme.programmeTexte}
                                 etapes={programme.programmeEtapes}

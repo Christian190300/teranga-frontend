@@ -1,16 +1,23 @@
-import { useEffect, useState } from "react";
+// pages/programmesAdmin/ProgrammeFormPage.tsx
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
     creerProgramme,
     modifierProgramme,
     obtenirProgrammeAdmin,
+    uploaderImageEtape,
     uploaderImageProgramme,
+    urlImageEtapeAdmin,
     urlImageProgrammeAdmin,
     type CreerModifierProgrammeDTO,
     type EtapeProgrammeDTO,
     type PointProgrammeDTO,
 } from "../../api/programmeService";
 import "./programmesAdmin.css";
+
+interface EtapeAvecFichier extends EtapeProgrammeDTO {
+    fichierImage?: File | null;
+}
 
 const VIDE: CreerModifierProgrammeDTO = {
     titre: "",
@@ -29,43 +36,68 @@ const VIDE: CreerModifierProgrammeDTO = {
     programmeApports: [],
 };
 
-/** Éditeur répétable pour une liste d'étapes (titre + sous-titre). */
 function EditeurEtapes({
                            etapes,
                            onChange,
+                           programmeId,
+                           section,
                        }: {
-    etapes: EtapeProgrammeDTO[];
-    onChange: (etapes: EtapeProgrammeDTO[]) => void;
+    etapes: EtapeAvecFichier[];
+    onChange: (etapes: EtapeAvecFichier[]) => void;
+    programmeId?: number;
+    section: "constat" | "programme";
 }) {
     function ajouter() {
-        onChange([...etapes, { titre: "", sousTitre: "" }]);
+        onChange([...etapes, { titre: "", sousTitre: "", imagePresente: false, fichierImage: null }]);
     }
+
     function retirer(index: number) {
         onChange(etapes.filter((_, i) => i !== index));
     }
-    function modifier(index: number, champ: keyof EtapeProgrammeDTO, valeur: string) {
+
+    function modifier(index: number, champ: keyof EtapeAvecFichier, valeur: any) {
         onChange(etapes.map((e, i) => (i === index ? { ...e, [champ]: valeur } : e)));
     }
 
     return (
         <div className="prog-repetable-liste">
             {etapes.map((etape, index) => (
-                <div className="prog-repetable-ligne" key={index}>
-                    <input
-                        type="text"
-                        placeholder="Titre (ex: ÉCOLE)"
-                        value={etape.titre}
-                        onChange={(e) => modifier(index, "titre", e.target.value)}
-                    />
-                    <input
-                        type="text"
-                        placeholder="Sous-titre (ex: Identifie)"
-                        value={etape.sousTitre ?? ""}
-                        onChange={(e) => modifier(index, "sousTitre", e.target.value)}
-                    />
-                    <button type="button" className="prog-repetable-retirer" onClick={() => retirer(index)}>
-                        ✕
-                    </button>
+                <div className="prog-repetable-carte" key={index}>
+                    <div className="prog-repetable-carte-head">
+                        <span className="prog-etape-badge">Étape {index + 1}</span>
+                        <button type="button" className="prog-repetable-retirer" onClick={() => retirer(index)}>
+                            ✕
+                        </button>
+                    </div>
+
+                    <div className="prog-field-grid">
+                        <input
+                            type="text"
+                            placeholder="Titre (ex: ÉCOLE)"
+                            value={etape.titre}
+                            onChange={(e) => modifier(index, "titre", e.target.value)}
+                        />
+                        <input
+                            type="text"
+                            placeholder="Sous-titre (ex: Identifie les besoins)"
+                            value={etape.sousTitre ?? ""}
+                            onChange={(e) => modifier(index, "sousTitre", e.target.value)}
+                        />
+                    </div>
+
+                    <div className="prog-etape-image-box">
+                        <label className="prog-field-label">Image de l'étape</label>
+                        {programmeId && etape.imagePresente && !etape.fichierImage && (
+                            <div className="prog-etape-thumb">
+                                <img src={urlImageEtapeAdmin(programmeId, section, index)} alt="" />
+                            </div>
+                        )}
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => modifier(index, "fichierImage", e.target.files?.[0] ?? null)}
+                        />
+                    </div>
                 </div>
             ))}
             <button type="button" className="prog-repetable-ajouter" onClick={ajouter}>
@@ -75,7 +107,6 @@ function EditeurEtapes({
     );
 }
 
-/** Éditeur répétable pour une liste de points (titre + description). */
 function EditeurPoints({
                            points,
                            onChange,
@@ -131,6 +162,9 @@ export function ProgrammeFormPage() {
     const estEdition = Boolean(id);
 
     const [form, setForm] = useState<CreerModifierProgrammeDTO>(VIDE);
+    const [constatEtapes, setConstatEtapes] = useState<EtapeAvecFichier[]>([]);
+    const [programmeEtapes, setProgrammeEtapes] = useState<EtapeAvecFichier[]>([]);
+
     const [imageActuelle, setImageActuelle] = useState<number | null>(null);
     const [fichierImage, setFichierImage] = useState<File | null>(null);
     const [chargement, setChargement] = useState(estEdition);
@@ -157,6 +191,8 @@ export function ProgrammeFormPage() {
                     programmeEtapes: p.programmeEtapes ?? [],
                     programmeApports: p.programmeApports ?? [],
                 });
+                setConstatEtapes((p.constatEtapes ?? []).map((e) => ({ ...e, fichierImage: null })));
+                setProgrammeEtapes((p.programmeEtapes ?? []).map((e) => ({ ...e, fichierImage: null })));
                 if (p.imagePresente) setImageActuelle(p.id);
             })
             .catch(() => setErreur("Impossible de charger ce programme."))
@@ -182,12 +218,26 @@ export function ProgrammeFormPage() {
                 constatTexte: form.constatTexte || null,
                 programmeTitre: form.programmeTitre || null,
                 programmeTexte: form.programmeTexte || null,
+                constatEtapes: constatEtapes.map(({ titre, sousTitre }) => ({ titre, sousTitre })),
+                programmeEtapes: programmeEtapes.map(({ titre, sousTitre }) => ({ titre, sousTitre })),
             };
 
             const programme = estEdition ? await modifierProgramme(Number(id), dto) : await creerProgramme(dto);
 
             if (fichierImage) {
                 await uploaderImageProgramme(programme.id, fichierImage);
+            }
+
+            for (let i = 0; i < constatEtapes.length; i++) {
+                if (constatEtapes[i].fichierImage) {
+                    await uploaderImageEtape(programme.id, "constat", i, constatEtapes[i].fichierImage!);
+                }
+            }
+
+            for (let i = 0; i < programmeEtapes.length; i++) {
+                if (programmeEtapes[i].fichierImage) {
+                    await uploaderImageEtape(programme.id, "programme", i, programmeEtapes[i].fichierImage!);
+                }
             }
 
             navigate("/admin/programmes");
@@ -198,76 +248,84 @@ export function ProgrammeFormPage() {
         }
     }
 
-    if (chargement) return <div className="mod-state">Chargement...</div>;
+    if (chargement) return <div className="prog-empty">Chargement...</div>;
 
     return (
         <div className="prog-admin-page">
             <h1 className="prog-admin-page__title">{estEdition ? "Modifier le programme" : "Nouveau programme"}</h1>
 
-            {erreur && <div className="mod-alert">{erreur}</div>}
+            {erreur && <div className="prog-modal">{erreur}</div>}
 
-            <form className="offre-form-card" onSubmit={handleSubmit}>
+            <form className="prog-admin-row" style={{ flexDirection: "column", alignItems: "stretch" }} onSubmit={handleSubmit}>
                 <div className="offre-field">
-                    <label>Titre</label>
-                    <input value={form.titre} onChange={(e) => handleChange("titre", e.target.value)} required />
+                    <label className="prog-field-label">Titre</label>
+                    <input className="prog-search" value={form.titre} onChange={(e) => handleChange("titre", e.target.value)} required />
                 </div>
 
                 <div className="offre-field">
-                    <label>Description</label>
-                    <textarea value={form.description ?? ""} onChange={(e) => handleChange("description", e.target.value)} />
+                    <label className="prog-field-label">Description</label>
+                    <textarea className="prog-search" rows={3} value={form.description ?? ""} onChange={(e) => handleChange("description", e.target.value)} />
                 </div>
 
                 <div className="offre-field">
-                    <label>Formateur</label>
-                    <input value={form.formateur ?? ""} onChange={(e) => handleChange("formateur", e.target.value)} />
+                    <label className="prog-field-label">Formateur</label>
+                    <input className="prog-search" value={form.formateur ?? ""} onChange={(e) => handleChange("formateur", e.target.value)} />
                 </div>
 
-                <div className="offre-field-row">
-                    <div className="offre-field">
-                        <label>Date de début</label>
+                <div className="prog-field-grid">
+                    <div>
+                        <label className="prog-field-label">Date de début</label>
                         <input
                             type="date"
+                            className="prog-search"
                             value={form.dateDebut}
                             onChange={(e) => handleChange("dateDebut", e.target.value)}
                             required
                         />
                     </div>
-                    <div className="offre-field">
-                        <label>Date de fin</label>
-                        <input type="date" value={form.dateFin ?? ""} onChange={(e) => handleChange("dateFin", e.target.value)} />
+                    <div>
+                        <label className="prog-field-label">Date de fin</label>
+                        <input type="date" className="prog-search" value={form.dateFin ?? ""} onChange={(e) => handleChange("dateFin", e.target.value)} />
                     </div>
                 </div>
 
-                <div className="offre-field">
-                    <label>Lien (candidature / en savoir plus)</label>
-                    <input value={form.lien ?? ""} onChange={(e) => handleChange("lien", e.target.value)} placeholder="https://..." />
+                <div>
+                    <label className="prog-field-label">Lien de la formation</label>
+                    <input className="prog-search" value={form.lien ?? ""} onChange={(e) => handleChange("lien", e.target.value)} placeholder="https://..." />
                 </div>
 
-                <div className="offre-field">
-                    <label>Image de couverture</label>
+                <div>
+                    <label className="prog-field-label">Image de couverture du programme</label>
                     {imageActuelle && !fichierImage && (
-                        <img src={urlImageProgrammeAdmin(imageActuelle)} alt="" className="prog-admin-form__preview" />
+                        <div className="prog-admin-row__thumb" style={{ width: 120, height: 80, marginBottom: 8 }}>
+                            <img src={urlImageProgrammeAdmin(imageActuelle)} alt="" />
+                        </div>
                     )}
                     <input type="file" accept="image/*" onChange={(e) => setFichierImage(e.target.files?.[0] ?? null)} />
                 </div>
 
-                <hr className="prog-form-separateur" />
-                <h2 className="prog-form-section-titre">LE CONSTAT</h2>
+                <hr style={{ margin: "20px 0", borderColor: "var(--border, #e2e8f0)" }} />
+                <h2 className="prog-admin-page__title">LE CONSTAT</h2>
 
-                <div className="offre-field">
-                    <label>Titre du constat</label>
-                    <input value={form.constatTitre ?? ""} onChange={(e) => handleChange("constatTitre", e.target.value)} />
+                <div>
+                    <label className="prog-field-label">Titre du constat</label>
+                    <input className="prog-search" value={form.constatTitre ?? ""} onChange={(e) => handleChange("constatTitre", e.target.value)} />
                 </div>
-                <div className="offre-field">
-                    <label>Texte du constat</label>
-                    <textarea value={form.constatTexte ?? ""} onChange={(e) => handleChange("constatTexte", e.target.value)} />
+                <div>
+                    <label className="prog-field-label">Texte du constat</label>
+                    <textarea className="prog-search" rows={3} value={form.constatTexte ?? ""} onChange={(e) => handleChange("constatTexte", e.target.value)} />
                 </div>
-                <div className="offre-field">
-                    <label>Étapes du constat</label>
-                    <EditeurEtapes etapes={form.constatEtapes} onChange={(v) => handleChange("constatEtapes", v)} />
+                <div>
+                    <label className="prog-field-label">Étapes du constat</label>
+                    <EditeurEtapes
+                        etapes={constatEtapes}
+                        onChange={setConstatEtapes}
+                        programmeId={id ? Number(id) : undefined}
+                        section="constat"
+                    />
                 </div>
-                <div className="offre-field">
-                    <label>Points du constat</label>
+                <div>
+                    <label className="prog-field-label">Points du constat</label>
                     <EditeurPoints
                         points={form.constatPoints}
                         onChange={(v) => handleChange("constatPoints", v)}
@@ -275,23 +333,28 @@ export function ProgrammeFormPage() {
                     />
                 </div>
 
-                <hr className="prog-form-separateur" />
-                <h2 className="prog-form-section-titre">LE PROGRAMME</h2>
+                <hr style={{ margin: "20px 0", borderColor: "var(--border, #e2e8f0)" }} />
+                <h2 className="prog-admin-page__title">LE PROGRAMME</h2>
 
-                <div className="offre-field">
-                    <label>Titre du programme</label>
-                    <input value={form.programmeTitre ?? ""} onChange={(e) => handleChange("programmeTitre", e.target.value)} />
+                <div>
+                    <label className="prog-field-label">Titre du programme</label>
+                    <input className="prog-search" value={form.programmeTitre ?? ""} onChange={(e) => handleChange("programmeTitre", e.target.value)} />
                 </div>
-                <div className="offre-field">
-                    <label>Texte du programme</label>
-                    <textarea value={form.programmeTexte ?? ""} onChange={(e) => handleChange("programmeTexte", e.target.value)} />
+                <div>
+                    <label className="prog-field-label">Texte du programme</label>
+                    <textarea className="prog-search" rows={3} value={form.programmeTexte ?? ""} onChange={(e) => handleChange("programmeTexte", e.target.value)} />
                 </div>
-                <div className="offre-field">
-                    <label>Étapes du programme</label>
-                    <EditeurEtapes etapes={form.programmeEtapes} onChange={(v) => handleChange("programmeEtapes", v)} />
+                <div>
+                    <label className="prog-field-label">Étapes du programme</label>
+                    <EditeurEtapes
+                        etapes={programmeEtapes}
+                        onChange={setProgrammeEtapes}
+                        programmeId={id ? Number(id) : undefined}
+                        section="programme"
+                    />
                 </div>
-                <div className="offre-field">
-                    <label>Apports du programme</label>
+                <div>
+                    <label className="prog-field-label">Apports du programme</label>
                     <EditeurPoints
                         points={form.programmeApports}
                         onChange={(v) => handleChange("programmeApports", v)}
@@ -299,9 +362,9 @@ export function ProgrammeFormPage() {
                     />
                 </div>
 
-                <div className="offre-form-actions">
-                    <button type="submit" className="btn-gold" disabled={enregistrement}>
-                        {enregistrement ? "Enregistrement..." : "Enregistrer"}
+                <div style={{ marginTop: 20, display: "flex", justifyContent: "flex-end" }}>
+                    <button type="submit" className="prog-chip prog-chip--active" disabled={enregistrement}>
+                        {enregistrement ? "Enregistrement..." : "Enregistrer le programme"}
                     </button>
                 </div>
             </form>
