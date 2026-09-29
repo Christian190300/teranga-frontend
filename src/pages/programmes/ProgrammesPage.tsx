@@ -13,7 +13,7 @@ function formatDate(iso: string): string {
 
 function CalendarIcon() {
     return (
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <rect x="3.5" y="5" width="17" height="15.5" rx="2" stroke="currentColor" strokeWidth="1.8" />
             <path d="M3.5 9.5h17" stroke="currentColor" strokeWidth="1.8" />
             <path d="M8 3v3.5M16 3v3.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
@@ -23,147 +23,144 @@ function CalendarIcon() {
 
 function UserIcon() {
     return (
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <circle cx="12" cy="8" r="3.5" stroke="currentColor" strokeWidth="1.8" />
             <path d="M5 20c1.2-4 4.2-6 7-6s5.8 2 7 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
         </svg>
     );
 }
 
+function ArrowIcon() {
+    return (
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+    );
+}
+
+function EtapesTimeline({
+                            etapes,
+                            programmeId,
+                            section,
+                        }: {
+    etapes: ProgrammeDTO["constatEtapes"];
+    programmeId: number;
+    section: "constat" | "programme";
+}) {
+    if (etapes.length === 0) return null;
+
+    return (
+        <ol className="prog-timeline">
+            {etapes.map((etape, i) => (
+                <li className="prog-timeline__item" key={i}>
+                    <span className="prog-timeline__num">{i + 1}</span>
+                    <div className="prog-timeline__body">
+                        <p className="prog-timeline__title">{etape.titre}</p>
+                        {etape.sousTitre && <p className="prog-timeline__sub">{etape.sousTitre}</p>}
+                        {etape.imagePresente && (
+                            <img
+                                src={urlImageEtapePublique(programmeId, section, i)}
+                                alt={etape.titre}
+                                className="prog-timeline__img"
+                            />
+                        )}
+                    </div>
+                </li>
+            ))}
+        </ol>
+    );
+}
+
+function PointsList({ points }: { points: ProgrammeDTO["constatPoints"] }) {
+    if (points.length === 0) return null;
+
+    return (
+        <ul className="prog-points">
+            {points.map((pt, i) => (
+                <li className="prog-points__item" key={i}>
+                    <span className="prog-points__marker" aria-hidden="true" />
+                    <div>
+                        <p className="prog-points__title">{pt.titre}</p>
+                        {pt.description && <p className="prog-points__desc">{pt.description}</p>}
+                    </div>
+                </li>
+            ))}
+        </ul>
+    );
+}
+
 function ProgrammeCard({ programme }: { programme: ProgrammeDTO }) {
     return (
-        <article className="prog-card">
-            {/* HERO BANNER (Pleine largeur sur ordinateur et mobile) */}
-            <div className="prog-hero">
+        <article className="prog-dossier">
+            <div className="prog-dossier__hero">
                 {programme.imagePresente && (
-                    <div className="prog-hero__media">
+                    <div className="prog-dossier__media">
                         <img
                             src={urlImageProgrammePublique(programme.id)}
                             alt={programme.titre}
-                            className="prog-hero__img"
+                            className="prog-dossier__img"
                         />
                     </div>
                 )}
-                <div className="prog-hero__body">
-                    <h2 className="prog-hero__title">{programme.titre}</h2>
-                    <div className="prog-hero__meta">
-                        <span className="prog-hero__meta-item">
-                            <CalendarIcon /> Débute le {formatDate(programme.dateDebut)}
-                            {programme.dateFin && ` · jusqu'au ${formatDate(programme.dateFin)}`}
+                <div className="prog-dossier__intro">
+                    <h2 className="prog-dossier__title">{programme.titre}</h2>
+
+                    <div className="prog-dossier__facts">
+                        <span className="prog-dossier__fact">
+                            <CalendarIcon />
+                            Débute le {formatDate(programme.dateDebut)}
+                            {programme.dateFin && ` — jusqu'au ${formatDate(programme.dateFin)}`}
                         </span>
                         {programme.formateur && (
-                            <span className="prog-hero__meta-item">
-                                <UserIcon /> {programme.formateur}
+                            <span className="prog-dossier__fact">
+                                <UserIcon />
+                                {programme.formateur}
                             </span>
                         )}
                     </div>
-                    {programme.description && <p className="prog-hero__desc">{programme.description}</p>}
+
+                    {programme.description && <p className="prog-dossier__desc">{programme.description}</p>}
+
                     {programme.lien && (
-                        <div className="prog-hero__cta">
-                            <a href={programme.lien} target="_blank" rel="noopener noreferrer" className="btn-gold">
-                                Candidater à ce programme
-                            </a>
-                        </div>
+                        <a href={programme.lien} target="_blank" rel="noopener noreferrer" className="prog-dossier__cta">
+                            Candidater à ce programme
+                            <ArrowIcon />
+                        </a>
                     )}
                 </div>
             </div>
 
-            {/* CONTENU PRINCIPAL (Grille responsive) */}
-            <div className="prog-content-grid">
-                {/* BLOC 1 : LE CONSTAT */}
-                {programme.constatTitre && (
-                    <div className="prog-bloc">
-                        <div className="prog-bloc__header">
-                            <span className="prog-bloc__label">Analyse</span>
-                            <h3 className="prog-bloc__titre">{programme.constatTitre}</h3>
-                        </div>
-                        {programme.constatTexte && <p className="prog-bloc__desc">{programme.constatTexte}</p>}
+            {(programme.constatTitre || programme.programmeTitre) && (
+                <div className="prog-dossier__body">
+                    {programme.constatTitre && (
+                        <section className="prog-dossier__column">
+                            <p className="prog-dossier__eyebrow">Le constat</p>
+                            <h3 className="prog-dossier__heading">{programme.constatTitre}</h3>
+                            {programme.constatTexte && <p className="prog-dossier__text">{programme.constatTexte}</p>}
 
-                        {/* Étapes du constat */}
-                        {programme.constatEtapes.length > 0 && (
-                            <div className="prog-etapes-grid">
-                                {programme.constatEtapes.map((etape, i) => (
-                                    <div className="prog-etape-card" key={i}>
-                                        <div className="prog-etape-card__head">
-                                            <span className="prog-etape-card__num">{i + 1}</span>
-                                            <div className="prog-etape-card__text">
-                                                <span className="prog-etape-card__title">{etape.titre}</span>
-                                                {etape.sousTitre && <span className="prog-etape-card__sub">{etape.sousTitre}</span>}
-                                            </div>
-                                        </div>
-                                        {etape.imagePresente && (
-                                            <img
-                                                src={urlImageEtapePublique(programme.id, "constat", i)}
-                                                alt={etape.titre}
-                                                className="prog-etape-card__img"
-                                            />
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
-                        )}
+                            <EtapesTimeline etapes={programme.constatEtapes} programmeId={programme.id} section="constat" />
+                            <PointsList points={programme.constatPoints} />
+                        </section>
+                    )}
 
-                        {/* Points clés du constat */}
-                        {programme.constatPoints.length > 0 && (
-                            <div className="prog-points-grid">
-                                {programme.constatPoints.map((pt, i) => (
-                                    <div className="prog-point-card" key={i}>
-                                        <h4>{pt.titre}</h4>
-                                        {pt.description && <p>{pt.description}</p>}
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                )}
+                    {programme.programmeTitre && (
+                        <section className="prog-dossier__column prog-dossier__column--accent">
+                            <p className="prog-dossier__eyebrow">Le dispositif</p>
+                            <h3 className="prog-dossier__heading">{programme.programmeTitre}</h3>
+                            {programme.programmeTexte && <p className="prog-dossier__text">{programme.programmeTexte}</p>}
 
-                {/* BLOC 2 : LE PROGRAMME */}
-                {programme.programmeTitre && (
-                    <div className="prog-bloc prog-bloc--accent">
-                        <div className="prog-bloc__header">
-                            <span className="prog-bloc__label">Dispositif</span>
-                            <h3 className="prog-bloc__titre">{programme.programmeTitre}</h3>
-                        </div>
-                        {programme.programmeTexte && <p className="prog-bloc__desc">{programme.programmeTexte}</p>}
+                            <EtapesTimeline etapes={programme.programmeEtapes} programmeId={programme.id} section="programme" />
 
-                        {/* Étapes du programme */}
-                        {programme.programmeEtapes.length > 0 && (
-                            <div className="prog-etapes-grid">
-                                {programme.programmeEtapes.map((etape, i) => (
-                                    <div className="prog-etape-card" key={i}>
-                                        <div className="prog-etape-card__head">
-                                            <span className="prog-etape-card__num">{i + 1}</span>
-                                            <div className="prog-etape-card__text">
-                                                <span className="prog-etape-card__title">{etape.titre}</span>
-                                                {etape.sousTitre && <span className="prog-etape-card__sub">{etape.sousTitre}</span>}
-                                            </div>
-                                        </div>
-                                        {etape.imagePresente && (
-                                            <img
-                                                src={urlImageEtapePublique(programme.id, "programme", i)}
-                                                alt={etape.titre}
-                                                className="prog-etape-card__img"
-                                            />
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-
-                        {/* Apports du programme */}
-                        {programme.programmeApports.length > 0 && (
-                            <div className="prog-points-grid">
-                                {programme.programmeApports.map((pt, i) => (
-                                    <div className="prog-point-card" key={i}>
-                                        <h4>{pt.titre}</h4>
-                                        {pt.description && <p>{pt.description}</p>}
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                )}
-            </div>
+                            {programme.programmeApports.length > 0 && (
+                                <div className="prog-dossier__apports">
+                                    <p className="prog-dossier__apports-label">Ce que vous en retirez</p>
+                                    <PointsList points={programme.programmeApports} />
+                                </div>
+                            )}
+                        </section>
+                    )}
+                </div>
+            )}
         </article>
     );
 }
@@ -180,8 +177,25 @@ export function ProgrammesPage() {
             .finally(() => setLoading(false));
     }, []);
 
-    if (loading) return <div className="prog-page"><div className="prog-page__container">Chargement...</div></div>;
-    if (error) return <div className="prog-page"><div className="prog-page__container">{error}</div></div>;
+    if (loading) {
+        return (
+            <div className="prog-page">
+                <div className="prog-page__container">
+                    <p className="prog-page__state">Chargement des programmes...</p>
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="prog-page">
+                <div className="prog-page__container">
+                    <p className="prog-page__state">{error}</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="prog-page">
@@ -191,7 +205,9 @@ export function ProgrammesPage() {
                     <p className="prog-page__lede">
                         {programmes.length > 1
                             ? `${programmes.length} programmes disponibles actuellement.`
-                            : "1 programme disponible actuellement."}
+                            : programmes.length === 1
+                                ? "1 programme disponible actuellement."
+                                : "Aucun programme disponible pour le moment."}
                     </p>
                 </header>
 
