@@ -1,5 +1,5 @@
 /* ==========================================================================
-   PROGRAMMES — Design Pleine Largeur (Full-Width) & Responsive
+   PROGRAMMES — Design Pleine Largeur (Full-Width) & Conservation des Images
    ========================================================================== */
 
 .prog-page {
@@ -16,7 +16,7 @@
     margin: 0 auto;
 }
 
-/* --- Header --- */
+/* --- En-tête --- */
 .prog-page__header {
     margin-bottom: 28px;
 }
@@ -49,25 +49,33 @@
     box-shadow: 0 10px 25px rgba(15, 27, 61, 0.04);
 }
 
-/* --- Hero Banner (Présentation & Cover) --- */
+/* --- Hero Banner (Présentation & Cover non coupée) --- */
 .prog-hero {
     display: grid;
-    grid-template-columns: 420px 1fr;
+    grid-template-columns: minmax(300px, 420px) 1fr;
     background: #ffffff;
     border-bottom: 1px solid var(--border, #e2e8f0);
+    align-items: center;
 }
 
 .prog-hero__media {
     width: 100%;
     height: 100%;
-    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f5f9;
+    padding: 12px;
 }
 
+/* CORRECTION : L'image conserve sa taille originale sans être rognée */
 .prog-hero__img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
+    max-height: 450px;
+    object-fit: contain;
     display: block;
+    border-radius: 8px;
 }
 
 .prog-hero__body {
@@ -162,10 +170,10 @@
     margin: 0;
 }
 
-/* --- Grille des Étapes --- */
+/* --- Grille des Étapes (Images d'étapes non coupées) --- */
 .prog-etapes-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 16px;
 }
 
@@ -216,10 +224,13 @@
     color: var(--text-muted, #64748b);
 }
 
+/* CORRECTION : L'image de chaque étape garde sa taille et ses proportions d'origine */
 .prog-etape-card__img {
     width: 100%;
-    height: 160px;
-    object-fit: cover;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    background: #f8fafc;
     border-top: 1px solid var(--border, #e2e8f0);
 }
 
@@ -273,15 +284,11 @@
 }
 
 /* ==========================================================================
-   RESPONSIVE (Tablette & Mobile)
+   RESPONSIVE (Mobile & Tablette)
    ========================================================================== */
 @media (max-width: 992px) {
     .prog-hero {
         grid-template-columns: 1fr;
-    }
-
-    .prog-hero__media {
-        height: 260px;
     }
 
     .prog-content-grid {
