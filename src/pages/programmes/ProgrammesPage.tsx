@@ -229,8 +229,18 @@ function ProgrammeCard({ programme }: { programme: ProgrammeDTO }) {
             </div>
 
             {/* DESCRIPTION DU PROGRAMME */}
-            {programme.programmeTexte &&
-                formatTexte(programme.programmeTexte)}
+            {programme.programmeTexte && (
+                <div className="prog-bloc__desc">
+                    {programme.programmeTexte
+                        .replace(/\\n/g, "\n")
+                        .split(/\n/)
+                        .map((ligne, index) => (
+                            <div key={index}>
+                                {ligne || <br />}
+                            </div>
+                        ))}
+                </div>
+            )}
 
             {/* Étapes du programme */}
             {programme.programmeEtapes.length > 0 && (
