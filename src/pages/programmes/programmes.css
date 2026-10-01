@@ -162,14 +162,19 @@
     margin: 0;
 }
 
-/* --- Grille des Étapes --- */
+
+/* --- Grille des étapes --- */
 .prog-etapes-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    align-items: stretch;
     gap: 16px;
 }
 
+/* --- Carte --- */
 .prog-etape-card {
+    min-width: 0;
+    height: 100%;
     background: #ffffff;
     border: 1px solid var(--border, #e2e8f0);
     border-radius: 10px;
@@ -179,16 +184,23 @@
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
 }
 
+/* --- En-tête de hauteur uniforme --- */
 .prog-etape-card__head {
-    padding: 12px 14px;
+    height: 76px;
+    min-height: 76px;
+    box-sizing: border-box;
+    padding: 10px 12px;
     display: flex;
     align-items: center;
     gap: 10px;
+    overflow: hidden;
 }
 
+/* Numéro */
 .prog-etape-card__num {
     width: 28px;
     height: 28px;
+    min-width: 28px;
     border-radius: 50%;
     background: var(--navy-ink, #0f1b3d);
     color: #ffffff;
@@ -200,27 +212,76 @@
     flex-shrink: 0;
 }
 
+/* Textes */
 .prog-etape-card__text {
+    min-width: 0;
     display: flex;
     flex-direction: column;
+    gap: 2px;
 }
 
 .prog-etape-card__title {
     font-size: 0.88rem;
+    line-height: 1.25;
     font-weight: 800;
     color: var(--navy-ink, #0f1b3d);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
 }
 
 .prog-etape-card__sub {
     font-size: 0.78rem;
+    line-height: 1.3;
     color: var(--text-muted, #64748b);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
 }
 
+/* --- Photos uniformes --- */
 .prog-etape-card__img {
+    display: block;
     width: 100%;
     height: 160px;
+    min-height: 160px;
+    flex-shrink: 0;
     object-fit: cover;
+    object-position: center;
     border-top: 1px solid var(--border, #e2e8f0);
+}
+
+/* --- Responsive --- */
+@media (max-width: 1100px) {
+    .prog-etapes-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .prog-etapes-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .prog-etapes-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .prog-etape-card__head {
+        height: 76px;
+        min-height: 76px;
+    }
+
+    .prog-etape-card__img {
+        height: 190px;
+        min-height: 190px;
+    }
 }
 
 /* --- Grille des Points/Apports --- */
