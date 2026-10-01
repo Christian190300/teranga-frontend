@@ -284,6 +284,21 @@
     }
 }
 
+.prog-bloc__desc {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--navy-ink, #0f1b3d);
+    margin: 0;
+}
+
+.prog-bloc__desc p {
+    margin: 0 0 12px;
+}
+
+.prog-bloc__desc p:last-child {
+    margin-bottom: 0;
+}
+
 /* --- Grille des Points/Apports --- */
 .prog-points-grid {
     display: grid;

@@ -85,7 +85,16 @@ export function ProgrammeDetailPage() {
                 <div className="offre-detail__section prog-bloc prog-bloc--accent">
                     <h2 className="offre-detail__section-title">Le programme</h2>
                     <h3 className="prog-bloc__titre">{programme.programmeTitre}</h3>
-                    {programme.programmeTexte && <p className="offre-detail__text">{programme.programmeTexte}</p>}
+                    {programme.programmeTexte && (
+                        <div className="prog-bloc__desc">
+                            {programme.programmeTexte
+                                .split(/\n\s*\n/)
+                                .filter(Boolean)
+                                .map((paragraphe, index) => (
+                                    <p key={index}>{paragraphe}</p>
+                                ))}
+                        </div>
+                    )}
 
                     {programme.programmeEtapes.length > 0 && (
                         <div className="prog-bloc__etapes">
