@@ -94,7 +94,9 @@ export function ProgrammeDetailPage() {
                                 .split(/\n\s*\n/)
                                 .filter(Boolean)
                                 .map((paragraphe, index) => (
-                                    <p key={index}>{paragraphe}</p>
+                                    <p key={index} style={{ whiteSpace: "pre-line" }}>
+                                        {paragraphe}
+                                    </p>
                                 ))}
                         </div>
                     )}

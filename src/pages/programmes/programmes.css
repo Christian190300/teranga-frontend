@@ -320,6 +320,11 @@
 }
 
 .prog-description p {
+    white-space: pre-line;
+    margin-bottom: 1rem;
+}
+
+.prog-description p {
     margin: 0 0 14px;
 }
 
