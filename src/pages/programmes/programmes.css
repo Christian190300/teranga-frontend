@@ -319,6 +319,12 @@
     line-height: 1.7;
 }
 
+.prog-bloc__desc {
+    white-space: pre-line;
+    line-height: 1.7;
+    margin-bottom: 1rem;
+}
+
 .prog-description p {
     white-space: pre-line;
     margin-bottom: 1rem;
