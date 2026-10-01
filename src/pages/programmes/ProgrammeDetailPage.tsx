@@ -81,13 +81,16 @@ export function ProgrammeDetailPage() {
                 </div>
             )}
 
+
             {programme.programmeTitre && (
                 <div className="offre-detail__section prog-bloc prog-bloc--accent">
                     <h2 className="offre-detail__section-title">Le programme</h2>
                     <h3 className="prog-bloc__titre">{programme.programmeTitre}</h3>
+
                     {programme.programmeTexte && (
-                        <div className="prog-bloc__desc">
+                        <div className="offre-detail__text prog-description">
                             {programme.programmeTexte
+                                .replace(/\\n/g, "\n")
                                 .split(/\n\s*\n/)
                                 .filter(Boolean)
                                 .map((paragraphe, index) => (
@@ -100,8 +103,14 @@ export function ProgrammeDetailPage() {
                         <div className="prog-bloc__etapes">
                             {programme.programmeEtapes.map((etape, i) => (
                                 <div className="prog-bloc__etape" key={i}>
-                                    <span className="prog-bloc__etape-titre">{etape.titre}</span>
-                                    {etape.sousTitre && <span className="prog-bloc__etape-sous">{etape.sousTitre}</span>}
+                        <span className="prog-bloc__etape-titre">
+                            {etape.titre}
+                        </span>
+                                    {etape.sousTitre && (
+                                        <span className="prog-bloc__etape-sous">
+                                {etape.sousTitre}
+                            </span>
+                                    )}
                                 </div>
                             ))}
                         </div>
